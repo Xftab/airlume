@@ -13,7 +13,7 @@ Airlume is a semester-7 BS Data Science project (DS494 Data Visualization; CC425
 | **Complete project plan** (current) | [`docs/pdf/Airlume_Complete_Project_Plan.pdf`](docs/pdf/Airlume_Complete_Project_Plan.pdf) | [`docs/plan/plan.md`](docs/plan/plan.md) |
 | Project proposal v1 (superseded) | [`docs/pdf/Airlume_Project_Proposal_v1.pdf`](docs/pdf/Airlume_Project_Proposal_v1.pdf) | [`docs/proposal-v1/proposal.md`](docs/proposal-v1/proposal.md) |
 
-The PDFs are generated from the Markdown sources. **Edit the `.md` file, never the PDF.** Whenever a source changes, the PDFs are rebuilt and saved alongside it, so they always match. As a backup, the [Build PDFs](.github/workflows/build-docs.yml) workflow also rebuilds them on GitHub after any push that changes a source.
+The PDFs are generated from the Markdown sources. **Edit the `.md` file, never the PDF.** Whenever a source changes, the PDFs are rebuilt and saved alongside it, so they always match. The [Check PDF build](.github/workflows/build-docs.yml) workflow verifies on GitHub that the documents still build after any push that changes a source, and attaches the PDFs to the run as a backup. It never commits.
 
 Save and push every change from Windows (Command Prompt):
 

@@ -1,7 +1,9 @@
-name: Build PDFs
+name: Check PDF build
 
-# Rebuilds the PDFs whenever a document source changes, and commits them back,
-# so docs/pdf/ always matches docs/plan/ and docs/proposal-v1/.
+# Verifies that both documents still build from their Markdown sources.
+# It never commits anything: the PDFs in docs/pdf/ are rebuilt and saved
+# by Claude in each working session. The built PDFs are attached to the
+# run as a downloadable artifact, as a backup copy.
 on:
   push:
     branches: [main]
@@ -13,11 +15,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-
-concurrency:
-  group: build-docs
-  cancel-in-progress: true
+  contents: read
 
 jobs:
   build:
@@ -36,14 +34,8 @@ jobs:
       - name: Build PDFs
         run: bash docs/build.sh
 
-      - name: Commit updated PDFs
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/pdf/
-          if git diff --cached --quiet; then
-            echo "PDFs already up to date."
-          else
-            git commit -m "docs: rebuild PDFs [automated]"
-            git push
-          fi
+      - name: Attach PDFs to this run (backup copy)
+        uses: actions/upload-artifact@v4
+        with:
+          name: airlume-pdfs
+          path: docs/pdf/*.pdf

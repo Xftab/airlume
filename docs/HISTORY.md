@@ -3,6 +3,7 @@
 Newest first. Each entry records what was decided and why.
 
 ## 12 October 2026
+- **GitHub workflow changed to check-only.** Its first run committed rebuilt PDFs, which conflicted with the PDFs saved locally (git cannot merge two PDFs). The workflow now only verifies the build and attaches the PDFs to the run. `save.bat` now keeps the laptop's version on any conflict and reports failures instead of claiming success.
 - **Security standard adopted.** A 15-item security checklist (keys, secrets in history, XSS, injection, rate limiting, headers, debug off, exposed files, database, audit) was added to the plan as a standing requirement, with a hardening sub-phase (6.7) that must pass before the site goes public. Git history scanned the same day: clean.
 - **GitHub Actions PDF workflow installed by hand.** Remote tools are not allowed to write workflow files (they run code on GitHub automatically), so Claude placed the file in the project folder and Aftab moved it into `.github/workflows/`. It is a backup; Claude still rebuilds the PDFs in each session.
 - **Working folder set to `K:\airlume`** on the laptop (C: is nearly full). Claude writes files there directly; `save.bat` commits and pushes to GitHub. GitHub was not linked to Claude, by the student's choice.

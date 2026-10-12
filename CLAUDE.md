@@ -17,7 +17,7 @@ Airlume is Aftab Ahmad's semester-7 project: a conversational 3D digital twin of
 - **On Aftab's laptop: `K:\airlume`.** This folder is connected to Claude sessions; Claude writes updated files there directly.
 - **On GitHub: `Xftab/airlume`.** After any change, Aftab runs `K:\airlume\save "what changed"`, which commits and pushes.
 - Every change made in a session must be written to `K:\airlume` before the session ends, with the PDFs rebuilt.
-- Claude's remote file tools **cannot write inside `.git/` or `.github/workflows/`**. Aftab runs git himself, through `save.bat`. The GitHub Actions workflow (`.github/workflows/build-docs.yml`) was installed by Aftab by hand; it is a backup that rebuilds PDFs on GitHub if a source is edited directly. Claude still rebuilds PDFs in each session.
+- Claude's remote file tools **cannot write inside `.git/` or `.github/workflows/`**. Aftab runs git himself, through `save.bat`. The GitHub Actions workflow (`.github/workflows/build-docs.yml`) only **checks** that the documents build and attaches the PDFs to the run; it **never commits**. (A version that committed PDFs caused merge conflicts with the PDFs Claude saves locally; removed 12 Oct.) Claude rebuilds the PDFs in each session.
 - **Write each update from a freshly named staging folder** and verify it by reading the file back from `K:\airlume`. Reusing a staging path once resent stale content.
 
 ## Machine
