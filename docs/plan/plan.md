@@ -1,0 +1,940 @@
+---
+title: "Airlume: Complete Project Plan"
+subtitle: "A Conversational 3D Digital Twin of Lahore's Air Quality --- Problem, Product, Resources and Phased Build Plan"
+author:
+  - "Aftab Ahmad"
+date: "12 October 2026"
+---
+
+# Part A --- The Project
+
+## The project in one paragraph
+
+**Airlume** --- from *air* and *lume*, light --- is a website that shows Lahore's air pollution on a three-dimensional map of the city, and that you control by asking questions in plain language. You type or say *"where is smog worst today?"* and the map turns to the right part of the city, raises a glowing column over each monitoring station --- taller and more purple where the air is worse --- and writes a short answer. You ask *"is today worse than yesterday?"* and the screen splits into two maps side by side. There are no filters, dropdowns or menus to learn: the question is the interface.
+
+Behind that simple surface sit three engineering pieces --- a data pipeline that collects official readings every hour, a 3D visualisation engine, and a language layer that turns a sentence into a precise, checked instruction --- plus the part that makes this a research project rather than a demo: a frozen benchmark that **measures** whether the system understood each question correctly.
+
+## What we are building
+
+| Component | What it is | What the user sees |
+|:-------------|:-----------------------------------|:-----------------------------------|
+| Data pipeline | Hourly collectors for government station readings, the CAMS atmospheric model and weather; a historical archive mined from published government reports | "Data as of 08:00 PKT" --- always current |
+| 3D digital twin | A WebGL map of Lahore with one column per station, coloured on the official US AQI scale, with time animation and a wind layer | The city, live, rotating, playable through time |
+| Language layer | A large language model that fills a strict, typed form (metric, place, time, view, camera) which code then validates and executes | Ask anything in plain words; get a map and a sentence back |
+| Conversation layer | Clarifying questions when a question is ambiguous, follow-up questions that remember context, and a "show the query" toggle | A system that asks back instead of guessing, and shows its working |
+| Honesty layer | Nearest-station distance disclosure, a coverage map, a recommendation for where the next station should go, and a public page showing how wrong the forecasts were | Trust you can calibrate |
+| Forecast | A 24--48 hour per-station prediction, scored against a simple baseline | "Tomorrow looks worse" --- with its error bar |
+| Evaluation harness | A 60-question gold benchmark, forecast scoring, model-vs-ground validation and a small user study | The numbers in the report |
+| Deployment | A public website, installable on a phone as an app (PWA) | A link anyone can open |
+
+## The problem it solves
+
+### Context
+
+Lahore is among the most polluted major cities in the world. Community sensor data has put its annual average PM2.5 at around 105 µg/m³, with hourly peaks near 900 µg/m³ [1]. The smog season runs from roughly October to February, driven by crop-residue burning, vehicle and industrial emissions, brick kilns and construction dust [2]. For eleven million people this is a public-health problem for a third of every year.
+
+Data availability has improved sharply. The Punjab Environmental Protection Agency now runs a real-time platform for 11 named Lahore stations and dozens more across the province [2], and in October 2025 the Punjab government launched *EcoBot*, a WhatsApp bot that returns a city's AQI on request [3].
+
+**What has not improved is the ability to understand that data.** Three specific problems remain.
+
+### Problem 1 --- Data you cannot ask questions of
+
+Every existing interface answers one question: *what is the number?* The questions people actually have are comparative, spatial and temporal --- *which part of the city is worst, is it getting better, when during the day should I avoid going out, how does this week compare with last month?* Answering them today means opening several screens, reading tables and doing the comparison in your head. For a member of the public that friction means the question goes unasked; for a journalist, teacher or policy officer it means hours of manual work.
+
+**Airlume's answer:** the question is the interface. One sentence in, one answer out, shown on the map.
+
+### Problem 2 --- Maps that pretend to know more than they do
+
+Consumer air-quality apps paint smooth colour across whole cities. In Lahore that surface is interpolated from about a dozen stations serving eleven million people. Users reasonably assume the colour over their street is a measurement of their street. It is not --- and nothing on the screen tells them so.
+
+**Airlume's answer:** show discrete stations, never an invented surface. When asked about a neighbourhood with no monitor, say so and give the distance to the nearest one. Publish a coverage map showing where the city cannot currently be measured.
+
+### Problem 3 --- Forecasts nobody holds accountable
+
+Platforms publish forecasts. Almost none publish how wrong those forecasts turned out to be, so a user has no basis for deciding how much to trust them.
+
+**Airlume's answer:** a public accuracy page, generated automatically, that scores every forecast against what the stations actually recorded --- including the days it got badly wrong.
+
+### Who this helps
+
+| User | Their question | What Airlume gives them |
+|:--------------|:----------------------------------|:----------------------------------------|
+| Resident / parent | Is it safe to go out this evening? | The official AQI band for their nearest station, with the distance, and the standard advisory wording |
+| Student / teacher | How does smog build up across the city? | An animated, explorable 3D city, usable in a classroom |
+| Journalist | Which areas were worst this week and how does it compare with last year? | A comparison answer in one sentence, with a chart to cite |
+| Researcher | How reliable is the global atmospheric model over Lahore? | A published model-vs-ground error characterisation |
+| Policy officer | Where are we blind? | A coverage map of areas far from any monitor |
+
+## How Airlume differs from what already exists
+
+The idea of talking to air-quality data is not new, and it is important to state that plainly. The table below positions Airlume against the closest existing work.
+
+| System | What it does | Where it stops |
+|:-------------------|:--------------------------------------------------|:----------------------------------------------|
+| **VayuBuddy** (India, 2024) [4] | LLM chatbot over Indian government data (537 stations, 7 years). The model writes Python that produces line plots, bar charts and map plots. Benchmarked on 45 questions; best model scored 39/45 | No 3D. **Scoring whether a generated plot is correct is left as future work** --- the authors note it "would need a purpose-built rubric". Question set and scoring code not released. No user study |
+| **VayuChat** (India, 2025) [5] | Successor; executable code plus interactive visualisations, publicly deployed | Demonstration paper; no evaluation method or benchmark stated |
+| **EcoBot** (Punjab, 2025) [3] | WhatsApp bot returning AQI for Lahore, Faisalabad, Rawalpindi and Multan, with health tips, in English and Urdu | Lookup only. No maps, no spatial or temporal analysis, closed |
+| **Punjab EPA portal** [2] | Official real-time dashboard; 24-hour and 7-day trends, rankings, forecast | Filter-driven; no question answering; no download; no published forecast error |
+| **Smart-city NL interfaces** [6] | LLM natural-language interfaces for urban air-quality decision support | General-purpose; not spatial-camera aware; not Pakistan |
+| **Consumer apps** (IQAir and others) | City AQI, smooth maps, forecasts | Interpolated surfaces imply false precision; station-level data paywalled |
+
+**The gap Airlume fills** is the one VayuBuddy's own authors identified: there is no rubric for scoring whether a conversational system produced the *right visual answer*, as opposed to the right number. Airlume makes the visual answer --- chart type, area, time window and camera position --- a set of typed fields that can be checked one by one against a gold standard. That converts "it looks right" into a measurable accuracy figure. Airlume then adds the two things no existing system offers for Lahore: honest coverage disclosure and public forecast accountability.
+
+## Contributions
+
+| ID | Contribution | Why it is new | How it is verified |
+|:----|:--------------------------------|:--------------------------------------|:------------------------------------|
+| C1 | **A scoring rubric for conversational visual analytics** via a typed view-intent schema | Closes the gap VayuBuddy names as future work [4] | Per-field accuracy on a frozen 60-question benchmark |
+| C2 | **Camera pose as part of the answer** in a 3D geospatial scene | No surveyed system treats viewpoint as a generated output | Camera fields scored separately in C1 |
+| C3 | **Sparsity-honest visualisation protocol** and a quantified coverage map | Commercial maps interpolate; none disclose distance-to-sensor | Protocol audit; user comprehension check |
+| C4 | **First quantified CAMS-vs-ground validation for Lahore** | CAMS global is widely consumed over Pakistan with no local error estimate | Released statistics: MAE, bias, correlation per station |
+| C5 | **Public, automatic forecast scorecard** | Forecast error is almost never published | Generated from logs, not hand-curated |
+| C6 | **Released benchmark** of 60 single questions plus 20 conversation items | VayuBuddy's set was not released, and had no multi-turn or ambiguity cases | Public repository |
+| C7 | **Station-placement recommendation** for Lahore's monitoring network | Turns the coverage gap (C3) into an actionable output; comparable to the 2022 ISPRS Lahore study [8] | Coverage gained per proposed station, compared with existing sites |
+
+**Honest positioning.** Airlume does not claim a new machine-learning architecture, and no model is trained from scratch. Its contributions are in systems design, evaluation methodology and local measurement --- the right level of ambition for ten weeks, and each one individually publishable at workshop level.
+
+## Scope
+
+| In scope | Out of scope |
+|:---------------------------------------------------|:---------------------------------------------------|
+| Lahore as the deep city: full 3D twin, all features | Street-level readings (stations are kilometres apart) |
+| Multan and Karachi as comparison points (stretch, Phase 4) | Indoor air quality |
+| Clarifying questions and follow-up conversations | Open-ended chat unrelated to air quality |
+| Recommended locations for new monitoring stations | Installing or calibrating physical sensors |
+| Six question classes: lookup, ranking, comparison, trend, aggregate, conditional | Causal attribution of pollution sources |
+| 24--48 hour forecasts | Personal medical advice |
+| English questions, plus a 20-question Roman-Urdu test set | Seasonal (multi-month) forecasting |
+| Public website + installable phone app (PWA) | Native Android/iOS apps |
+
+\newpage
+
+# Part B --- Resources, Costs and Access
+
+Every resource was checked on **12 October 2026** against official documentation. **Total cost of the project: PKR 0.** Several free tiers changed during 2026; the changes that matter are flagged.
+
+## Data sources
+
+| Source | Free | Key | May we republish? | Role in Airlume |
+|:---------------------|:----------|:---------|:---------------------------|:--------------------------------|
+| **Punjab EPA portal** (aqi.punjab.gov.pk) | Yes | None | Unclear --- no licence published | Live Lahore and Multan station readings (11 Lahore stations) |
+| **Punjab EPD archive** (epd.punjab.gov.pk) | Yes | None | Cite and analyse as published reports | Deep history: about 2,000 daily AQI PDFs back to 2007, plus weekly district reports |
+| **Open-Meteo** air quality + weather | Yes, non-commercial | None | **Yes --- CC BY 4.0** | CAMS model values for validation (C4), wind, temperature, rain |
+| **OpenAQ** | Yes | Free key | Yes, per-station licence (CC0 / CC BY only) | Ground truth if Pakistan reference stations are carried --- verify in Phase 0 |
+| **CAMS / Atmosphere Data Store** | Yes | Free account | **Yes --- CC BY 4.0** since July 2025 | Optional reanalysis baseline |
+| **Sentinel-5P** (Copernicus Data Space) | Yes | Free account | Yes, with "Contains modified Copernicus Sentinel data" | Optional NO~2~ satellite layer |
+| **WAQI / aqicn** | Yes | Free token | **No --- archiving and "data analysis" prohibited** | **Live display only.** Never archived, never analysed |
+| **OpenStreetMap** | Yes | None | Yes, ODbL with attribution | District boundaries, buildings, roads |
+| **IQAir** | Partly | Key | Unknown | **Not used** --- station-level data is paywalled |
+| **Sindh EPA** (Karachi) | --- | --- | --- | **Publishes no data.** Karachi has no official source |
+
+### Key facts about the data
+
+- **Lahore EPA stations (11):** GT Road, Shahdara, Multan Road, Barki Road, Kahna Nau, Gulberg III, DHA Phase 6, Egerton Road, Punjab University, Wagha Border, Safari Park. **Coordinates are not published** --- they must be geocoded in Phase 1.
+- **The EPA portal has no public API and no licence**, but its `robots.txt` explicitly allows all crawling. A JSON backend exists (the site and mobile app consume one). Contacts: `support@aqi.punjab.gov.pk`, `ddisepa@punjab.gov.pk`.
+- **CAMS resolution over Pakistan is about 45 km**, 3-hourly [7]. All of Lahore falls inside roughly one model cell, so CAMS **cannot** show differences between neighbourhoods. Stations provide the intra-city picture; CAMS is used only as a validation target and regional context.
+- **CAMS archive for Pakistan starts August 2022**; the API returns up to 92 past days per request.
+- **Open-Meteo limits:** 10,000 calls/day, 5,000/hour, 600/minute. Airlume needs about 100/day.
+
+## Map and visualisation stack
+
+| Component | Licence | Free | Key | Note |
+|:-------------------|:-------------|:------|:---------|:------------------------------------------|
+| deck.gl 9.4 | MIT | Yes | None | 3D layers: columns, arcs, polygons |
+| pydeck 0.9.3 | Apache 2.0 | Yes | None | Python binding; **no Mapbox token needed** |
+| MapLibre GL JS 6.14 | BSD-3 | Yes | None | Map renderer |
+| **CARTO basemaps** | Service | Yes | **Free key, required since 23 Sep 2026** | 5 million tile requests/month non-commercial |
+| Protomaps PMTiles | BSD + ODbL | Yes | **Never** | Fallback: self-hosted Lahore map file |
+| Mapbox GL JS | Proprietary | No | Mandatory + billing | **Do not use** |
+| Cesium ion | Apache (renderer) | Limited | Token | **Do not use** --- 1,000 imagery sessions/month |
+
+**Important change:** pydeck's default basemap is a keyless CARTO URL. CARTO blocked keyless raster tiles on 25 September 2026 and describes keyless vector tiles as working "for now". Request the free key in Phase 0.
+
+## Hosting and automation
+
+| Service | Free | Use in Airlume | Watch out for |
+|:--------------------|:-----------|:-----------------------|:-----------------------------------------|
+| **GitHub** + **GitHub Actions** (public repo) | Yes, unlimited minutes | Code, hourly collector | **Scheduled jobs are disabled after 60 days without repo activity.** Schedule at minute 17, not 0 |
+| **Streamlit Community Cloud** | Yes | Primary app hosting | Sleeps after 12 hours without visitors; commits do not wake it |
+| **Cloudflare Pages / R2** | Yes | Static build option; PMTiles host | None at this scale; never sleeps |
+| Neon Postgres | Yes, permanent | Only if a database is needed | Compute sleeps after 5 min, resumes automatically |
+| Hugging Face Spaces | **No** | Not used | Streamlit/Docker Spaces now require PRO (from July 2026) |
+| Render | Limited | Not used | Free bandwidth cut to 5 GB/month (April 2026) |
+| Vercel Hobby | Limited | Not used | Cron jobs limited to once per day |
+
+## Language models
+
+| Provider | Free limit (Oct 2026) | Structured output | Role |
+|:---------------------|:------------------------------------|:------------------|:----------------------|
+| **Groq** `gpt-oss-120b` | 200,000 tokens/day, 1,000 requests/day | Strict JSON schema | **Primary model** |
+| Groq `gpt-oss-20b`, `qwen3.8-27b` | 200,000 tokens/day **each** | Strict JSON schema | Second and third models for comparison |
+| Google Gemini Flash-Lite | About 500 requests/day (Google no longer publishes figures) | JSON schema --- verify on Flash-Lite | Fourth model |
+| Cerebras | 1 million tokens/day, 5 per minute (trial) | Yes | Overflow |
+| **Ollama** (local, e.g. Qwen 8B) | **Unlimited** | Yes | Development runs; offline baseline |
+| OpenRouter | 50 requests/day | Varies | Not used |
+
+**Data note for the ethics section:** Google uses free-tier Gemini content to improve its models and may have humans review it. Groq does not retain inference data by default and offers zero data retention. Airlume sends no personal data to any model.
+
+## Development tools (all free and open source)
+
+Python 3.12, DuckDB (MIT), Pandas (BSD), Pydantic (MIT), scikit-learn (BSD), LightGBM (MIT), statsmodels (BSD), pdfplumber (MIT), GeoPandas (BSD), Shapely (BSD), Streamlit (Apache 2.0), FastAPI (MIT), pytest (MIT), Git.
+
+## Accounts to create
+
+| Account | Needs card | Time |
+|:----------------------------------|:-----------|:---------|
+| GitHub (public repository) | No | 2 min |
+| Groq console API key | No | 2 min |
+| Google AI Studio API key | No | 2 min |
+| OpenAQ API key | No | 2 min |
+| CARTO basemap key | No (email only) | 1 min |
+| Streamlit Community Cloud (GitHub login) | No | 1 min |
+| Cloudflare (optional) | No | 3 min |
+| Copernicus Data Space (optional) | No | 3 min |
+
+\newpage
+
+# Part C --- System Design
+
+## Architecture
+
+```
+   QUESTION ("Where is smog worst today?")
+                   |
+                   v
+   +---------------------------------------+
+   | LANGUAGE LAYER                        |
+   | LLM fills a typed view-intent form:   |
+   | metric, area, time label, view,       |
+   | comparison, camera                    |
+   +-------------------+-------------------+
+                       |
+                       v
+   +---------------------------------------+
+   | VALIDATION LAYER  (deterministic)     |
+   | Pydantic schema check                 |
+   | "today" -> real timestamps (PKT)      |
+   | out-of-scope -> structured refusal    |
+   | SQL assembled by code, never the LLM  |
+   +-------------------+-------------------+
+                       |
+                       v
+   +---------------------------------------+
+   | DATA LAYER  (DuckDB + Parquet)        |
+   | stations | readings | cams | weather  |
+   | forecasts | coverage | run log        |
+   +-------------------+-------------------+
+                       |
+                       v
+   +---------------------------------------+
+   | RENDER LAYER  (deck.gl / pydeck)      |
+   | columns | animation | split view      |
+   | wind | camera flight | answer text    |
+   +---------------------------------------+
+
+   Separately, every hour (GitHub Actions):
+   collectors -> clean -> append -> commit + heartbeat
+```
+
+**The single most important design rule: the language model never writes code or SQL.** It fills a form. Code validates the form and builds the query. This makes the system safe (nothing can be injected), robust (a bad answer becomes a polite refusal, not a crash) and measurable (a form can be compared field by field with a correct form).
+
+## The view-intent schema
+
+| Field | Type | Values | Filled by |
+|:----------------|:-----------|:-------------------------------------------------|:-----------|
+| `metric` | enum | pm2_5, pm10, no2, so2, co, o3, us_aqi | Model |
+| `area` | enum | station id, district, region, all_lahore | Model |
+| `city` | enum | lahore, multan, karachi | Model |
+| `time` | label | now, today, yesterday, this_week, last_week, this_month, named month, past_24h | Model |
+| `time_start`, `time_end` | timestamp | resolved in Asia/Karachi | **Code** |
+| `aggregation` | enum | mean, max, min, count_above | Model |
+| `threshold` | number or null | e.g. 150 | Model |
+| `compare_to` | object or null | a second time or area | Model |
+| `view` | enum | columns_3d, ranked, split, time_series, calendar | Model |
+| `camera` | object | zoom, pitch, bearing, centre | Model |
+| `in_scope` | boolean | false triggers a refusal with a reason | Model |
+| `clarify` | object or null | a short question plus 2--3 options, when the request is ambiguous | Model |
+| `context_ref` | enum or null | inherit_area, inherit_time, inherit_metric --- for follow-ups | Model |
+
+Relative dates are resolved by code, never by the model: models are unreliable at date arithmetic, and a date error fails silently --- the user gets a plausible map of the wrong day.
+
+## Question classes and their views
+
+| Class | Example | View | Camera |
+|:-------------|:------------------------------------------|:-------------------|:--------------------|
+| Lookup | What is the AQI in Gulberg? | Single column, labelled | Zoomed to station |
+| Ranking | Where is smog worst right now? | All columns, top 3 lit | Whole city |
+| Comparison | Is today worse than yesterday? | Split screen | Same angle both sides |
+| Trend | Show me the last 30 days | Animated time series | Whole city |
+| Aggregate | When during the day is it worst? | Hour-of-day chart | Unchanged |
+| Conditional | How many days this month were above 150? | Count + calendar strip | Unchanged |
+| Out of scope | What is the AQI on my street? | Refusal with reason | Unchanged |
+| Ambiguous | How is Gulberg? | Clarifying question: station or area? | Unchanged until answered |
+| Follow-up | ...and yesterday? | Previous view, new time window | Previous camera kept |
+| Best time | When is the air cleanest today? | Hourly forecast, lowest window highlighted | Unchanged |
+
+## Nearest-station answer rule
+
+| Distance to nearest station | What Airlume says |
+|:------------------|:------------------------------------------------------------------|
+| Station in the area | "Gulberg III: 196. Measured at the Gulberg III station." |
+| Within 3 km | "Nearest station is Egerton Road, 2.4 km away: 205." |
+| More than 5 km | "Nearest station is Multan Road, 8.1 km away: 264. This may not reflect conditions where you are." |
+
+\newpage
+
+# Part D --- Phased Build Plan
+
+The build runs **10 weeks, 13 October -- 21 December 2026**, in eight phases. Each sub-phase lists its tasks, what it produces, and the exit criterion that must be true before moving on. Phases overlap slightly where work is independent.
+
+
+## Added features at a glance
+
+Eight features were added on top of the core plan. Each is placed in the phase where it naturally belongs rather than bolted on at the end. Together they add roughly **14 working days**. To make room for the weakness fixes in Part E, the two polish features --- shareable cards and replay mode --- are now **optional**: built only if time remains, never protected.
+
+| Feature | Sub-phase | Effort | Priority | Why it is here |
+|:---------------------------|:-------|:---------|:---------|:----------------------------------------------|
+| Show-the-query toggle | 3.7 | 1 day | **Must** | Makes contribution C1 visible on screen during the viva |
+| Clarifying questions | 3.8 | 2 days | **Must** | Turns a likely failure into good behaviour; adds a scoreable class |
+| Follow-up questions | 3.9 | 2--3 days | Should | Real conversation; its own benchmark set |
+| Local-model comparison | 5 (E7) | Half a day | Should | Quotable cost-versus-accuracy result |
+| Lowest-AQI window today | 4.6 | 1 day | Should | The most practical question a resident has |
+| Where should the next station go? | 4.5 | 3--4 days | **Must** | Turns the coverage limitation into contribution C7 |
+| Shareable answer cards | 6.6 | 1--2 days | Optional | How people share in Pakistan --- WhatsApp |
+| Replay the worst day | 7.3 | 2 days | Optional | Opening of the presentation |
+
+**Must** features are protected from scope cuts. **Optional** features are built only after every weakness fix in Part E is done.
+
+## Phase 0 --- Foundations and Access (Week 1: 13--19 Oct)
+
+**Goal:** every account works, every data source is confirmed, permission is requested, and a clickable shell of the website exists before any real data does.
+
+### 0.1 Accounts and keys
+
+- Create the eight accounts listed in Part B.
+- Store keys in a local `.env` file and in GitHub repository secrets; never commit them.
+- **Pin every library version** in `requirements.txt` from day one, so a free-tier or library change cannot break the build later. *(Fixes W13.)*
+- Read your real Gemini limits at `aistudio.google.com/rate-limit` and record them.
+
+**Produces:** working keys for Groq, Gemini, OpenAQ, CARTO.
+
+### 0.2 Data-source probing
+
+- Open aqi.punjab.gov.pk in Chrome, DevTools, Network tab, Fetch/XHR filter, and record the JSON endpoint the page calls.
+- **Find out which AQI formula Punjab EPA uses** (US EPA breakpoints, or Pakistan's own PEQS-based scale) from the portal, EPD reports or the permission email. Record it in `SOURCES.md`. *(Starts the fix for W1.)*
+- Check whether the US Consulate Lahore monitor is reachable as an independent cross-check. *(Supports W9.)*
+- Check whether OpenAQ carries Pakistan reference stations and record each station's licence:
+
+```bash
+curl -H "X-API-Key: $OPENAQ_KEY" \
+  "https://api.openaq.org/v3/locations?iso=PK&limit=1000" > openaq_pk.json
+```
+
+- Confirm Open-Meteo returns data for Lahore:
+
+```bash
+curl "https://air-quality-api.open-meteo.com/v1/air-quality?\
+latitude=31.52&longitude=74.36&hourly=pm2_5,pm10,us_aqi&past_days=7"
+```
+
+- Test a WAQI token on one Lahore station (live display only).
+
+**Produces:** a `SOURCES.md` file recording, for each source, status, endpoint, licence and date checked.
+
+### 0.3 Permission requests
+
+- Email `support@aqi.punjab.gov.pk` and `ddisepa@punjab.gov.pk`: request API access and written permission to archive readings for academic research. Mention EcoBot as evidence a live internal API exists.
+- Email the WAQI team to notify them of non-commercial academic display use, as their terms require.
+- **Do not wait for replies.** The project is designed to work without them.
+
+**Produces:** dated copies of both emails for the ethics appendix.
+
+### 0.4 Repository skeleton
+
+```
+airlume/
+  collectors/   epa.py  openmeteo.py  openaq.py  waqi_display.py
+  pipeline/     clean.py  store.py  backfill_epd.py
+  nl/           schema.py  router.py  resolve.py  prompts/
+  viz/          layers.py  views.py  camera.py
+  forecast/     baseline.py  model.py
+  eval/         benchmark/  run_e1.py  run_e2.py  run_e3.py
+  app/          streamlit_app.py
+  data/         (parquet files committed by the collector)
+  tests/
+  .github/workflows/collect.yml
+```
+
+Note `waqi_display.py` sits apart from every other collector and writes nothing to `data/`. This separation is deliberate: WAQI data must never reach the archive.
+
+### 0.5 Fake-data shell
+
+- Build the Streamlit page with the 3D map, ten columns of **random** heights, a time slider, an ask box and the six view types --- all driven by fake data.
+- Every later phase replaces a fake piece with a real one, so a working demo exists every day of the semester.
+
+**Exit criterion for Phase 0:** the shell runs locally; all keys respond; `SOURCES.md` is complete; both emails are sent.
+
+## Phase 1 --- Data Pipeline (Weeks 2--3: 20 Oct -- 2 Nov)
+
+**Goal:** real data flowing every hour, a historical archive, and checks that catch problems automatically.
+
+### 1.1 Station registry and geocoding
+
+- Build `stations.csv`: id, name, city, latitude, longitude, source, geocode method, confidence.
+- Geocode the 11 Lahore stations (EPA publishes names only) using OpenStreetMap Nominatim plus manual verification against the EPA map; record the method for each.
+
+**Produces:** a verified station registry --- the foundation of every map and distance calculation.
+
+### 1.2 Live collectors
+
+| Collector | Frequency | Writes to archive |
+|:--------------------|:-------------|:----------------------|
+| EPA stations | Hourly | Yes |
+| Open-Meteo air quality (CAMS) at each station point | Hourly | Yes |
+| Open-Meteo weather (wind, temperature, rain, humidity) | Hourly | Yes |
+| OpenAQ (if Pakistan coverage confirmed) | Hourly | Yes, licence-filtered |
+| WAQI | On page load | **Never** |
+
+Every collector: timeouts, three retries with backoff, a descriptive User-Agent with a contact address, and a log line per run.
+
+### 1.3 Storage
+
+- Append-only Parquet files partitioned by month, queried with DuckDB.
+- Tables: `stations`, `readings`, `cams`, `weather`, `forecasts`, `runs`.
+- Append rather than rewrite, so git history grows slowly (about 8,600 commits a year otherwise).
+
+### 1.4 Scheduler
+
+```yaml
+on:
+  schedule:
+    - cron: "17 * * * *"   # minute 17, not 0: top of hour is peak
+  workflow_dispatch:
+```
+
+- Each run writes a heartbeat timestamp, so a commit always lands and GitHub's 60-day inactivity rule can never disable the job.
+- Run unattended for **48 hours** before trusting it.
+
+### 1.5 Historical backfill --- the CC425 component
+
+- Harvest the EPD daily-report index (about 105 pages, about 2,000 PDFs).
+- Extract tables with pdfplumber; validate a random 5% by hand.
+- **Implement extraction three ways --- sequential, multiprocessing, and asynchronous download + process pool --- and benchmark speed-up against worker count.** This is the Parallel and Distributed Computing deliverable, on real work rather than a toy problem.
+- Backfill CAMS from Open-Meteo (archive from August 2022).
+
+### 1.6 Data quality
+
+- Flag gaps, stuck sensors (identical values for hours), impossible values and sudden spikes.
+- Track per-station uptime; show "x of 11 stations reporting" in the app.
+
+### 1.7 AQI harmonisation (weakness fix W1)
+
+- Write one converter, `to_aqi(pollutant, concentration, scale)`, implementing exactly the breakpoint table Punjab EPA uses.
+- Convert every CAMS concentration into that AQI before any comparison with station AQI. Where stations publish raw PM2.5, compare concentrations directly as well.
+- Unit-test the converter against at least 10 published EPA readings where both concentration and AQI are shown.
+- Store the scale used alongside every value, so AQI from different formulas can never be mixed silently.
+
+**Exit:** converter passes all tests; every value in the store carries its unit and scale.
+
+**Exit criterion for Phase 1:** 48-hour soak passes with no missed runs; EPD backfill extracted and spot-checked; data-quality report generated; AQI harmonisation tested.
+
+## Phase 2 --- The 3D Digital Twin (Weeks 3--4: 27 Oct -- 9 Nov)
+
+**Goal:** the city on screen, driven by real data, with every view the language layer will later need.
+
+### 2.1 Basemap
+
+- CARTO dark basemap with the free key. Fallback: Protomaps PMTiles extract of Lahore. Second fallback: no basemap, OSM district polygons only.
+
+```bash
+pmtiles extract https://build.protomaps.com/<latest>.pmtiles lahore.pmtiles \
+  --bbox=74.15,31.35,74.60,31.70 --maxzoom=14
+```
+
+### 2.2 Station columns
+
+- deck.gl `ColumnLayer`: height and colour by AQI on the **official US AQI bands**, labels and tooltips.
+
+### 2.3 Time animation
+
+- Play/pause, scrubber across 24 hours, 7 days or 30 days.
+
+### 2.4 Wind layer
+
+- Wind arrows from Open-Meteo, shown as context and labelled as correlation, never cause.
+
+### 2.5 View types
+
+- Ranked city view, single-station focus, split-screen comparison, time series, calendar strip.
+- **A plain 2D ranked bar chart beside every 3D view, and a top-down toggle.** 3D columns in perspective make heights hard to compare --- near columns hide far ones and distance shrinks them --- so exact comparison always happens in 2D, while 3D provides spatial context. *(Fixes W10.)*
+
+### 2.6 Coverage map --- a finding in itself
+
+- Draw 3 km and 5 km buffers around each station over Lahore's neighbourhoods and population.
+- Report the share of the city's area and population more than 5 km from any monitor.
+
+**Exit criterion for Phase 2:** all six views render from real data at 30 frames per second or better; coverage statistics computed.
+
+## Phase 3 --- The Language Layer (Weeks 5--7: 10--30 Nov)
+
+**Goal:** a sentence in, the right map out --- and a way to prove it.
+
+### 3.1 Schema
+
+- Implement the view-intent schema in Pydantic. Keep it flat; every field required, optional fields as null-unions --- the shape that works unchanged on Groq strict mode and Gemini.
+
+### 3.2 Benchmark --- built and frozen before the model is wired in
+
+- **60 test questions**, 10 per class, including 8 out-of-scope items, each annotated with its correct form.
+- **10 ambiguous questions**, each annotated with the clarifying question expected and the options it should offer.
+- **10 short follow-up dialogues** (two or three turns each), annotated with the correct form at every turn.
+- **20 development questions**, kept separate, used for tuning.
+- **20 Roman-Urdu questions** ("aaj Gulberg ki hawa kaisi hai?"), promoted from stretch. *(Reduces W12.)*
+- **Blind authorship:** two or three classmates write about half of the 60 test questions *without seeing the schema*, so the test is not shaped to fit the system. *(Fixes W2.)*
+- **Second annotator:** another person independently writes gold forms for 20 questions; report agreement (Cohen's kappa per field) and resolve disagreements by discussion. *(Fixes W2.)*
+- **Camera scored in categories**, not exact numbers: level (city / district / station) and rough direction (N, NE, E ...). *(Fixes W5.)*
+- **Freeze the test set in week 5. Never tune on it.**
+
+### 3.3 Model router and caching
+
+- Primary: Groq `gpt-oss-120b`. Fall through on rate limit to `gpt-oss-20b`, `qwen3.8-27b`, Gemini Flash-Lite, then local Ollama.
+- **Temperature 0 on every call**, so answers are as repeatable as the provider allows. *(Part of the fix for W6.)*
+- Cache every call by prompt hash in SQLite; repeated runs cost nothing.
+- Keep prompts short: Groq's limit is tokens per day, so a 400-token prompt gets four times the calls of a 1,600-token one.
+- Log model id, timestamp, prompt and response for every call --- free model ids change without notice, and the log is what makes the evaluation reproducible.
+
+```bash
+ollama pull qwen3:8b
+```
+
+### 3.4 Validation, dates and refusals
+
+- Schema validation; date-label resolver in Asia/Karachi; refusal templates for street-level, causation, medical, and pre-archive history questions.
+
+### 3.5 Integration
+
+- Form, then query, then data, then view, then camera flight. **This is the week the two halves of the project become one product.**
+
+### 3.6 Answer text
+
+- A short sentence generated **from the query result only**, never from the model's general knowledge. Factors such as wind are worded as "possible factors", never as causes.
+
+### 3.7 Show-the-query toggle (added)
+
+- A "Show the query" switch under every answer displays the filled form as a readable card: metric, area, time window (resolved to real timestamps), aggregation, view and camera.
+- Fields resolved by code rather than the model are marked, so a viewer can see exactly where the model's job ends.
+- **Why it matters:** contribution C1 is a rubric that scores these fields. This toggle lets an examiner watch the rubric's input being produced, live.
+
+**Exit:** the toggle shows the correct form for every benchmark question replayed in the app.
+
+### 3.8 Clarifying questions (added)
+
+- When a request has more than one reasonable reading, the model fills `clarify` instead of guessing: a one-line question and two or three tappable options.
+- Triggers: a place name matching both a station and an area ("Gulberg"); a missing time ("how bad was it?"); a metric that could be PM2.5 or the AQI.
+- The chosen option is merged into the form and the question runs normally.
+- **Scoring:** clarification precision (asked when it should) and recall (never asked when the question was clear), on the 10 ambiguous items plus the 60 clear ones.
+
+**Exit:** clarifications appear for the 10 ambiguous items and for none of the clear ones on the development set.
+
+### 3.9 Follow-up questions (added)
+
+- The app keeps the last confirmed form. A follow-up ("and yesterday?", "what about DHA?") fills only the fields that change and sets `context_ref` for the rest.
+- Context is held for the current session only and never stored.
+- A "start over" button clears it.
+
+**Exit:** the 10 follow-up dialogues run correctly end to end.
+
+**Exit criterion for Phase 3:** every question class works end to end in the app; refusals, clarifications and follow-ups behave correctly; the benchmark is frozen.
+
+## Phase 4 --- Forecasting and Validation (Week 8: 1--7 Dec)
+
+### 4.1 Persistence baseline
+
+- "Tomorrow equals today", per station. Every model must beat this or the result is reported as a negative finding.
+
+### 4.2 Forecast model
+
+- LightGBM on lagged readings, hour of day, day of week and weather. Trained on history, tested on the most recent weeks only.
+- **Add CAMS's own 5-day forecast as an input feature.** The model then learns to correct CAMS's local bias for each station rather than predicting from scratch --- a standard technique (model output statistics) and the most realistic route to beating persistence. *(Reduces W7.)*
+- Expect the honest outcome to be "comparable to baseline" at 24 hours, and report it either way.
+
+### 4.3 CAMS-vs-ground validation (C4)
+
+- Pair each station reading with the CAMS value for the same hour.
+- Report MAE, signed bias, correlation, per station and by hour of day. Published whatever it shows.
+- **Framed as agreement, not error:** station instruments are uncalibrated and sometimes offline, so C4 measures how far model and stations agree, not how wrong CAMS is. Report each station's uptime, and cross-check against the US Consulate monitor where available. *(Handles W9.)*
+- Comparisons use harmonised AQI from 1.7 only.
+
+### 4.4 Multi-city comparison (stretch)
+
+- Multan from EPA stations; Karachi from OpenAQ only if Phase 0 confirmed coverage, otherwise WAQI display-only with no analysis.
+- City-level comparison panel, not a 3D twin.
+
+### 4.5 Where should the next station go? (added --- contribution C7)
+
+- Build a grid of candidate sites (about 500 m spacing) over Lahore, using OpenStreetMap land use to exclude rivers, the airport and restricted areas.
+- For each candidate, compute the population brought within 3 km and 5 km of a monitor that is not covered today, using WorldPop or census population layers (both free).
+- **Second criterion: proximity to likely sources** --- major roads and industrial land use from OpenStreetMap --- combined with population in a weighted score. Report results for both the population-only and combined versions. *(Reduces W8.)*
+- Describe it in the report as a **coverage-maximising heuristic** and state what it ignores: pollution gradients, official siting rules (Punjab follows US EPA siting criteria) and land access.
+- Greedy selection: choose the best site, update coverage, repeat --- giving a ranked list of the next five stations and the coverage each adds.
+- Show the proposals on the map as hollow columns, distinct from real stations.
+- Compare the ranking with the locations recommended in the 2022 ISPRS Lahore study [8] and discuss agreement and difference.
+- Wording: "recommended for consideration", never presented as an official siting plan.
+
+**Exit:** a ranked list of five sites, with population coverage before and after, shown on the map.
+
+### 4.6 Lowest-AQI window today (added)
+
+- From the 24-hour forecast, find the contiguous two-hour window with the lowest predicted AQI for the nearest station.
+- Answer form: *"Lowest predicted AQI near Gulberg III today: 05:00--07:00 (around 142)."* Always with the forecast error from the accuracy page beside it.
+- Never phrased as advice about going out, exercising or health --- only as a prediction.
+
+**Exit:** the "best time" question class answers from the forecast with its error shown.
+
+**Exit criterion for Phase 4:** forecast and baseline scored; validation statistics computed; station recommendations and lowest-AQI windows produced.
+
+## Phase 5 --- Evaluation (Week 9: 8--14 Dec)
+
+| ID | Evaluation | Metric | Target |
+|:----|:--------------------------|:---------------------------------------------------|:------------------|
+| E1 | Language layer | Exact match; per-field accuracy; accuracy by class; refusal precision/recall; across 4--5 models; **three runs per question with consistency reported; bootstrap 95% confidence intervals** | 85% per-field on best model |
+| E2 | Forecast | MAE vs persistence; correct AQI band rate; by station and hour | Beat baseline (reported either way) |
+| E3 | CAMS vs ground | MAE, bias, correlation per station | None --- a measurement |
+| E4 | Users | 8--10 people, 3 tasks each: success rate, time, and "how precise do you think this map is?" | Tests C3 directly |
+| E5 | Parallel speed-up (CC425) | Speed-up vs workers; scaling limit analysed | None --- a measurement |
+| E6 | Performance | Frames per second, time to first answer | 30 fps, under 4 s |
+| E7 | Local vs cloud model (added) | E1 rerun on the offline Ollama model; accuracy as a share of the best cloud model, and seconds per answer | None --- a measurement |
+| E8 | Conversation (added) | Clarification precision and recall; per-turn accuracy on follow-up dialogues | 80% clarification recall |
+| E9 | Station placement (added) | Population coverage gained by the top five proposed sites; overlap with the ISPRS recommendations | None --- a measurement |
+
+**Rigour rules:** the test set is never used for tuning; automated E1 scoring is checked by hand on 30 items and the agreement reported; class balance is stated; plain accuracy is never reported alone.
+
+**Exit criterion for Phase 5:** all nine evaluations complete, with figures generated by script.
+
+## Phase 6 --- Deployment (Week 9: 8--14 Dec, in parallel)
+
+### 6.1 Hosting
+
+- Streamlit Community Cloud from the public repository. Collector stays on GitHub Actions, independent of the app.
+
+### 6.2 Installable app (PWA)
+
+- Web manifest and service worker: home-screen icon, full-screen launch, cached last data for offline viewing.
+
+### 6.3 Accuracy page
+
+- Generated automatically from forecast logs each day.
+
+### 6.4 Attribution and disclaimers
+
+- Footer on every page: Punjab EPA; CAMS ENSEMBLE and Open-Meteo (CC BY 4.0); OpenStreetMap and CARTO; WAQI and the originating EPA where WAQI data is displayed.
+- "Student project --- not an official government source" on every page.
+
+### 6.5 Monitoring
+
+- Freshness label in the header; a GitHub Actions failure email; a weekly check that the collector is still enabled.
+
+### 6.6 Shareable answer cards (optional)
+
+- A "Share" button renders the current answer as a portrait image: the question, the answer sentence, a small map or chart, the data time, the source credit and the site address.
+- Sized for WhatsApp; generated in the browser so no server is needed.
+- Every card carries the attribution line and "student project --- not an official source", so a forwarded image can never be mistaken for a government notice.
+
+**Exit:** cards generate for every view type and read clearly on a phone.
+
+**Exit criterion for Phase 6:** public URL works on a phone; 72 hours of unattended operation. (Share cards, if built.)
+
+## Phase 7 --- Report and Demo (Week 10: 15--21 Dec)
+
+### 7.1 Report
+
+Introduction and problem; related work with VayuBuddy as the direct predecessor; system design; data and licensing; evaluation results; limitations; **known weaknesses and how each was handled**; ethics; conclusion and future work.
+
+Two framing rules for the whole report:
+
+- **The contribution is scoring the visual answer** --- view, area, time window and camera --- which VayuBuddy's authors named as an unsolved need. Never describe it as "using structured output". *(Fixes W3.)*
+- **Target users are named honestly:** students, journalists and analysts. Public impact is not claimed, because it was not measured. *(Handles W11.)*
+
+### 7.2 Releases
+
+- Benchmark (60 questions and gold forms), evaluation code, derived statistics (C4, coverage, forecast error), and the source code. **Raw EPA readings are released only if permission was granted.**
+
+### 7.3 Replay the worst day (optional)
+
+- Find the day with the highest city-average AQI in the archive.
+- Animate it hour by hour at about 10 seconds per hour of data, with captions drawn from the data: when the rise began, which station peaked first, the wind direction at the time.
+- Captions describe what happened, never why --- consistent with the no-causation rule.
+- Used as the opening of the presentation and available to any visitor from a "Replay" button.
+
+### 7.4 Demo rehearsal
+
+See Part F.
+
+**Exit criterion:** report submitted; repository public; demo rehearsed twice.
+
+\newpage
+
+# Part E --- Timeline, Risks, Limitations and Ethics
+
+## Ten-week timeline
+
+| Week | Dates | Phase | Milestone |
+|:------|:--------------|:----------------------------------------|:------------------------------------|
+| 1 | 13--19 Oct | 0 Foundations | Shell runs, keys work, emails sent |
+| 2 | 20--26 Oct | 1 Data pipeline; AQI formula identified | Live collection running; versions pinned |
+| 3 | 27 Oct -- 2 Nov | 1 Backfill, **AQI harmonisation** + 2 Twin begins | Soak passed; EPD extracted; **W1 fixed** |
+| 4 | 3--9 Nov | 2 Digital twin, **2D companion views**; recruit classmates | All views live; **W10 fixed** |
+| 5 | 10--16 Nov | 3 Schema + benchmark: **blind questions, second annotator, camera categories, Roman-Urdu** | **Benchmark frozen; W2, W5 fixed** |
+| 6 | 17--23 Nov | 3 Language: router, validator, clarifying questions | Questions answered in console; clarifications work |
+| 7 | 24--30 Nov | 3 Language: integration, show-the-query, follow-ups | **End-to-end system complete** |
+| 8 | 1--7 Dec | 4 Forecast **with CAMS input**, validation **as agreement**, placement **with source criterion**, lowest-AQI window | C4, C7 produced; **W7, W8, W9 handled** |
+| 9 | 8--14 Dec | 5 Evaluation: **3 runs, confidence intervals**, local model + 6 Deployment | Results in; URL live; **W4, W6 fixed** |
+| 10 | 15--21 Dec | 7 Report **with weaknesses section**, demo; optional features if time remains | Submission; **W3, W11 handled** |
+
+**Critical weeks:** week 1 (removes integration risk early), week 5 (freezing the benchmark protects the honesty of every later number) and week 7 (the system becomes one product).
+
+**Scope cuts, decided now, in this order if behind:** (1) satellite layer, (2) multi-city panel, (3) shareable answer cards, (4) replay-the-worst-day mode, (5) voice input, (6) lowest-AQI window, (7) follow-up questions, (8) split-screen view, (9) Roman-Urdu test set. **Never cut:** the 3D map, time animation, the language layer, the evaluation, the show-the-query toggle, clarifying questions, station placement, **or any of the fully-solvable weakness fixes W1--W6, W10, W13.**
+
+**Honest capacity note:** the weakness fixes add about 10 days; making cards and replay optional frees about 4. The plan remains tight --- weeks 6--9 have no slack. **Validity fixes come before every feature:** a polished demo with an unsound number fails a viva; a plain demo with sound numbers passes it.
+
+## Risk register
+
+| ID | Risk | Likelihood | Impact | Mitigation |
+|:----|:----------------------------|:-----------|:---------|:---------------------------------------------|
+| R1 | EPA has no usable endpoint | Medium | High | Find it in DevTools in week 1; fall back to polite page scraping; EPD PDF history independent of it |
+| R2 | EPA never replies or refuses | High | Medium | Built to work without permission; release derived statistics only; respect any refusal and switch ground truth to EPD PDFs or OpenAQ |
+| R3 | WAQI data leaks into analysis | Low | High | Separate module that writes nothing to disk |
+| R4 | Collector stops silently | Medium | Medium | Heartbeat commits, minute-17 schedule, freshness label, failure emails |
+| R5 | Free LLM limits too tight | Medium | Low | Router across 5 models, caching, short prompts, unlimited local model |
+| R6 | Free model ids retired mid-project | Medium | Medium | Log exact ids; open-weight `gpt-oss` models can be re-run locally |
+| R7 | CARTO basemap changes again | Medium | Low | Protomaps fallback ready; no-basemap mode works |
+| R8 | Stations offline during smog season | High | Medium | Uptime shown in app; gaps reported, never filled silently |
+| R9 | Language accuracy below target | Low | Medium | Reported as a finding with error analysis |
+| R10 | Forecast fails to beat baseline | Medium | Low | Reported as a negative result |
+| R11 | Examiner's phone app shows a different number | High | Medium | Different stations, averaging windows and AQI formulas explain it; C4 quantifies it in advance |
+| R12 | Scope creep | **High** | High | Cut order fixed above; Could-priority features dropped at the first slip |
+| R13 | Station recommendations read as official advice | Low | Medium | Labelled "recommended for consideration"; method and limits stated beside the map |
+| R14 | Shared cards circulate as if official | Medium | Medium | Attribution and "not an official source" baked into every image |
+
+## Known weaknesses and mitigations
+
+A self-review identified fifteen weaknesses. They fall into three kinds: **solvable** (the fix removes the problem), **reducible** (the fix makes it much smaller) and **handled** (outside the project's control, managed openly). Each is resolved at a specific point in the build.
+
+### Solvable --- fixed completely
+
+| ID | Weakness | Fix | Phase | Resolved by | Exit check |
+|:----|:-------------------------|:-------------------------------------|:------|:----------|:---------------------------|
+| W1 | Station AQI compared with CAMS concentration --- different units and formulas | Identify EPA's AQI formula; convert CAMS into the same scale; unit-test | 0.2, 1.7 | Week 3 | Converter passes tests on 10 published readings |
+| W2 | Benchmark written by the same person who built the system | Classmates write half the questions blind; second annotator on 20 items; report kappa | 3.2 | Week 5 | Kappa reported; benchmark frozen |
+| W3 | Contribution mistaken for "just structured output" | Frame as scoring the visual answer; cite VayuBuddy's stated gap | 7.1 | Week 10 | Framing used in report and viva slides |
+| W4 | 60 questions is a small sample | Bootstrap 95% confidence intervals; no claims inside the noise | 5 (E1) | Week 9 | Every accuracy figure carries an interval |
+| W5 | No single "correct" camera | Score camera by level and direction categories | 3.2 | Week 5 | Camera rubric in the frozen benchmark |
+| W6 | LLM answers vary between runs | Temperature 0; three runs per question; consistency reported | 3.3, 5 | Week 9 | Consistency figure in E1 |
+| W10 | 3D columns distort height comparisons | 2D ranked bar beside every 3D view; top-down toggle | 2.5 | Week 4 | Every view has its 2D companion |
+| W13 | Free tiers and libraries change without notice | Pin all versions; demo from laptop on cached data | 0.1, 7.4 | Week 1 | `requirements.txt` pinned; offline demo rehearsed |
+
+### Reducible --- made much smaller
+
+| ID | Weakness | Reduction | Phase | Resolved by | What remains |
+|:----|:-------------------------|:-------------------------------------|:------|:----------|:---------------------------|
+| W7 | Forecast may not beat the baseline | CAMS forecast as an input feature (bias correction) | 4.2 | Week 8 | It may still only match the baseline --- reported either way |
+| W8 | Station placement ignores pollution sources | Add roads and industrial land as a second criterion | 4.5 | Week 8 | Still a heuristic, not a siting study |
+| W12 | English-only questions | 20-question Roman-Urdu test set | 3.2 | Week 5 | Urdu script not supported |
+| W11 | A website may not reach the public | Name real target users; share cards bridge to WhatsApp if built | 7.1 | Week 10 | Public demand not measured |
+| W14 | One person, ten weeks | Fixed cut order; optional features last | All | Ongoing | Schedule risk never reaches zero |
+
+### Handled --- outside the project's control
+
+| ID | Weakness | Why it cannot be fixed | How it is handled | When |
+|:----|:-------------------------|:------------------------------|:-----------------------------------|:----------|
+| W9 | Station readings may be inaccurate | Only the EPA can calibrate its instruments | C4 framed as agreement; uptime reported; US Consulate cross-check | Week 8 |
+| W15 | No licence for EPA data | Only the EPA can grant permission | Permission email; build without reply; publish derived statistics only | Week 1, then ongoing |
+
+### Resolution schedule
+
+| Week | Weaknesses resolved |
+|:------|:------------------------------------------------------------|
+| 1 | W13 (versions pinned), W15 (permission requested) |
+| 3 | W1 (AQI harmonised) |
+| 4 | W10 (2D companion views) |
+| 5 | W2 (blind benchmark, second annotator), W5 (camera categories), W12 (Roman-Urdu set) |
+| 8 | W7 (CAMS-input forecast), W8 (source criterion), W9 (agreement framing) |
+| 9 | W4 (confidence intervals), W6 (three-run consistency) |
+| 10 | W3 (contribution framing), W11 (target users) |
+| Ongoing | W14 (scope discipline) |
+
+## Limitations
+
+1. **Spatial coverage:** about a dozen stations for eleven million people; between them Airlume reports the nearest reading and its distance, never an invented value.
+2. **History:** station-level history is limited to the EPD published reports and Airlume's own logging period.
+3. **Model resolution:** CAMS over Pakistan is about 45 km --- a regional estimate, measured in C4 rather than assumed accurate.
+4. **No causation:** wind and rain are shown as correlates; source attribution needs chemical analysis.
+5. **No medical advice:** only the official AQI band and its standard wording.
+6. **Single deep city:** the architecture generalises; generalisation is not tested.
+7. **Free-tier dependence:** model availability and limits can change without notice.
+
+## Ethics and licensing
+
+- **Attribution** on every page for every source, in the form each licence requires.
+- **Non-impersonation:** clearly labelled as a student project, not an official source.
+- **Permission:** sought in writing in week 1 and documented; any refusal is respected.
+- **WAQI** used for live display only, as its terms allow; never archived or analysed.
+- **No personal data** is collected, stored, or sent to any language model.
+- **Polite collection:** hourly at most, descriptive User-Agent, timeouts and backoff.
+- **Free-tier model data use** disclosed in the report.
+
+## Mapping to course outcomes
+
+**DS494 Data Visualization:** 3D spatial encoding, temporal animation, an externally standardised colour scale, comparative views, and the explicit communication of data sparsity --- tested empirically in E4.
+
+**CC425 Parallel and Distributed Computing:** parallel extraction of about 2,000 historical PDFs benchmarked across sequential, multiprocessing and asynchronous designs (E5); decoupled distributed deployment of collector and application.
+
+# Part F --- Demo Day
+
+## Demo script (about seven minutes)
+
+1. **Open with "Replay the worst day"** if it was built --- thirty seconds of the worst day in the data, captions only. Otherwise open with the city already rotating. Say nothing.
+2. Ask **"Where is smog worst right now?"** --- live, about today. Let the camera fly.
+3. Ask **"Is today worse than yesterday?"** --- the split screen.
+4. Ask **"How is Gulberg?"** --- Airlume asks back: *the Gulberg III station or the whole area?* Tap one. *This is clarification.*
+5. Follow up with **"and yesterday?"** --- it remembers Gulberg. Switch on **Show the query** and point at the fields. *This is C1, visible.*
+6. Ask **"What's the AQI in Ali Town?"** --- no station there; Airlume names the nearest one and its distance. *This is C3 working.*
+7. Ask **"What's the AQI on my street?"** --- a graceful refusal. *Proving the system knows its limits earns more credit than any success.*
+8. Show the coverage map and the five recommended new stations. *This is C7.*
+9. Show the accuracy page --- yesterday's forecast against reality.
+10. One slide of results: E1 accuracy by class, E7 local-versus-cloud, E3 CAMS error.
+11. Close on the known-weaknesses slide: what you found, and when and how you fixed each one. *(If cards were built, share one to your phone as the last click.)*
+
+## Before walking in
+
+- Open the app once to wake it (it sleeps after 12 hours).
+- Check the freshness label shows today's date.
+- Present from **localhost on cached data**; keep the public URL open in a second tab as proof it is live.
+- Have a screen recording on the laptop in case the network fails.
+
+## Deliverables
+
+1. Public website and installable phone app.
+2. Complete source code in a public repository.
+3. Frozen benchmark: 60 questions, 10 ambiguous items and 10 follow-up dialogues, with gold annotations.
+4. Evaluation code reproducing every figure.
+5. Derived statistics: CAMS-vs-ground validation, coverage analysis, forecast scorecard.
+6. Station-placement recommendation: ranked sites with coverage gained (C7).
+7. Local-versus-cloud model comparison (E7).
+8. Parallel-extraction benchmark (CC425).
+9. Written report and presentation.
+
+\newpage
+
+# Appendix A --- Benchmark Samples
+
+| ID | Question | Class | Expected behaviour |
+|:----|:------------------------------------------|:-------------|:---------------------------------------|
+| 1 | Where is smog worst right now? | Ranking | All stations ranked; city camera |
+| 2 | What is the AQI in Gulberg? | Lookup | Gulberg III station; zoomed camera |
+| 3 | Is today worse than yesterday? | Comparison | Split view, two days |
+| 4 | Show me the last thirty days | Trend | Animated 30-day series |
+| 5 | How many days this month were above 150? | Conditional | Count + calendar strip |
+| 6 | When during the day is pollution worst? | Aggregate | Mean by hour of day |
+| 7 | Which station improved most this week? | Comparison | Change across two windows, ranked |
+| 8 | Compare Shahdara and DHA today | Comparison | Two stations side by side |
+| 9 | What is the AQI on my street? | Out of scope | Refusal: stations kilometres apart |
+| 10 | What was the AQI in 2015? | Out of scope / history | Answer from EPD archive if present, else refusal |
+| 11 | Is it safe for my child to play outside? | Out of scope | Official band wording only |
+| 12 | Who is causing the smog? | Out of scope | Refusal: needs source apportionment |
+| 13 | How is Gulberg? | Ambiguous | Clarify: Gulberg III station or the Gulberg area? |
+| 14 | How bad was it? | Ambiguous | Clarify: today, this week or this month? |
+| 15 | (after Q2) ...and yesterday? | Follow-up | Same station, yesterday; camera kept |
+| 16 | (after Q1) What about DHA? | Follow-up | Same view and time, DHA Phase 6 |
+| 17 | When is the air cleanest today? | Best time | Lowest predicted two-hour window, with error |
+| 18 | Where should a new monitor go? | Placement | Show the five recommended sites |
+
+# Appendix B --- Week-1 Command Checklist
+
+Create the project environment:
+
+```bash
+python -m venv venv && source venv/bin/activate
+```
+
+Install the core libraries:
+
+```bash
+pip install duckdb pandas pyarrow pydantic requests streamlit pydeck \
+  geopandas shapely pdfplumber scikit-learn lightgbm statsmodels pytest
+```
+
+Check OpenAQ's Pakistan coverage:
+
+```bash
+curl -H "X-API-Key: $OPENAQ_KEY" \
+  "https://api.openaq.org/v3/locations?iso=PK&limit=1000" > openaq_pk.json
+```
+
+Test Open-Meteo for Lahore:
+
+```bash
+curl "https://air-quality-api.open-meteo.com/v1/air-quality?\
+latitude=31.52&longitude=74.36&hourly=pm2_5,us_aqi&past_days=7"
+```
+
+Enumerate the EPD archive index:
+
+```bash
+for p in $(seq 0 104); do
+  curl -s "https://epd.punjab.gov.pk/Air_quality?page=$p" > epd_index_$p.html
+  sleep 2
+done
+```
+
+Install the local model for development:
+
+```bash
+ollama pull qwen3:8b
+```
+
+Re-enable the collector if GitHub ever disables it:
+
+```bash
+gh workflow enable collect.yml
+```
+
+# Appendix C --- Sources
+
+[1] Omar, A. and Rosales, C. (2024). *Open Air Quality Community Data in Pakistan.* EGU General Assembly, EGU24-453. <https://doi.org/10.5194/egusphere-egu24-453>
+
+[2] Punjab Environmental Protection Agency. *Lahore AQI real-time platform.* <https://aqi.punjab.gov.pk/lahore> ; Punjab EPD air-quality archive, <https://epd.punjab.gov.pk/air_quality>
+
+[3] *Punjab introduces EcoBot for real-time air quality monitoring.* Digital Pakistan, October 2025. <https://digitalpakistan.pk/punjab-introduces-ecobot-for-real-time-air-quality-monitoring/>
+
+[4] *VayuBuddy: an LLM-Powered Chatbot to Democratize Air Quality Insights* (2024). <https://arxiv.org/html/2411.12760v1> ; review: <https://pith.science/paper/2411.12760>
+
+[5] *VayuChat: An LLM-Powered Conversational Interface for Air Quality Data Analytics* (2025). <https://awesomepapers.io/ai-agents/papers/2511.01046>
+
+[6] *Towards Democratising Urban Sustainability Data: An LLM-Enabled Natural Language Interface for Smart-City Air-Quality Decision Support.* Sustainability 18(11), 5506. <https://www.mdpi.com/2071-1050/18/11/5506>
+
+[7] Open-Meteo. *Air Quality API documentation.* <https://open-meteo.com/en/docs/air-quality-api> ; licence: <https://open-meteo.com/en/licence> ; terms: <https://open-meteo.com/en/terms>
+
+[8] *Data Driven Framework for Analysis of Air Quality Landscape for the City of Lahore.* ISPRS Archives XLVIII-4/W5-2022. <https://isprs-archives.copernicus.org/articles/XLVIII-4-W5-2022/167/2022/>
+
+[9] World Air Quality Index Project. *API terms of service.* <https://aqicn.org/api/tos> ; Punjab network feed: <https://aqicn.org/network/aqipunjab/>
+
+[10] OpenAQ. *Terms of use and rate limits.* <https://docs.openaq.org/about/terms> ; <https://docs.openaq.org/using-the-api/rate-limits>
+
+[11] CARTO. *Basemaps FAQ and terms.* <https://docs.carto.com/faqs/carto-basemaps> ; <https://carto.com/legal/basemap-terms/>
+
+[12] Protomaps documentation. <https://docs.protomaps.com/>
+
+[13] GitHub. *Actions billing and scheduled workflows.* <https://docs.github.com/en/billing/concepts/product-billing/github-actions> ; <https://docs.github.com/en/actions/how-tos/manage-workflow-runs/disable-and-enable-workflows>
+
+[14] Streamlit. *Community Cloud app management.* <https://docs.streamlit.io/deploy/streamlit-community-cloud/manage-your-app>
+
+[15] Hugging Face. *Spaces overview.* <https://huggingface.co/docs/hub/spaces-overview>
+
+[16] Groq. *Rate limits and structured outputs.* <https://console.groq.com/docs/rate-limits> ; <https://console.groq.com/docs/structured-outputs>
+
+[17] Google. *Gemini API pricing, rate limits and terms.* <https://ai.google.dev/gemini-api/docs/pricing> ; <https://ai.google.dev/gemini-api/terms>
+
+[18] Copernicus. *CC BY licence for CDS/ADS (from 2 July 2025).* <https://forum.ecmwf.int/t/cc-by-licence-to-replace-licence-to-use-copernicus-products-on-02-july-2025/13464> ; Data Space quotas: <https://documentation.dataspace.copernicus.eu/Quotas.html>
+
+[19] United States EPA. *Technical Assistance Document for the Reporting of Daily Air Quality --- the AQI.*

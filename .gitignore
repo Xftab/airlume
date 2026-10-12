@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+# LaTeX build leftovers
+*.aux
+*.log
+*.out
+*.toc
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
