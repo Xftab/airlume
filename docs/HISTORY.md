@@ -3,7 +3,7 @@
 Newest first. Each entry records what was decided and why.
 
 ## 12 October 2026
-- **Dropped the GitHub Actions PDF workflow.** Remote tools may not write workflow files, and installing it by hand was unnecessary friction. PDFs are rebuilt by Claude in each session and saved with their sources, so nothing is lost.
+- **GitHub Actions PDF workflow installed by hand.** Remote tools are not allowed to write workflow files (they run code on GitHub automatically), so Claude placed the file in the project folder and Aftab moved it into `.github/workflows/`. It is a backup; Claude still rebuilds the PDFs in each session.
 - **Working folder set to `K:\airlume`** on the laptop (C: is nearly full). Claude writes files there directly; `save.bat` commits and pushes to GitHub. GitHub was not linked to Claude, by the student's choice.
 - **Renamed the project to Airlume** (air + *lume*, light). "Hawa" was dropped at the student's request. "AeroVue" was rejected because it is a Honeywell avionics trademark; "Airora" because search engines autocorrect it to "Aurora". "Airlume" is used elsewhere only by a 2017 art installation.
 - **Repository created** with automatic PDF rebuilds on every source change.
