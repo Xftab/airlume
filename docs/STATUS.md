@@ -7,6 +7,7 @@ _Last updated: 12 October 2026_
 
 Done so far:
 - Project idea chosen, researched and named **Airlume** (renamed from "Hawa").
+- Scope set (12 Oct evening): **all Pakistani cities with monitoring stations** at city level, Lahore in full 3D depth. Registered with the university under the title "Airlume: A Conversational 3D Digital Twin of Air Quality in Pakistan".
 - Complete project plan written: 29 pages, 8 phases, 15 known weaknesses with fixes and dates.
 - Every resource verified free and accessible on 12 Oct 2026.
 - UI mockups made (desktop live view, answered query, accuracy page, phone), using the 11 real EPA station names.

@@ -1,6 +1,6 @@
 ---
 title: "Airlume: Complete Project Plan"
-subtitle: "A Conversational 3D Digital Twin of Lahore's Air Quality --- Problem, Product, Resources and Phased Build Plan"
+subtitle: "A Conversational 3D Digital Twin of Air Quality in Pakistan's Monitored Cities --- Problem, Product, Resources and Phased Build Plan"
 author:
   - "Aftab Ahmad"
 date: "12 October 2026"
@@ -10,7 +10,7 @@ date: "12 October 2026"
 
 ## The project in one paragraph
 
-**Airlume** --- from *air* and *lume*, light --- is a website that shows Lahore's air pollution on a three-dimensional map of the city, and that you control by asking questions in plain language. You type or say *"where is smog worst today?"* and the map turns to the right part of the city, raises a glowing column over each monitoring station --- taller and more purple where the air is worse --- and writes a short answer. You ask *"is today worse than yesterday?"* and the screen splits into two maps side by side. There are no filters, dropdowns or menus to learn: the question is the interface.
+**Airlume** --- from *air* and *lume*, light --- is a website that shows air pollution across Pakistan's monitored cities on a three-dimensional map, and that you control by asking questions in plain language. Zoomed out, every city with monitoring stations stands as a glowing column --- taller and more purple where the air is worse. Zoom into Lahore and the city opens up station by station. You type or say *"which city has the worst smog today?"* or *"where is it worst in Lahore?"* and the map turns to the right place and writes a short answer. You ask *"is today worse than yesterday?"* and the screen splits into two maps side by side. There are no filters, dropdowns or menus to learn: the question is the interface.
 
 Behind that simple surface sit three engineering pieces --- a data pipeline that collects official readings every hour, a 3D visualisation engine, and a language layer that turns a sentence into a precise, checked instruction --- plus the part that makes this a research project rather than a demo: a frozen benchmark that **measures** whether the system understood each question correctly.
 
@@ -98,8 +98,9 @@ The idea of talking to air-quality data is not new, and it is important to state
 
 | In scope | Out of scope |
 |:---------------------------------------------------|:---------------------------------------------------|
-| Lahore as the deep city: full 3D twin, all features | Street-level readings (stations are kilometres apart) |
-| Multan and Karachi as comparison points (stretch, Phase 4) | Indoor air quality |
+| **Every Pakistani city with monitoring stations**, at city level: Punjab's 28 EPA cities, plus Islamabad, Karachi, Peshawar and Quetta where third-party stations exist | Places with no stations (rural areas, unmonitored towns): no invented values |
+| **Lahore in full depth**: the only city with enough stations (11) for an intra-city 3D twin | Intra-city detail for any other city |
+| Country-wide questions: rankings, comparisons and trends between cities | Indoor air quality |
 | Clarifying questions and follow-up conversations | Open-ended chat unrelated to air quality |
 | Recommended locations for new monitoring stations | Installing or calibrating physical sensors |
 | Six question classes: lookup, ranking, comparison, trend, aggregate, conditional | Causal attribution of pollution sources |
@@ -117,16 +118,16 @@ Every resource was checked on **12 October 2026** against official documentation
 
 | Source | Free | Key | May we republish? | Role in Airlume |
 |:---------------------|:----------|:---------|:---------------------------|:--------------------------------|
-| **Punjab EPA portal** (aqi.punjab.gov.pk) | Yes | None | Unclear --- no licence published | Live Lahore and Multan station readings (11 Lahore stations) |
+| **Punjab EPA portal** (aqi.punjab.gov.pk) | Yes | None | Unclear --- no licence published | Live readings for 28 Punjab cities (59 stations province-wide; 11 in Lahore) |
 | **Punjab EPD archive** (epd.punjab.gov.pk) | Yes | None | Cite and analyse as published reports | Deep history: about 2,000 daily AQI PDFs back to 2007, plus weekly district reports |
 | **Open-Meteo** air quality + weather | Yes, non-commercial | None | **Yes --- CC BY 4.0** | CAMS model values for validation (C4), wind, temperature, rain |
-| **OpenAQ** | Yes | Free key | Yes, per-station licence (CC0 / CC BY only) | Ground truth if Pakistan reference stations are carried --- verify in Phase 0 |
+| **OpenAQ** | Yes | Free key | Yes, per-station licence (CC0 / CC BY only) | Cities outside Punjab (Islamabad, Karachi, Peshawar, Quetta) where its stations exist --- verify coverage and licences in Phase 0 |
 | **CAMS / Atmosphere Data Store** | Yes | Free account | **Yes --- CC BY 4.0** since July 2025 | Optional reanalysis baseline |
 | **Sentinel-5P** (Copernicus Data Space) | Yes | Free account | Yes, with "Contains modified Copernicus Sentinel data" | Optional NO~2~ satellite layer |
 | **WAQI / aqicn** | Yes | Free token | **No --- archiving and "data analysis" prohibited** | **Live display only.** Never archived, never analysed |
 | **OpenStreetMap** | Yes | None | Yes, ODbL with attribution | District boundaries, buildings, roads |
 | **IQAir** | Partly | Key | Unknown | **Not used** --- station-level data is paywalled |
-| **Sindh EPA** (Karachi) | --- | --- | --- | **Publishes no data.** Karachi has no official source |
+| **Sindh EPA** (Karachi) | --- | --- | --- | **Publishes no data.** Karachi and other non-Punjab cities rely on OpenAQ (archivable) or WAQI (display only) |
 
 ### Key facts about the data
 
@@ -244,7 +245,7 @@ Python 3.12, DuckDB (MIT), Pandas (BSD), Pydantic (MIT), scikit-learn (BSD), Lig
 |:----------------|:-----------|:-------------------------------------------------|:-----------|
 | `metric` | enum | pm2_5, pm10, no2, so2, co, o3, us_aqi | Model |
 | `area` | enum | station id, district, region, all_lahore | Model |
-| `city` | enum | lahore, multan, karachi | Model |
+| `city` | enum or null | any monitored city (from the station registry); null means all cities | Model |
 | `time` | label | now, today, yesterday, this_week, last_week, this_month, named month, past_24h | Model |
 | `time_start`, `time_end` | timestamp | resolved in Asia/Karachi | **Code** |
 | `aggregation` | enum | mean, max, min, count_above | Model |
@@ -566,10 +567,13 @@ ollama pull qwen3:8b
 - **Framed as agreement, not error:** station instruments are uncalibrated and sometimes offline, so C4 measures how far model and stations agree, not how wrong CAMS is. Report each station's uptime, and cross-check against the US Consulate monitor where available. *(Handles W9.)*
 - Comparisons use harmonised AQI from 1.7 only.
 
-### 4.4 Multi-city comparison (stretch)
+### 4.4 City-level comparison across Pakistan (core)
 
-- Multan from EPA stations; Karachi from OpenAQ only if Phase 0 confirmed coverage, otherwise WAQI display-only with no analysis.
-- City-level comparison panel, not a 3D twin.
+- Every monitored city appears on the country view as one column: its city-level AQI, with a per-city time series and ranking.
+- Punjab cities come from the EPA portal; Islamabad, Karachi, Peshawar and Quetta from OpenAQ where Phase 0 confirmed archivable coverage, otherwise shown from WAQI for display only and excluded from every analysis and published file.
+- Country-level question classes: *"which city is worst today?"*, *"compare Lahore and Faisalabad this week"*, *"which city improved most this month?"*
+- Each city card states its data source and station count, so a one-station city is never read as precisely as Lahore.
+- Lahore remains the only city with intra-city 3D detail; clicking any other city shows its city-level record, not an invented neighbourhood map.
 
 ### 4.5 Where should the next station go? (added --- contribution C7)
 
@@ -711,7 +715,7 @@ See Part F.
 
 **Critical weeks:** week 1 (removes integration risk early), week 5 (freezing the benchmark protects the honesty of every later number) and week 7 (the system becomes one product).
 
-**Scope cuts, decided now, in this order if behind:** (1) satellite layer, (2) multi-city panel, (3) shareable answer cards, (4) replay-the-worst-day mode, (5) voice input, (6) lowest-AQI window, (7) follow-up questions, (8) split-screen view, (9) Roman-Urdu test set. **Never cut:** the 3D map, time animation, the language layer, the evaluation, the show-the-query toggle, clarifying questions, station placement, **or any of the fully-solvable weakness fixes W1--W6, W10, W13.**
+**Scope cuts, decided now, in this order if behind:** (1) satellite layer, (2) non-Punjab cities (keep the 28 Punjab EPA cities), (3) shareable answer cards, (4) replay-the-worst-day mode, (5) voice input, (6) lowest-AQI window, (7) follow-up questions, (8) split-screen view, (9) Roman-Urdu test set. **Never cut:** the 3D map, time animation, the language layer, the evaluation, the show-the-query toggle, clarifying questions, station placement, **or any of the fully-solvable weakness fixes W1--W6, W10, W13.**
 
 **Honest capacity note:** the weakness fixes add about 10 days; making cards and replay optional frees about 4. The plan remains tight --- weeks 6--9 have no slack. **Validity fixes come before every feature:** a polished demo with an unsound number fails a viva; a plain demo with sound numbers passes it.
 
@@ -789,7 +793,7 @@ A self-review identified fifteen weaknesses. They fall into three kinds: **solva
 3. **Model resolution:** CAMS over Pakistan is about 45 km --- a regional estimate, measured in C4 rather than assumed accurate.
 4. **No causation:** wind and rain are shown as correlates; source attribution needs chemical analysis.
 5. **No medical advice:** only the official AQI band and its standard wording.
-6. **Single deep city:** the architecture generalises; generalisation is not tested.
+6. **One city in depth:** only Lahore has enough stations for intra-city detail; every other city is a single value. Places with no stations are not shown as having a value at all.
 7. **Free-tier dependence:** model availability and limits can change without notice.
 
 ## Security checklist

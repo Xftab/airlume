@@ -1,8 +1,8 @@
 # Airlume
 
-**A conversational 3D digital twin of Lahore's air quality.**
+**A conversational 3D digital twin of air quality in Pakistan's monitored cities.**
 
-Ask a question about Lahore's air in plain words: *"Where is smog worst today?"* or *"Is today worse than yesterday?"* A three-dimensional map of the city answers it, turning the camera, raising a column over each monitoring station and writing a short reply. The question is the interface.
+Ask a question in plain words: *"Which city has the worst smog today?"* or *"Where is it worst in Lahore?"* A three-dimensional map answers it: every monitored city in Pakistan as a column at country level, and Lahore station by station. The question is the interface.
 
 Airlume is a semester-7 BS Data Science project (DS494 Data Visualization; CC425 Parallel & Distributed Computing), built at zero cost on open data.
 

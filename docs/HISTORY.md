@@ -3,6 +3,7 @@
 Newest first. Each entry records what was decided and why.
 
 ## 12 October 2026
+- **Scope widened to Pakistan's monitored cities.** Every city with monitoring stations (Punjab's 28 EPA cities; Islamabad, Karachi, Peshawar, Quetta via third-party stations) appears at city level; Lahore keeps the full 3D twin. A nationwide CAMS model grid was considered and rejected: the student chose to show only measured values, never modelled ones, on the map. City comparison moved from stretch to core.
 - **GitHub workflow changed to check-only.** Its first run committed rebuilt PDFs, which conflicted with the PDFs saved locally (git cannot merge two PDFs). The workflow now only verifies the build and attaches the PDFs to the run. `save.bat` now keeps the laptop's version on any conflict and reports failures instead of claiming success.
 - **Security standard adopted.** A 15-item security checklist (keys, secrets in history, XSS, injection, rate limiting, headers, debug off, exposed files, database, audit) was added to the plan as a standing requirement, with a hardening sub-phase (6.7) that must pass before the site goes public. Git history scanned the same day: clean.
 - **GitHub Actions PDF workflow installed by hand.** Remote tools are not allowed to write workflow files (they run code on GitHub automatically), so Claude placed the file in the project folder and Aftab moved it into `.github/workflows/`. It is a backup; Claude still rebuilds the PDFs in each session.
