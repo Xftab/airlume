@@ -4,12 +4,13 @@ rem Usage:  save "what changed"
 setlocal
 cd /d "%~dp0"
 if "%~1"=="" (set "MSG=Update project files") else (set "MSG=%~1")
+set "DID="
 git add -A
 git diff --cached --quiet
-if errorlevel 1 git commit -m "%MSG%"
-rem Pull first: GitHub may have committed rebuilt PDFs since the last save.
-git pull --rebase --autostash
-git push
+if errorlevel 1 (git commit -q -m "%MSG%" & set "DID=1")
+rem Pull first, in case anything was changed on GitHub directly.
+git pull -q --rebase --autostash
+git push -q
 echo.
-echo Saved and pushed: %MSG%
+if defined DID (echo Saved and pushed: %MSG%) else (echo Nothing new to save. Synced with GitHub.)
 endlocal

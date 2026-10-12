@@ -10,7 +10,7 @@ Done so far:
 - Complete project plan written: 29 pages, 8 phases, 15 known weaknesses with fixes and dates.
 - Every resource verified free and accessible on 12 Oct 2026.
 - UI mockups made (desktop live view, answered query, accuracy page, phone), using the 11 real EPA station names.
-- This repository created, with automatic PDF rebuilds.
+- Repository created: github.com/Xftab/airlume (private).
 - Project folder set up on the laptop at `K:\airlume`; `save.bat` commits and pushes in one command.
 
 ## Next steps (Phase 0)
