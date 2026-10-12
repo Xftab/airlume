@@ -312,7 +312,8 @@ Eight features were added on top of the core plan. Each is placed in the phase w
 ### 0.1 Accounts and keys
 
 - Create the eight accounts listed in Part B.
-- Store keys in a local `.env` file and in GitHub repository secrets; never commit them.
+- Store keys in a local `.env` file and in GitHub repository secrets; never commit them. `.env` is already in `.gitignore`.
+- Install a pre-commit secret scanner (gitleaks) so a key can never be committed by accident, and scan the existing history once. *(Security, Part E.)*
 - **Pin every library version** in `requirements.txt` from day one, so a free-tier or library change cannot break the build later. *(Fixes W13.)*
 - Read your real Gemini limits at `aistudio.google.com/rate-limit` and record them.
 
@@ -642,7 +643,24 @@ ollama pull qwen3:8b
 
 **Exit:** cards generate for every view type and read clearly on a phone.
 
-**Exit criterion for Phase 6:** public URL works on a phone; 72 hours of unattended operation. (Share cards, if built.)
+### 6.7 Security hardening (required before the URL goes public)
+
+Airlume is a public, read-only site with one user input: the question box. That keeps the attack surface small, and the design keeps it that way. The full checklist is in Part E; the items below are the ones that need building.
+
+- **Secrets:** every key lives in `.env` locally and in the host's secrets store when deployed; never in code, never in `data/`, never in a commit. A startup check refuses to run if a key is missing from the environment or found in a file.
+- **Input handling:** the question is treated as untrusted text. It is passed to the model as data inside a fixed system prompt; the model's only output is the typed form; the form is validated by Pydantic; SQL is built by code with parameters only. No user text is ever interpolated into a query, a shell command or HTML.
+- **Output handling:** the answer sentence and every station name are rendered as text, never as HTML. `unsafe_allow_html` is banned in the codebase (enforced by a test that greps for it).
+- **Rate limiting:** per-visitor limit on the question box (for example 20 questions per 10 minutes) and a global daily cap sized to the free model quota, with cached answers served without a model call. This protects the free-tier budget, which is the asset an attacker would actually burn.
+- **No accounts, no admin routes:** the public site has no login and no write path. Collection runs separately on GitHub Actions. If an operator page is ever added, it is protected by authentication and is not reachable from the public app.
+- **Security headers and settings:** debug mode off; no stack traces to visitors; Content-Security-Policy, X-Content-Type-Options, X-Frame-Options and Referrer-Policy set wherever the host allows (a FastAPI layer adds them if Streamlit alone cannot).
+- **Dependencies:** versions pinned; `pip-audit` run before each release; unused packages removed.
+- **Data store:** DuckDB file opened read-only by the web app; collectors are the only writers, and they run outside the app.
+- **Exposed-file check:** before going public, list every file served or committed and confirm none is a secret, a key, a database with private data, or a config file.
+- **Logs:** never log the raw key, the full environment, or visitor IP addresses beyond what rate limiting needs (hashed, short retention).
+
+**Exit:** the security checklist in Part E passes with zero open items; `gitleaks` and `pip-audit` report clean.
+
+**Exit criterion for Phase 6:** public URL works on a phone; 72 hours of unattended operation; security hardening complete. (Share cards, if built.)
 
 ## Phase 7 --- Report and Demo (Week 10: 15--21 Dec)
 
@@ -688,7 +706,7 @@ See Part F.
 | 6 | 17--23 Nov | 3 Language: router, validator, clarifying questions | Questions answered in console; clarifications work |
 | 7 | 24--30 Nov | 3 Language: integration, show-the-query, follow-ups | **End-to-end system complete** |
 | 8 | 1--7 Dec | 4 Forecast **with CAMS input**, validation **as agreement**, placement **with source criterion**, lowest-AQI window | C4, C7 produced; **W7, W8, W9 handled** |
-| 9 | 8--14 Dec | 5 Evaluation: **3 runs, confidence intervals**, local model + 6 Deployment | Results in; URL live; **W4, W6 fixed** |
+| 9 | 8--14 Dec | 5 Evaluation: **3 runs, confidence intervals**, local model + 6 Deployment and **security hardening** | Results in; URL live; **W4, W6 fixed**; security checklist passed |
 | 10 | 15--21 Dec | 7 Report **with weaknesses section**, demo; optional features if time remains | Submission; **W3, W11 handled** |
 
 **Critical weeks:** week 1 (removes integration risk early), week 5 (freezing the benchmark protects the honesty of every later number) and week 7 (the system becomes one product).
@@ -715,6 +733,7 @@ See Part F.
 | R12 | Scope creep | **High** | High | Cut order fixed above; Could-priority features dropped at the first slip |
 | R13 | Station recommendations read as official advice | Low | Medium | Labelled "recommended for consideration"; method and limits stated beside the map |
 | R14 | Shared cards circulate as if official | Medium | Medium | Attribution and "not an official source" baked into every image |
+| R15 | Leaked API key or abused question box burns the free quota or exposes the site | Medium | High | Secret scanning from day one; keys only in environment; rate limits and daily cap; read-only app with no write path; security checklist (Part E) must pass before going public |
 
 ## Known weaknesses and mitigations
 
@@ -772,6 +791,28 @@ A self-review identified fifteen weaknesses. They fall into three kinds: **solva
 5. **No medical advice:** only the official AQI band and its standard wording.
 6. **Single deep city:** the architecture generalises; generalisation is not tested.
 7. **Free-tier dependence:** model availability and limits can change without notice.
+
+## Security checklist
+
+A standing requirement for this project: it must not be an easy target. The list below is run in full before the site goes public (Phase 6.7) and again before submission. Items marked *N/A by design* are not skipped: they are true because of a design choice, and the choice is stated.
+
+| # | Item | How Airlume meets it | When |
+|:---|:-----------------------------|:-------------------------------------------------------------|:---------|
+| S1 | API keys hidden | `.env` locally, host secrets store when deployed; never committed; `.gitignore` covers `.env` | Phase 0 |
+| S2 | Environment variables checked | Startup check: required keys present, no key in any tracked file | Phase 0 |
+| S3 | Git history free of secrets | `gitleaks` pre-commit hook plus a one-time full-history scan. **History checked 12 Oct 2026: 15 files, all documents, no secrets.** | Phase 0, then every commit |
+| S4 | Admin routes protected | *N/A by design:* the public app has no admin route. Any future operator page requires authentication | Phase 6 |
+| S5 | Authentication and authorisation | *N/A by design:* no user accounts; the site is read-only for everyone. If accounts are ever added: passwords hashed with Argon2id, sessions server-side | Phase 6 |
+| S6 | Forms sanitised, XSS prevented | One input (the question). Treated as data; never rendered as HTML; `unsafe_allow_html` banned by a test | Phase 3 |
+| S7 | Injection prevented | Model fills a typed form only; code builds SQL with parameters; no shell calls with user text | Phase 3 |
+| S8 | Rate limiting | Per-visitor and global daily caps on the question box; cache serves repeats | Phase 6 |
+| S9 | API endpoints secured | Only the question endpoint is public; it accepts a bounded string, returns JSON, has the rate limit above | Phase 6 |
+| S10 | Core settings and security headers | Debug off; no stack traces; CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy | Phase 6 |
+| S11 | Unneeded things removed | Unused packages, routes and files deleted; `pip-audit` clean | Phase 6 |
+| S12 | Exposed files checked | Review of every served and committed file before going public | Phase 6 |
+| S13 | Database secured | DuckDB opened read-only by the app; writers run outside it; no network database unless needed, then least-privilege role over TLS | Phase 1, 6 |
+| S14 | Passwords hashed properly | *N/A by design* (no passwords). Argon2id if ever added | --- |
+| S15 | Full security audit | Whole checklist re-run, plus `gitleaks`, `pip-audit` and `bandit`, before going public and before submission | Phase 6, 7 |
 
 ## Ethics and licensing
 

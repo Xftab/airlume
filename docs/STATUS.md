@@ -22,6 +22,7 @@ Done so far:
 - [ ] Notify WAQI of academic display use.
 - [ ] Set up the K: drive environment and pin library versions (fix W13).
 - [ ] Build the fake-data UI shell.
+- [ ] Install the gitleaks pre-commit hook (security item S3). History already scanned clean on 12 Oct.
 
 ## Open decisions
 - Fill in roll number and supervisor name on the plan's title page.
