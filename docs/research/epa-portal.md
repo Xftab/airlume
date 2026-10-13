@@ -38,3 +38,10 @@
 ## Standards
 - NEQS/PEQS ambient: PM2.5 annual 15, 24-h 35 µg/m³; PM10 120 / 150; a 2023 PEQS draft proposes 30 / 55 (gazetting unconfirmed).
 - US EPA breakpoints: Technical Assistance Document EPA-454/B-24-002 (Table 6).
+
+## Live dry run, 13 Oct 2026 14:00 PKT (first real fetch from the laptop)
+- `/lahore`: 10 station rows (Gulberg III absent again - it seems to be missing from this table routinely). Timestamp parsed correctly (09:00 UTC = 14:00 PKT).
+- `/`: 35 of 36 districts matched the registry; one name differs (the collector now prints it).
+- Open-Meteo: 34 hourly rows for Lahore.
+- **The portal AQI is not the AQI of the hourly PM2.5 shown.** Examples: Egerton Road PM2.5 35.2 -> US-2012 formula 100, portal 143; Punjab University 33.1 -> 95 vs 133; Wagha 17.7/84.4 -> 65 vs 103; GT Road 24.2 -> 76 vs 73. The morning snapshot (7:00) matched within 3 points, the afternoon one does not. Two candidate explanations, both testable once hourly data accumulates: (a) the AQI is computed on an **8-hour mean** (EPD order of 1 Oct 2025) while the table shows the latest hour - midday PM2.5 falls fast, so the 8-h mean stays higher; (b) NO2 or O3 dominates at some stations. Readings now store CO, SO2, NO2, O3 as well, so both can be checked. This is the core of the W1 harmonisation study (1.7).
+- EPD archive: page 1 (oldest) holds scanned **monthly** summaries from 2010-2015 for one station (Town Hall), image-only. Not worth OCR. Daily typed reports are on the newest pages; `epd_fetch_sample.py last` fetches from there.

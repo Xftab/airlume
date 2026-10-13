@@ -24,7 +24,7 @@ ARCHIVE = ROOT / "data" / "archive"
 
 KEYS = {"readings": ["station_id", "ts", "source"], "city_hourly": ["city_id", "ts", "source"]}
 COLS = {
-    "readings": ["station_id", "ts", "pm25", "pm10", "aqi", "aqi_computed", "source"],
+    "readings": ["station_id", "ts", "pm25", "pm10", "co", "so2", "no2", "o3", "aqi", "aqi_computed", "source"],
     "city_hourly": ["city_id", "ts", "pm25", "pm10", "aqi", "n_stations", "source"],
 }
 
@@ -37,7 +37,11 @@ def export(table: str, df: pd.DataFrame) -> list[Path]:
     """Append new rows of `df` into the month files. Returns the files touched."""
     if df.empty:
         return []
-    df = df[COLS[table]].copy()
+    df = df.copy()
+    for c in COLS[table]:
+        if c not in df.columns:
+            df[c] = None
+    df = df[COLS[table]]
     df["ts"] = pd.to_datetime(df["ts"], utc=True)
     touched: list[Path] = []
     for (source, month), part in df.groupby([df["source"], df["ts"].dt.strftime("%Y-%m")]):

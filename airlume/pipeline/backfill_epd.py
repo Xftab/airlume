@@ -49,6 +49,15 @@ def list_page(page: int, session: requests.Session | None = None) -> list[Report
     return out
 
 
+def last_page(session: requests.Session | None = None) -> int:
+    """Highest page number in the index pagination (page 1 = oldest reports)."""
+    s = session or requests.Session()
+    r = s.get(INDEX, params={"page": 1}, headers={"User-Agent": USER_AGENT}, timeout=30)
+    r.raise_for_status()
+    nums = [int(m) for m in re.findall(r"[?&]page=(\d+)", r.text)]
+    return max(nums) if nums else 1
+
+
 def download(link: ReportLink, session: requests.Session | None = None) -> Path:
     s = session or requests.Session()
     RAW_DIR.mkdir(parents=True, exist_ok=True)

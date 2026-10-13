@@ -1,6 +1,8 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+import pandas as pd
+
 from airlume.collectors.epa import parse_lahore_html
 
 NOW = datetime(2026, 10, 13, 8, 0, tzinfo=ZoneInfo("Asia/Karachi"))
@@ -28,6 +30,8 @@ def test_values_and_timestamp():
     df = parse_lahore_html(SAMPLE, NOW).set_index("station_id")
     assert df.loc["LHR-MR", "aqi"] == 361 and df.loc["LHR-MR", "pm25"] == 310.8
     assert df.loc["LHR-MR", "aqi_computed"] == 361
+    assert df.loc["LHR-MR", "no2"] == 87.8 and df.loc["LHR-MR", "co"] == 3.8
+    assert pd.isna(df.loc["LHR-GT", "co"])
     assert df.loc["LHR-WB", "aqi_computed"] in (94, 95)
     # 07:00 PKT == 02:00 UTC
     assert df.loc["LHR-GT", "ts"].hour == 2

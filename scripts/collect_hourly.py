@@ -54,6 +54,8 @@ def run(dry_run: bool = False) -> int:
         lookup = {c.name.lower(): c.city_id for c in reg.cities}
         df = epa.parse_home_html(epa.fetch_home_html(), lookup)
         print(f"[epa/districts] {len(df)} district rows")
+        if epa.UNMATCHED:
+            print(f"[epa/districts] names on the page not in the registry: {epa.UNMATCHED}")
         if not df.empty:
             results["city_hourly"] = df
             ok += 1

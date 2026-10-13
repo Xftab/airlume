@@ -86,6 +86,7 @@ def parse_lahore_html(html: str, now: datetime | None = None) -> pd.DataFrame:
         col_aqi = next((i for h, i in idx.items() if h.startswith("aqi")), None)
         col_pm25 = next((i for h, i in idx.items() if "2.5" in h), None)
         col_pm10 = next((i for h, i in idx.items() if "10" in h and "2.5" not in h), None)
+        col_gas = {g: next((i for h, i in idx.items() if h.split()[0] == g), None) for g in ("co", "so2", "no2", "o3")}
         for tr in table.find_all("tr"):
             cells = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
             if not cells or col_station is None or col_station >= len(cells):
@@ -101,12 +102,14 @@ def parse_lahore_html(html: str, now: datetime | None = None) -> pd.DataFrame:
             pm10 = _num(cells[col_pm10]) if col_pm10 is not None and col_pm10 < len(cells) else None
             aqi_rep = _num(cells[col_aqi]) if col_aqi is not None and col_aqi < len(cells) else None
             aqi_comp, _ = aqi_from_concentrations(pm25, pm10)
+            gases = {g: (_num(cells[i]) if i is not None and i < len(cells) else None) for g, i in col_gas.items()}
             rows.append(
                 {
                     "station_id": station_id,
                     "ts": row_ts,
                     "pm25": pm25,
                     "pm10": pm10,
+                    **gases,
                     "aqi": int(aqi_rep) if aqi_rep is not None else None,
                     "aqi_computed": aqi_comp,
                     "source": "punjab_epa",
@@ -149,6 +152,9 @@ DISTRICT_ALIASES = {
 }
 
 
+UNMATCHED: list[str] = []  # district names seen on the page but absent from the registry (debug aid)
+
+
 def parse_home_html(html: str, city_lookup: dict[str, str], now: datetime | None = None) -> pd.DataFrame:
     """Parse the district ranking on `/`.
 
@@ -160,6 +166,7 @@ def parse_home_html(html: str, city_lookup: dict[str, str], now: datetime | None
     page_ts = _parse_updated(soup.get_text(" ", strip=True), now)
     rows: list[dict] = []
     seen: set[str] = set()
+    UNMATCHED.clear()
     # The ranking is a list/table of "<name> <aqi> <label>" items; be tolerant of markup.
     for el in soup.find_all(["tr", "li", "div", "a"]):
         text = el.get_text(" ", strip=True)
@@ -171,7 +178,11 @@ def parse_home_html(html: str, city_lookup: dict[str, str], now: datetime | None
         name = re.sub(r"\s+", " ", m.group(1)).strip().lower()
         name = DISTRICT_ALIASES.get(name, name).lower()
         city_id = city_lookup.get(name)
-        if city_id is None or city_id in seen:
+        if city_id is None:
+            if name.title() not in UNMATCHED and len(name) > 3:
+                UNMATCHED.append(name.title())
+            continue
+        if city_id in seen:
             continue
         seen.add(city_id)
         rows.append({

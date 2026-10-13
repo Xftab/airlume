@@ -26,6 +26,10 @@ CREATE TABLE IF NOT EXISTS readings (
     ts           TIMESTAMPTZ NOT NULL,
     pm25         DOUBLE,
     pm10         DOUBLE,
+    co           DOUBLE,
+    so2          DOUBLE,
+    no2          DOUBLE,
+    o3           DOUBLE,
     aqi          INTEGER,
     aqi_computed INTEGER,
     source       VARCHAR NOT NULL,
@@ -57,22 +61,27 @@ class Store:
         self.con = duckdb.connect(str(self.path), read_only=read_only)
         if not read_only:
             self.con.execute(SCHEMA)
+            for col in ("co", "so2", "no2", "o3"):  # migrate databases created before 13 Oct
+                self.con.execute(f"ALTER TABLE readings ADD COLUMN IF NOT EXISTS {col} DOUBLE")
 
     def close(self) -> None:
         self.con.close()
 
     # ---- writes -----------------------------------------------------------
     def upsert_readings(self, df: pd.DataFrame) -> int:
-        """df columns: station_id, ts (tz-aware), pm25, pm10, aqi, aqi_computed, source."""
+        """df columns: station_id, ts (tz-aware), pm25, pm10, [co, so2, no2, o3], aqi, aqi_computed, source."""
         if df.empty:
             return 0
         df = df.copy()
+        for col in ("co", "so2", "no2", "o3"):
+            if col not in df.columns:
+                df[col] = None
         df["ingested_at"] = datetime.now(tz=__import__("datetime").timezone.utc)
         self.con.register("incoming", df)
         self.con.execute(
             """
             INSERT OR REPLACE INTO readings
-            SELECT station_id, ts, pm25, pm10, aqi, aqi_computed, source, ingested_at
+            SELECT station_id, ts, pm25, pm10, co, so2, no2, o3, aqi, aqi_computed, source, ingested_at
             FROM incoming
             """
         )
@@ -102,7 +111,7 @@ class Store:
         placeholders = ",".join("?" for _ in station_ids)
         return self.con.execute(
             f"""
-            SELECT r.station_id, r.ts, r.pm25, r.pm10, r.aqi, r.aqi_computed, r.source
+            SELECT r.station_id, r.ts, r.pm25, r.pm10, r.co, r.so2, r.no2, r.o3, r.aqi, r.aqi_computed, r.source
             FROM readings r
             JOIN (SELECT station_id, max(ts) AS ts FROM readings
                   WHERE station_id IN ({placeholders}) GROUP BY station_id) m
