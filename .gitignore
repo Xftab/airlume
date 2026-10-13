@@ -13,3 +13,16 @@ venv/
 .DS_Store
 Thumbs.db
 .vscode/
+# Data and secrets (never commit)
+data/*.duckdb
+data/*.duckdb.wal
+data/raw/
+data/cache/
+*.env
+.env.*
+!.env.example
+# Reports / local artefacts
+.pytest_cache/
+.streamlit/secrets.toml
+*.egg-info/
+_update/

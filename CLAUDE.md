@@ -3,7 +3,7 @@
 Read this first, then `docs/STATUS.md` and `docs/HISTORY.md`.
 
 ## What this is
-Airlume is Aftab Ahmad's semester-7 project: a conversational 3D digital twin of Lahore's air quality. The canonical description, scope, resources, phases and weaknesses are in `docs/plan/plan.md`.
+Airlume is Aftab Ahmad's semester-7 project: a conversational 3D digital twin of air quality in Pakistan's monitored cities (Lahore in station-level 3D). The canonical description, scope, resources, phases and weaknesses are in `docs/plan/plan.md`.
 
 ## Standing rules
 1. **Keep the documents current.** Whenever a decision changes (scope, name, data source, schedule, feature, fix), update `docs/plan/plan.md` in the same session, rebuild the PDFs with `bash docs/build.sh`, and record the decision in `docs/HISTORY.md`. Then write every changed file, PDFs included, into `K:\airlume` and ask Aftab to run `save`.
@@ -22,3 +22,12 @@ Airlume is Aftab Ahmad's semester-7 project: a conversational 3D digital twin of
 
 ## Machine
 Lenovo ThinkBook 14 G6 IRL (21KG): i7-1355U (10 cores, 12 threads), 8 GB DDR5 (one free SO-DIMM slot), Intel UHD graphics. C: drive nearly full; use K:. Local model: `qwen3:4b` (8B needs 16 GB).
+
+## Code conventions (from Phase 0)
+- Python 3.13, pinned `requirements.txt`; venv at `K:\airlume\.venv` (created by `setup.bat`).
+- All SQL in `pipeline/store.py`, parameterised; metric/aggregation names are checked against allow-lists.
+- Secrets only via `config.load_settings()`; `scripts/check_secrets.py` runs before the app starts.
+- `collectors/waqi_display.py` may be imported only by the app (`tests/test_waqi_isolation.py` enforces it).
+- Answer text is produced by `nl/answer.py` from numbers, never by the model.
+- Research findings go in `docs/research/`; the plan's Appendix D summarises them.
+- Run `python -m pytest` before every sync; 45 tests as of 13 Oct.

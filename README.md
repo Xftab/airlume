@@ -27,6 +27,36 @@ Build the PDFs locally (Git Bash or WSL; needs pandoc and XeLaTeX):
 bash docs/build.sh
 ```
 
+## Run it (Windows, Command Prompt)
+
+```cmd
+K:\airlume\setup      one-time: creates .venv on K: and installs pinned packages
+K:\airlume\run        starts the app at http://localhost:8501 (Ctrl+C stops it)
+K:\airlume\test       runs the test suite
+```
+
+Keys go in `K:\airlume\.env` (copy of `.env.example`); that file is never committed. With no keys the app runs on fake data with a plain dark map.
+
+## Layout
+
+```
+airlume/        Python package
+  aqi.py          AQI breakpoints (US EPA 2012/2024) and Punjab labels
+  config.py       settings from .env; start-up secret check
+  collectors/     epa.py (Punjab EPA HTML parser), openmeteo.py, openaq.py,
+                  waqi_display.py (live display only; never stored)
+  pipeline/       registry.py (stations, cities, nearest-station rule), store.py (DuckDB), fake.py
+  nl/             schema.py (typed view-intent form), resolve.py, answer.py, stub_router.py
+  viz/            layers.py, camera.py, views.py (pydeck / deck.gl)
+  forecast/       baseline.py (persistence)
+  eval/benchmark/ frozen questions and the scoring rubric
+  app/            streamlit_app.py
+data/registry/  stations.csv, cities.csv (the only data files committed)
+docs/           plan, PDFs, STATUS, HISTORY, SOURCES, research notes, email drafts
+scripts/        seed_fake.py, epa_dry_run.py, check_secrets.py
+tests/          pytest suite
+```
+
 ## Project status
 
 See [`docs/STATUS.md`](docs/STATUS.md) for where things stand and what comes next, and [`docs/HISTORY.md`](docs/HISTORY.md) for every decision made so far and why.

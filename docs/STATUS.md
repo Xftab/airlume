@@ -1,31 +1,30 @@
 # Status
 
-_Last updated: 12 October 2026_
+_Last updated: 13 October 2026_
 
 ## Where we are
-**Phase 0: Foundations and Access (week 1, 13–19 Oct)** is about to start. Planning is complete.
+**Phase 0: Foundations and Access (week 1, 13–19 Oct)** — day one done. The code skeleton, registry, tests and fake-data shell exist and run.
 
-Done so far:
-- Project idea chosen, researched and named **Airlume** (renamed from "Hawa").
-- Scope set (12 Oct evening): **all Pakistani cities with monitoring stations** at city level, Lahore in full 3D depth. Registered with the university under the title "Airlume: A Conversational 3D Digital Twin of Air Quality in Pakistan".
-- Complete project plan written: 29 pages, 8 phases, 15 known weaknesses with fixes and dates.
-- Every resource verified free and accessible on 12 Oct 2026.
-- UI mockups made (desktop live view, answered query, accuracy page, phone), using the 11 real EPA station names.
-- Repository created: github.com/Xftab/airlume (private).
-- Project folder set up on the laptop at `K:\airlume`; `save.bat` commits and pushes in one command.
+Done on 13 Oct:
+- Punjab EPA portal investigated: server-rendered HTML, no public JSON; parser written and tested (`airlume/collectors/epa.py`). Notes in `docs/research/epa-portal.md`.
+- **AQI formula identified (W1):** US EPA 2012 breakpoints under Punjab's seven labels. `airlume/aqi.py` + tests.
+- Station/city registry built with coordinates and confidence levels (`data/registry/`). Portal lists 36 districts, not 28; plan updated.
+- Code: typed schema, resolver, DuckDB store, fake data, deck.gl layers, answer sentences, stub router, 45 passing tests.
+- Shell runs in keyless map mode; screenshots checked.
+- `setup.bat`, `run.bat`, `test.bat` for the laptop; `.env.example`; secret check; gitleaks and pre-commit configs.
+- Emails drafted in `docs/emails/`; `docs/SOURCES.md` written.
+- Plan revised (Phase 0.6, W1 row, Appendix D); PDFs rebuilt.
 
-## Next steps (Phase 0)
-- [ ] Create accounts and keys: Groq, Google AI Studio, OpenAQ, CARTO basemap key, Streamlit Cloud.
-- [ ] Find the EPA portal's JSON endpoint (Chrome DevTools, Network tab, Fetch/XHR).
-- [ ] Identify which AQI formula Punjab EPA uses (fix W1).
-- [ ] Check OpenAQ Pakistan coverage and per-station licences.
-- [ ] Email the Punjab EPA (`support@aqi.punjab.gov.pk`, `ddisepa@punjab.gov.pk`) for API access and archiving permission.
-- [ ] Notify WAQI of academic display use.
-- [ ] Set up the K: drive environment and pin library versions (fix W13).
-- [ ] Build the fake-data UI shell.
-- [ ] Install the gitleaks pre-commit hook (security item S3). History already scanned clean on 12 Oct.
+## Next steps (rest of Phase 0)
+- [ ] Aftab: run `K:\airlume\setup` then `K:\airlume\run` and confirm the shell opens.
+- [ ] Aftab: run `python scripts\epa_dry_run.py` inside the venv and send Claude the output (confirms the parser against the live page; saves raw HTML to `data/raw/`).
+- [ ] Aftab: create accounts — Groq, Google AI Studio, OpenAQ, CARTO, Streamlit Community Cloud — and put the keys in `K:\airlume\.env` (never in chat).
+- [ ] Aftab: send the two emails (`docs/emails/`), with supervisor name filled in.
+- [ ] Claude: once `.env` has an OpenAQ key, run station discovery for Islamabad/Karachi/Peshawar and add licensed stations to the registry.
+- [ ] Claude: `collect.yml` GitHub Actions workflow (hourly) — placed in `_update\` for Aftab to move, since remote tools cannot write `.github/workflows/`.
+- [ ] Known cosmetic issue: deck.gl text labels throw a MultiIconLayer error in headless Chromium; check on the laptop's real browser, else switch to HTML labels in Phase 2.
 
 ## Open decisions
-- Fill in roll number and supervisor name on the plan's title page.
-- Optional RAM upgrade (one 8 GB DDR5 SO-DIMM, about Rs 24,000) to run the 8B local model.
-- Make this repository public before Phase 1: free GitHub Actions minutes and Streamlit Cloud both need a public repo.
+- Supervisor name and roll number for the plan's title page and the EPA email.
+- Optional RAM upgrade (one 8 GB DDR5 SO-DIMM) for the 8B local model.
+- Make the repository public before Phase 1 (needed for free Actions minutes and Streamlit Cloud).

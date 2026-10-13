@@ -2,6 +2,16 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 13 October 2026
+- **Phase 0 build started and the skeleton completed in one session.** Package layout follows plan 0.4; 45 tests pass; the fake-data shell runs end to end (question, typed form, validated query, code-written answer, 3D view).
+- **Punjab EPA portal is server-rendered HTML with no public JSON.** Decision: parse the Lahore table at one request per hour with a cache-buster and a named user agent, after asking permission. `api.aqi.punjab.gov.pk` exists but is undocumented; not probed further.
+- **AQI formula settled (W1).** Portal numbers reproduce the US EPA 2012 breakpoints under Punjab's own labels. Both the 2012 and 2024 tables are implemented so the harmonisation study (1.7) can show the difference.
+- **Portal covers 36 districts, not 28.** Scope text, resource table and scope-cut list corrected.
+- **Station coordinates taken from IQAir station pages** (9 of 11) and neighbourhood centroids (2), each with a confidence label displayed in the app, pending EPA confirmation. The EPA email asks for the official list.
+- **Quetta is display-only** (sensors exist only on WAQI/IQAir). Islamabad, Karachi and Peshawar use Urban Unit sensors on OpenAQ.
+- **Map runs keyless by default** (`map_provider=None`); CARTO is used only when a key is present, so the demo never depends on a third-party tile service.
+- **Answer sentences are written by code, not the model** (new `nl/answer.py`), so text can never contradict the numbers.
+
 ## 12 October 2026
 - **Scope widened to Pakistan's monitored cities.** Every city with monitoring stations (Punjab's 28 EPA cities; Islamabad, Karachi, Peshawar, Quetta via third-party stations) appears at city level; Lahore keeps the full 3D twin. A nationwide CAMS model grid was considered and rejected: the student chose to show only measured values, never modelled ones, on the map. City comparison moved from stretch to core.
 - **GitHub workflow changed to check-only.** Its first run committed rebuilt PDFs, which conflicted with the PDFs saved locally (git cannot merge two PDFs). The workflow now only verifies the build and attaches the PDFs to the run. `save.bat` now keeps the laptop's version on any conflict and reports failures instead of claiming success.

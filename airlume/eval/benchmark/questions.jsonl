@@ -1,0 +1,10 @@
+{"id": "q001", "class": "where_now", "question": "Where is the air worst in Lahore right now?", "expected": {"metric": "aqi", "city": "Lahore", "aggregation": "latest", "view": "stations_3d", "time": "now"}}
+{"id": "q002", "class": "how_much", "question": "What is the AQI in Gulberg?", "expected": {"metric": "aqi", "city": "Lahore", "area": "Gulberg III", "aggregation": "latest"}}
+{"id": "q003", "class": "compare_time", "question": "Is Lahore's air better than yesterday?", "expected": {"city": "Lahore", "compare_to": "yesterday", "view": "compare"}}
+{"id": "q004", "class": "threshold_count", "question": "How many hours was the AQI above 300 in Shahdara last week?", "expected": {"city": "Lahore", "area": "Shahdara", "aggregation": "count_hours_above", "threshold": 300, "time": "last_7_days"}}
+{"id": "q005", "class": "compare_place", "question": "Which city has worse air today, Lahore or Faisalabad?", "expected": {"city": "Lahore", "compare_to": "other_city", "other_city": "Faisalabad", "view": "compare"}}
+{"id": "q006", "class": "where_now", "question": "Show me PM2.5 near Model Town", "expected": {"metric": "pm25", "city": "Lahore", "area": "Model Town"}}
+{"id": "q007", "class": "out_of_scope", "question": "What is the capital of France?", "expected": {"in_scope": false}}
+{"id": "q008", "class": "ambiguous", "question": "Is it bad?", "expected": {"clarify": true}}
+{"id": "q009", "class": "follow_up", "question": "And yesterday?", "expected": {"context_ref": true}}
+{"id": "q010", "class": "where_now", "question": "Which city in Pakistan has the cleanest air right now?", "expected": {"view": "city_overview", "aggregation": "latest"}}

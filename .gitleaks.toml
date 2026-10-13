@@ -1,0 +1,9 @@
+# gitleaks config (S12). Run:  gitleaks detect --source . --config .gitleaks.toml
+[extend]
+useDefault = true
+
+[allowlist]
+paths = [
+  '''docs/pdf/.*\.pdf''',
+  '''\.env\.example''',
+]

@@ -1,0 +1,41 @@
+city_id,name,province,lat,lon,source,primary_source,notes
+PB-LHE,Lahore,Punjab,31.54972,74.34361,Wikipedia infobox,punjab_epa,11 EPA stations; full 3D depth
+PB-OKA,Okara,Punjab,30.80917,73.45361,Wikipedia infobox,punjab_epa,
+PB-NNS,Nankana Sahib,Punjab,31.45000,73.70667,Wikipedia infobox,punjab_epa,
+PB-MZG,Muzaffargarh,Punjab,30.07417,71.19056,Wikipedia infobox,punjab_epa,
+PB-RJP,Rajanpur,Punjab,29.10417,70.32472,Wikipedia infobox,punjab_epa,
+PB-CHN,Chiniot,Punjab,31.71944,72.98417,Wikipedia infobox,punjab_epa,
+PB-JHG,Jhang,Punjab,31.26944,72.31611,Wikipedia infobox,punjab_epa,
+PB-VEH,Vehari,Punjab,30.04194,72.35278,Wikipedia infobox,punjab_epa,
+PB-KHW,Khanewal,Punjab,30.30000,71.93300,Wikipedia infobox,punjab_epa,
+PB-SWL,Sahiwal,Punjab,30.66111,73.10833,Wikipedia infobox,punjab_epa,
+PB-FSD,Faisalabad,Punjab,31.41667,73.09111,Wikipedia infobox,punjab_epa,3 EPA stations
+PB-GRW,Gujranwala,Punjab,32.15667,74.19000,Wikipedia infobox,punjab_epa,2 EPA stations
+PB-PKP,Pakpattan,Punjab,30.34417,73.38389,Wikipedia infobox,punjab_epa,
+PB-MUX,Multan,Punjab,30.19778,71.46972,Wikipedia infobox,punjab_epa,
+PB-SKP,Sheikhupura,Punjab,31.71111,73.98778,Wikipedia infobox,punjab_epa,
+PB-ATK,Attock,Punjab,33.76667,72.36667,Wikipedia infobox,punjab_epa,
+PB-DGK,Dera Ghazi Khan,Punjab,30.03306,70.64000,Wikipedia infobox,punjab_epa,Portal label "DG Khan"
+PB-KAD,Kot Addu,Punjab,30.46639,70.96556,Wikipedia infobox,punjab_epa,
+PB-BWP,Bahawalpur,Punjab,29.39556,71.68361,Wikipedia infobox,punjab_epa,2 EPA stations
+PB-RYK,Rahim Yar Khan,Punjab,28.42000,70.30000,Wikipedia infobox,punjab_epa,
+PB-KSR,Kasur,Punjab,31.11667,74.45000,Wikipedia infobox,punjab_epa,
+PB-RWP,Rawalpindi,Punjab,33.60000,73.03300,Wikipedia infobox,punjab_epa,3 EPA stations
+PB-BKR,Bhakkar,Punjab,31.62778,71.06250,Wikipedia infobox,punjab_epa,
+PB-SGD,Sargodha,Punjab,32.08361,72.67111,Wikipedia infobox,punjab_epa,2 EPA stations
+PB-NWL,Narowal,Punjab,32.10000,74.87472,Wikipedia infobox,punjab_epa,
+PB-HFZ,Hafizabad,Punjab,32.07139,73.68778,Wikipedia infobox,punjab_epa,
+PB-MUR,Murree,Punjab,33.90417,73.39028,Wikipedia infobox,punjab_epa,
+PB-KSB,Khushab,Punjab,32.29861,72.35083,Wikipedia infobox,punjab_epa,
+PB-GJT,Gujrat,Punjab,32.57389,74.07889,Wikipedia infobox,punjab_epa,
+PB-JLM,Jhelum,Punjab,32.94250,73.72556,Wikipedia infobox,punjab_epa,
+PB-SKT,Sialkot,Punjab,32.49250,74.53111,Wikipedia infobox,punjab_epa,
+PB-WZD,Wazirabad,Punjab,32.43528,74.11417,Wikipedia infobox,punjab_epa,
+PB-MBD,Mandi Bahauddin,Punjab,32.57972,73.48139,Wikipedia infobox,punjab_epa,
+PB-CKW,Chakwal,Punjab,32.93028,72.85556,Wikipedia infobox,punjab_epa,
+PB-MWL,Mianwali,Punjab,32.58528,71.54361,Wikipedia infobox,punjab_epa,
+PB-TLG,Talagang,Punjab,32.92778,72.41111,Wikipedia infobox,punjab_epa,
+ICT-ISB,Islamabad,ICT,33.69,73.04,approx centre,openaq,Urban Unit AirGradient sensors via OpenAQ; US Embassy dormant
+SD-KHI,Karachi,Sindh,24.86,67.01,approx centre,openaq,Urban Unit AirGradient sensors via OpenAQ
+KP-PEW,Peshawar,KP,34.01,71.55,approx centre,openaq,Urban Unit AirGradient sensors via OpenAQ
+BL-QTA,Quetta,Balochistan,30.18,66.99,approx centre,waqi_display,Urban Unit sensors on WAQI/IQAir only - display only

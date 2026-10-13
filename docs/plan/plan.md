@@ -3,7 +3,7 @@ title: "Airlume: Complete Project Plan"
 subtitle: "A Conversational 3D Digital Twin of Air Quality in Pakistan's Monitored Cities --- Problem, Product, Resources and Phased Build Plan"
 author:
   - "Aftab Ahmad"
-date: "12 October 2026"
+date: "13 October 2026 (revision 2)"
 ---
 
 # Part A --- The Project
@@ -98,7 +98,7 @@ The idea of talking to air-quality data is not new, and it is important to state
 
 | In scope | Out of scope |
 |:---------------------------------------------------|:---------------------------------------------------|
-| **Every Pakistani city with monitoring stations**, at city level: Punjab's 28 EPA cities, plus Islamabad, Karachi, Peshawar and Quetta where third-party stations exist | Places with no stations (rural areas, unmonitored towns): no invented values |
+| **Every Pakistani city with monitoring stations**, at city level: Punjab's 36 EPA districts, plus Islamabad, Karachi, Peshawar and Quetta where third-party stations exist | Places with no stations (rural areas, unmonitored towns): no invented values |
 | **Lahore in full depth**: the only city with enough stations (11) for an intra-city 3D twin | Intra-city detail for any other city |
 | Country-wide questions: rankings, comparisons and trends between cities | Indoor air quality |
 | Clarifying questions and follow-up conversations | Open-ended chat unrelated to air quality |
@@ -118,7 +118,7 @@ Every resource was checked on **12 October 2026** against official documentation
 
 | Source | Free | Key | May we republish? | Role in Airlume |
 |:---------------------|:----------|:---------|:---------------------------|:--------------------------------|
-| **Punjab EPA portal** (aqi.punjab.gov.pk) | Yes | None | Unclear --- no licence published | Live readings for 28 Punjab cities (59 stations province-wide; 11 in Lahore) |
+| **Punjab EPA portal** (aqi.punjab.gov.pk) | Yes | None | Unclear --- no licence published | Live readings for 36 Punjab districts (41 EPA monitors in 17 districts per the EPD order of 1 Oct 2025; 11 in Lahore). Server-rendered HTML, no public JSON; see Appendix D |
 | **Punjab EPD archive** (epd.punjab.gov.pk) | Yes | None | Cite and analyse as published reports | Deep history: about 2,000 daily AQI PDFs back to 2007, plus weekly district reports |
 | **Open-Meteo** air quality + weather | Yes, non-commercial | None | **Yes --- CC BY 4.0** | CAMS model values for validation (C4), wind, temperature, rain |
 | **OpenAQ** | Yes | Free key | Yes, per-station licence (CC0 / CC BY only) | Cities outside Punjab (Islamabad, Karachi, Peshawar, Quetta) where its stations exist --- verify coverage and licences in Phase 0 |
@@ -375,6 +375,20 @@ Note `waqi_display.py` sits apart from every other collector and writes nothing 
 - Every later phase replaces a fake piece with a real one, so a working demo exists every day of the semester.
 
 **Exit criterion for Phase 0:** the shell runs locally; all keys respond; `SOURCES.md` is complete; both emails are sent.
+
+### 0.6 Phase 0 progress (13 October)
+
+Done on day one, all in the repository:
+
+- **Portal investigated** (Appendix D): Laravel, server-rendered, no public JSON; the Lahore page's HTML table is the data path. A parser with tests (`collectors/epa.py`) and a dry-run script exist. Live hourly collection waits for the permission email or one week of silence.
+- **AQI formula identified --- W1 is now solvable in code.** Punjab's station numbers reproduce the US EPA 2012 PM2.5/PM10 breakpoints with max-of-sub-indices (within 0--3 points) under Punjab's own seven labels. `airlume/aqi.py` implements the 2012 and 2024 tables and the Punjab bands; tests pin four published portal readings.
+- **Registry built:** 11 Lahore stations with coordinates (9 station-level from IQAir pages, 2 neighbourhood centroids), 36 Punjab districts and 4 other cities (`data/registry/`). Confidence is recorded per row and shown on the map until the EPA confirms.
+- **Code skeleton:** typed view-intent schema (Pydantic), resolver with Asia/Karachi dates and the nearest-station rule, DuckDB store with parameterised queries only, fake-data generator, deck.gl layers and cameras, code-written answer sentences, and a rule-based stand-in router. 45 tests pass.
+- **Shell runs** on fake data in keyless map mode: question in, typed form out, validated query, answer sentence, 3D columns or national city view.
+- **Security groundwork:** `.env.example`, start-up secret check that refuses placeholders and blocks fake data in production, gitleaks config, pre-commit config, XSRF protection on, usage statistics off, WAQI isolation enforced by a test.
+- **Emails drafted** (`docs/emails/`), `SOURCES.md` written.
+
+Still open this week: create the accounts (Groq, Google AI Studio, OpenAQ, CARTO, Streamlit Cloud), send the two emails, run `scripts/epa_dry_run.py` on the laptop to confirm the parser against the live page, and check whether the page's embedded JSON block is public.
 
 ## Phase 1 --- Data Pipeline (Weeks 2--3: 20 Oct -- 2 Nov)
 
@@ -715,7 +729,7 @@ See Part F.
 
 **Critical weeks:** week 1 (removes integration risk early), week 5 (freezing the benchmark protects the honesty of every later number) and week 7 (the system becomes one product).
 
-**Scope cuts, decided now, in this order if behind:** (1) satellite layer, (2) non-Punjab cities (keep the 28 Punjab EPA cities), (3) shareable answer cards, (4) replay-the-worst-day mode, (5) voice input, (6) lowest-AQI window, (7) follow-up questions, (8) split-screen view, (9) Roman-Urdu test set. **Never cut:** the 3D map, time animation, the language layer, the evaluation, the show-the-query toggle, clarifying questions, station placement, **or any of the fully-solvable weakness fixes W1--W6, W10, W13.**
+**Scope cuts, decided now, in this order if behind:** (1) satellite layer, (2) non-Punjab cities (keep the 36 Punjab EPA districts), (3) shareable answer cards, (4) replay-the-worst-day mode, (5) voice input, (6) lowest-AQI window, (7) follow-up questions, (8) split-screen view, (9) Roman-Urdu test set. **Never cut:** the 3D map, time animation, the language layer, the evaluation, the show-the-query toggle, clarifying questions, station placement, **or any of the fully-solvable weakness fixes W1--W6, W10, W13.**
 
 **Honest capacity note:** the weakness fixes add about 10 days; making cards and replay optional frees about 4. The plan remains tight --- weeks 6--9 have no slack. **Validity fixes come before every feature:** a polished demo with an unsound number fails a viva; a plain demo with sound numbers passes it.
 
@@ -747,7 +761,7 @@ A self-review identified fifteen weaknesses. They fall into three kinds: **solva
 
 | ID | Weakness | Fix | Phase | Resolved by | Exit check |
 |:----|:-------------------------|:-------------------------------------|:------|:----------|:---------------------------|
-| W1 | Station AQI compared with CAMS concentration --- different units and formulas | Identify EPA's AQI formula; convert CAMS into the same scale; unit-test | 0.2, 1.7 | Week 3 | Converter passes tests on 10 published readings |
+| W1 | Station AQI compared with CAMS concentration --- different units and formulas | **Formula identified 13 Oct** (US EPA 2012 breakpoints, Punjab labels); converter written and tested on 4 portal readings; extend to 10 and convert CAMS | 0.2 done, 1.7 | Week 3 | Converter passes tests on 10 published readings |
 | W2 | Benchmark written by the same person who built the system | Classmates write half the questions blind; second annotator on 20 items; report kappa | 3.2 | Week 5 | Kappa reported; benchmark frozen |
 | W3 | Contribution mistaken for "just structured output" | Frame as scoring the visual answer; cite VayuBuddy's stated gap | 7.1 | Week 10 | Framing used in report and viva slides |
 | W4 | 60 questions is a small sample | Bootstrap 95% confidence intervals; no claims inside the noise | 5 (E1) | Week 9 | Every accuracy figure carries an interval |
@@ -983,3 +997,15 @@ gh workflow enable collect.yml
 [18] Copernicus. *CC BY licence for CDS/ADS (from 2 July 2025).* <https://forum.ecmwf.int/t/cc-by-licence-to-replace-licence-to-use-copernicus-products-on-02-july-2025/13464> ; Data Space quotas: <https://documentation.dataspace.copernicus.eu/Quotas.html>
 
 [19] United States EPA. *Technical Assistance Document for the Reporting of Daily Air Quality --- the AQI.*
+
+# Appendix D --- Punjab EPA portal findings (13 October 2026)
+
+Full notes: `docs/research/epa-portal.md` and `docs/research/registry-notes.md`.
+
+- **Site:** Laravel + Vite, server-rendered. Public routes: `/`, `/lahore`, `/health-advisory`, `/support`. `/lahore/analysis` needs a login. No public JSON on the main host; `api.aqi.punjab.gov.pk` exists but is undocumented (it serves the Android app `com.moonshotsmc.aqipunjab`).
+- **Data path:** `GET /lahore` returns an HTML table (Rank, Station, AQI, Level, PM2.5, PM10, CO, SO2, NO2, O3) with a "Last updated" line in Pakistan time. Plain URLs can be served stale from a cache; a throwaway query parameter fetches fresh data. Hourly cadence; single stations can lag or drop out (Gulberg III was absent in one snapshot).
+- **AQI scale:** labels Good 0--50, Satisfactory 51--100, Moderate 101--150, Unhealthy for sensitive groups 151--200, Unhealthy 201--300, Very unhealthy 301--400, Hazardous 401--500. Numbers match the US EPA 2012 breakpoints with max-of-sub-indices. The EPD order of 1 October 2025 says official bulletins use 8-hour averages at 9 am, 5 pm and 1 am.
+- **Districts on the home page:** 36 (Okara, Nankana Sahib, Muzaffargarh, Rajanpur, Chiniot, Jhang, Vehari, Khanewal, Sahiwal, Faisalabad, Gujranwala, Pakpattan, Multan, Lahore, Sheikhupura, Attock, DG Khan, Kot Addu, Bahawalpur, Rahim Yar Khan, Kasur, Rawalpindi, Bhakkar, Sargodha, Narowal, Hafizabad, Murree, Khushab, Gujrat, Jhelum, Sialkot, Wazirabad, Mandi Bahauddin, Chakwal, Mianwali, Talagang). The plan's earlier figure of 28 was out of date.
+- **Coordinates:** not published by the portal. Nine Lahore stations located from IQAir station pages, two (Multan Road, Kahna Nau) from neighbourhood centroids. Confidence is stored per station and displayed. The permission email asks the EPA to confirm.
+- **Other cities:** Islamabad, Karachi and Peshawar have The Urban Unit's AirGradient sensors on OpenAQ (licensed, storable). Quetta's sensors are on WAQI/IQAir only, so Quetta is display-only. The US Embassy and Consulate monitors have been dormant since March 2025.
+- **Standards:** NEQS/PEQS PM2.5 limits 15 µg/m³ annual, 35 µg/m³ 24-hour.
