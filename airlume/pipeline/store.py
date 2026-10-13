@@ -36,6 +36,19 @@ CREATE TABLE IF NOT EXISTS readings (
     ingested_at  TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (station_id, ts, source)
 );
+CREATE TABLE IF NOT EXISTS epd_daily (
+    date          DATE NOT NULL,
+    station_label VARCHAR NOT NULL,
+    station_id    VARCHAR,
+    city          VARCHAR NOT NULL,
+    pollutant     VARCHAR,
+    conc          DOUBLE,
+    aqi           INTEGER NOT NULL,
+    style         VARCHAR NOT NULL,
+    source        VARCHAR NOT NULL,
+    ingested_at   TIMESTAMPTZ NOT NULL,
+    PRIMARY KEY (date, station_label, pollutant, source)
+);
 CREATE TABLE IF NOT EXISTS city_hourly (
     city_id      VARCHAR NOT NULL,
     ts           TIMESTAMPTZ NOT NULL,
@@ -98,6 +111,22 @@ class Store:
             """
             INSERT OR REPLACE INTO city_hourly
             SELECT city_id, ts, pm25, pm10, aqi, n_stations, source, ingested_at
+            FROM incoming
+            """
+        )
+        self.con.unregister("incoming")
+        return len(df)
+
+    def upsert_epd_daily(self, df: pd.DataFrame) -> int:
+        if df.empty:
+            return 0
+        df = df.copy()
+        df["ingested_at"] = datetime.now(tz=__import__("datetime").timezone.utc)
+        self.con.register("incoming", df)
+        self.con.execute(
+            """
+            INSERT OR REPLACE INTO epd_daily
+            SELECT date, station_label, station_id, city, pollutant, conc, aqi, style, source, ingested_at
             FROM incoming
             """
         )
@@ -191,4 +220,5 @@ class Store:
     def counts(self) -> dict[str, int]:
         r = self.con.execute("SELECT count(*) FROM readings").fetchone()[0]
         c = self.con.execute("SELECT count(*) FROM city_hourly").fetchone()[0]
-        return {"readings": int(r), "city_hourly": int(c)}
+        e = self.con.execute("SELECT count(*) FROM epd_daily").fetchone()[0]
+        return {"readings": int(r), "city_hourly": int(c), "epd_daily": int(e)}

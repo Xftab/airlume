@@ -1,0 +1,380 @@
+date,station_label,station_id,city,pollutant,conc,aqi,style,source
+2025-10-19,BHU Jandiala,,Lahore,pm25,,154,A,epd_pdf
+2025-10-19,EPA HQ,,Lahore,pm25,,205,A,epd_pdf
+2025-10-19,Egerton Road,LHR-EG,Lahore,pm25,,226,A,epd_pdf
+2025-10-19,FMDRC,,Lahore,pm25,,232,A,epd_pdf
+2025-10-19,Kahna Nau,LHR-KN,Lahore,pm25,,250,A,epd_pdf
+2025-10-19,LWMC,,Lahore,pm25,,277,A,epd_pdf
+2025-10-19,Lathepur,,Lahore,pm25,,177,A,epd_pdf
+2025-10-19,PKLI,,Lahore,pm25,,204,A,epd_pdf
+2025-10-19,PU 1,LHR-PU,Lahore,pm25,,202,A,epd_pdf
+2025-10-19,PU 2,,Lahore,pm25,,202,A,epd_pdf
+2025-10-19,Raja Jang,,Lahore,pm25,,183,A,epd_pdf
+2025-10-19,Safari Park,LHR-SP,Lahore,pm25,,212,A,epd_pdf
+2025-10-19,Shahdara,LHR-SHD,Lahore,pm25,,228,A,epd_pdf
+2025-10-19,Town Hall,,Lahore,pm25,,213,A,epd_pdf
+2025-10-19,UET,LHR-GT,Lahore,pm25,,283,A,epd_pdf
+2025-10-19,Wahga Boarder,LHR-WB,Lahore,pm25,,157,A,epd_pdf
+2025-10-20,BHU Jandiala,,Lahore,pm25,,169,A,epd_pdf
+2025-10-20,EPA HQ,,Lahore,pm25,,189,A,epd_pdf
+2025-10-20,Egerton Road,LHR-EG,Lahore,pm25,,185,A,epd_pdf
+2025-10-20,FMDRC,,Lahore,pm25,,235,A,epd_pdf
+2025-10-20,Kahna Nau,LHR-KN,Lahore,pm25,,250,A,epd_pdf
+2025-10-20,LWMC,,Lahore,pm25,,237,A,epd_pdf
+2025-10-20,Lathepur,,Lahore,pm25,,190,A,epd_pdf
+2025-10-20,PKLI,,Lahore,pm25,,213,A,epd_pdf
+2025-10-20,PU 1,LHR-PU,Lahore,pm25,,186,A,epd_pdf
+2025-10-20,PU 2,,Lahore,pm25,,203,A,epd_pdf
+2025-10-20,Raja Jang,,Lahore,pm25,,193,A,epd_pdf
+2025-10-20,Safari Park,LHR-SP,Lahore,pm25,,200,A,epd_pdf
+2025-10-20,Shahdara,LHR-SHD,Lahore,pm25,,223,A,epd_pdf
+2025-10-20,Town Hall,,Lahore,pm25,,222,A,epd_pdf
+2025-10-20,UET,LHR-GT,Lahore,pm25,,220,A,epd_pdf
+2025-10-20,Wahga Boarder,LHR-WB,Lahore,pm25,,171,A,epd_pdf
+2025-10-21,BHU Jandiala,,Lahore,pm25,,160,A,epd_pdf
+2025-10-21,EPA HQ,,Lahore,pm25,,193,A,epd_pdf
+2025-10-21,Egerton Road,LHR-EG,Lahore,pm25,,209,A,epd_pdf
+2025-10-21,FMDRC,,Lahore,pm25,,223,A,epd_pdf
+2025-10-21,Kahna Nau,LHR-KN,Lahore,pm25,,256,A,epd_pdf
+2025-10-21,LWMC,,Lahore,pm25,,244,A,epd_pdf
+2025-10-21,Lathepur,,Lahore,pm25,,179,A,epd_pdf
+2025-10-21,PKLI,,Lahore,pm25,,193,A,epd_pdf
+2025-10-21,PU 1,LHR-PU,Lahore,pm25,,193,A,epd_pdf
+2025-10-21,PU 2,,Lahore,pm25,,223,A,epd_pdf
+2025-10-21,Raja Jang,,Lahore,pm25,,224,A,epd_pdf
+2025-10-21,Safari Park,LHR-SP,Lahore,pm25,,210,A,epd_pdf
+2025-10-21,Shahdara,LHR-SHD,Lahore,pm25,,198,A,epd_pdf
+2025-10-21,Town Hall,,Lahore,pm25,,239,A,epd_pdf
+2025-10-21,UET,LHR-GT,Lahore,pm25,,256,A,epd_pdf
+2025-10-21,Wahga Boarder,LHR-WB,Lahore,pm25,,156,A,epd_pdf
+2025-10-22,BHU Jandiala,,Lahore,pm25,,158,A,epd_pdf
+2025-10-22,EPA HQ,,Lahore,pm25,,180,A,epd_pdf
+2025-10-22,Egerton Road,LHR-EG,Lahore,pm25,,188,A,epd_pdf
+2025-10-22,FMDRC,,Lahore,pm25,,204,A,epd_pdf
+2025-10-22,Kahna Nau,LHR-KN,Lahore,pm25,,223,A,epd_pdf
+2025-10-22,LWMC,,Lahore,pm25,,237,A,epd_pdf
+2025-10-22,Lathepur,,Lahore,pm25,,169,A,epd_pdf
+2025-10-22,PKLI,,Lahore,pm25,,198,A,epd_pdf
+2025-10-22,PU 1,LHR-PU,Lahore,pm25,,186,A,epd_pdf
+2025-10-22,PU 2,,Lahore,pm25,,224,A,epd_pdf
+2025-10-22,Raja Jang,,Lahore,pm25,,245,A,epd_pdf
+2025-10-22,Safari Park,LHR-SP,Lahore,pm25,,217,A,epd_pdf
+2025-10-22,Shahdara,LHR-SHD,Lahore,pm25,,220,A,epd_pdf
+2025-10-22,Town Hall,,Lahore,pm25,,216,A,epd_pdf
+2025-10-22,UET,LHR-GT,Lahore,pm25,,227,A,epd_pdf
+2025-10-22,Wahga Boarder,LHR-WB,Lahore,pm25,,174,A,epd_pdf
+2025-10-23,BHU,,Lahore,pm25,,200,A,epd_pdf
+2025-10-23,EPA HQ,,Lahore,pm25,,194,A,epd_pdf
+2025-10-23,Egerton,,Lahore,pm25,,193,A,epd_pdf
+2025-10-23,FMDRC,,Lahore,pm25,,228,A,epd_pdf
+2025-10-23,Kahna Nau,LHR-KN,Lahore,pm25,,208,A,epd_pdf
+2025-10-23,LWMC,,Lahore,pm25,,236,A,epd_pdf
+2025-10-23,Lathepur,,Lahore,pm25,,218,A,epd_pdf
+2025-10-23,PKLI,,Lahore,pm25,,230,A,epd_pdf
+2025-10-23,PU 1,LHR-PU,Lahore,pm25,,185,A,epd_pdf
+2025-10-23,PU2,,Lahore,pm25,,207,A,epd_pdf
+2025-10-23,Raja Jang,,Lahore,pm25,,199,A,epd_pdf
+2025-10-23,Safari Park,LHR-SP,Lahore,pm25,,198,A,epd_pdf
+2025-10-23,Shahdara,LHR-SHD,Lahore,pm25,,268,A,epd_pdf
+2025-10-23,Town Hall,,Lahore,pm25,,240,A,epd_pdf
+2025-10-23,UET,LHR-GT,Lahore,pm25,,243,A,epd_pdf
+2025-10-23,Wahga Boarder,LHR-WB,Lahore,pm25,,169,A,epd_pdf
+2025-10-24,BHU Jandiala,,Lahore,pm25,,161,A,epd_pdf
+2025-10-24,EPA HQ,,Lahore,pm25,,276,A,epd_pdf
+2025-10-24,Egerton Road,LHR-EG,Lahore,pm25,,265,A,epd_pdf
+2025-10-24,FMDRC,,Lahore,pm25,,247,A,epd_pdf
+2025-10-24,Kahna Nau,LHR-KN,Lahore,pm25,,267,A,epd_pdf
+2025-10-24,LWMC,,Lahore,pm25,,257,A,epd_pdf
+2025-10-24,Lathepur,,Lahore,pm25,,190,A,epd_pdf
+2025-10-24,PKLI,,Lahore,pm25,,220,A,epd_pdf
+2025-10-24,PU 1,LHR-PU,Lahore,pm25,,234,A,epd_pdf
+2025-10-24,PU 2,,Lahore,pm25,,261,A,epd_pdf
+2025-10-24,Raja Jang,,Lahore,pm25,,210,A,epd_pdf
+2025-10-24,Safari Park,LHR-SP,Lahore,pm25,,281,A,epd_pdf
+2025-10-24,Shahdara,LHR-SHD,Lahore,pm25,,240,A,epd_pdf
+2025-10-24,Town Hall,,Lahore,pm25,,304,A,epd_pdf
+2025-10-24,UET,LHR-GT,Lahore,pm25,,373,A,epd_pdf
+2025-10-24,Wahga Boarder,LHR-WB,Lahore,pm25,,161,A,epd_pdf
+2025-10-25,BHU Jandiala,,Lahore,pm25,,183,A,epd_pdf
+2025-10-25,EPA HQ,,Lahore,pm25,,245,A,epd_pdf
+2025-10-25,Egerton Road,LHR-EG,Lahore,pm25,,244,A,epd_pdf
+2025-10-25,FMDRC,,Lahore,pm25,,280,A,epd_pdf
+2025-10-25,Kahna Nau,LHR-KN,Lahore,pm25,,288,A,epd_pdf
+2025-10-25,LWMC,,Lahore,pm25,,306,A,epd_pdf
+2025-10-25,Lathepur,,Lahore,pm25,,227,A,epd_pdf
+2025-10-25,PKLI,,Lahore,pm25,,245,A,epd_pdf
+2025-10-25,PU 1,LHR-PU,Lahore,pm25,,232,A,epd_pdf
+2025-10-25,PU 2,,Lahore,pm25,,273,A,epd_pdf
+2025-10-25,Raja Jang,,Lahore,pm25,,240,A,epd_pdf
+2025-10-25,Safari Park,LHR-SP,Lahore,pm25,,277,A,epd_pdf
+2025-10-25,Shahdara,LHR-SHD,Lahore,pm25,,277,A,epd_pdf
+2025-10-25,Town Hall,,Lahore,pm25,,258,A,epd_pdf
+2025-10-25,UET,LHR-GT,Lahore,pm25,,328,A,epd_pdf
+2025-10-25,Wahga Boarder,LHR-WB,Lahore,pm25,,196,A,epd_pdf
+2025-10-26,BHU,,Lahore,pm25,,183,A,epd_pdf
+2025-10-26,EPA HQ,,Lahore,pm25,,234,A,epd_pdf
+2025-10-26,Egerton Road,LHR-EG,Lahore,pm25,,261,A,epd_pdf
+2025-10-26,FMDRC,,Lahore,pm25,,268,A,epd_pdf
+2025-10-26,Jandiala Wahga,,Lahore,pm25,,182,A,epd_pdf
+2025-10-26,Kahna Nau,LHR-KN,Lahore,pm25,,282,A,epd_pdf
+2025-10-26,Lathepur,,Lahore,pm25,,222,A,epd_pdf
+2025-10-26,PKLI,,Lahore,pm25,,234,A,epd_pdf
+2025-10-26,PU 1,LHR-PU,Lahore,pm25,,241,A,epd_pdf
+2025-10-26,PU 2,,Lahore,pm25,,282,A,epd_pdf
+2025-10-26,Raja Jang,,Lahore,pm25,,152,A,epd_pdf
+2025-10-26,Safari Park,LHR-SP,Lahore,pm25,,265,A,epd_pdf
+2025-10-26,Shahdara,LHR-SHD,Lahore,pm25,,334,A,epd_pdf
+2025-10-26,Town Hall,,Lahore,pm25,,285,A,epd_pdf
+2025-10-26,UET,LHR-GT,Lahore,pm25,,292,A,epd_pdf
+2025-10-27,BHU,,Lahore,pm25,,183,A,epd_pdf
+2025-10-27,EPA HQ,,Lahore,pm25,,209,A,epd_pdf
+2025-10-27,Egerton Road,LHR-EG,Lahore,pm25,,247,A,epd_pdf
+2025-10-27,FMDRC,,Lahore,pm25,,237,A,epd_pdf
+2025-10-27,Jandiala Wahga,,Lahore,pm25,,179,A,epd_pdf
+2025-10-27,Kahna Nau,LHR-KN,Lahore,pm25,,272,A,epd_pdf
+2025-10-27,LWMC,,Lahore,pm25,,326,A,epd_pdf
+2025-10-27,PKLI,,Lahore,pm25,,225,A,epd_pdf
+2025-10-27,PU 1,LHR-PU,Lahore,pm25,,227,A,epd_pdf
+2025-10-27,PU 2,,Lahore,pm25,,267,A,epd_pdf
+2025-10-27,Safari Park,LHR-SP,Lahore,pm25,,285,A,epd_pdf
+2025-10-27,Shahdara,LHR-SHD,Lahore,pm25,,267,A,epd_pdf
+2025-10-27,Town Hall,,Lahore,pm25,,328,A,epd_pdf
+2025-10-27,UET,LHR-GT,Lahore,pm25,,308,A,epd_pdf
+2025-10-29,Boarder BHU,,Lahore,pm25,,175,A,epd_pdf
+2025-10-29,EPA HQ,,Lahore,pm25,,293,A,epd_pdf
+2025-10-29,Egerton Road,LHR-EG,Lahore,pm25,,345,A,epd_pdf
+2025-10-29,FMDRC,,Lahore,pm25,,319,A,epd_pdf
+2025-10-29,Kahna Nau,LHR-KN,Lahore,pm25,,379,A,epd_pdf
+2025-10-29,LWMC,,Lahore,pm25,,383,A,epd_pdf
+2025-10-29,PKLI,,Lahore,pm25,,337,A,epd_pdf
+2025-10-29,PU 1,LHR-PU,Lahore,pm25,,253,A,epd_pdf
+2025-10-29,PU 2,,Lahore,pm25,,312,A,epd_pdf
+2025-10-29,Raja Jang,,Lahore,pm25,,80,A,epd_pdf
+2025-10-29,Safari Park,LHR-SP,Lahore,pm25,,321,A,epd_pdf
+2025-10-29,Shahdara,LHR-SHD,Lahore,pm25,,357,A,epd_pdf
+2025-10-29,Town Hall,,Lahore,pm25,,358,A,epd_pdf
+2025-10-29,UET,LHR-GT,Lahore,pm25,,421,A,epd_pdf
+2025-10-29,Wahga Boarder,LHR-WB,Lahore,pm25,,225,A,epd_pdf
+2025-10-30,Boarder BHU,,Lahore,pm25,,153,A,epd_pdf
+2025-10-30,EPA HQ,,Lahore,pm25,,305,A,epd_pdf
+2025-10-30,Egerton Road,LHR-EG,Lahore,pm25,,358,A,epd_pdf
+2025-10-30,FMDRC,,Lahore,pm25,,342,A,epd_pdf
+2025-10-30,Kahna Nau,LHR-KN,Lahore,pm25,,480,A,epd_pdf
+2025-10-30,LWMC,,Lahore,pm25,,397,A,epd_pdf
+2025-10-30,PU 1,LHR-PU,Lahore,pm25,,252,A,epd_pdf
+2025-10-30,PU 2,,Lahore,pm25,,361,A,epd_pdf
+2025-10-30,Raja Jang,,Lahore,pm25,,80,A,epd_pdf
+2025-10-30,Safari Park,LHR-SP,Lahore,pm25,,368,A,epd_pdf
+2025-10-30,Shahdara,LHR-SHD,Lahore,pm25,,395,A,epd_pdf
+2025-10-30,Town Hall,,Lahore,pm25,,363,A,epd_pdf
+2025-10-30,UET,LHR-GT,Lahore,pm25,,359,A,epd_pdf
+2025-10-30,Wahga Boarder,LHR-WB,Lahore,pm25,,220,A,epd_pdf
+2025-10-31,EPA HQ,,Lahore,pm25,,273,A,epd_pdf
+2025-10-31,Egerton Road,LHR-EG,Lahore,pm25,,297,A,epd_pdf
+2025-10-31,FMDRC,,Lahore,pm25,,295,A,epd_pdf
+2025-10-31,Kahna Nau,LHR-KN,Lahore,pm25,,348,A,epd_pdf
+2025-10-31,LWMC,,Lahore,pm25,,328,A,epd_pdf
+2025-10-31,PKLI,,Lahore,pm25,,278,A,epd_pdf
+2025-10-31,PU 1,LHR-PU,Lahore,pm25,,251,A,epd_pdf
+2025-10-31,PU 2,,Lahore,pm25,,297,A,epd_pdf
+2025-10-31,Safari Park,LHR-SP,Lahore,pm25,,339,A,epd_pdf
+2025-10-31,Shahdara,LHR-SHD,Lahore,pm25,,351,A,epd_pdf
+2025-10-31,Town Hall,,Lahore,pm25,,318,A,epd_pdf
+2025-10-31,UET,LHR-GT,Lahore,pm25,,345,A,epd_pdf
+2025-10-31,Wahga Boarder,LHR-WB,Lahore,pm25,,205,A,epd_pdf
+2025-11-01,EPA HQ,,Lahore,pm25,,257,A,epd_pdf
+2025-11-01,Egerton Road,LHR-EG,Lahore,pm25,,299,A,epd_pdf
+2025-11-01,FMDRC,,Lahore,pm25,,308,A,epd_pdf
+2025-11-01,Kahna Nau,LHR-KN,Lahore,pm25,,306,A,epd_pdf
+2025-11-01,LWMC,,Lahore,pm25,,329,A,epd_pdf
+2025-11-01,PKLI,,Lahore,pm25,,281,A,epd_pdf
+2025-11-01,PU 1,LHR-PU,Lahore,pm25,,245,A,epd_pdf
+2025-11-01,PU 2,,Lahore,pm25,,296,A,epd_pdf
+2025-11-01,Safari Park,LHR-SP,Lahore,pm25,,289,A,epd_pdf
+2025-11-01,Shahdara,LHR-SHD,Lahore,pm25,,343,A,epd_pdf
+2025-11-01,Town Hall,,Lahore,pm25,,367,A,epd_pdf
+2025-11-01,UET,LHR-GT,Lahore,pm25,,345,A,epd_pdf
+2025-11-18,BHU Jandiala,,Lahore,pm25,,174,A,epd_pdf
+2025-11-18,EPA HQ,,Lahore,pm25,,253,A,epd_pdf
+2025-11-18,Egerton Road,LHR-EG,Lahore,pm25,,311,A,epd_pdf
+2025-11-18,FMDRC,,Lahore,pm25,,305,A,epd_pdf
+2025-11-18,Kahna Nau,LHR-KN,Lahore,pm25,,344,A,epd_pdf
+2025-11-18,LWMC,,Lahore,pm25,,409,A,epd_pdf
+2025-11-18,Lathepur,,Lahore,pm25,,209,A,epd_pdf
+2025-11-18,PKLI,,Lahore,pm25,,284,A,epd_pdf
+2025-11-18,PU 1,LHR-PU,Lahore,pm25,,271,A,epd_pdf
+2025-11-18,PU 2,,Lahore,pm25,,312,A,epd_pdf
+2025-11-18,Raja Jang,,Lahore,pm25,,219,A,epd_pdf
+2025-11-18,Safari Park,LHR-SP,Lahore,pm25,,342,A,epd_pdf
+2025-11-18,Shahdara,LHR-SHD,Lahore,pm25,,342,A,epd_pdf
+2025-11-18,Town Hall,,Lahore,pm25,,364,A,epd_pdf
+2025-11-18,UET,LHR-GT,Lahore,pm25,,448,A,epd_pdf
+2025-11-18,Wahga Boarder,LHR-WB,Lahore,pm25,,305,A,epd_pdf
+2025-11-19,BHU Jandiala,,Lahore,pm25,,198,A,epd_pdf
+2025-11-19,EPA HQ,,Lahore,pm25,,291,A,epd_pdf
+2025-11-19,Egerton Road,LHR-EG,Lahore,pm25,,296,A,epd_pdf
+2025-11-19,FMDRC,,Lahore,pm25,,329,A,epd_pdf
+2025-11-19,Kahna Nau,LHR-KN,Lahore,pm25,,379,A,epd_pdf
+2025-11-19,LWMC,,Lahore,pm25,,351,A,epd_pdf
+2025-11-19,Lathepur,,Lahore,pm25,,267,A,epd_pdf
+2025-11-19,PKLI,,Lahore,pm25,,319,A,epd_pdf
+2025-11-19,PU 1,LHR-PU,Lahore,pm25,,272,A,epd_pdf
+2025-11-19,PU 2,,Lahore,pm25,,310,A,epd_pdf
+2025-11-19,Raja Jang,,Lahore,pm25,,273,A,epd_pdf
+2025-11-19,Safari Park,LHR-SP,Lahore,pm25,,294,A,epd_pdf
+2025-11-19,Shahdara,LHR-SHD,Lahore,pm25,,435,A,epd_pdf
+2025-11-19,UET,LHR-GT,Lahore,pm25,,396,A,epd_pdf
+2025-11-20,BHU Jandiala,,Lahore,pm25,,183,A,epd_pdf
+2025-11-20,EPA HQ,,Lahore,pm25,,257,A,epd_pdf
+2025-11-20,Egerton Road,LHR-EG,Lahore,pm25,,279,A,epd_pdf
+2025-11-20,FMDRC,,Lahore,pm25,,302,A,epd_pdf
+2025-11-20,Kahna Nau,LHR-KN,Lahore,pm25,,393,A,epd_pdf
+2025-11-20,LWMC,,Lahore,pm25,,373,A,epd_pdf
+2025-11-20,Lathepur,,Lahore,pm25,,230,A,epd_pdf
+2025-11-20,PKLI,,Lahore,pm25,,302,A,epd_pdf
+2025-11-20,PU 1,LHR-PU,Lahore,pm25,,268,A,epd_pdf
+2025-11-20,PU 2,,Lahore,pm25,,291,A,epd_pdf
+2025-11-20,Raja Jang,,Lahore,pm25,,258,A,epd_pdf
+2025-11-20,Safari Park,LHR-SP,Lahore,pm25,,328,A,epd_pdf
+2025-11-20,Shahdara,LHR-SHD,Lahore,pm25,,374,A,epd_pdf
+2025-11-20,Town Hall,,Lahore,pm25,,362,A,epd_pdf
+2025-11-20,UET,LHR-GT,Lahore,pm25,,387,A,epd_pdf
+2025-11-20,Wahga Boarder,LHR-WB,Lahore,pm25,,182,A,epd_pdf
+2025-11-22,EPA HQ,,Lahore,pm25,,283,A,epd_pdf
+2025-11-22,Egerton Road,LHR-EG,Lahore,pm25,,272,A,epd_pdf
+2025-11-22,FMDRC,,Lahore,pm25,,311,A,epd_pdf
+2025-11-22,Kahna Nau,LHR-KN,Lahore,pm25,,332,A,epd_pdf
+2025-11-22,LWMC,,Lahore,pm25,,348,A,epd_pdf
+2025-11-22,Lahore average,,Lahore,pm25,,299,A,epd_pdf
+2025-11-22,PKLI,,Lahore,pm25,,274,A,epd_pdf
+2025-11-22,PU 1,LHR-PU,Lahore,pm25,,260,A,epd_pdf
+2025-11-22,PU 2,,Lahore,pm25,,318,A,epd_pdf
+2025-11-22,Safari Park,LHR-SP,Lahore,pm25,,325,A,epd_pdf
+2025-11-22,Shahdara,LHR-SHD,Lahore,pm25,,330,A,epd_pdf
+2025-11-22,Town Hall,,Lahore,pm25,,319,A,epd_pdf
+2025-11-22,UET,LHR-GT,Lahore,pm25,,337,A,epd_pdf
+2025-11-22,Wahga Boarder,LHR-WB,Lahore,pm25,,183,A,epd_pdf
+2025-11-24,EPA HQ,,Lahore,pm25,,247,A,epd_pdf
+2025-11-24,Egerton Road,LHR-EG,Lahore,pm25,,227,A,epd_pdf
+2025-11-24,FMDRC,,Lahore,pm25,,282,A,epd_pdf
+2025-11-24,Kahna Nau,LHR-KN,Lahore,pm25,,293,A,epd_pdf
+2025-11-24,LWMC,,Lahore,pm25,,290,A,epd_pdf
+2025-11-24,Lahore average,,Lahore,pm25,,276,A,epd_pdf
+2025-11-24,PKLI,,Lahore,pm25,,279,A,epd_pdf
+2025-11-24,PU 1,LHR-PU,Lahore,pm25,,231,A,epd_pdf
+2025-11-24,PU 2,,Lahore,pm25,,277,A,epd_pdf
+2025-11-24,Safari Park,LHR-SP,Lahore,pm25,,251,A,epd_pdf
+2025-11-24,Shahdara,LHR-SHD,Lahore,pm25,,327,A,epd_pdf
+2025-11-24,Town Hall,,Lahore,pm25,,305,A,epd_pdf
+2025-11-24,UET,LHR-GT,Lahore,pm25,,367,A,epd_pdf
+2025-11-24,Wahga Boarder,LHR-WB,Lahore,pm25,,214,A,epd_pdf
+2025-11-25,EPA HQ,,Lahore,pm25,,285,A,epd_pdf
+2025-11-25,Egerton Road,LHR-EG,Lahore,pm25,,269,A,epd_pdf
+2025-11-25,FMDRC,,Lahore,pm25,,287,A,epd_pdf
+2025-11-25,Kahna Nau,LHR-KN,Lahore,pm25,,274,A,epd_pdf
+2025-11-25,LWMC,,Lahore,pm25,,272,A,epd_pdf
+2025-11-25,Lahore average,,Lahore,pm25,,288,A,epd_pdf
+2025-11-25,PKLI,,Lahore,pm25,,321,A,epd_pdf
+2025-11-25,PU 1,LHR-PU,Lahore,pm25,,224,A,epd_pdf
+2025-11-25,PU 2,,Lahore,pm25,,275,A,epd_pdf
+2025-11-25,Safari Park,LHR-SP,Lahore,pm25,,277,A,epd_pdf
+2025-11-25,Shahdara,LHR-SHD,Lahore,pm25,,357,A,epd_pdf
+2025-11-25,Town Hall,,Lahore,pm25,,305,A,epd_pdf
+2025-11-25,UET,LHR-GT,Lahore,pm25,,384,A,epd_pdf
+2025-11-25,Wahga Boarder,LHR-WB,Lahore,pm25,,219,A,epd_pdf
+2025-11-26,EPA HQ,,Lahore,pm25,,254,A,epd_pdf
+2025-11-26,Egerton Road,LHR-EG,Lahore,pm25,,245,A,epd_pdf
+2025-11-26,FMDRC,,Lahore,pm25,,267,A,epd_pdf
+2025-11-26,Kahna Nau,LHR-KN,Lahore,pm25,,309,A,epd_pdf
+2025-11-26,LWMC,,Lahore,pm25,,303,A,epd_pdf
+2025-11-26,Lahore average,,Lahore,pm25,,275,A,epd_pdf
+2025-11-26,PKLI,,Lahore,pm25,,295,A,epd_pdf
+2025-11-26,PU 1,LHR-PU,Lahore,pm25,,233,A,epd_pdf
+2025-11-26,PU 2,,Lahore,pm25,,261,A,epd_pdf
+2025-11-26,Safari Park,LHR-SP,Lahore,pm25,,260,A,epd_pdf
+2025-11-26,Shahdara,LHR-SHD,Lahore,pm25,,313,A,epd_pdf
+2025-11-26,Town Hall,,Lahore,pm25,,304,A,epd_pdf
+2025-11-26,UET,LHR-GT,Lahore,pm25,,313,A,epd_pdf
+2025-11-26,Wahga Boarder,LHR-WB,Lahore,pm25,,222,A,epd_pdf
+2025-11-27,Boarder,,Lahore,pm25,,434,A,epd_pdf
+2025-11-27,EPA HQ,,Lahore,pm25,,264,A,epd_pdf
+2025-11-27,Egerton Road,LHR-EG,Lahore,pm25,,415,A,epd_pdf
+2025-11-27,FMDRC,,Lahore,pm25,,315,A,epd_pdf
+2025-11-27,Kahna Nau,LHR-KN,Lahore,pm25,,336,A,epd_pdf
+2025-11-27,LWMC,,Lahore,pm25,,334,A,epd_pdf
+2025-11-27,Lahore average,,Lahore,pm25,,335,A,epd_pdf
+2025-11-27,PKLI,,Lahore,pm25,,278,A,epd_pdf
+2025-11-27,PU 1,LHR-PU,Lahore,pm25,,274,A,epd_pdf
+2025-11-27,Safari Park,LHR-SP,Lahore,pm25,,314,A,epd_pdf
+2025-11-27,Shahdara,LHR-SHD,Lahore,pm25,,282,A,epd_pdf
+2025-11-27,Town Hall,,Lahore,pm25,,310,A,epd_pdf
+2025-11-27,UET,LHR-GT,Lahore,pm25,,336,A,epd_pdf
+2025-11-27,Wahga Boarder,LHR-WB,Lahore,pm25,,458,A,epd_pdf
+2025-11-28,EPA HQ,,Lahore,pm25,,282,A,epd_pdf
+2025-11-28,Egerton Road,LHR-EG,Lahore,pm25,,566,A,epd_pdf
+2025-11-28,FMDRC,,Lahore,pm25,,327,A,epd_pdf
+2025-11-28,Kahna Nau,LHR-KN,Lahore,pm25,,361,A,epd_pdf
+2025-11-28,LWMC,,Lahore,pm25,,288,A,epd_pdf
+2025-11-28,Lahore average,,Lahore,pm25,,331,A,epd_pdf
+2025-11-28,PKLI,,Lahore,pm25,,295,A,epd_pdf
+2025-11-28,PU 1,LHR-PU,Lahore,pm25,,245,A,epd_pdf
+2025-11-28,PU 2,,Lahore,pm25,,296,A,epd_pdf
+2025-11-28,Safari Park,LHR-SP,Lahore,pm25,,275,A,epd_pdf
+2025-11-28,Shahdara,LHR-SHD,Lahore,pm25,,267,A,epd_pdf
+2025-11-28,Town Hall,,Lahore,pm25,,311,A,epd_pdf
+2025-11-28,UET,LHR-GT,Lahore,pm25,,318,A,epd_pdf
+2025-11-28,Wahga Boarder,LHR-WB,Lahore,pm25,,473,A,epd_pdf
+2025-11-29,EPA HQ,,Lahore,pm25,,265,A,epd_pdf
+2025-11-29,Egerton Road,LHR-EG,Lahore,pm25,,528,A,epd_pdf
+2025-11-29,FMDRC,,Lahore,pm25,,309,A,epd_pdf
+2025-11-29,Kahna Nau,LHR-KN,Lahore,pm25,,349,A,epd_pdf
+2025-11-29,LWMC,,Lahore,pm25,,254,A,epd_pdf
+2025-11-29,Lahore average,,Lahore,pm25,,318,A,epd_pdf
+2025-11-29,PKLI,,Lahore,pm25,,268,A,epd_pdf
+2025-11-29,PU 1,LHR-PU,Lahore,pm25,,204,A,epd_pdf
+2025-11-29,PU 2,,Lahore,pm25,,243,A,epd_pdf
+2025-11-29,Safari Park,LHR-SP,Lahore,pm25,,275,A,epd_pdf
+2025-11-29,Shahdara,LHR-SHD,Lahore,pm25,,315,A,epd_pdf
+2025-11-29,Town Hall,,Lahore,pm25,,337,A,epd_pdf
+2025-11-29,UET,LHR-GT,Lahore,pm25,,341,A,epd_pdf
+2025-11-29,Wahga Boarder,LHR-WB,Lahore,pm25,,443,A,epd_pdf
+2025-11-30,EPA HQ,,Lahore,pm25,,227,A,epd_pdf
+2025-11-30,Egerton Road,LHR-EG,Lahore,pm25,,565,A,epd_pdf
+2025-11-30,FMDRC,,Lahore,pm25,,277,A,epd_pdf
+2025-11-30,Kahna Nau,LHR-KN,Lahore,pm25,,323,A,epd_pdf
+2025-11-30,LWMC,,Lahore,pm25,,282,A,epd_pdf
+2025-11-30,Lahore average,,Lahore,pm25,,321,A,epd_pdf
+2025-11-30,PKLI,,Lahore,pm25,,265,A,epd_pdf
+2025-11-30,PU 1,LHR-PU,Lahore,pm25,,214,A,epd_pdf
+2025-11-30,PU 2,,Lahore,pm25,,250,A,epd_pdf
+2025-11-30,Safari Park,LHR-SP,Lahore,pm25,,256,A,epd_pdf
+2025-11-30,Shahdara,LHR-SHD,Lahore,pm25,,363,A,epd_pdf
+2025-11-30,Town Hall,,Lahore,pm25,,296,A,epd_pdf
+2025-11-30,UET,LHR-GT,Lahore,pm25,,337,A,epd_pdf
+2025-11-30,Wahga Boarder,LHR-WB,Lahore,pm25,,521,A,epd_pdf
+2025-12-01,EPA HQ,,Lahore,pm25,,224,A,epd_pdf
+2025-12-01,Egerton Road,LHR-EG,Lahore,pm25,,559,A,epd_pdf
+2025-12-01,FMDRC,,Lahore,pm25,,255,A,epd_pdf
+2025-12-01,Kahna Nau,LHR-KN,Lahore,pm25,,330,A,epd_pdf
+2025-12-01,LWMC,,Lahore,pm25,,300,A,epd_pdf
+2025-12-01,Lahore average,,Lahore,pm25,,308,A,epd_pdf
+2025-12-01,PKLI,,Lahore,pm25,,288,A,epd_pdf
+2025-12-01,PU 1,LHR-PU,Lahore,pm25,,202,A,epd_pdf
+2025-12-01,PU 2,,Lahore,pm25,,249,A,epd_pdf
+2025-12-01,Safari Park,LHR-SP,Lahore,pm25,,262,A,epd_pdf
+2025-12-01,Shahdara,LHR-SHD,Lahore,pm25,,278,A,epd_pdf
+2025-12-01,Town Hall,,Lahore,pm25,,246,A,epd_pdf
+2025-12-01,UET,LHR-GT,Lahore,pm25,,291,A,epd_pdf
+2025-12-01,Wahga Boarder,LHR-WB,Lahore,pm25,,514,A,epd_pdf
+2025-12-02,EPA HQ,,Lahore,pm25,,282,A,epd_pdf
+2025-12-02,FMDRC,,Lahore,pm25,,310,A,epd_pdf
+2025-12-02,Kahna Nau,LHR-KN,Lahore,pm25,,379,A,epd_pdf
+2025-12-02,LWMC,,Lahore,pm25,,341,A,epd_pdf
+2025-12-02,Lahore average,,Lahore,pm25,,334,A,epd_pdf
+2025-12-02,PKLI,,Lahore,pm25,,345,A,epd_pdf
+2025-12-02,PU 1,LHR-PU,Lahore,pm25,,277,A,epd_pdf
+2025-12-02,PU 2,,Lahore,pm25,,302,A,epd_pdf
+2025-12-02,Safari Park,LHR-SP,Lahore,pm25,,292,A,epd_pdf
+2025-12-02,Shahdara,LHR-SHD,Lahore,pm25,,353,A,epd_pdf
+2025-12-02,Town Hall,,Lahore,pm25,,379,A,epd_pdf
+2025-12-02,UET,LHR-GT,Lahore,pm25,,418,A,epd_pdf

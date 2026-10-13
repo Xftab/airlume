@@ -1,0 +1,235 @@
+"""Parsers for the EPD Punjab daily AQI bulletins (epd.punjab.gov.pk/Air_quality).
+
+Layouts seen in samples (13 Oct 2026):
+- **Style A, Nov 2025 - Dec 2025:** two pages.  Page 1 is an Urdu district
+  ranking (18 districts; Urdu shaping is garbled by text extraction, so only
+  page 2 is used).  Page 2: "Average AQI of Lahore (13 AQMS) (334)", a
+  "Rank Location AQI" table of 13 Lahore stations plus transboundary sites,
+  and the note "AQI calculations is performed for last 24 hours (dd.mm.yyyy
+  ...) using PM2.5 data.  The data is fetched from AQI Punjab dashboard."
+- **Style B, 2022 - 2024:** "AIR QUALITY INDEX (AQI) OF LAHORE RECORDED WITH
+  AQMS ON dd.mm.yyyy (BASED ON PREVIOUS 24 HOURS DATA)" with 3-4 stations,
+  pollutant used, PEQS value, concentration, AQI.  Some 2022 rows use CO with
+  min/max 8-hour averages and two AQIs; the maximum is kept.
+- **Style C, 2018 - 2020:** concentration tables for the old network
+  (Town Hall, Dental College, Met Office, Multan, Faisalabad ...).  Not
+  parsed yet; stations do not map to today's network.
+
+Every row is a *daily* value: `date` is the day the 24-hour window covers.
+"""
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass
+from datetime import date, datetime, timedelta
+from pathlib import Path
+
+import pdfplumber
+
+STATION_RE = re.compile(r"^\s*(\d{1,2})\s+([A-Za-z][A-Za-z0-9 .&()'-]*?)\s+(\d{2,3})\s*$")
+NOTE_DATE_RE = re.compile(r"last 24 hours\s*\((\d{2}\.\d{2}\.\d{4})")
+UPDATED_RE = re.compile(r"Updated\s+Time:\s*(\d{2}\.\d{2}\.\d{4})")
+TITLE_B_RE = re.compile(r"AQMS ON\s+(\d{2}\.\d{2}\.\d{4})")
+AVG_RE = re.compile(r"Average\s+AQI\s+of\s+Lahore.*?\((\d{2,3})\)\s*$", re.S)
+
+# Partial / inconsistent labels in the bulletins -> one canonical label.
+LABEL_ALIASES = {
+    "(epa hqs, national hockey": "EPA HQ",
+    "national hockey stadium,": "EPA HQ",
+    "national hockey stadium, gulberg lahore": "EPA HQ",
+    "mobile aqms": "Mobile AQMS",
+    "(college of earth and": "PU 1",
+    "punjab university, lahore": "PU 1",
+    "town hall, lahore": "Town Hall",
+    "wahga": "Wahga Boarder",
+    "wahga boarder": "Wahga Boarder",
+    "c2 sector, block 1, township,": "Township",
+    "gujjumata, farozpur road": "Gajjumata",
+    "daroghawala, industrial area": "Daroghawala",
+    "shallay valley range road": "Rawalpindi Shalley Valley",
+    "rawalpindi": "Rawalpindi Shalley Valley",
+}
+
+# Bulletin label -> registry station_id where the site is the same as today's portal station.
+LABEL_TO_STATION = {
+    "uet": "LHR-GT",
+    "kahna nau": "LHR-KN",
+    "shahdara": "LHR-SHD",
+    "safari park": "LHR-SP",
+    "egerton road": "LHR-EG",
+    "wahga boarder": "LHR-WB",
+    "wagha border": "LHR-WB",
+    "pu 1": "LHR-PU",
+}
+
+
+@dataclass(frozen=True)
+class DailyRow:
+    date: date
+    station_label: str
+    station_id: str | None
+    city: str
+    pollutant: str | None
+    conc: float | None
+    aqi: int
+    style: str
+
+
+def _d(s: str) -> date:
+    return datetime.strptime(s, "%d.%m.%Y").date()
+
+
+def _norm(label: str) -> str:
+    return re.sub(r"\s+", " ", label.strip().lower())
+
+
+def extract_pages(path: Path) -> list[str]:
+    with pdfplumber.open(str(path)) as pdf:
+        return [p.extract_text(layout=True) or "" for p in pdf.pages]
+
+
+def detect_style(pages: list[str]) -> str:
+    joined = "\n".join(pages)
+    if "Rank" in joined and "Location" in joined and "Hourly Report" in joined:
+        return "A"
+    if TITLE_B_RE.search(joined):
+        return "B"
+    if "DAILY QUALITY MONITORING" in joined or "Monitoring of Air Quality" in joined:
+        return "C"
+    return "unknown"
+
+
+def _rows_style_a(pages: list[str]) -> list[DailyRow]:
+    text = "\n".join(pages)
+    m = NOTE_DATE_RE.search(text)
+    if m:
+        day = _d(m.group(1))
+    else:
+        u = UPDATED_RE.search(text)
+        if not u:
+            return []
+        day = _d(u.group(1)) - timedelta(days=1)
+    rows: list[DailyRow] = []
+    lines = [l.rstrip() for l in text.splitlines()]
+    # Rank/Location/AQI column region: take the text right of the "Rank" header column.
+    start = next((i for i, l in enumerate(lines) if re.search(r"\bRank\s+Location\s+AQI\b", l)), None)
+    if start is None:
+        return []
+    col = lines[start].index("Rank")
+    pending_name: list[str] = []
+    pending_rank: tuple[int, int] | None = None  # (rank, aqi) waiting for a name
+    for l in lines[start + 1:]:
+        seg = l[col:].strip() if len(l) > col else ""
+        if not seg:
+            continue
+        if seg.startswith("Transboundary"):
+            break
+        m = STATION_RE.match(seg)
+        if m:
+            label = m.group(2).strip()
+            rows.append(_mk(day, label, int(m.group(3)), "A"))
+            pending_name, pending_rank = [], None
+            continue
+        m2 = re.match(r"^(\d{1,2})\s+(\d{2,3})$", seg)  # rank + aqi, name on neighbouring lines
+        if m2:
+            if pending_name:
+                rows.append(_mk(day, " ".join(pending_name), int(m2.group(2)), "A"))
+                pending_name = []
+            else:
+                pending_rank = (int(m2.group(1)), int(m2.group(2)))
+            continue
+        if re.match(r"^[A-Za-z][A-Za-z .()'-]*$", seg):
+            if pending_rank:
+                pending_name.append(seg)
+                # a name split over two lines: wait one more line if it looks incomplete
+                if seg.lower() in {"wahga", "wagha"}:
+                    continue
+                rows.append(_mk(day, " ".join(pending_name), pending_rank[1], "A"))
+                pending_name, pending_rank = [], None
+            else:
+                pending_name.append(seg)
+    return rows
+
+
+def canonical(label: str) -> str:
+    n = _norm(label)
+    return LABEL_ALIASES.get(n, re.sub(r"\s+", " ", label.strip()))
+
+
+def _mk(day: date, label: str, aqi: int, style: str, pollutant: str | None = "pm25",
+        conc: float | None = None, city: str = "Lahore") -> DailyRow:
+    label = canonical(label)
+    return DailyRow(day, label, LABEL_TO_STATION.get(_norm(label)), city, pollutant, conc, aqi, style)
+
+
+def _rows_style_b(pages: list[str]) -> list[DailyRow]:
+    text = pages[0]
+    m = TITLE_B_RE.search(text)
+    if not m:
+        return []
+    day = _d(m.group(1))
+    lines = [l.rstrip() for l in text.splitlines()]
+    rows: list[DailyRow] = []
+    prev_text = ""
+    for i, l in enumerate(lines):
+        core = l[:95]  # drop the AQI-limits legend on the right
+        # PM rows: "<name> Particulate matter 35  58  133"  /  "Respirable Particulate Matter 35 76 154"
+        pm = re.search(r"(.*?)\s*(?:Respirable\s+)?Particulate [Mm]atter\s+(35|150)\s+(\d+(?:\.\d+)?)\s+(\d{2,3})", core)
+        if pm:
+            name = pm.group(1).strip() or prev_text
+            pol = "pm10" if pm.group(2) == "150" else "pm25"
+            rows.append(_mk(day, name, int(pm.group(4)), "B", pol, float(pm.group(3)),
+                            city="Rawalpindi" if "rawalpindi" in (name + " " + lines[i + 1] if i + 1 < len(lines) else name).lower() else "Lahore"))
+            prev_text = ""
+            continue
+        # Some layouts put the numbers on the line after "Particulate matter" (PM10 Rawalpindi case)
+        num_only = re.match(r"^\s*(?:([A-Za-z][A-Za-z ,.()&-]*?)\s+)?(35|150)\s+(\d+(?:\.\d+)?)\s+(\d{2,3})\s*$", core)
+        if num_only and i > 0 and "Particulate" in lines[i - 1]:
+            name = (num_only.group(1) or "").strip() or prev_text
+            pol = "pm10" if num_only.group(2) == "150" else "pm25"
+            rows.append(_mk(day, name, int(num_only.group(4)), "B", pol, float(num_only.group(3)),
+                            city="Rawalpindi" if "rawalpindi" in name.lower() else "Lahore"))
+            prev_text = ""
+            continue
+        co = re.search(r"(.*?)\s*Carbon Monoxide \(CO\)\s+5\s+(?:Minimum.*)?$", core)
+        if co:
+            prev_text = co.group(1).strip() or prev_text
+            # numbers may be on this line or a later one: "4.26 4.77 84 95"
+            for look in lines[i:i + 5]:
+                nums = re.search(r"(\d+\.\d+)\s+(\d+\.\d+)\s+(\d{2,3})\s+(\d{2,3})", look)
+                if nums:
+                    rows.append(_mk(day, prev_text, max(int(nums.group(3)), int(nums.group(4))), "B", "co", float(nums.group(2))))
+                    break
+            prev_text = ""
+            continue
+        stripped = core.strip()
+        if stripped and re.match(r"^[A-Za-z(]", stripped) and not stripped.startswith(("Station", "AIR QUALITY", "Note", "Disclaimer", "to calculate", "calculate", "used to", "Conc.")):
+            prev_text = re.sub(r"\s+", " ", stripped)
+    return rows
+
+
+def city_average(pages: list[str]) -> int | None:
+    m = re.search(r"Average\s+AQI\s+of\s+Lahore[^\n]*?\((\d{2,3})\)", "\n".join(pages))
+    return int(m.group(1)) if m else None
+
+
+def parse_pages(pages: list[str]) -> tuple[str, list[DailyRow], int | None]:
+    """Same as parse_report but from already-extracted page text (used by tests)."""
+    style = detect_style(pages)
+    if style == "A":
+        return style, _rows_style_a(pages), city_average(pages)
+    if style == "B":
+        return style, _rows_style_b(pages), None
+    return style, [], None
+
+
+def parse_report(path: Path) -> tuple[str, list[DailyRow], int | None]:
+    """Returns (style, station rows, Lahore city-average AQI if printed)."""
+    pages = extract_pages(path)
+    style = detect_style(pages)
+    if style == "A":
+        return style, _rows_style_a(pages), city_average(pages)
+    if style == "B":
+        return style, _rows_style_b(pages), None
+    return style, [], None

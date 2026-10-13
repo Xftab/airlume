@@ -22,11 +22,17 @@ from airlume.config import ROOT
 
 ARCHIVE = ROOT / "data" / "archive"
 
-KEYS = {"readings": ["station_id", "ts", "source"], "city_hourly": ["city_id", "ts", "source"]}
+KEYS = {
+    "readings": ["station_id", "ts", "source"],
+    "city_hourly": ["city_id", "ts", "source"],
+    "epd_daily": ["date", "station_label", "pollutant", "source"],
+}
 COLS = {
     "readings": ["station_id", "ts", "pm25", "pm10", "co", "so2", "no2", "o3", "aqi", "aqi_computed", "source"],
     "city_hourly": ["city_id", "ts", "pm25", "pm10", "aqi", "n_stations", "source"],
+    "epd_daily": ["date", "station_label", "station_id", "city", "pollutant", "conc", "aqi", "style", "source"],
 }
+TIME_COL = {"readings": "ts", "city_hourly": "ts", "epd_daily": "date"}
 
 
 def _path(table: str, source: str, month: str) -> Path:
@@ -42,18 +48,22 @@ def export(table: str, df: pd.DataFrame) -> list[Path]:
         if c not in df.columns:
             df[c] = None
     df = df[COLS[table]]
-    df["ts"] = pd.to_datetime(df["ts"], utc=True)
+    tcol = TIME_COL[table]
+    df[tcol] = pd.to_datetime(df[tcol], utc=(tcol == "ts"))
     touched: list[Path] = []
-    for (source, month), part in df.groupby([df["source"], df["ts"].dt.strftime("%Y-%m")]):
+    bucket = df[tcol].dt.strftime("%Y-%m") if tcol == "ts" else df[tcol].dt.strftime("%Y")
+    for (source, month), part in df.groupby([df["source"], bucket]):
         p = _path(table, source, month)
         p.parent.mkdir(parents=True, exist_ok=True)
         if p.exists():
-            old = pd.read_csv(p, parse_dates=["ts"])
-            old["ts"] = pd.to_datetime(old["ts"], utc=True)
+            old = pd.read_csv(p)
+            old[tcol] = pd.to_datetime(old[tcol], utc=(tcol == "ts"))
             merged = pd.concat([old, part], ignore_index=True)
         else:
             merged = part
         merged = merged.drop_duplicates(subset=KEYS[table], keep="last").sort_values(KEYS[table])
+        if tcol == "date":
+            merged[tcol] = merged[tcol].dt.strftime("%Y-%m-%d")
         merged.to_csv(p, index=False, date_format="%Y-%m-%dT%H:%M:%SZ", lineterminator="\n")
         touched.append(p)
     return touched
@@ -64,8 +74,11 @@ def load_all(table: str) -> pd.DataFrame:
     if not files:
         return pd.DataFrame(columns=COLS[table])
     frames = []
+    tcol = TIME_COL[table]
     for f in files:
         d = pd.read_csv(f)
-        d["ts"] = pd.to_datetime(d["ts"], utc=True)
+        d[tcol] = pd.to_datetime(d[tcol], utc=(tcol == "ts"))
+        if tcol == "date":
+            d[tcol] = d[tcol].dt.date
         frames.append(d)
     return pd.concat(frames, ignore_index=True)

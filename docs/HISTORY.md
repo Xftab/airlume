@@ -10,6 +10,8 @@ Newest first. Each entry records what was decided and why.
 - **Station coordinates taken from IQAir station pages** (9 of 11) and neighbourhood centroids (2), each with a confidence label displayed in the app, pending EPA confirmation. The EPA email asks for the official list.
 - **Quetta is display-only** (sensors exist only on WAQI/IQAir). Islamabad, Karachi and Peshawar use Urban Unit sensors on OpenAQ.
 - **Map runs keyless by default** (`map_provider=None`); CARTO is used only when a key is present, so the demo never depends on a third-party tile service.
+- **Ozone added to the AQI computation.** First live afternoon fetch showed the portal's AQI exceeding the PM2.5 sub-index exactly where O3 was high; gas sub-indices with ug/m3 -> ppb conversion were added. Remaining differences point to an 8-hour averaging window, to be tested with a day of data.
+- **EPD bulletin back-fill scoped.** Archive runs Jan 2018 - 2 Dec 2025 (newest first). Bulletins compute AQI from the 24-hour PM2.5 mean. Parser covers 2022-2025; pre-2022 layouts use the old station network and are skipped. The Dec 2025 - Oct 2026 gap has no permitted official source; decision pending.
 - **CSV archive is the data of record** (one file per source per month, append-only); DuckDB is a rebuildable cache. Chosen so GitHub Actions can commit hourly data as plain-text line appends, never a binary file that conflicts.
 - **Answer sentences are written by code, not the model** (new `nl/answer.py`), so text can never contradict the numbers.
 
