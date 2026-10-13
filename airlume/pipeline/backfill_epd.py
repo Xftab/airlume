@@ -49,6 +49,15 @@ def list_page(page: int, session: requests.Session | None = None) -> list[Report
     return out
 
 
+def listing_links(page: int, session: requests.Session | None = None) -> list[ReportLink]:
+    """Links on `page` minus the ones that also appear on another page (sidebar/static)."""
+    s = session or requests.Session()
+    here = list_page(page, s)
+    other = list_page(1 if page != 1 else 2, s)
+    static = {l.url for l in other}
+    return [l for l in here if l.url not in static]
+
+
 def last_page(session: requests.Session | None = None) -> int:
     """Highest page number in the index pagination (page 1 = oldest reports)."""
     s = session or requests.Session()

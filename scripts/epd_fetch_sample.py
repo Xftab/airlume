@@ -12,12 +12,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from airlume.pipeline.backfill_epd import download, last_page, list_page
+from airlume.pipeline.backfill_epd import download, last_page, listing_links
 
 arg = sys.argv[1] if len(sys.argv) > 1 else "1"
 page = last_page() if arg == "last" else int(arg)
 n = int(sys.argv[2]) if len(sys.argv) > 2 else 3
-links = list_page(page)
-print(f"page {page}: {len(links)} PDF links")
+links = listing_links(page)
+print(f"page {page}: {len(links)} listing PDFs (static sidebar links removed)")
+for l in links:
+    print("   ", l.date_hint, "|", l.title)
 for l in links[:n]:
     print(" ", l.date_hint, l.title, "->", download(l))

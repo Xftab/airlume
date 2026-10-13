@@ -33,3 +33,14 @@ def test_punjab_labels():
     assert band_for(450).label == "Hazardous"
     assert band_for(999).label == "Hazardous"
     assert band_for(None) is None
+
+
+def test_ozone_can_dominate_afternoon():
+    # Egerton Road, 13 Oct 2026 14:00: PM2.5 35.2 but O3 186.2 ug/m3 (~95 ppb) -> portal AQI 143.
+    aqi, dom = aqi_from_concentrations(pm25=35.2, pm10=119.8, o3=186.2, no2=34.4, so2=18.5, co=1.2)
+    assert dom == "o3" and aqi > 100
+
+
+def test_gas_units_converted():
+    assert sub_index("no2", 34.4 / 1.88) < 51  # 18 ppb -> Good
+    assert aqi_from_concentrations(pm25=24.2, pm10=68.3, o3=89.2, no2=16.0, so2=37.5, co=0.6)[0] in range(70, 80)  # GT Road 73

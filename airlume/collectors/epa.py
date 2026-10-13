@@ -101,8 +101,8 @@ def parse_lahore_html(html: str, now: datetime | None = None) -> pd.DataFrame:
             pm25 = _num(cells[col_pm25]) if col_pm25 is not None and col_pm25 < len(cells) else None
             pm10 = _num(cells[col_pm10]) if col_pm10 is not None and col_pm10 < len(cells) else None
             aqi_rep = _num(cells[col_aqi]) if col_aqi is not None and col_aqi < len(cells) else None
-            aqi_comp, _ = aqi_from_concentrations(pm25, pm10)
             gases = {g: (_num(cells[i]) if i is not None and i < len(cells) else None) for g, i in col_gas.items()}
+            aqi_comp, _ = aqi_from_concentrations(pm25, pm10, **gases)
             rows.append(
                 {
                     "station_id": station_id,
@@ -152,6 +152,7 @@ DISTRICT_ALIASES = {
 }
 
 
+_NOT_DISTRICTS = {"solar radiation", "last", "last updated", "humidity", "wind", "temperature", "aqi", "rank"}
 UNMATCHED: list[str] = []  # district names seen on the page but absent from the registry (debug aid)
 
 
@@ -179,7 +180,7 @@ def parse_home_html(html: str, city_lookup: dict[str, str], now: datetime | None
         name = DISTRICT_ALIASES.get(name, name).lower()
         city_id = city_lookup.get(name)
         if city_id is None:
-            if name.title() not in UNMATCHED and len(name) > 3:
+            if name.title() not in UNMATCHED and len(name) > 3 and name not in _NOT_DISTRICTS:
                 UNMATCHED.append(name.title())
             continue
         if city_id in seen:

@@ -25,8 +25,9 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 ## Next steps (rest of Phase 0)
 - [ ] Aftab: run `K:\airlume\setup` then `K:\airlume\run` and confirm the shell opens.
 - [x] Live dry run done 14:00 PKT: 10 Lahore stations, 35/36 districts, Open-Meteo OK. Finding: portal AQI differs from hourly-PM2.5 AQI in the afternoon (8-h mean or gas-dominated); all six pollutants now stored to settle it. See research notes.
-- [ ] Aftab: run `K:\airlume\collect --dry-run` again to see which district name is unmatched.
-- [ ] Aftab: `python scripts\epd_fetch_sample.py last 3` (newest, typed daily reports) - page 1 samples were scanned 2010-15 monthly tables, not usable.
+- [x] Unmatched names were page furniture; ignored. Ozone identified as the afternoon driver; gas sub-indices added to `aqi.py`.
+- [ ] Aftab: `python scripts\epd_fetch_sample.py last 3` again (sampler now skips the three static sidebar PDFs that fooled it) and send the printed list.
+- [ ] After ~1 day of hourly collection: `python scripts\w1_check.py` to settle the averaging window.
 - [ ] Aftab: create accounts — Groq, Google AI Studio, OpenAQ, CARTO, Streamlit Community Cloud — and put the keys in `K:\airlume\.env` (never in chat).
 - [ ] Aftab: send the two emails (`docs/emails/`), with supervisor name filled in.
 - [ ] Claude: once `.env` has an OpenAQ key, run station discovery for Islamabad/Karachi/Peshawar and add licensed stations to the registry.

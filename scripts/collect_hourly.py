@@ -56,6 +56,9 @@ def run(dry_run: bool = False) -> int:
         print(f"[epa/districts] {len(df)} district rows")
         if epa.UNMATCHED:
             print(f"[epa/districts] names on the page not in the registry: {epa.UNMATCHED}")
+        absent = [c.name for c in reg.cities if c.province == "Punjab" and c.city_id not in set(df.city_id)]
+        if absent:
+            print(f"[epa/districts] registry districts not on the page today: {absent}")
         if not df.empty:
             results["city_hourly"] = df
             ok += 1
