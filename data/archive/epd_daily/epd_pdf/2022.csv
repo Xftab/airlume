@@ -1,4 +1,294 @@
 date,station_label,station_id,city,pollutant,conc,aqi,style,source
+2022-01-04,Faisalabad,,Faisalabad,pm10,153.0,105,B,epd_pdf
+2022-01-04,Rahim Yar Khan,,Rahim Yar Khan,pm25,39.8,112,B,epd_pdf
+2022-01-04,Rawalpindi Shalley Valley,,Rawalpindi,pm10,168.0,109,B,epd_pdf
+2022-01-04,"Sundar Industrial Estate,",,Lahore,pm25,191.0,246,B,epd_pdf
+2022-01-05,Faisalabad,,Faisalabad,pm10,121.0,81,B,epd_pdf
+2022-01-05,Rahim Yar Khan,,Rahim Yar Khan,pm25,38.8,109,B,epd_pdf
+2022-01-05,Rawalpindi Shalley Valley,,Rawalpindi,pm10,87.0,58,B,epd_pdf
+2022-01-05,"Sundar Industrial Estate,",,Lahore,pm25,159.6,218,B,epd_pdf
+2022-01-06,EPA HQ,,Lahore,pm25,80.0,157,B,epd_pdf
+2022-01-06,Faisalabad,,Faisalabad,pm10,82.0,55,B,epd_pdf
+2022-01-06,Rahim Yar Khan,,Rahim Yar Khan,pm25,36.7,103,B,epd_pdf
+2022-01-06,Rawalpindi Shalley Valley,,Rawalpindi,pm10,19.0,13,B,epd_pdf
+2022-01-06,"Sundar Industrial Estate,",,Lahore,pm25,96.94,169,B,epd_pdf
+2022-01-06,Town Hall,,Lahore,co,5.26,104,B,epd_pdf
+2022-01-07,EPA HQ,,Lahore,pm25,113.0,181,B,epd_pdf
+2022-01-07,Faisalabad,,Faisalabad,pm10,44.0,29,B,epd_pdf
+2022-01-07,Rahim Yar Khan,,Rahim Yar Khan,pm25,26.2,75,B,epd_pdf
+2022-01-07,"Sundar Industrial Estate,",,Lahore,pm25,149.1,208,B,epd_pdf
+2022-01-07,Town Hall,,Lahore,co,6.63,132,B,epd_pdf
+2022-01-08,EPA HQ,,Lahore,pm25,75.0,154,B,epd_pdf
+2022-01-08,Faisalabad,,Faisalabad,pm10,84.0,56,B,epd_pdf
+2022-01-08,Rahim Yar Khan,,Rahim Yar Khan,pm25,23.0,66,B,epd_pdf
+2022-01-08,"Sundar Industrial Estate,",,Lahore,pm25,90.0,164,B,epd_pdf
+2022-01-08,Town Hall,,Lahore,co,6.05,120,B,epd_pdf
+2022-01-09,EPA HQ,,Lahore,pm25,75.0,154,B,epd_pdf
+2022-01-09,Faisalabad,,Faisalabad,pm10,19.0,13,B,epd_pdf
+2022-01-09,Rawalpindi Shalley Valley,,Rawalpindi,pm10,71.0,48,B,epd_pdf
+2022-01-09,"Sundar Industrial Estate,",,Lahore,pm25,86.0,162,B,epd_pdf
+2022-01-09,Town Hall,,Lahore,co,6.19,123,B,epd_pdf
+2022-01-10,EPA HQ,,Lahore,pm25,91.0,165,B,epd_pdf
+2022-01-10,Faisalabad,,Faisalabad,pm10,47.0,31,B,epd_pdf
+2022-01-10,Rahim Yar Khan,,Rahim Yar Khan,pm25,24.0,69,B,epd_pdf
+2022-01-10,Rawalpindi Shalley Valley,,Rawalpindi,pm10,62.0,41,B,epd_pdf
+2022-01-10,"Sundar Industrial Estate,",,Lahore,pm25,97.7,170,B,epd_pdf
+2022-01-10,Town Hall,,Lahore,co,6.31,126,B,epd_pdf
+2022-01-11,EPA HQ,,Lahore,pm25,130.0,193,B,epd_pdf
+2022-01-11,Faisalabad,,Faisalabad,pm10,80.0,53,B,epd_pdf
+2022-01-11,Rahim Yar Khan,,Rahim Yar Khan,pm25,27.0,77,B,epd_pdf
+2022-01-11,Rawalpindi Shalley Valley,,Rawalpindi,pm10,65.0,43,B,epd_pdf
+2022-01-11,"Sundar Industrial Estate,",,Lahore,pm25,187.8,244,B,epd_pdf
+2022-01-11,Town Hall,,Lahore,co,6.49,129,B,epd_pdf
+2022-01-12,"Canal View Society,",,Lahore,pm25,107.5,177,B,epd_pdf
+2022-01-12,EPA HQ,,Lahore,pm25,113.0,181,B,epd_pdf
+2022-01-12,Faisalabad,,Faisalabad,pm10,105.0,70,B,epd_pdf
+2022-01-12,Rahim Yar Khan,,Rahim Yar Khan,pm25,26.0,74,B,epd_pdf
+2022-01-12,Rawalpindi Shalley Valley,,Rawalpindi,pm10,73.0,49,B,epd_pdf
+2022-01-12,Town Hall,,Lahore,co,6.3,126,B,epd_pdf
+2022-01-13,"Canal View Society,",,Lahore,pm25,230.0,282,B,epd_pdf
+2022-01-13,EPA HQ,,Lahore,pm25,165.0,223,B,epd_pdf
+2022-01-13,Faisalabad,,Faisalabad,pm10,107.0,72,B,epd_pdf
+2022-01-13,Rahim Yar Khan,,Rahim Yar Khan,pm25,28.0,80,B,epd_pdf
+2022-01-13,Rawalpindi Shalley Valley,,Rawalpindi,pm10,89.0,60,B,epd_pdf
+2022-01-13,Town Hall,,Lahore,co,8.66,173,B,epd_pdf
+2022-01-14,"Canal View Society,",,Lahore,pm25,214.0,267,B,epd_pdf
+2022-01-14,EPA HQ,,Lahore,pm25,183.0,239,B,epd_pdf
+2022-01-14,Faisalabad,,Faisalabad,pm10,120.0,80,B,epd_pdf
+2022-01-14,Rahim Yar Khan,,Rahim Yar Khan,pm25,34.0,97,B,epd_pdf
+2022-01-14,Rawalpindi Shalley Valley,,Rawalpindi,pm10,67.0,45,B,epd_pdf
+2022-01-14,Town Hall,,Lahore,co,7.51,150,B,epd_pdf
+2022-01-15,"Canal View Society,",,Lahore,pm25,224.4,277,B,epd_pdf
+2022-01-15,EPA HQ,,Lahore,pm25,188.0,244,B,epd_pdf
+2022-01-15,Faisalabad,,Faisalabad,pm10,107.0,71,B,epd_pdf
+2022-01-15,Rahim Yar Khan,,Rahim Yar Khan,pm25,32.2,91,B,epd_pdf
+2022-01-15,Rawalpindi Shalley Valley,,Rawalpindi,pm10,140.0,93,B,epd_pdf
+2022-01-15,Town Hall,,Lahore,co,5.86,117,B,epd_pdf
+2022-01-16,"Canal View Society,",,Lahore,pm25,230.6,282,B,epd_pdf
+2022-01-16,EPA HQ,,Lahore,pm25,195.0,250,B,epd_pdf
+2022-01-16,Faisalabad,,Faisalabad,pm10,105.0,70,B,epd_pdf
+2022-01-16,Rahim Yar Khan,,Rahim Yar Khan,pm25,34.4,98,B,epd_pdf
+2022-01-16,Rawalpindi Shalley Valley,,Rawalpindi,pm10,159.0,105,B,epd_pdf
+2022-01-16,Town Hall,,Lahore,co,5.73,114,B,epd_pdf
+2022-01-17,"Canal View Society,",,Lahore,pm25,170.69,228,B,epd_pdf
+2022-01-17,EPA HQ,,Lahore,pm25,201.0,255,B,epd_pdf
+2022-01-17,Rahim Yar Khan,,Rahim Yar Khan,pm25,33.7,96,B,epd_pdf
+2022-01-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,194.0,122,B,epd_pdf
+2022-01-17,Town Hall,,Lahore,co,5.78,115,B,epd_pdf
+2022-01-18,"Canal View Society,",,Lahore,pm25,265.0,315,B,epd_pdf
+2022-01-18,EPA HQ,,Lahore,pm25,201.0,231,B,epd_pdf
+2022-01-18,Rahim Yar Khan,,Rahim Yar Khan,pm25,39.7,102,B,epd_pdf
+2022-01-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,156.0,103,B,epd_pdf
+2022-01-18,Town Hall,,Lahore,co,6.76,135,B,epd_pdf
+2022-01-19,EPA HQ,,Lahore,pm25,224.0,276,B,epd_pdf
+2022-01-19,"GC University, Lahore",,Lahore,pm25,290.5,341,B,epd_pdf
+2022-01-19,Rahim Yar Khan,,Rahim Yar Khan,pm25,40.0,113,B,epd_pdf
+2022-01-19,Town Hall,,Lahore,co,9.26,185,B,epd_pdf
+2022-01-20,EPA HQ,,Lahore,pm25,139.0,199,B,epd_pdf
+2022-01-20,Faisalabad,,Faisalabad,pm10,121.0,81,B,epd_pdf
+2022-01-20,"GC University, Lahore",,Lahore,pm25,222.7,275,B,epd_pdf
+2022-01-20,Rahim Yar Khan,,Rahim Yar Khan,pm25,42.4,120,B,epd_pdf
+2022-01-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,145.0,97,B,epd_pdf
+2022-01-20,Town Hall,,Lahore,co,6.52,130,B,epd_pdf
+2022-01-21,EPA HQ,,Lahore,pm25,102.0,173,B,epd_pdf
+2022-01-21,Faisalabad,,Faisalabad,pm10,126.0,84,B,epd_pdf
+2022-01-21,"GC University, Lahore",,Lahore,pm25,186.42,242,B,epd_pdf
+2022-01-21,Rahim Yar Khan,,Rahim Yar Khan,pm25,34.8,99,B,epd_pdf
+2022-01-21,Town Hall,,Lahore,co,5.94,118,B,epd_pdf
+2022-01-22,EPA HQ,,Lahore,pm25,85.0,161,B,epd_pdf
+2022-01-22,Faisalabad,,Faisalabad,pm10,120.0,80,B,epd_pdf
+2022-01-22,"GC University, Lahore",,Lahore,pm25,99.0,171,B,epd_pdf
+2022-01-22,Rahim Yar Khan,,Rahim Yar Khan,pm25,42.0,118,B,epd_pdf
+2022-01-22,Rawalpindi Shalley Valley,,Rawalpindi,pm10,144.0,96,B,epd_pdf
+2022-01-22,Town Hall,,Lahore,co,6.04,120,B,epd_pdf
+2022-01-23,EPA HQ,,Lahore,pm25,85.0,161,B,epd_pdf
+2022-01-23,Faisalabad,,Faisalabad,pm10,69.0,46,B,epd_pdf
+2022-01-23,"GC University, Lahore",,Lahore,pm25,136.0,197,B,epd_pdf
+2022-01-23,Rahim Yar Khan,,Rahim Yar Khan,pm25,23.2,66,B,epd_pdf
+2022-01-23,Town Hall,,Lahore,co,5.9,117,B,epd_pdf
+2022-01-24,EPA HQ,,Lahore,pm25,82.0,159,B,epd_pdf
+2022-01-24,Faisalabad,,Faisalabad,pm10,40.0,27,B,epd_pdf
+2022-01-24,"GC University, Lahore",,Lahore,pm25,68.0,147,B,epd_pdf
+2022-01-24,Rahim Yar Khan,,Rahim Yar Khan,pm25,28.6,82,B,epd_pdf
+2022-01-24,Rawalpindi Shalley Valley,,Rawalpindi,pm10,41.0,62,B,epd_pdf
+2022-01-24,Town Hall,,Lahore,co,5.91,118,B,epd_pdf
+2022-01-25,EPA HQ,,Lahore,pm25,126.0,190,B,epd_pdf
+2022-01-25,Faisalabad,,Faisalabad,pm10,70.0,47,B,epd_pdf
+2022-01-25,"GC University, Lahore",,Lahore,pm25,128.0,192,B,epd_pdf
+2022-01-25,Rahim Yar Khan,,Rahim Yar Khan,pm25,31.2,89,B,epd_pdf
+2022-01-25,Rawalpindi Shalley Valley,,Rawalpindi,pm10,55.0,37,B,epd_pdf
+2022-01-25,Town Hall,,Lahore,co,7.98,159,B,epd_pdf
+2022-01-26,EPA HQ,,Lahore,pm25,109.0,178,B,epd_pdf
+2022-01-26,Faisalabad,,Faisalabad,pm10,76.0,51,B,epd_pdf
+2022-01-26,Kot Lakhpat Industrial,,Lahore,pm25,115.9,183,B,epd_pdf
+2022-01-26,Rahim Yar Khan,,Rahim Yar Khan,pm25,40.5,114,B,epd_pdf
+2022-01-26,Rawalpindi Shalley Valley,,Rawalpindi,pm10,64.0,43,B,epd_pdf
+2022-01-26,Town Hall,,Lahore,co,7.42,148,B,epd_pdf
+2022-01-27,EPA HQ,,Lahore,pm25,116.0,183,B,epd_pdf
+2022-01-27,Faisalabad,,Faisalabad,pm10,93.0,62,B,epd_pdf
+2022-01-27,Kot Lakhpat Industrial,,Lahore,pm25,136.2,197,B,epd_pdf
+2022-01-27,Rahim Yar Khan,,Rahim Yar Khan,pm25,38.0,107,B,epd_pdf
+2022-01-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,95.0,64,B,epd_pdf
+2022-01-27,Town Hall,,Lahore,co,14.54,230,B,epd_pdf
+2022-01-28,EPA HQ,,Lahore,pm25,105.0,175,B,epd_pdf
+2022-01-28,Faisalabad,,Faisalabad,pm10,93.0,62,B,epd_pdf
+2022-01-28,Kot Lakhpat Industrial,,Lahore,pm25,141.6,202,B,epd_pdf
+2022-01-28,Rahim Yar Khan,,Rahim Yar Khan,pm25,40.2,107,B,epd_pdf
+2022-01-28,Rawalpindi Shalley Valley,,Rawalpindi,pm10,149.0,99,B,epd_pdf
+2022-01-28,Town Hall,,Lahore,co,8.76,175,B,epd_pdf
+2022-01-29,EPA HQ,,Lahore,pm25,95.0,168,B,epd_pdf
+2022-01-29,Faisalabad,,Faisalabad,pm10,97.0,64,B,epd_pdf
+2022-01-29,Kot Lakhpat Industrial,,Lahore,pm25,128.0,191,B,epd_pdf
+2022-01-29,Rahim Yar Khan,,Rahim Yar Khan,pm25,42.8,121,B,epd_pdf
+2022-01-29,Rawalpindi Shalley Valley,,Rawalpindi,pm10,181.0,116,B,epd_pdf
+2022-01-29,Town Hall,,Lahore,co,10.14,201,B,epd_pdf
+2022-01-30,Bahawalpure,,Lahore,pm25,31.6,90,B,epd_pdf
+2022-01-30,EPA HQ,,Lahore,pm25,110.0,179,B,epd_pdf
+2022-01-30,Faisalabad,,Faisalabad,pm10,120.0,80,B,epd_pdf
+2022-01-30,Kot Lakhpat Industrial,,Lahore,pm25,207.0,261,B,epd_pdf
+2022-01-30,Rawalpindi Shalley Valley,,Rawalpindi,pm10,189.0,120,B,epd_pdf
+2022-01-30,Town Hall,,Lahore,co,9.42,188,B,epd_pdf
+2022-01-31,EPA HQ,,Lahore,pm25,121.0,186,B,epd_pdf
+2022-01-31,Faisalabad,,Faisalabad,pm10,139.0,93,B,epd_pdf
+2022-01-31,Kot Lakhpat Industrial,,Lahore,pm25,170.0,227,B,epd_pdf
+2022-01-31,Rahim Yar Khan,,Rahim Yar Khan,pm25,40.0,121,B,epd_pdf
+2022-01-31,Rawalpindi Shalley Valley,,Rawalpindi,pm10,192.0,121,B,epd_pdf
+2022-01-31,Town Hall,,Lahore,co,8.2,163,B,epd_pdf
+2022-02-01,EPA HQ,,Lahore,pm25,165.0,223,B,epd_pdf
+2022-02-01,Faisalabad,,Faisalabad,pm10,115.0,77,B,epd_pdf
+2022-02-01,Kot Lakhpat Industrial,,Lahore,pm25,243.0,293,B,epd_pdf
+2022-02-01,Rahim Yar Khan,,Rahim Yar Khan,pm25,36.0,101,B,epd_pdf
+2022-02-01,Rawalpindi Shalley Valley,,Rawalpindi,pm10,206.0,128,B,epd_pdf
+2022-02-01,Town Hall,,Lahore,co,12.17,215,B,epd_pdf
+2022-02-02,EPA HQ,,Lahore,pm25,125.0,189,B,epd_pdf
+2022-02-02,Faisalabad,,Faisalabad,pm10,218.0,134,B,epd_pdf
+2022-02-02,Kot Lakhpat Industrial,,Lahore,pm25,204.0,258,B,epd_pdf
+2022-02-02,Rahim Yar Khan,,Rahim Yar Khan,pm25,34.6,97,B,epd_pdf
+2022-02-02,Rawalpindi Shalley Valley,,Rawalpindi,pm10,135.0,90,B,epd_pdf
+2022-02-02,Town Hall,,Lahore,co,9.76,195,B,epd_pdf
+2022-02-03,EPA HQ,,Lahore,pm25,101.0,172,B,epd_pdf
+2022-02-03,Faisalabad,,Faisalabad,pm10,141.0,94,B,epd_pdf
+2022-02-03,Kot Lakhpat Industrial,,Lahore,pm25,149.5,209,B,epd_pdf
+2022-02-03,Rahim Yar Khan,,Rahim Yar Khan,pm25,35.0,100,B,epd_pdf
+2022-02-03,Rawalpindi Shalley Valley,,Rawalpindi,pm10,229.0,140,B,epd_pdf
+2022-02-03,Town Hall,,Lahore,co,6.84,136,B,epd_pdf
+2022-02-04,EPA HQ,,Lahore,pm25,79.0,157,B,epd_pdf
+2022-02-04,Faisalabad,,Faisalabad,pm10,92.0,61,B,epd_pdf
+2022-02-04,Kot Lakhpat Industrial,,Lahore,pm25,84.0,160,B,epd_pdf
+2022-02-04,Rahim Yar Khan,,Rahim Yar Khan,pm25,42.0,118,B,epd_pdf
+2022-02-04,Rawalpindi Shalley Valley,,Rawalpindi,pm10,81.0,54,B,epd_pdf
+2022-02-04,Town Hall,,Lahore,co,5.74,114,B,epd_pdf
+2022-02-05,EPA HQ,,Lahore,pm25,110.0,179,B,epd_pdf
+2022-02-05,Kot Lakhpat Industrial,,Lahore,pm25,92.8,167,B,epd_pdf
+2022-02-05,Rahim Yar Khan,,Rahim Yar Khan,pm25,40.4,114,B,epd_pdf
+2022-02-05,Rawalpindi Shalley Valley,,Rawalpindi,pm10,98.0,66,B,epd_pdf
+2022-02-05,Town Hall,,Lahore,co,6.39,127,B,epd_pdf
+2022-02-06,EPA HQ,,Lahore,pm25,122.0,187,B,epd_pdf
+2022-02-06,Kot Lakhpat Industrial,,Lahore,pm25,132.0,194,B,epd_pdf
+2022-02-06,Rahim Yar Khan,,Rahim Yar Khan,pm25,44.6,126,B,epd_pdf
+2022-02-06,Rawalpindi Shalley Valley,,Rawalpindi,pm10,165.0,108,B,epd_pdf
+2022-02-06,Town Hall,,Lahore,co,6.45,128,B,epd_pdf
+2022-02-07,EPA HQ,,Lahore,pm25,88.0,163,B,epd_pdf
+2022-02-07,Kot Lakhpat Industrial,,Lahore,pm25,93.0,167,B,epd_pdf
+2022-02-07,Rahim Yar Khan,,Rahim Yar Khan,pm25,40.0,113,B,epd_pdf
+2022-02-07,Rawalpindi Shalley Valley,,Rawalpindi,pm10,188.0,119,B,epd_pdf
+2022-02-07,Town Hall,,Lahore,co,7.17,143,B,epd_pdf
+2022-02-08,EPA HQ,,Lahore,pm25,83.0,160,B,epd_pdf
+2022-02-08,PU 1,LHR-PU,Lahore,pm25,114.0,181,B,epd_pdf
+2022-02-08,Rahim Yar Khan,,Rahim Yar Khan,pm25,38.0,107,B,epd_pdf
+2022-02-08,Rawalpindi Shalley Valley,,Rawalpindi,pm10,141.0,94,B,epd_pdf
+2022-02-08,Town Hall,,Lahore,co,8.28,165,B,epd_pdf
+2022-02-09,EPA HQ,,Lahore,pm25,101.0,172,B,epd_pdf
+2022-02-09,PU 1,LHR-PU,Lahore,pm25,104.0,174,B,epd_pdf
+2022-02-09,Rahim Yar Khan,,Rahim Yar Khan,pm25,39.8,112,B,epd_pdf
+2022-02-09,Rawalpindi Shalley Valley,,Rawalpindi,pm10,195.0,123,B,epd_pdf
+2022-02-09,Town Hall,,Lahore,co,16.72,245,B,epd_pdf
+2022-02-10,EPA HQ,,Lahore,pm25,103.0,174,B,epd_pdf
+2022-02-10,PU 1,LHR-PU,Lahore,pm25,116.0,183,B,epd_pdf
+2022-02-10,Rahim Yar Khan,,Rahim Yar Khan,pm25,34.2,98,B,epd_pdf
+2022-02-10,Rawalpindi Shalley Valley,,Rawalpindi,pm10,143.0,95,B,epd_pdf
+2022-02-10,Town Hall,,Lahore,co,11.53,210,B,epd_pdf
+2022-02-11,EPA HQ,,Lahore,pm25,79.0,157,B,epd_pdf
+2022-02-11,PU 1,LHR-PU,Lahore,pm25,80.0,158,B,epd_pdf
+2022-02-11,Rahim Yar Khan,,Rahim Yar Khan,pm25,41.0,116,B,epd_pdf
+2022-02-11,Rawalpindi Shalley Valley,,Rawalpindi,pm10,137.0,91,B,epd_pdf
+2022-02-11,Town Hall,,Lahore,co,6.63,132,B,epd_pdf
+2022-02-12,EPA HQ,,Lahore,pm25,69.0,148,B,epd_pdf
+2022-02-12,PU 1,LHR-PU,Lahore,pm25,76.0,155,B,epd_pdf
+2022-02-12,Rahim Yar Khan,,Rahim Yar Khan,pm25,39.2,110,B,epd_pdf
+2022-02-12,Rawalpindi Shalley Valley,,Rawalpindi,pm10,149.0,99,B,epd_pdf
+2022-02-12,Town Hall,,Lahore,co,10.92,206,B,epd_pdf
+2022-02-13,EPA HQ,,Lahore,pm25,112.0,180,B,epd_pdf
+2022-02-13,PU 1,LHR-PU,Lahore,pm25,120.9,186,B,epd_pdf
+2022-02-13,Rahim Yar Khan,,Rahim Yar Khan,pm25,40.0,112,B,epd_pdf
+2022-02-13,Rawalpindi Shalley Valley,,Rawalpindi,pm10,140.0,93,B,epd_pdf
+2022-02-13,Town Hall,,Lahore,co,10.37,203,B,epd_pdf
+2022-02-14,EPA HQ,,Lahore,pm25,117.0,184,B,epd_pdf
+2022-02-14,PU 1,LHR-PU,Lahore,pm25,127.0,191,B,epd_pdf
+2022-02-14,Rahim Yar Khan,,Rahim Yar Khan,pm25,42.4,120,B,epd_pdf
+2022-02-14,Rawalpindi Shalley Valley,,Rawalpindi,pm10,157.0,105,B,epd_pdf
+2022-02-14,Town Hall,,Lahore,co,8.09,161,B,epd_pdf
+2022-02-15,EPA HQ,,Lahore,pm25,109.0,178,B,epd_pdf
+2022-02-15,PU 1,LHR-PU,Lahore,pm25,106.0,176,B,epd_pdf
+2022-02-15,Rahim Yar Khan,,Rahim Yar Khan,pm25,40.6,114,B,epd_pdf
+2022-02-15,Rawalpindi Shalley Valley,,Rawalpindi,pm10,173.0,112,B,epd_pdf
+2022-02-15,Town Hall,,Lahore,co,12.24,215,B,epd_pdf
+2022-02-16,EPA HQ,,Lahore,pm25,111.0,179,B,epd_pdf
+2022-02-16,PU 1,LHR-PU,Lahore,pm25,123.0,188,B,epd_pdf
+2022-02-16,Rahim Yar Khan,,Rahim Yar Khan,pm25,41.7,118,B,epd_pdf
+2022-02-16,Rawalpindi Shalley Valley,,Rawalpindi,pm10,192.0,121,B,epd_pdf
+2022-02-16,Town Hall,,Lahore,co,12.82,219,B,epd_pdf
+2022-02-17,EPA HQ,,Lahore,pm25,124.0,188,B,epd_pdf
+2022-02-17,PU 1,LHR-PU,Lahore,pm25,207.0,261,B,epd_pdf
+2022-02-17,Rahim Yar Khan,,Rahim Yar Khan,pm25,40.0,113,B,epd_pdf
+2022-02-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,174.0,112,B,epd_pdf
+2022-02-17,Town Hall,,Lahore,co,11.49,210,B,epd_pdf
+2022-02-18,EPA HQ,,Lahore,pm25,160.0,219,B,epd_pdf
+2022-02-18,PU 1,LHR-PU,Lahore,pm25,218.0,271,B,epd_pdf
+2022-02-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,190.0,120,B,epd_pdf
+2022-02-18,Town Hall,,Lahore,co,14.38,229,B,epd_pdf
+2022-02-19,EPA HQ,,Lahore,pm25,103.0,174,B,epd_pdf
+2022-02-19,PU 1,LHR-PU,Lahore,pm25,129.0,192,B,epd_pdf
+2022-02-19,Rawalpindi Shalley Valley,,Rawalpindi,pm10,117.0,114,B,epd_pdf
+2022-02-19,Town Hall,,Lahore,co,6.74,134,B,epd_pdf
+2022-02-20,EPA HQ,,Lahore,pm25,84.0,160,B,epd_pdf
+2022-02-20,PU 1,LHR-PU,Lahore,pm25,116.0,183,B,epd_pdf
+2022-02-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,121.0,81,B,epd_pdf
+2022-02-20,Town Hall,,Lahore,co,6.23,124,B,epd_pdf
+2022-02-21,EPA HQ,,Lahore,pm25,73.0,153,B,epd_pdf
+2022-02-21,Ferozepur road near,,Lahore,pm25,83.0,160,B,epd_pdf
+2022-02-21,Rawalpindi Shalley Valley,,Rawalpindi,pm10,220.0,135,B,epd_pdf
+2022-02-21,Town Hall,,Lahore,co,6.07,121,B,epd_pdf
+2022-02-22,EPA HQ,,Lahore,pm25,83.0,160,B,epd_pdf
+2022-02-22,Ferozepur road near,,Lahore,pm25,106.0,176,B,epd_pdf
+2022-02-22,Rawalpindi Shalley Valley,,Rawalpindi,pm10,168.0,109,B,epd_pdf
+2022-02-22,Town Hall,,Lahore,co,9.86,197,B,epd_pdf
+2022-02-23,EPA HQ,,Lahore,pm25,75.0,154,B,epd_pdf
+2022-02-23,Punjab Institute of Cardiology,,Lahore,pm25,80.0,158,B,epd_pdf
+2022-02-23,Rawalpindi Shalley Valley,,Rawalpindi,pm10,169.0,110,B,epd_pdf
+2022-02-23,Town Hall,,Lahore,co,5.8,115,B,epd_pdf
+2022-02-25,EPA HQ,,Lahore,pm25,84.0,160,B,epd_pdf
+2022-02-25,Punjab Institute of,,Lahore,pm25,161.0,219,B,epd_pdf
+2022-02-25,Rawalpindi Shalley Valley,,Rawalpindi,pm10,119.0,79,B,epd_pdf
+2022-02-25,Town Hall,,Lahore,co,8.44,168,B,epd_pdf
+2022-02-26,EPA HQ,,Lahore,pm25,47.0,117,B,epd_pdf
+2022-02-26,Rawalpindi Shalley Valley,,Rawalpindi,pm10,130.0,87,B,epd_pdf
+2022-02-26,Town Hall,,Lahore,co,6.81,135,B,epd_pdf
+2022-02-26,University of Home,,Lahore,pm25,77.0,156,B,epd_pdf
+2022-02-27,EPA HQ,,Lahore,pm25,41.0,109,B,epd_pdf
+2022-02-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,184.0,117,B,epd_pdf
+2022-02-27,Town Hall,,Lahore,co,5.84,116,B,epd_pdf
+2022-02-27,University of Home,,Lahore,pm25,36.0,102,B,epd_pdf
+2022-02-28,EPA HQ,,Lahore,pm25,37.0,103,B,epd_pdf
+2022-02-28,Home Economics University,,Lahore,pm25,61.0,137,B,epd_pdf
+2022-02-28,Rawalpindi Shalley Valley,,Rawalpindi,pm10,152.0,101,B,epd_pdf
+2022-02-28,Town Hall,,Lahore,co,5.53,110,B,epd_pdf
+2022-03-01,EPA HQ,,Lahore,pm25,63.0,140,B,epd_pdf
+2022-03-01,Home Economics University,,Lahore,pm25,96.0,169,B,epd_pdf
+2022-03-01,Town Hall,,Lahore,co,9.02,180,B,epd_pdf
+2022-03-02,EPA HQ,,Lahore,pm25,91.0,165,B,epd_pdf
+2022-03-02,Home Economics University,,Lahore,pm25,116.0,183,B,epd_pdf
+2022-03-02,Town Hall,,Lahore,co,9.8,196,B,epd_pdf
 2022-03-09,EPA HQ,,Lahore,pm25,59.0,134,B,epd_pdf
 2022-03-09,"Green Fort 2, Canal Bank Road,",,Lahore,pm25,79.0,157,B,epd_pdf
 2022-03-09,Town Hall,,Lahore,co,8.86,177,B,epd_pdf
@@ -411,3 +701,99 @@ date,station_label,station_id,city,pollutant,conc,aqi,style,source
 2022-09-13,Town Hall,,Lahore,co,4.22,84,B,epd_pdf
 2022-09-14,Town Hall,,Lahore,co,5.56,110,B,epd_pdf
 2022-09-15,Town Hall,,Lahore,co,5.56,110,B,epd_pdf
+2022-10-06,"r ol Ghati, Lahore",,Lahore,pm25,120.66,186,B,epd_pdf
+2022-10-07,"r ol Ghati, Lahore",,Lahore,pm25,73.79,153,B,epd_pdf
+2022-10-08,"l Ghati, Lahore",,Lahore,pm25,86.22,162,B,epd_pdf
+2022-10-09,"l Ghati, Lahore",,Lahore,pm25,71.99,152,B,epd_pdf
+2022-10-10,"l Ghati, Lahore",,Lahore,pm25,65.27,143,B,epd_pdf
+2022-10-11,"l Ghati, Lahore",,Lahore,pm25,55.73,129,B,epd_pdf
+2022-10-12,"l Ghati, Lahore",,Lahore,pm25,148.58,208,B,epd_pdf
+2022-10-13,"l Ghati, Lahore",,Lahore,pm25,79.4,157,B,epd_pdf
+2022-10-14,"l Ghati, Lahore",,Lahore,pm25,91.56,167,B,epd_pdf
+2022-10-15,(AERAS AQMS-500),,Lahore,pm25,83.85,160,B,epd_pdf
+2022-10-15,"l Ghati, Lahore",,Lahore,pm25,98.34,171,B,epd_pdf
+2022-10-17,(AERAS AQMS-500),,Lahore,pm25,135.59,197,B,epd_pdf
+2022-10-18,(AERAS AQMS-500),,Lahore,pm25,138.31,199,B,epd_pdf
+2022-10-19,(AERAS AQMS-500),,Lahore,pm25,131.12,192,B,epd_pdf
+2022-10-19,"c k 1, Township, Lahore",,Lahore,pm25,132.38,194,B,epd_pdf
+2022-10-20,(AERAS AQMS-500),,Lahore,pm25,150.97,210,B,epd_pdf
+2022-10-20,"c k 1, Township, Lahore",,Lahore,pm25,83.86,160,B,epd_pdf
+2022-10-21,(AERAS AQMS-500),,Lahore,pm25,87.72,163,B,epd_pdf
+2022-10-21,"a t, Islampura,",,Lahore,pm25,86.3,162,B,epd_pdf
+2022-10-22,(AERAS AQMS-500),,Lahore,pm25,48.05,119,B,epd_pdf
+2022-10-22,"a t, Islampura,",,Lahore,pm25,64.33,141,B,epd_pdf
+2022-10-23,(AERAS AQMS-500),,Lahore,pm25,78.18,156,B,epd_pdf
+2022-10-23,"a t, Islampura,",,Lahore,pm25,96.33,169,B,epd_pdf
+2022-10-24,(AERAS AQMS-500),,Lahore,pm25,117.48,184,B,epd_pdf
+2022-10-24,"a t, Islampura,",,Lahore,pm25,120.0,186,B,epd_pdf
+2022-10-25,(AERAS AQMS-500),,Lahore,pm25,92.51,166,B,epd_pdf
+2022-10-25,"a t, Islampura,",,Lahore,pm25,167.48,225,B,epd_pdf
+2022-10-26,(AERAS AQMS-500),,Lahore,pm25,120.5,186,B,epd_pdf
+2022-10-26,"a t, Islampura,",,Lahore,pm25,169.5,227,B,epd_pdf
+2022-10-27,(AERAS AQMS-500),,Lahore,pm25,154.77,214,B,epd_pdf
+2022-10-27,"a t, Islampura,",,Lahore,pm25,195.33,250,B,epd_pdf
+2022-10-28,(AERAS AQMS-500),,Lahore,pm25,147.44,207,B,epd_pdf
+2022-10-28,"a t, Islampura,",,Lahore,pm25,225.0,277,B,epd_pdf
+2022-10-29,(AERAS AQMS-500),,Lahore,pm25,110.67,179,B,epd_pdf
+2022-10-29,"a t, Islampura,",,Lahore,pm25,223.0,275,B,epd_pdf
+2022-10-30,(AERAS AQMS-500),,Lahore,pm25,175.79,233,B,epd_pdf
+2022-10-30,"a t, Islampura,",,Lahore,pm25,177.0,234,B,epd_pdf
+2022-10-31,(AERAS AQMS-500),,Lahore,pm25,254.32,304,B,epd_pdf
+2022-11-01,(AERAS AQMS-500),,Lahore,pm25,259.51,309,B,epd_pdf
+2022-11-02,(AERAS AQMS-500),,Lahore,pm25,221.0,274,B,epd_pdf
+2022-11-03,(AERAS AQMS-500),,Lahore,pm25,142.0,203,B,epd_pdf
+2022-11-03,"a t, Islampura,",,Lahore,pm25,163.0,221,B,epd_pdf
+2022-11-04,"Karol Ghati, Lahore",,Lahore,pm25,224.0,276,B,epd_pdf
+2022-11-05,"Karol Ghati, Lahore",,Lahore,pm25,325.0,375,B,epd_pdf
+2022-11-06,"Karol Ghati, Lahore",,Lahore,pm25,351.0,402,B,epd_pdf
+2022-11-07,"Karol Ghati, Lahore",,Lahore,pm25,132.0,194,B,epd_pdf
+2022-11-08,"Karol Ghati, Lahore",,Lahore,pm25,63.0,140,B,epd_pdf
+2022-11-09,"Karol Ghati, Lahore",,Lahore,pm25,129.0,192,B,epd_pdf
+2022-11-10,"Karol Ghati, Lahore",,Lahore,pm25,251.0,301,B,epd_pdf
+2022-11-11,"Karol Ghati, Lahore",,Lahore,pm25,80.0,158,B,epd_pdf
+2022-11-12,"Karol Ghati, Lahore",,Lahore,pm25,138.0,198,B,epd_pdf
+2022-11-13,"Karol Ghati, Lahore",,Lahore,pm25,199.0,254,B,epd_pdf
+2022-11-14,"Karol Ghati, Lahore",,Lahore,pm25,249.0,299,B,epd_pdf
+2022-11-15,"Karol Ghati, Lahore",,Lahore,pm25,104.0,174,B,epd_pdf
+2022-11-16,"Karol Ghati, Lahore",,Lahore,pm25,86.0,162,B,epd_pdf
+2022-11-17,"Karol Ghati, Lahore",,Lahore,pm25,194.0,249,B,epd_pdf
+2022-11-18,"Karol Ghati, Lahore",,Lahore,pm25,193.0,248,B,epd_pdf
+2022-11-19,"Karol Ghati, Lahore",,Lahore,pm25,285.0,335,B,epd_pdf
+2022-11-20,"Karol Ghati, Lahore",,Lahore,pm25,384.0,439,B,epd_pdf
+2022-11-21,"Karol Ghati, Lahore",,Lahore,pm25,158.0,217,B,epd_pdf
+2022-11-22,"Karol Ghati, Lahore",,Lahore,pm25,236.0,287,B,epd_pdf
+2022-11-23,"Karol Ghati, Lahore",,Lahore,pm25,223.0,275,B,epd_pdf
+2022-11-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,293.0,172,B,epd_pdf
+2022-11-28,Rawalpindi Shalley Valley,,Rawalpindi,pm10,293.0,172,B,epd_pdf
+2022-11-29,Rawalpindi Shalley Valley,,Rawalpindi,pm10,337.0,194,B,epd_pdf
+2022-11-30,Rawalpindi Shalley Valley,,Rawalpindi,pm10,337.0,194,B,epd_pdf
+2022-12-01,Rawalpindi Shalley Valley,,Rawalpindi,pm10,234.0,151,B,epd_pdf
+2022-12-02,Rawalpindi Shalley Valley,,Rawalpindi,pm10,267.0,159,B,epd_pdf
+2022-12-03,Rawalpindi Shalley Valley,,Rawalpindi,pm10,251.0,151,B,epd_pdf
+2022-12-04,Rawalpindi Shalley Valley,,Rawalpindi,pm10,245.0,148,B,epd_pdf
+2022-12-05,Rawalpindi Shalley Valley,,Rawalpindi,pm10,248.0,149,B,epd_pdf
+2022-12-06,Rawalpindi Shalley Valley,,Rawalpindi,pm10,240.0,145,B,epd_pdf
+2022-12-07,Rawalpindi Shalley Valley,,Rawalpindi,pm10,244.0,147,B,epd_pdf
+2022-12-08,Rawalpindi Shalley Valley,,Rawalpindi,pm10,274.0,162,B,epd_pdf
+2022-12-09,Rawalpindi Shalley Valley,,Rawalpindi,pm10,278.0,164,B,epd_pdf
+2022-12-10,Rawalpindi Shalley Valley,,Rawalpindi,pm10,297.0,174,B,epd_pdf
+2022-12-11,Rawalpindi Shalley Valley,,Rawalpindi,pm10,287.0,169,B,epd_pdf
+2022-12-12,Rawalpindi Shalley Valley,,Rawalpindi,pm10,242.0,146,B,epd_pdf
+2022-12-13,Rawalpindi Shalley Valley,,Rawalpindi,pm10,245.0,148,B,epd_pdf
+2022-12-14,Rawalpindi Shalley Valley,,Rawalpindi,pm10,228.0,139,B,epd_pdf
+2022-12-15,Rawalpindi Shalley Valley,,Rawalpindi,pm10,238.0,144,B,epd_pdf
+2022-12-16,Rawalpindi Shalley Valley,,Rawalpindi,pm10,241.0,146,B,epd_pdf
+2022-12-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,253.0,152,B,epd_pdf
+2022-12-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,253.0,152,B,epd_pdf
+2022-12-19,Rawalpindi Shalley Valley,,Rawalpindi,pm10,265.0,158,B,epd_pdf
+2022-12-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,265.0,158,B,epd_pdf
+2022-12-21,Rawalpindi Shalley Valley,,Rawalpindi,pm10,275.0,163,B,epd_pdf
+2022-12-22,Rawalpindi Shalley Valley,,Rawalpindi,pm10,253.0,152,B,epd_pdf
+2022-12-23,Rawalpindi Shalley Valley,,Rawalpindi,pm10,294.0,172,B,epd_pdf
+2022-12-24,Rawalpindi Shalley Valley,,Rawalpindi,pm10,273.0,162,B,epd_pdf
+2022-12-25,Rawalpindi Shalley Valley,,Rawalpindi,pm10,250.0,150,B,epd_pdf
+2022-12-26,Rawalpindi Shalley Valley,,Rawalpindi,pm10,243.0,147,B,epd_pdf
+2022-12-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,249.0,150,B,epd_pdf
+2022-12-29,Rawalpindi Shalley Valley,,Rawalpindi,pm10,253.0,152,B,epd_pdf
+2022-12-30,Rawalpindi Shalley Valley,,Rawalpindi,pm10,204.0,127,B,epd_pdf
+2022-12-31,Rawalpindi Shalley Valley,,Rawalpindi,pm10,169.0,97,B,epd_pdf

@@ -717,3 +717,35 @@ date,station_label,station_id,city,pollutant,conc,aqi,style,source
 2024-08-20,"(National Hockey Stadium, EPA",,Lahore,pm25,34.0,97,B,epd_pdf
 2024-08-20,PU 1,LHR-PU,Lahore,pm25,33.0,95,B,epd_pdf
 2024-08-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,41.0,27,B,epd_pdf
+2024-10-01,Lahore average,,Lahore,pm25,,127,E,epd_pdf
+2024-10-02,Lahore average,,Lahore,pm25,,149,E,epd_pdf
+2024-10-03,Lahore average,,Lahore,pm25,,157,E,epd_pdf
+2024-10-04,Lahore average,,Lahore,pm25,,166,E,epd_pdf
+2024-10-05,Lahore average,,Lahore,pm25,,164,E,epd_pdf
+2024-10-06,Lahore average,,Lahore,pm25,,101,E,epd_pdf
+2024-10-07,Lahore average,,Lahore,pm25,,103,E,epd_pdf
+2024-10-17,Lahore average,,Lahore,pm25,,165,E,epd_pdf
+2024-10-18,Lahore average,,Lahore,pm25,,200,E,epd_pdf
+2024-10-19,Lahore average,,Lahore,pm25,,185,E,epd_pdf
+2024-10-20,Lahore average,,Lahore,pm25,,238,E,epd_pdf
+2024-10-21,Lahore average,,Lahore,pm25,,224,E,epd_pdf
+2024-10-22,Lahore average,,Lahore,pm25,,256,E,epd_pdf
+2024-10-23,Lahore average,,Lahore,pm25,,253,E,epd_pdf
+2024-10-24,Lahore average,,Lahore,pm25,,234,E,epd_pdf
+2024-10-25,Lahore average,,Lahore,pm25,,181,E,epd_pdf
+2024-10-26,Lahore average,,Lahore,pm25,,190,E,epd_pdf
+2024-10-27,Lahore average,,Lahore,pm25,,262,E,epd_pdf
+2024-10-28,Lahore average,,Lahore,pm25,,353,E,epd_pdf
+2024-10-29,Lahore average,,Lahore,pm25,,324,E,epd_pdf
+2024-10-30,Lahore average,,Lahore,pm25,,284,E,epd_pdf
+2024-10-31,Lahore average,,Lahore,pm25,,192,E,epd_pdf
+2024-11-01,Lahore average,,Lahore,pm25,,207,E,epd_pdf
+2024-11-02,Lahore average,,Lahore,pm25,,242,E,epd_pdf
+2024-11-04,Lahore average,,Lahore,pm25,,455,E,epd_pdf
+2024-11-05,Lahore average,,Lahore,pm25,,309,E,epd_pdf
+2024-11-29,Lahore average,,Lahore,pm25,,328,E,epd_pdf
+2024-11-30,Lahore average,,Lahore,pm25,,239,E,epd_pdf
+2024-12-01,Lahore average,,Lahore,pm25,,225,E,epd_pdf
+2024-12-02,Lahore average,,Lahore,pm25,,233,E,epd_pdf
+2024-12-03,Lahore average,,Lahore,pm25,,194,E,epd_pdf
+2024-12-29,Lahore average,,Lahore,pm25,,185,E,epd_pdf

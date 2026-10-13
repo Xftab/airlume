@@ -38,7 +38,11 @@ import pdfplumber
 STATION_RE = re.compile(r"^\s*(\d{1,2})\s+([A-Za-z][A-Za-z0-9 .&()'-]*?)\s+(\d{2,3})\s*$")
 NOTE_DATE_RE = re.compile(r"last 24 hours\s*\((\d{2}\.\d{2}\.\d{4})")
 UPDATED_RE = re.compile(r"Updated\s+Time:\s*(\d{2}\.\d{2}\.\d{4})")
-TITLE_B_RE = re.compile(r"AQMS ON\s+(\d{2}\.\d{2}\.\d{4})")
+TITLE_B_RE = re.compile(r"AQMS (?:ON|OF EPA (?:AT|IN) [A-Z ]+?)\s+(\d{2}\.\d{2}\.\d{4})")
+PM_ROW_RE = re.compile(r"(.*?)\s*(?:Respirable\s+)?Particulate [Mm]atter(?:\s*\(PM\s*2\.5\s*\)|\s*\(PM\s*10\s*\))?\s+(35|150)\s+(\d+(?:\.\d+)?)\s+(\d{2,3})")
+# 2020-2021 rows: "<name>  PM  35  46.326  128" / "<name>  CO  5 (mg/m3)  8.470  79" / "<name> NO 80 23.295 11"
+B17_ROW_RE = re.compile(r"^\s*(.*?)\s+(PM|CO|NO|SO)\s+(35|150|5|80|120|130)\s*(?:\(mg/m3\))?\s+(\d+(?:\.\d+)?)\s+(\d{1,3})\s*$")
+B17_POL = {"PM": "pm25", "CO": "co", "NO": "no2", "SO": "so2"}
 AVG_RE = re.compile(r"Average\s+AQI\s+of\s+Lahore.*?\((\d{2,3})\)\s*$", re.S)
 
 # Partial / inconsistent labels in the bulletins -> one canonical label.
@@ -53,6 +57,13 @@ LABEL_ALIASES = {
     "wahga": "Wahga Boarder",
     "wahga boarder": "Wahga Boarder",
     "c2 sector, block 1, township,": "Township",
+    "c2 sector, block 1,": "Township",
+    "d1 sector, block 2": "Township D1",
+    "met station, jail road": "Jail Road",
+    "met station, jail": "Jail Road",
+    "mobile van (model": "Mobile AQMS",
+    "cees, university of": "PU 1",
+    "national hockey": "EPA HQ",
     "gujjumata, farozpur road": "Gajjumata",
     "daroghawala, industrial area": "Daroghawala",
     "shallay valley range road": "Rawalpindi Shalley Valley",
@@ -60,7 +71,10 @@ LABEL_ALIASES = {
 }
 
 # Transboundary / out-of-Lahore sites that appear in the Lahore table.
-SITE_CITY = {"raja jang": "Kasur", "lathepur": "Sheikhupura", "bhu jandiala": "Sheikhupura"}
+SITE_CITY = {"raja jang": "Kasur", "lathepur": "Sheikhupura", "bhu jandiala": "Sheikhupura",
+             "rawalpindi shalley valley": "Rawalpindi", "rahim yar khan": "Rahim Yar Khan", "multan": "Multan",
+             "faisalabad": "Faisalabad", "gujranwala": "Gujranwala", "sheikhupura": "Sheikhupura",
+             "sialkot": "Sialkot", "bahawalpur": "Bahawalpur", "sargodha": "Sargodha", "kasur": "Kasur"}
 
 # Bulletin label -> registry station_id where the site is the same as today's portal station.
 LABEL_TO_STATION = {
@@ -108,8 +122,10 @@ def detect_style(pages: list[str]) -> str:
         return "A"
     if "AQI" in joined and "Analysis" in joined and "Dominant" in joined:
         return "D"
-    if re.search(r"Average\s+AQI\s+Lahore\s+\d", joined) and "Name of AQMS" in joined:
+    if re.search(r"Average\s+AQI\s+Lahore\s+\d", joined):
         return "E"
+    if "Smog Policy" in joined:
+        return "B17"  # 2020-2021: old Smog Policy 2017 scale; keep concentrations, recompute AQI later
     if TITLE_B_RE.search(joined):
         return "B"
     if "DAILY QUALITY MONITORING" in joined or "Monitoring of Air Quality" in joined:
@@ -193,7 +209,7 @@ def _rows_style_b(pages: list[str]) -> list[DailyRow]:
     for i, l in enumerate(lines):
         core = l[:95]  # drop the AQI-limits legend on the right
         # PM rows: "<name> Particulate matter 35  58  133"  /  "Respirable Particulate Matter 35 76 154"
-        pm = re.search(r"(.*?)\s*(?:Respirable\s+)?Particulate [Mm]atter\s+(35|150)\s+(\d+(?:\.\d+)?)\s+(\d{2,3})", core)
+        pm = PM_ROW_RE.search(core)
         if pm:
             name = pm.group(1).strip() or prev_text
             pol = "pm10" if pm.group(2) == "150" else "pm25"
@@ -277,8 +293,50 @@ def _rows_style_d(pages: list[str]) -> tuple[list[DailyRow], int | None]:
 def city_average_e(pages: list[str]) -> tuple[date | None, int | None]:
     text = pages[0]
     m = re.search(r"Average\s+AQI\s+Lahore\s+(\d{2,3})", text)
-    d = re.search(r"(\d{2}\.\d{2}\.\d{4})\s*\(12:00AM", text)
+    d = re.search(r"(\d{2}\.\d{2}\.\d{4})", text)
     return (_d(d.group(1)) if d else None), (int(m.group(1)) if m else None)
+
+
+def _rows_style_b17(pages: list[str]) -> list[DailyRow]:
+    """2020-2021 bulletins on the Smog Policy 2017 scale. AQI stored as printed; `style`='B17'
+    marks it as non-comparable; `conc` allows recomputation on the current scale."""
+    text = pages[0]
+    m = TITLE_B_RE.search(text)
+    if not m:
+        return []
+    day = _d(m.group(1))
+    lines = [l.rstrip() for l in text.splitlines()]
+    rows: list[DailyRow] = []
+    prev = ""
+    for i, l in enumerate(lines):
+        core = l[:88]
+        r = B17_ROW_RE.match(core)
+        if r:
+            name = r.group(1).strip() or prev
+            # a name split like "Met Station, Jail" / "Road"
+            if i + 1 < len(lines) and re.match(r"^\s{8,}([A-Z][a-z]+)\s*$", lines[i + 1]):
+                name += " " + lines[i + 1].strip()
+            rows.append(DailyRow(day, canonical(name), LABEL_TO_STATION.get(_norm(canonical(name))), "Lahore",
+                                 B17_POL[r.group(2)], float(r.group(4)), int(r.group(5)), "B17"))
+            prev = ""
+            continue
+        # CO / PM rows with min/max 8-hour averages: numbers on a later line "7.19 11.10 144 201"
+        hdr = re.match(r"^\s*(.*?)\s+(CO|PM2\.5)\s+(5|35)\s+Minimum", core)
+        if hdr:
+            name = hdr.group(1).strip() or prev
+            for look in lines[i:i + 6]:
+                nums = re.search(r"(\d+\.\d+)\s+(\d+\.\d+)\s+(\d{2,3})\s+(\d{2,3})", look)
+                if nums:
+                    pol = "co" if hdr.group(3) == "5" else "pm25"  # PEQS 5 mg/m3 is CO even when mislabelled
+                    rows.append(DailyRow(day, canonical(name), None, "Lahore", pol, float(nums.group(2)),
+                                         max(int(nums.group(3)), int(nums.group(4))), "B17"))
+                    break
+            prev = ""
+            continue
+        stripped = core.strip()
+        if stripped and re.match(r"^[A-Z(]", stripped) and not stripped.startswith(("Station", "AIR QUALITY", "Note", "Disclaimer", "AQI", "Locations", "Site")):
+            prev = re.sub(r"\s+", " ", stripped)
+    return rows
 
 
 def city_average(pages: list[str]) -> int | None:
@@ -294,6 +352,8 @@ def parse_pages(pages: list[str]) -> tuple[str, list[DailyRow], int | None, date
         return style, rows, city_average(pages), rows[0].date if rows else None
     if style == "B":
         return style, _rows_style_b(pages), None, None
+    if style == "B17":
+        return style, _rows_style_b17(pages), None, None
     if style == "D":
         rows, avg = _rows_style_d(pages)
         return style, rows, avg, rows[0].date if rows else None

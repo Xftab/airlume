@@ -30,7 +30,8 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - [x] Unmatched names were page furniture; ignored. Ozone identified as the afternoon driver; gas sub-indices added to `aqi.py`.
 - [x] EPD archive sampled across 2018-2025; parser written for the 2022-2025 layouts (`pipeline/epd_parse.py`, 5 fixture tests). Archive ends 2 Dec 2025.
 - [x] Trial back-fill pages 1-5: 379 rows. Two more layouts (D, E) and scanned files found and handled; parser now covers Aug 2025 - Dec 2025 fully and 2022 - 2024.
-- [ ] Aftab: re-run `python scripts\backfill_epd.py 1 5` (re-parses the cached PDFs, no new downloads), then the full `1 104` when convenient (~1.5 h, resumable).
+- [x] Full back-fill run: 2,121 rows 2022-2025. Three more layouts handled incl. the 2020-21 Smog Policy 2017 scale (style B17, non-comparable, concentrations kept).
+- [ ] Aftab: re-run `python scripts\backfill_epd.py 1 104` once more (cached PDFs, no downloads, ~10 min) to pick up the 2020-2022 rows.
 - [ ] Decide how to treat the gap 3 Dec 2025 - 12 Oct 2026 (no official per-station data; CAMS city-level or leave empty).
 - [ ] After ~1 day of hourly collection: `python scripts\w1_check.py` to settle the averaging window.
 - [ ] Aftab: create accounts — Groq, Google AI Studio, OpenAQ, CARTO, Streamlit Community Cloud — and put the keys in `K:\airlume\.env` (never in chat).

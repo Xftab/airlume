@@ -1,0 +1,274 @@
+date,station_label,station_id,city,pollutant,conc,aqi,style,source
+2021-01-01,Jail Road,,Lahore,pm25,57.108,162,B17,epd_pdf
+2021-01-01,Township,,Lahore,no2,143.24,179,B17,epd_pdf
+2021-01-02,Jail Road,,Lahore,pm25,56.499,161,B17,epd_pdf
+2021-01-02,Township,,Lahore,no2,77.039,96,B17,epd_pdf
+2021-01-03,Jail Road,,Lahore,pm25,19.168,55,B17,epd_pdf
+2021-01-03,Mobile Van,,Lahore,no2,50.984,64,B17,epd_pdf
+2021-01-04,Jail Road,,Lahore,pm25,20.67,59,B17,epd_pdf
+2021-01-05,Jail Road,,Lahore,pm25,13.92,40,B17,epd_pdf
+2021-01-06,Jail Road,,Lahore,pm25,8.26,24,B17,epd_pdf
+2021-01-07,Jail Road,,Lahore,pm25,14.352,41,B17,epd_pdf
+2021-01-08,Jail Road,,Lahore,pm25,20.013,57,B17,epd_pdf
+2021-01-08,Mobile Van,,Lahore,no2,50.128,63,B17,epd_pdf
+2021-01-09,Jail Road,,Lahore,pm25,21.929,63,B17,epd_pdf
+2021-01-09,Mobile Van,,Lahore,no2,44.744,56,B17,epd_pdf
+2021-01-11,Jail Road,,Lahore,pm25,30.376,87,B17,epd_pdf
+2021-01-11,Mobile Van,,Lahore,no2,52.828,66,B17,epd_pdf
+2021-01-13,Jail Road,,Lahore,pm25,36.212,103,B17,epd_pdf
+2021-01-13,Mobile Van,,Lahore,no2,70.575,88,B17,epd_pdf
+2021-01-13,Township,,Lahore,co,3.131,63,B17,epd_pdf
+2021-01-14,Jail Road,,Lahore,pm25,48.881,140,B17,epd_pdf
+2021-01-14,Mobile Van,,Lahore,no2,60.595,76,B17,epd_pdf
+2021-01-15,Jail Road,,Lahore,pm25,35.377,101,B17,epd_pdf
+2021-01-16,Jail Road,,Lahore,pm25,55.964,160,B17,epd_pdf
+2021-01-16,Mobile Van,,Lahore,no2,68.996,86,B17,epd_pdf
+2021-01-17,Jail Road,,Lahore,pm25,38.786,111,B17,epd_pdf
+2021-01-17,Mobile Van,,Lahore,no2,58.28,73,B17,epd_pdf
+2021-01-18,Jail Road,,Lahore,pm25,27.3,78,B17,epd_pdf
+2021-01-18,Mobile Van,,Lahore,no2,41.905,52,B17,epd_pdf
+2021-01-19,Jail Road,,Lahore,pm25,38.279,109,B17,epd_pdf
+2021-01-19,Mobile Van,,Lahore,no2,41.905,52,B17,epd_pdf
+2021-01-20,Jail Road,,Lahore,pm25,18.996,54,B17,epd_pdf
+2021-01-20,Mobile Van EPA,,Lahore,no2,60.125,75,B17,epd_pdf
+2021-01-30,Town Hall,,Lahore,co,7.472,150,B17,epd_pdf
+2021-02-02,Town Hall,,Lahore,co,11.664,204,B17,epd_pdf
+2021-02-03,Town Hall,,Lahore,co,13.75,220,B17,epd_pdf
+2021-07-14,Town Hall,,Lahore,co,3.58,72,B17,epd_pdf
+2021-08-04,Mobile Van (EPA,,Lahore,co,1.97,39,B17,epd_pdf
+2021-08-04,Town Hall,,Lahore,co,5.38,108,B17,epd_pdf
+2021-08-06,Mobile Van (EPA,,Lahore,pm25,26.0,74,B17,epd_pdf
+2021-08-06,Town Hall,,Lahore,co,8.199,164,B17,epd_pdf
+2021-08-06,Township,,Lahore,co,3.084,62,B17,epd_pdf
+2021-08-07,Town Hall,,Lahore,co,7.673,154,B17,epd_pdf
+2021-08-07,Township,,Lahore,co,3.0935,62,B17,epd_pdf
+2021-08-08,Township,,Lahore,co,3.063,61,B17,epd_pdf
+2021-08-09,Township,,Lahore,co,3.0567,61,B17,epd_pdf
+2021-08-10,Mobile Van (EPA,,Lahore,pm25,79.0,223,B17,epd_pdf
+2021-08-10,Town Hall,,Lahore,co,7.73,155,B17,epd_pdf
+2021-08-10,Township,,Lahore,co,3.059,61,B17,epd_pdf
+2021-08-11,Mobile Van (EPA,,Lahore,pm25,58.8,173,B17,epd_pdf
+2021-08-11,Town Hall,,Lahore,co,8.65,173,B17,epd_pdf
+2021-08-11,Township,,Lahore,co,3.055,61,B17,epd_pdf
+2021-08-12,Mobile Van (EPA,,Lahore,pm25,61.0,174,B17,epd_pdf
+2021-08-12,Town Hall,,Lahore,co,6.738,135,B17,epd_pdf
+2021-08-12,Township,,Lahore,co,3.024,60,B17,epd_pdf
+2021-08-13,Mobile Van (EPA,,Lahore,pm25,61.4,175,B17,epd_pdf
+2021-08-13,Town Hall,,Lahore,co,6.642,133,B17,epd_pdf
+2021-08-13,Township,,Lahore,co,3.071,61,B17,epd_pdf
+2021-08-14,Mobile Van (EPA,,Lahore,pm25,44.5,125,B17,epd_pdf
+2021-08-14,Town Hall,,Lahore,co,6.72,135,B17,epd_pdf
+2021-08-14,Township,,Lahore,co,3.09,62,B17,epd_pdf
+2021-08-15,Town Hall,,Lahore,co,7.72,154,B17,epd_pdf
+2021-08-16,Town Hall,,Lahore,co,6.62,133,B17,epd_pdf
+2021-08-16,Township,,Lahore,co,3.082,61,B17,epd_pdf
+2021-08-17,Mobile Van (EPA,,Lahore,pm25,72.0,205,B17,epd_pdf
+2021-08-17,Town Hall,,Lahore,co,7.29,146,B17,epd_pdf
+2021-08-17,Township,,Lahore,co,3.047,61,B17,epd_pdf
+2021-08-18,Mobile Van (EPA,,Lahore,pm25,65.0,185,B17,epd_pdf
+2021-08-18,Town Hall,,Lahore,co,6.52,131,B17,epd_pdf
+2021-08-18,Township,,Lahore,co,3.059,61,B17,epd_pdf
+2021-08-20,Town Hall,,Lahore,co,7.61,152,B17,epd_pdf
+2021-08-20,Township,,Lahore,co,3.105,62,B17,epd_pdf
+2021-08-21,Town Hall,,Lahore,co,6.42,129,B17,epd_pdf
+2021-08-21,Township,,Lahore,co,3.093,62,B17,epd_pdf
+2021-08-22,Town Hall,,Lahore,co,5.87,118,B17,epd_pdf
+2021-08-22,Township,,Lahore,co,3.07,61,B17,epd_pdf
+2021-09-27,Town Hall,,Lahore,co,7.85,157,B17,epd_pdf
+2021-09-27,Township,,Lahore,co,2.53,51,B17,epd_pdf
+2021-09-28,Mobile Van (EPA,,Lahore,pm25,74.0,208,B17,epd_pdf
+2021-09-28,Township,,Lahore,co,3.1,62,B17,epd_pdf
+2021-09-29,Mobile Van (EPA,,Lahore,pm25,101.42,288,B17,epd_pdf
+2021-09-29,Town Hall,,Lahore,co,8.48,168,B17,epd_pdf
+2021-09-29,Township,,Lahore,co,3.09,62,B17,epd_pdf
+2021-10-02,Mobile Van (EPA,,Lahore,pm25,66.8,191,B17,epd_pdf
+2021-10-02,Town Hall,,Lahore,co,7.31,147,B17,epd_pdf
+2021-10-02,Township,,Lahore,co,3.1,62,B17,epd_pdf
+2021-10-03,Town Hall,,Lahore,co,7.32,147,B17,epd_pdf
+2021-10-03,Township,,Lahore,co,3.11,62,B17,epd_pdf
+2021-10-04,Town Hall,,Lahore,co,8.0,160,B17,epd_pdf
+2021-10-04,Township,,Lahore,co,3.04,61,B17,epd_pdf
+2021-10-05,Mobile Van (EPA,,Lahore,pm25,19.5,56,B17,epd_pdf
+2021-10-05,Town Hall,,Lahore,co,6.41,129,B17,epd_pdf
+2021-10-05,Township,,Lahore,co,3.02,61,B17,epd_pdf
+2021-10-06,Mobile Van (EPA,,Lahore,pm25,22.4,64,B17,epd_pdf
+2021-10-06,Town Hall,,Lahore,co,6.89,138,B17,epd_pdf
+2021-10-06,Township,,Lahore,co,3.08,62,B17,epd_pdf
+2021-10-07,Mobile Van (EPA,,Lahore,pm25,65.83,188,B17,epd_pdf
+2021-10-07,Town Hall,,Lahore,co,7.0,141,B17,epd_pdf
+2021-10-07,Township,,Lahore,co,3.082,62,B17,epd_pdf
+2021-10-08,Town Hall,,Lahore,co,6.84,137,B17,epd_pdf
+2021-10-08,Township,,Lahore,co,3.061,61,B17,epd_pdf
+2021-10-10,Town Hall,,Lahore,co,9.817,196,B17,epd_pdf
+2021-10-10,Township,,Lahore,co,3.061,61,B17,epd_pdf
+2021-10-11,Town Hall,,Lahore,co,5.648,114,B17,epd_pdf
+2021-10-11,Township,,Lahore,co,3.069,61,B17,epd_pdf
+2021-10-13,Mobile Van (Manga,,Lahore,pm25,110.0,312,B17,epd_pdf
+2021-10-13,Town Hall,,Lahore,co,6.53,111,B17,epd_pdf
+2021-10-13,Township,,Lahore,co,3.05,61,B17,epd_pdf
+2021-10-14,Town Hall,,Lahore,co,6.4547,130,B17,epd_pdf
+2021-10-14,Township,,Lahore,co,3.063,61,B17,epd_pdf
+2021-10-15,Town Hall,,Lahore,co,8.79,176,B17,epd_pdf
+2021-10-15,Township,,Lahore,co,3.139,63,B17,epd_pdf
+2021-10-16,Town Hall,,Lahore,co,9.96,199,B17,epd_pdf
+2021-10-16,Township,,Lahore,co,3.069,61,B17,epd_pdf
+2021-10-17,Town Hall,,Lahore,co,9.031,181,B17,epd_pdf
+2021-10-17,Township,,Lahore,co,3.062,61,B17,epd_pdf
+2021-10-18,Town Hall,,Lahore,co,6.023,121,B17,epd_pdf
+2021-10-18,Township,,Lahore,co,3.59,72,B17,epd_pdf
+2021-10-19,Mobile Van,,Lahore,pm25,55.0,156,B17,epd_pdf
+2021-10-19,Town Hall,,Lahore,co,6.059,122,B17,epd_pdf
+2021-10-19,Township,,Lahore,co,3.06,61,B17,epd_pdf
+2021-10-20,Town Hall,,Lahore,co,8.11,163,B17,epd_pdf
+2021-10-20,Township,,Lahore,co,3.059,61,B17,epd_pdf
+2021-10-21,Town Hall,,Lahore,co,17.06,243,B17,epd_pdf
+2021-10-22,Town Hall,,Lahore,co,12.47,211,B17,epd_pdf
+2021-10-23,Town Hall,,Lahore,co,6.812,137,B17,epd_pdf
+2021-10-24,Town Hall,,Lahore,co,5.025,101,B17,epd_pdf
+2021-10-24,Township,,Lahore,co,2.85,57,B17,epd_pdf
+2021-10-25,Town Hall,,Lahore,co,5.33,107,B17,epd_pdf
+2021-10-25,Township,,Lahore,co,2.24,51,B17,epd_pdf
+2021-10-26,Town Hall,,Lahore,co,6.67,134,B17,epd_pdf
+2021-10-28,Town Hall,,Lahore,co,11.14,201,B17,epd_pdf
+2021-10-28,Township,,Lahore,co,3.047,61,B17,epd_pdf
+2021-10-29,Town Hall,,Lahore,co,14.56,225,B17,epd_pdf
+2021-10-29,Township,,Lahore,co,3.077,62,B17,epd_pdf
+2021-10-30,Town Hall,,Lahore,co,15.49,232,B17,epd_pdf
+2021-10-30,Township,,Lahore,co,3.07,61,B17,epd_pdf
+2021-10-31,Town Hall,,Lahore,co,9.75,195,B17,epd_pdf
+2021-10-31,Township,,Lahore,co,3.082,62,B17,epd_pdf
+2021-11-01,Town Hall,,Lahore,co,13.47,218,B17,epd_pdf
+2021-11-01,Township,,Lahore,co,3.087,62,B17,epd_pdf
+2021-11-02,Town Hall,,Lahore,co,6.95,140,B17,epd_pdf
+2021-11-02,Township,,Lahore,co,3.095,62,B17,epd_pdf
+2021-11-03,Mobile Van (EPA,,Lahore,pm25,40.0,113,B17,epd_pdf
+2021-11-04,Mobile Van (EPA,,Lahore,pm25,76.0,215,B17,epd_pdf
+2021-11-04,Township,,Lahore,co,3.09,62,B17,epd_pdf
+2021-11-06,Mobile Van ( Near US,,Lahore,pm25,299.0,349,B17,epd_pdf
+2021-11-06,Town Hall,,Lahore,co,11.61,204,B17,epd_pdf
+2021-11-06,Township,,Lahore,co,3.082,62,B17,epd_pdf
+2021-11-07,Mobile Van (EPA,,Lahore,pm25,111.0,315,B17,epd_pdf
+2021-11-07,Town Hall,,Lahore,co,6.92,139,B17,epd_pdf
+2021-11-07,Township,,Lahore,co,3.085,62,B17,epd_pdf
+2021-11-08,Mobile Van (EPA,,Lahore,pm25,105.66,300,B17,epd_pdf
+2021-11-08,Town Hall,,Lahore,co,14.91,228,B17,epd_pdf
+2021-11-08,Township,,Lahore,co,3.099,62,B17,epd_pdf
+2021-11-09,Town Hall,,Lahore,co,12.27,209,B17,epd_pdf
+2021-11-09,Township,,Lahore,co,3.082,62,B17,epd_pdf
+2021-11-10,Mobile Van (Kot,,Lahore,pm25,124.75,356,B17,epd_pdf
+2021-11-10,Town Hall,,Lahore,co,21.41,274,B17,epd_pdf
+2021-11-10,Township,,Lahore,co,3.096,62,B17,epd_pdf
+2021-11-11,Mobile Van (Badian,,Lahore,pm25,144.0,403,B17,epd_pdf
+2021-11-11,Township,,Lahore,co,3.083,62,B17,epd_pdf
+2021-11-12,Mobile Van ( Zoology,,Lahore,pm25,125.0,356,B17,epd_pdf
+2021-11-12,Town Hall,,Lahore,co,23.05,289,B17,epd_pdf
+2021-11-12,Township,,Lahore,co,6.486,130,B17,epd_pdf
+2021-11-13,Mobile Van ( Zoology,,Lahore,pm25,122.0,348,B17,epd_pdf
+2021-11-13,Town Hall,,Lahore,co,12.47,211,B17,epd_pdf
+2021-11-13,Township,,Lahore,co,7.16,143,B17,epd_pdf
+2021-11-14,Mobile AQMS,,Lahore,pm25,108.45,308,B17,epd_pdf
+2021-11-14,Township,,Lahore,pm25,133.0,380,B17,epd_pdf
+2021-11-15,Mobile AQMS,,Lahore,pm25,122.0,348,B17,epd_pdf
+2021-11-15,Town Hall,,Lahore,co,16.52,239,B17,epd_pdf
+2021-11-15,Township,,Lahore,co,9.69,194,B17,epd_pdf
+2021-11-16,Mobile AQMS,,Lahore,pm25,162.0,414,B17,epd_pdf
+2021-11-16,Town Hall,,Lahore,co,11.1,201,B17,epd_pdf
+2021-11-16,Township,,Lahore,co,8.44,169,B17,epd_pdf
+2021-11-16,Township D1,,Lahore,pm25,154.0,409,B17,epd_pdf
+2021-11-17,Mobile Van (Thokar,,Lahore,pm25,129.57,370,B17,epd_pdf
+2021-11-17,Town Hall,,Lahore,co,20.31,267,B17,epd_pdf
+2021-11-17,Township,,Lahore,co,7.55,152,B17,epd_pdf
+2021-11-17,Township D1,,Lahore,pm25,137.0,391,B17,epd_pdf
+2021-11-18,Mobile Van (Thokar,,Lahore,pm25,138.0,394,B17,epd_pdf
+2021-11-18,Town Hall,,Lahore,co,12.05,208,B17,epd_pdf
+2021-11-18,Township,,Lahore,co,7.29,146,B17,epd_pdf
+2021-11-18,Township D1,,Lahore,pm25,139.9,399,B17,epd_pdf
+2021-11-19,Town Hall,,Lahore,co,15.4,231,B17,epd_pdf
+2021-11-21,EPA HQ,,Lahore,pm25,137.0,391,B17,epd_pdf
+2021-11-21,Mobile Van (Near,,Lahore,pm25,175.0,422,B17,epd_pdf
+2021-11-21,Town Hall,,Lahore,co,13.88,221,B17,epd_pdf
+2021-11-21,Township,,Lahore,no2,171.0,214,B17,epd_pdf
+2021-11-22,Faisalabad,,Lahore,pm25,225.0,249,B17,epd_pdf
+2021-11-22,Mobile Van (Near,,Lahore,pm25,140.0,400,B17,epd_pdf
+2021-11-22,Town Hall,,Lahore,co,7.26,146,B17,epd_pdf
+2021-12-17,EPA HQ,,Lahore,pm25,182.0,238,B,epd_pdf
+2021-12-17,Faisalabad,,Faisalabad,pm10,151.0,101,B,epd_pdf
+2021-12-17,"Green Fort2, Canal Bank",,Lahore,pm25,273.0,323,B,epd_pdf
+2021-12-17,Rahim Yar Khan,,Rahim Yar Khan,pm25,51.0,145,B,epd_pdf
+2021-12-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,150.0,99,B,epd_pdf
+2021-12-17,Town Hall,,Lahore,co,7.13,143,B,epd_pdf
+2021-12-18,EPA HQ,,Lahore,pm25,243.0,294,B,epd_pdf
+2021-12-18,Faisalabad,,Faisalabad,pm10,159.0,117,B,epd_pdf
+2021-12-18,"Manawan, Bata Pur",,Lahore,pm25,221.72,274,B,epd_pdf
+2021-12-18,Rahim Yar Khan,,Rahim Yar Khan,pm25,51.0,145,B,epd_pdf
+2021-12-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,132.0,88,B,epd_pdf
+2021-12-18,Town Hall,,Lahore,co,6.11,122,B,epd_pdf
+2021-12-19,EPA HQ,,Lahore,pm25,230.0,282,B,epd_pdf
+2021-12-19,Faisalabad,,Faisalabad,pm10,147.0,98,B,epd_pdf
+2021-12-19,"Manawan, Bata Pur",,Lahore,pm25,298.0,348,B,epd_pdf
+2021-12-19,Rahim Yar Khan,,Rahim Yar Khan,pm25,58.0,165,B,epd_pdf
+2021-12-19,Rawalpindi Shalley Valley,,Rawalpindi,pm10,169.0,137,B,epd_pdf
+2021-12-19,Town Hall,,Lahore,co,7.25,145,B,epd_pdf
+2021-12-20,EPA HQ,,Lahore,pm25,213.0,266,B,epd_pdf
+2021-12-20,Faisalabad,,Faisalabad,pm10,158.0,115,B,epd_pdf
+2021-12-20,"Manawan, Bata Pur",,Lahore,pm25,303.0,353,B,epd_pdf
+2021-12-20,Rahim Yar Khan,,Rahim Yar Khan,pm25,47.0,133,B,epd_pdf
+2021-12-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,168.0,135,B,epd_pdf
+2021-12-20,Town Hall,,Lahore,co,16.28,243,B,epd_pdf
+2021-12-21,EPA HQ,,Lahore,pm25,257.0,307,B,epd_pdf
+2021-12-21,Faisalabad,,Faisalabad,pm10,141.0,94,B,epd_pdf
+2021-12-21,"Jallo, Lahore (Mobile",,Lahore,pm25,327.0,377,B,epd_pdf
+2021-12-21,Rahim Yar Khan,,Rahim Yar Khan,pm25,51.0,145,B,epd_pdf
+2021-12-21,Rawalpindi Shalley Valley,,Rawalpindi,pm10,182.0,164,B,epd_pdf
+2021-12-21,Town Hall,,Lahore,co,17.4,250,B,epd_pdf
+2021-12-22,EPA HQ,,Lahore,pm25,265.0,315,B,epd_pdf
+2021-12-22,Faisalabad,,Faisalabad,pm10,172.0,143,B,epd_pdf
+2021-12-22,"Jallo, Lahore (Mobile",,Lahore,pm25,318.0,368,B,epd_pdf
+2021-12-22,Rahim Yar Khan,,Rahim Yar Khan,pm25,52.2,148,B,epd_pdf
+2021-12-22,Rawalpindi Shalley Valley,,Rawalpindi,pm10,184.0,168,B,epd_pdf
+2021-12-22,Town Hall,,Lahore,co,20.4,267,B,epd_pdf
+2021-12-24,EPA HQ,,Lahore,pm25,247.0,297,B,epd_pdf
+2021-12-24,Faisalabad,,Faisalabad,pm10,189.0,176,B,epd_pdf
+2021-12-24,"Johar Town, Lahore",,Lahore,pm25,328.5,379,B,epd_pdf
+2021-12-24,Rahim Yar Khan,,Rahim Yar Khan,pm25,58.4,166,B,epd_pdf
+2021-12-24,Town Hall,,Lahore,co,25.43,303,B,epd_pdf
+2021-12-25,EPA HQ,,Lahore,pm25,266.0,316,B,epd_pdf
+2021-12-25,Faisalabad,,Faisalabad,pm10,172.0,143,B,epd_pdf
+2021-12-25,"Park View Society,",,Lahore,pm25,245.8,296,B,epd_pdf
+2021-12-25,Rahim Yar Khan,,Rahim Yar Khan,pm25,54.5,155,B,epd_pdf
+2021-12-25,Rawalpindi Shalley Valley,,Rawalpindi,pm10,175.0,149,B,epd_pdf
+2021-12-25,Town Hall,,Lahore,co,11.76,212,B,epd_pdf
+2021-12-26,EPA HQ,,Lahore,pm25,269.0,319,B,epd_pdf
+2021-12-26,Faisalabad,,Faisalabad,pm10,175.0,149,B,epd_pdf
+2021-12-26,"Park View Society,",,Lahore,pm25,312.0,362,B,epd_pdf
+2021-12-26,Rahim Yar Khan,,Rahim Yar Khan,pm25,51.0,145,B,epd_pdf
+2021-12-26,Rawalpindi Shalley Valley,,Rawalpindi,pm10,207.0,127,B,epd_pdf
+2021-12-26,Town Hall,,Lahore,co,14.22,228,B,epd_pdf
+2021-12-27,EPA HQ,,Lahore,pm25,310.0,360,B,epd_pdf
+2021-12-27,Faisalabad,,Faisalabad,pm10,128.0,85,B,epd_pdf
+2021-12-27,"Park View Society,",,Lahore,pm25,344.13,394,B,epd_pdf
+2021-12-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,145.0,97,B,epd_pdf
+2021-12-27,Town Hall,,Lahore,co,11.12,208,B,epd_pdf
+2021-12-28,EPA HQ,,Lahore,pm25,230.0,282,B,epd_pdf
+2021-12-28,Faisalabad,,Faisalabad,pm10,144.0,96,B,epd_pdf
+2021-12-28,"Park View Society,",,Lahore,pm25,240.58,291,B,epd_pdf
+2021-12-28,Rahim Yar Khan,,Rahim Yar Khan,pm25,46.3,131,B,epd_pdf
+2021-12-28,Town Hall,,Lahore,co,9.8,196,B,epd_pdf
+2021-12-29,EPA HQ,,Lahore,pm25,135.0,196,B,epd_pdf
+2021-12-29,Faisalabad,,Faisalabad,pm10,130.0,87,B,epd_pdf
+2021-12-29,Punjab University,,Lahore,pm25,131.0,194,B,epd_pdf
+2021-12-29,Rahim Yar Khan,,Rahim Yar Khan,pm25,50.0,142,B,epd_pdf
+2021-12-29,Rawalpindi Shalley Valley,,Rawalpindi,pm10,101.0,68,B,epd_pdf
+2021-12-29,Town Hall,,Lahore,co,9.19,183,B,epd_pdf
+2021-12-30,EPA HQ,,Lahore,pm25,150.0,209,B,epd_pdf
+2021-12-30,Faisalabad,,Faisalabad,pm10,121.0,80,B,epd_pdf
+2021-12-30,Punjab University,,Lahore,pm25,134.4,196,B,epd_pdf
+2021-12-30,Rahim Yar Khan,,Rahim Yar Khan,pm25,47.4,134,B,epd_pdf
+2021-12-30,Rawalpindi Shalley Valley,,Rawalpindi,pm10,113.0,76,B,epd_pdf
+2021-12-30,Town Hall,,Lahore,co,14.17,228,B,epd_pdf
+2021-12-31,EPA HQ,,Lahore,pm25,155.0,214,B,epd_pdf
+2021-12-31,Faisalabad,,Faisalabad,pm10,129.0,86,B,epd_pdf
+2021-12-31,Punjab University,,Lahore,pm25,161.6,220,B,epd_pdf
+2021-12-31,Rahim Yar Khan,,Rahim Yar Khan,pm25,49.0,134,B,epd_pdf
+2021-12-31,Rawalpindi Shalley Valley,,Rawalpindi,pm10,169.0,110,B,epd_pdf
+2021-12-31,Town Hall,,Lahore,co,11.29,209,B,epd_pdf

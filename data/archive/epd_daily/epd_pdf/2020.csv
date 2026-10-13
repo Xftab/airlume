@@ -1,0 +1,232 @@
+date,station_label,station_id,city,pollutant,conc,aqi,style,source
+2020-10-13,Jail Road,,Lahore,pm25,43.195,120,B17,epd_pdf
+2020-10-13,Town Hall,,Lahore,co,9.1132,85,B17,epd_pdf
+2020-10-13,Township,,Lahore,no2,70.596,35,B17,epd_pdf
+2020-10-15,Jail Road,,Lahore,pm25,37.037,105,B17,epd_pdf
+2020-10-16,Jail Road,,Lahore,pm25,34.381,98,B17,epd_pdf
+2020-10-17,Jail Road,,Lahore,pm25,44.554,123,B17,epd_pdf
+2020-10-17,Township,,Lahore,no2,137.817,71,B17,epd_pdf
+2020-10-18,Jail Road,,Lahore,pm25,32.471,94,B17,epd_pdf
+2020-10-18,Mobile Van at EPA,,Lahore,no2,118.065,60,B17,epd_pdf
+2020-10-18,Township,,Lahore,no2,215.179,105,B17,epd_pdf
+2020-10-19,Jail Road,,Lahore,pm25,32.491,94,B17,epd_pdf
+2020-10-19,Township,,Lahore,no2,184.166,97,B17,epd_pdf
+2020-10-20,Jail Road,,Lahore,pm25,42.194,117,B17,epd_pdf
+2020-10-20,Township,,Lahore,no2,147.703,77,B17,epd_pdf
+2020-10-21,Jail Road,,Lahore,pm25,57.867,152,B17,epd_pdf
+2020-10-21,Township,,Lahore,no2,255.844,108,B17,epd_pdf
+2020-10-22,Township,,Lahore,no2,155.466,81,B17,epd_pdf
+2020-10-23,Jail Road,,Lahore,pm25,51.26,140,B17,epd_pdf
+2020-10-23,Township,,Lahore,no2,108.582,54,B17,epd_pdf
+2020-10-24,Jail Road,,Lahore,pm25,56.299,151,B17,epd_pdf
+2020-10-24,Township,,Lahore,no2,124.969,64,B17,epd_pdf
+2020-10-25,Jail Road,,Lahore,pm25,53.193,144,B17,epd_pdf
+2020-10-25,Township,,Lahore,no2,153.565,80,B17,epd_pdf
+2020-10-26,Jail Road,,Lahore,pm25,28.044,84,B17,epd_pdf
+2020-10-26,Town Hall,,Lahore,pm25,195.767,246,B17,epd_pdf
+2020-10-27,Jail Road,,Lahore,pm25,35.927,102,B17,epd_pdf
+2020-10-29,Jail Road,,Lahore,pm25,56.669,152,B17,epd_pdf
+2020-10-29,Town Hall,,Lahore,co,36.114,310,B17,epd_pdf
+2020-10-29,Township,,Lahore,no2,185.086,98,B17,epd_pdf
+2020-10-30,Jail Road,,Lahore,pm25,64.847,156,B17,epd_pdf
+2020-10-30,Town Hall,,Lahore,co,15.3143,165,B17,epd_pdf
+2020-10-30,Township,,Lahore,no2,240.6497,106,B17,epd_pdf
+2020-10-31,Jail Road,,Lahore,pm25,46.068,127,B17,epd_pdf
+2020-10-31,Town Hall,,Lahore,pm25,216.0,266,B17,epd_pdf
+2020-10-31,Township,,Lahore,no2,95.194,47,B17,epd_pdf
+2020-11-01,Jail Road,,Lahore,pm25,46.684,128,B17,epd_pdf
+2020-11-01,Town Hall,,Lahore,pm25,162.1,212,B17,epd_pdf
+2020-11-01,Township,,Lahore,no2,96.432,48,B17,epd_pdf
+2020-11-02,Jail Road,,Lahore,pm25,52.102,142,B17,epd_pdf
+2020-11-02,Town Hall,,Lahore,pm25,192.1,242,B17,epd_pdf
+2020-11-02,Township,,Lahore,co,2.566,28,B17,epd_pdf
+2020-11-03,Town Hall,,Lahore,co,16.814,186,B17,epd_pdf
+2020-11-05,Jail Road,,Lahore,pm25,53.669,146,B17,epd_pdf
+2020-11-05,Town Hall,,Lahore,co,19.448,210,B17,epd_pdf
+2020-11-06,Town Hall,,Lahore,co,28.087,260,B17,epd_pdf
+2020-11-07,Jail Road,,Lahore,pm25,69.755,158,B17,epd_pdf
+2020-11-07,Town Hall,,Lahore,co,10.732,121,B17,epd_pdf
+2020-11-08,Town Hall,,Lahore,co,13.2079,133,B17,epd_pdf
+2020-11-08,Township,,Lahore,no2,128.323,66,B17,epd_pdf
+2020-11-09,Jail Road,,Lahore,pm25,69.133,158,B17,epd_pdf
+2020-11-09,Town Hall,,Lahore,co,17.4268,195,B17,epd_pdf
+2020-11-09,Township,,Lahore,no2,149.9415,78,B17,epd_pdf
+2020-11-10,Jail Road,,Lahore,pm25,78.465,163,B17,epd_pdf
+2020-11-10,Qanchi stop 14Km,,Lahore,no2,185.5681,98,B17,epd_pdf
+2020-11-10,Town Hall,,Lahore,co,27.886,283,B17,epd_pdf
+2020-11-10,Township,,Lahore,no2,256.2085,108,B17,epd_pdf
+2020-11-11,Jail Road,,Lahore,pm25,95.905,172,B17,epd_pdf
+2020-11-11,Town Hall,,Lahore,co,19.193,212,B17,epd_pdf
+2020-11-12,"Gulberg, Lahore",,Lahore,pm25,154.3,196,B17,epd_pdf
+2020-11-12,Jail Road,,Lahore,pm25,38.599,108,B17,epd_pdf
+2020-11-12,Town Hall,,Lahore,co,14.5046,153,B17,epd_pdf
+2020-11-13,"Gulberg, Lahore",,Lahore,pm25,119.756,61,B17,epd_pdf
+2020-11-13,Jail Road,,Lahore,pm25,58.141,152,B17,epd_pdf
+2020-11-13,Town Hall,,Lahore,co,26.823,253,B17,epd_pdf
+2020-11-14,Jail Road,,Lahore,pm25,63.734,155,B17,epd_pdf
+2020-11-14,Town Hall,,Lahore,co,22.271,226,B17,epd_pdf
+2020-11-15,Jail Road,,Lahore,pm25,78.131,163,B17,epd_pdf
+2020-11-15,Site-2 Quaid-e-,,Lahore,pm25,384.4,423,B17,epd_pdf
+2020-11-15,Town Hall,,Lahore,co,12.1045,118,B17,epd_pdf
+2020-11-16,Jail Road,,Lahore,pm25,59.023,153,B17,epd_pdf
+2020-11-16,Town Hall,,Lahore,co,6.805,65,B17,epd_pdf
+2020-11-16,Township,,Lahore,co,4.578,44,B17,epd_pdf
+2020-11-17,Jail Road,,Lahore,pm25,20.949,70,B17,epd_pdf
+2020-11-17,Town Hall,,Lahore,co,9.032,84,B17,epd_pdf
+2020-11-17,Township,,Lahore,co,2.887,28,B17,epd_pdf
+2020-11-18,Jail Road,,Lahore,pm25,23.349,75,B17,epd_pdf
+2020-11-18,"Site: Gulberg,",,Lahore,pm25,78.143,163,B17,epd_pdf
+2020-11-18,Town Hall,,Lahore,co,7.039,67,B17,epd_pdf
+2020-11-19,Jail Road,,Lahore,pm25,34.621,98,B17,epd_pdf
+2020-11-19,Site: Quaid-e-,,Lahore,pm25,161.111,212,B17,epd_pdf
+2020-11-19,Town Hall,,Lahore,co,18.339,204,B17,epd_pdf
+2020-11-20,Jail Road,,Lahore,pm25,43.622,121,B17,epd_pdf
+2020-11-20,Site1:,,Lahore,pm25,213.25,263,B17,epd_pdf
+2020-11-20,Town Hall,,Lahore,co,34.387,297,B17,epd_pdf
+2020-11-20,Township,,Lahore,no2,83.976,42,B17,epd_pdf
+2020-11-21,Jail Road,,Lahore,pm25,43.893,121,B17,epd_pdf
+2020-11-21,Site1:,,Lahore,pm25,165.0,215,B17,epd_pdf
+2020-11-21,Town Hall,,Lahore,co,9.957,92,B17,epd_pdf
+2020-11-21,Township,,Lahore,no2,63.543,33,B17,epd_pdf
+2020-11-22,Jail Road,,Lahore,pm25,29.758,88,B17,epd_pdf
+2020-11-22,Site 1: Bubtian,,Lahore,pm25,113.75,181,B17,epd_pdf
+2020-11-22,Site 2: Rafaqat,,Lahore,pm25,161.1,212,B17,epd_pdf
+2020-11-22,Town Hall,,Lahore,co,25.356,244,B17,epd_pdf
+2020-11-22,Township,,Lahore,co,2.962,28,B17,epd_pdf
+2020-11-23,Jail Road,,Lahore,pm25,39.372,111,B17,epd_pdf
+2020-11-23,Site 1: Rafaqat,,Lahore,pm25,179.0,229,B17,epd_pdf
+2020-11-23,Site 2: Shahdrah,,Lahore,pm25,311.33,361,B17,epd_pdf
+2020-11-23,Town Hall,,Lahore,co,12.851,128,B17,epd_pdf
+2020-11-23,Township,,Lahore,no2,86.288,42,B17,epd_pdf
+2020-11-24,Jail Road,,Lahore,pm25,59.378,153,B17,epd_pdf
+2020-11-24,Site 1: Kala Shah,,Lahore,pm25,339.875,389,B17,epd_pdf
+2020-11-24,"Site 2: Gulberg,",,Lahore,pm25,195.5,246,B17,epd_pdf
+2020-11-24,Town Hall,,Lahore,co,8.945,128,B17,epd_pdf
+2020-11-24,Township,,Lahore,no2,123.174,63,B17,epd_pdf
+2020-11-25,"Site 1: Gulberg,",,Lahore,pm25,98.444,173,B17,epd_pdf
+2020-11-25,Site 2: Atari,,Lahore,pm25,238.333,288,B17,epd_pdf
+2020-11-25,Town Hall,,Lahore,co,8.2403,77,B17,epd_pdf
+2020-11-25,Township,,Lahore,co,6.811,65,B17,epd_pdf
+2020-11-26,Jail Road,,Lahore,pm25,47.271,130,B17,epd_pdf
+2020-11-26,Site 1: Atari,,Lahore,pm25,158.1,209,B17,epd_pdf
+2020-11-26,"Site 2: Kamahan,",,Lahore,pm25,306.0,356,B17,epd_pdf
+2020-11-26,Town Hall,,Lahore,co,9.027,84,B17,epd_pdf
+2020-11-26,Township,,Lahore,no2,86.293,42,B17,epd_pdf
+2020-11-27,Jail Road,,Lahore,pm25,32.406,94,B17,epd_pdf
+2020-11-27,"Site 1: Kamahan,",,Lahore,pm25,166.875,217,B17,epd_pdf
+2020-11-27,Town Hall,,Lahore,co,8.436,79,B17,epd_pdf
+2020-11-27,Township,,Lahore,co,2.875,28,B17,epd_pdf
+2020-11-28,Jail Road,,Lahore,pm25,25.159,78,B17,epd_pdf
+2020-11-28,Site 1: : Gulberg,,Lahore,pm25,77.076,162,B17,epd_pdf
+2020-11-28,Site 2: Quaid-e-,,Lahore,pm25,182.0,233,B17,epd_pdf
+2020-11-28,Town Hall,,Lahore,co,9.553,89,B17,epd_pdf
+2020-11-29,Jail Road,,Lahore,pm25,35.429,100,B17,epd_pdf
+2020-11-29,"Site 1: Green Town,",,Lahore,pm25,132.8,191,B17,epd_pdf
+2020-11-29,"Site 2: College,",,Lahore,pm25,184.22,234,B17,epd_pdf
+2020-11-29,Town Hall,,Lahore,co,20.131,214,B17,epd_pdf
+2020-11-29,Township,,Lahore,no2,63.227,31,B17,epd_pdf
+2020-11-30,Jail Road,,Lahore,pm25,47.313,130,B17,epd_pdf
+2020-11-30,Site 1: College,,Lahore,pm25,194.375,244,B17,epd_pdf
+2020-11-30,Site 2: Akbar,,Lahore,pm25,329.0,379,B17,epd_pdf
+2020-11-30,Town Hall,,Lahore,co,32.485,285,B17,epd_pdf
+2020-11-30,Township,,Lahore,no2,74.422,37,B17,epd_pdf
+2020-12-01,Jail Road,,Lahore,pm25,58.862,153,B17,epd_pdf
+2020-12-01,Town Hall,,Lahore,co,27.647,258,B17,epd_pdf
+2020-12-01,Township,,Lahore,no2,153.938,80,B17,epd_pdf
+2020-12-02,Jail Road,,Lahore,pm25,50.507,138,B17,epd_pdf
+2020-12-02,Town Hall,,Lahore,co,18.237,203,B17,epd_pdf
+2020-12-02,Township,,Lahore,no2,66.695,33,B17,epd_pdf
+2020-12-03,Jail Road,,Lahore,pm25,46.326,128,B17,epd_pdf
+2020-12-03,Town Hall,,Lahore,co,8.47,79,B17,epd_pdf
+2020-12-03,Township,,Lahore,no2,23.295,11,B17,epd_pdf
+2020-12-04,Jail Road,,Lahore,pm25,51.504,140,B17,epd_pdf
+2020-12-04,Site 1: Akbar,,Lahore,pm25,267.11,317,B17,epd_pdf
+2020-12-04,Site 2:Green,,Lahore,pm25,298.0,348,B17,epd_pdf
+2020-12-04,Town Hall,,Lahore,co,32.2086,284,B17,epd_pdf
+2020-12-04,Township,,Lahore,co,3.703,36,B17,epd_pdf
+2020-12-05,Jail Road,,Lahore,pm25,54.537,148,B17,epd_pdf
+2020-12-05,Site 1: Akbar,,Lahore,pm25,287.47,338,B17,epd_pdf
+2020-12-05,Site 2:Green,,Lahore,pm25,289.5,340,B17,epd_pdf
+2020-12-05,Town Hall,,Lahore,co,11.249,104,B17,epd_pdf
+2020-12-05,Township,,Lahore,co,2.851,27,B17,epd_pdf
+2020-12-06,Jail Road,,Lahore,pm25,48.189,132,B17,epd_pdf
+2020-12-06,Site 1: Akbar,,Lahore,pm25,272.25,323,B17,epd_pdf
+2020-12-06,Site2: College,,Lahore,pm25,221.57,271,B17,epd_pdf
+2020-12-06,Township,,Lahore,co,4.635,45,B17,epd_pdf
+2020-12-07,Jail Road,,Lahore,pm25,57.752,152,B17,epd_pdf
+2020-12-07,Site 1: College,,Lahore,pm25,334.0,384,B17,epd_pdf
+2020-12-07,Site2: Green,,Lahore,pm25,304.375,354,B17,epd_pdf
+2020-12-07,Town Hall,,Lahore,co,12.19,120,B17,epd_pdf
+2020-12-07,Township,,Lahore,co,2.905,28,B17,epd_pdf
+2020-12-08,Jail Road,,Lahore,pm25,40.725,114,B17,epd_pdf
+2020-12-08,Site 1: Green,,Lahore,pm25,229.625,279,B17,epd_pdf
+2020-12-08,Site2: Akbar,,Lahore,pm25,364.71,410,B17,epd_pdf
+2020-12-08,Town Hall,,Lahore,co,27.704,257,B17,epd_pdf
+2020-12-08,Township,,Lahore,no2,26.176,12,B17,epd_pdf
+2020-12-09,Jail Road,,Lahore,pm25,42.897,119,B17,epd_pdf
+2020-12-09,Site 1: Akbar,,Lahore,pm25,122.75,186,B17,epd_pdf
+2020-12-09,Site2: Quaid-e-,,Lahore,pm25,96.5,172,B17,epd_pdf
+2020-12-09,Town Hall,,Lahore,co,9.922,92,B17,epd_pdf
+2020-12-09,Township,,Lahore,no2,21.374,10,B17,epd_pdf
+2020-12-10,Jail Road,,Lahore,pm25,25.554,79,B17,epd_pdf
+2020-12-10,Site 1: Quaid-e-,,Lahore,pm25,173.71,224,B17,epd_pdf
+2020-12-10,Site2: Akbar,,Lahore,pm25,172.25,223,B17,epd_pdf
+2020-12-10,Town Hall,,Lahore,co,11.751,113,B17,epd_pdf
+2020-12-11,Jail Road,,Lahore,pm25,35.775,101,B17,epd_pdf
+2020-12-11,Site 1: Quaid-e-,,Lahore,pm25,164.363,215,B17,epd_pdf
+2020-12-11,Site2: Akbar,,Lahore,pm25,273.875,324,B17,epd_pdf
+2020-12-11,Town Hall,,Lahore,co,24.432,240,B17,epd_pdf
+2020-12-12,Jail Road,,Lahore,pm25,29.033,87,B17,epd_pdf
+2020-12-12,Site 1: Quaid-e-,,Lahore,pm25,59.1,153,B17,epd_pdf
+2020-12-12,Town Hall,,Lahore,co,8.669,81,B17,epd_pdf
+2020-12-13,Jail Road,,Lahore,pm25,13.061,53,B17,epd_pdf
+2020-12-13,Site 1: Quaid-e-,,Lahore,pm25,46.28,127,B17,epd_pdf
+2020-12-13,Site 2: Wagha,,Lahore,pm25,152.3,203,B17,epd_pdf
+2020-12-13,Town Hall,,Lahore,co,6.623,63,B17,epd_pdf
+2020-12-14,Jail Road,,Lahore,pm25,14.841,57,B17,epd_pdf
+2020-12-14,Site 1: Wagha,,Lahore,pm25,151.409,202,B17,epd_pdf
+2020-12-14,Town Hall,,Lahore,co,5.4516,53,B17,epd_pdf
+2020-12-15,Jail Road,,Lahore,pm25,16.514,60,B17,epd_pdf
+2020-12-15,Site 1: Wagha,,Lahore,pm25,127.428,188,B17,epd_pdf
+2020-12-15,Town Hall,,Lahore,co,6.519,62,B17,epd_pdf
+2020-12-16,Jail Road,,Lahore,pm25,20.144,68,B17,epd_pdf
+2020-12-16,Site 1: Wagha,,Lahore,pm25,115.55,182,B17,epd_pdf
+2020-12-16,Town Hall,,Lahore,co,6.623,63,B17,epd_pdf
+2020-12-17,Jail Road,,Lahore,pm25,22.169,72,B17,epd_pdf
+2020-12-17,Site 1: Wagha,,Lahore,pm25,145.105,197,B17,epd_pdf
+2020-12-17,Town Hall,,Lahore,co,9.033,84,B17,epd_pdf
+2020-12-18,Jail Road,,Lahore,pm25,40.48,113,B17,epd_pdf
+2020-12-18,Site 1: Wagha,,Lahore,pm25,303.0,353,B17,epd_pdf
+2020-12-18,Town Hall,,Lahore,co,28.036,264,B17,epd_pdf
+2020-12-19,Jail Road,,Lahore,pm25,40.523,114,B17,epd_pdf
+2020-12-19,Site 1: Wagha,,Lahore,pm25,245.062,295,B17,epd_pdf
+2020-12-19,Town Hall,,Lahore,co,15.957,173,B17,epd_pdf
+2020-12-20,Jail Road,,Lahore,pm25,56.657,152,B17,epd_pdf
+2020-12-20,Mobile Van,,Lahore,pm25,233.579,283,B17,epd_pdf
+2020-12-20,Town Hall,,Lahore,co,14.238,148,B17,epd_pdf
+2020-12-21,Jail Road,,Lahore,pm25,51.197,139,B17,epd_pdf
+2020-12-21,Mobile Van,,Lahore,pm25,330.739,380,B17,epd_pdf
+2020-12-21,Township,,Lahore,no2,102.142,51,B17,epd_pdf
+2020-12-22,Jail Road,,Lahore,pm25,51.563,140,B17,epd_pdf
+2020-12-22,Mobile Van,,Lahore,pm25,361.869,408,B17,epd_pdf
+2020-12-22,Township,,Lahore,no2,111.507,56,B17,epd_pdf
+2020-12-23,Jail Road,,Lahore,pm25,69.548,158,B17,epd_pdf
+2020-12-23,Mobile Van,,Lahore,pm25,291.143,341,B17,epd_pdf
+2020-12-23,Township,,Lahore,no2,141.831,73,B17,epd_pdf
+2020-12-24,Jail Road,,Lahore,pm25,41.884,117,B17,epd_pdf
+2020-12-24,Township,,Lahore,no2,72.292,36,B17,epd_pdf
+2020-12-25,Jail Road,,Lahore,pm25,64.884,156,B17,epd_pdf
+2020-12-25,Township,,Lahore,no2,115.519,145,B17,epd_pdf
+2020-12-26,Jail Road,,Lahore,pm25,48.979,138,B17,epd_pdf
+2020-12-26,Township,,Lahore,no2,161.4978,200,B17,epd_pdf
+2020-12-27,Jail Road,,Lahore,pm25,66.966,191,B17,epd_pdf
+2020-12-27,Township,,Lahore,no2,117.525,147,B17,epd_pdf
+2020-12-28,Jail Road,,Lahore,pm25,24.879,69,B17,epd_pdf
+2020-12-28,Township,,Lahore,no2,65.272,82,B17,epd_pdf
+2020-12-29,Jail Road,,Lahore,pm25,20.981,60,B17,epd_pdf
+2020-12-29,Township,,Lahore,no2,68.628,86,B17,epd_pdf
+2020-12-30,Jail Road,,Lahore,pm25,31.129,89,B17,epd_pdf
+2020-12-30,Mobile Van,,Lahore,no2,51.613,65,B17,epd_pdf
+2020-12-30,Township,,Lahore,no2,71.033,89,B17,epd_pdf
+2020-12-31,Jail Road,,Lahore,pm25,46.972,133,B17,epd_pdf
+2020-12-31,Township,,Lahore,no2,127.592,160,B17,epd_pdf

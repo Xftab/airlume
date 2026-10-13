@@ -1,4 +1,46 @@
 date,station_label,station_id,city,pollutant,conc,aqi,style,source
+2023-01-01,Rawalpindi Shalley Valley,,Rawalpindi,pm10,121.0,81,B,epd_pdf
+2023-01-02,Rawalpindi Shalley Valley,,Rawalpindi,pm10,98.0,66,B,epd_pdf
+2023-01-03,Rawalpindi Shalley Valley,,Rawalpindi,pm10,98.0,66,B,epd_pdf
+2023-01-04,Rawalpindi Shalley Valley,,Rawalpindi,pm10,181.0,116,B,epd_pdf
+2023-01-05,Rawalpindi Shalley Valley,,Rawalpindi,pm10,196.0,123,B,epd_pdf
+2023-01-06,Rawalpindi Shalley Valley,,Rawalpindi,pm10,187.0,119,B,epd_pdf
+2023-01-07,Rawalpindi Shalley Valley,,Rawalpindi,pm10,233.0,142,B,epd_pdf
+2023-01-08,Rawalpindi Shalley Valley,,Rawalpindi,pm10,216.0,133,B,epd_pdf
+2023-01-09,Rawalpindi Shalley Valley,,Rawalpindi,pm10,208.0,129,B,epd_pdf
+2023-01-10,Rawalpindi Shalley Valley,,Rawalpindi,pm10,193.0,122,B,epd_pdf
+2023-01-11,Rawalpindi Shalley Valley,,Rawalpindi,pm10,201.0,126,B,epd_pdf
+2023-01-12,Rawalpindi Shalley Valley,,Rawalpindi,pm10,102.0,68,B,epd_pdf
+2023-01-14,Rawalpindi Shalley Valley,,Rawalpindi,pm10,56.0,37,B,epd_pdf
+2023-01-15,Rawalpindi Shalley Valley,,Rawalpindi,pm10,126.0,84,B,epd_pdf
+2023-01-16,Rawalpindi Shalley Valley,,Rawalpindi,pm10,108.0,72,B,epd_pdf
+2023-01-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,142.0,95,B,epd_pdf
+2023-01-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,141.0,92,B,epd_pdf
+2023-01-19,Rawalpindi Shalley Valley,,Rawalpindi,pm10,178.0,114,B,epd_pdf
+2023-01-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,212.0,131,B,epd_pdf
+2023-01-21,Rawalpindi Shalley Valley,,Rawalpindi,pm10,203.0,127,B,epd_pdf
+2023-01-22,Rawalpindi Shalley Valley,,Rawalpindi,pm10,203.0,127,B,epd_pdf
+2023-01-23,Rawalpindi Shalley Valley,,Rawalpindi,pm10,72.0,48,B,epd_pdf
+2023-01-24,Rawalpindi Shalley Valley,,Rawalpindi,pm10,114.0,76,B,epd_pdf
+2023-01-26,Rawalpindi Shalley Valley,,Rawalpindi,pm10,95.0,64,B,epd_pdf
+2023-01-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,95.0,64,B,epd_pdf
+2023-01-28,Rawalpindi Shalley Valley,,Rawalpindi,pm10,128.0,85,B,epd_pdf
+2023-01-29,Rawalpindi Shalley Valley,,Rawalpindi,pm10,147.0,98,B,epd_pdf
+2023-01-30,Rawalpindi Shalley Valley,,Rawalpindi,pm10,170.0,110,B,epd_pdf
+2023-01-31,Rawalpindi Shalley Valley,,Rawalpindi,pm10,63.0,42,B,epd_pdf
+2023-02-01,Rawalpindi Shalley Valley,,Rawalpindi,pm10,116.0,77,B,epd_pdf
+2023-02-02,Rawalpindi Shalley Valley,,Rawalpindi,pm10,116.0,77,B,epd_pdf
+2023-02-03,Rawalpindi Shalley Valley,,Rawalpindi,pm10,102.0,68,B,epd_pdf
+2023-02-04,Rawalpindi Shalley Valley,,Rawalpindi,pm10,123.0,82,B,epd_pdf
+2023-02-05,Rawalpindi Shalley Valley,,Rawalpindi,pm10,138.0,92,B,epd_pdf
+2023-02-06,Rawalpindi Shalley Valley,,Rawalpindi,pm10,152.0,101,B,epd_pdf
+2023-02-07,Rawalpindi Shalley Valley,,Rawalpindi,pm10,167.0,109,B,epd_pdf
+2023-02-08,Rawalpindi Shalley Valley,,Rawalpindi,pm10,75.0,50,B,epd_pdf
+2023-02-09,Rawalpindi Shalley Valley,,Rawalpindi,pm10,105.0,76,B,epd_pdf
+2023-02-10,Rawalpindi Shalley Valley,,Rawalpindi,pm10,76.0,55,B,epd_pdf
+2023-02-11,Rawalpindi Shalley Valley,,Rawalpindi,pm10,85.0,57,B,epd_pdf
+2023-02-12,Rawalpindi Shalley Valley,,Rawalpindi,pm10,114.0,78,B,epd_pdf
+2023-02-13,Rawalpindi Shalley Valley,,Rawalpindi,pm10,166.0,108,B,epd_pdf
 2023-05-20,Mobile AQMS Particulate Max.Temp 37°C –39°C,,Lahore,pm25,49.0,120,B,epd_pdf
 2023-05-21,Mobile AQMS Particulate Max.Temp 39°C –40°C,,Lahore,pm25,53.0,126,B,epd_pdf
 2023-05-22,Mobile AQMS Particulate Max.Temp 40°C –42°C,,Lahore,pm25,57.0,131,B,epd_pdf
