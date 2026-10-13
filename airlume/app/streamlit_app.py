@@ -117,14 +117,14 @@ left, right = st.columns([3, 1])
 with left:
     if view == "city_overview" or (resolved and (city_id != "PB-LHE" or resolved.compare_city_id)):
         cf = city_frame()
-        st.pydeck_chart(deck_city_overview(cf), use_container_width=True, height=620)
+        st.pydeck_chart(deck_city_overview(cf), width="stretch", height=620)
     else:
         sf = station_frame(city_id)
         target = None
         if resolved and resolved.station_id:
             s = reg.station(resolved.station_id)
             target = (s.lat, s.lon)
-        st.pydeck_chart(deck_stations_3d(sf, cam, target), use_container_width=True, height=620)
+        st.pydeck_chart(deck_stations_3d(sf, cam, target), width="stretch", height=620)
 
 with right:
     if resolved and resolved.notes:
