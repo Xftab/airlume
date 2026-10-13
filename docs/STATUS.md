@@ -15,9 +15,17 @@ Done on 13 Oct:
 - Emails drafted in `docs/emails/`; `docs/SOURCES.md` written.
 - Plan revised (Phase 0.6, W1 row, Appendix D); PDFs rebuilt.
 
+Also done on 13 Oct (afternoon, Phase 1 started early):
+- `scripts/collect_hourly.py` — one round of collection: EPA Lahore stations, EPA district ranking (home-page parser), Open-Meteo CAMS for Lahore. Each source fails independently.
+- **CSV archive** (`data/archive/<table>/<source>/<YYYY-MM>.csv`, append-only, deduplicated) is the committed data of record; DuckDB is a local cache (`scripts/rebuild_db.py`). This avoids binary merge conflicts in git.
+- The app rebuilds its cache from the archive when fake data is off.
+- EPD back-fill scaffold: `pipeline/backfill_epd.py` (list + download) and `scripts/epd_fetch_sample.py`; the PDF parser waits for sample files.
+- `collect.bat` added; `_update\collect.yml` commits only `data/archive/`.
+
 ## Next steps (rest of Phase 0)
 - [ ] Aftab: run `K:\airlume\setup` then `K:\airlume\run` and confirm the shell opens.
-- [ ] Aftab: run `python scripts\epa_dry_run.py` inside the venv and send Claude the output (confirms the parser against the live page; saves raw HTML to `data/raw/`).
+- [ ] Aftab: run `K:\airlume\collect --dry-run` and send Claude a screenshot (confirms both EPA parsers and Open-Meteo against the live sites).
+- [ ] Aftab: run `python scripts\epd_fetch_sample.py` inside the venv and send the names of the PDFs it saved plus a screenshot of one, so the back-fill parser can be written.
 - [ ] Aftab: create accounts — Groq, Google AI Studio, OpenAQ, CARTO, Streamlit Community Cloud — and put the keys in `K:\airlume\.env` (never in chat).
 - [ ] Aftab: send the two emails (`docs/emails/`), with supervisor name filled in.
 - [ ] Claude: once `.env` has an OpenAQ key, run station discovery for Islamabad/Karachi/Peshawar and add licensed stations to the registry.

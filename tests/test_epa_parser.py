@@ -35,3 +35,23 @@ def test_values_and_timestamp():
 
 def test_empty_page():
     assert parse_lahore_html("<html></html>", NOW).empty
+
+
+HOME = """
+<html><body><p>Last updated: 10:00 AM, Oct 13, 2026</p>
+<table><tr><th>Rank</th><th>District</th><th>AQI</th><th>Level</th></tr>
+<tr><td>1</td><td>Okara</td><td>175</td><td>Unhealthy for sensitive groups</td></tr>
+<tr><td>2</td><td>DG Khan</td><td>160</td><td>Unhealthy for sensitive groups</td></tr>
+<tr><td>3</td><td>Lahore</td><td>140</td><td>Moderate</td></tr>
+<tr><td>4</td><td>Atlantis</td><td>99</td><td>Satisfactory</td></tr>
+</table></body></html>
+"""
+
+
+def test_home_parser(registry):
+    from airlume.collectors.epa import parse_home_html
+    lookup = {c.name.lower(): c.city_id for c in registry.cities}
+    df = parse_home_html(HOME, lookup, NOW)
+    got = dict(zip(df.city_id, df.aqi))
+    assert got == {"PB-OKA": 175, "PB-DGK": 160, "PB-LHE": 140}
+    assert df.ts.iloc[0].hour == 5  # 10:00 PKT = 05:00 UTC

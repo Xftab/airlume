@@ -10,6 +10,7 @@ Newest first. Each entry records what was decided and why.
 - **Station coordinates taken from IQAir station pages** (9 of 11) and neighbourhood centroids (2), each with a confidence label displayed in the app, pending EPA confirmation. The EPA email asks for the official list.
 - **Quetta is display-only** (sensors exist only on WAQI/IQAir). Islamabad, Karachi and Peshawar use Urban Unit sensors on OpenAQ.
 - **Map runs keyless by default** (`map_provider=None`); CARTO is used only when a key is present, so the demo never depends on a third-party tile service.
+- **CSV archive is the data of record** (one file per source per month, append-only); DuckDB is a rebuildable cache. Chosen so GitHub Actions can commit hourly data as plain-text line appends, never a binary file that conflicts.
 - **Answer sentences are written by code, not the model** (new `nl/answer.py`), so text can never contradict the numbers.
 
 ## 12 October 2026

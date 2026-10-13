@@ -47,11 +47,16 @@ def _registry() -> Registry:
 @st.cache_resource
 def _store() -> Store:
     s = Store()
-    if SETTINGS.use_fake_data and s.counts()["readings"] == 0:
+    if s.counts()["readings"] == 0:
         reg = _registry()
-        r = fake_readings(reg)
-        s.upsert_readings(r)
-        s.upsert_city_hourly(fake_city_hourly(reg, r))
+        if SETTINGS.use_fake_data:
+            r = fake_readings(reg)
+            s.upsert_readings(r)
+            s.upsert_city_hourly(fake_city_hourly(reg, r))
+        else:  # fresh clone / cloud deploy: rebuild the cache from the committed CSV archive
+            from airlume.pipeline import archive
+            s.upsert_readings(archive.load_all("readings"))
+            s.upsert_city_hourly(archive.load_all("city_hourly"))
     return s
 
 
