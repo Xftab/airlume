@@ -2,7 +2,7 @@
 title: "Airlume: Complete Project Plan"
 subtitle: "A Conversational 3D Digital Twin of Air Quality in Pakistan's Monitored Cities --- Problem, Product, Resources and Phased Build Plan"
 author:
-  - "Aftab Ahmad"
+  - "Aftab Ahmad, Kiran Saif and Tehreem Fatima"
 date: "13 October 2026 (revision 2)"
 ---
 

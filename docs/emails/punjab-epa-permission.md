@@ -6,7 +6,7 @@
 
 Dear Sir/Madam,
 
-I am Aftab Ahmad, a 7th-semester BS Data Science student at the University of Management and Technology, Lahore. For my semester project (courses DS494 Data Visualization and CC425 Parallel & Distributed Computing, supervisor: [SUPERVISOR NAME]) I am building **Airlume**, a free, non-commercial web app that shows Punjab EPA's published air-quality readings on a 3D map of Lahore and lets people ask questions about them in plain language (for example, "which station was worst last night?").
+I am Aftab Ahmad, a 7th-semester BS Data Science student at the University of Management and Technology, Lahore. For my semester project (courses DS494 Data Visualization and CC425 Parallel & Distributed Computing, supervisor: Dr Rimsha Anam) I am building **Airlume**, a free, non-commercial web app that shows Punjab EPA's published air-quality readings on a 3D map of Lahore and lets people ask questions about them in plain language (for example, "which station was worst last night?").
 
 I would like your permission to:
 

@@ -25,6 +25,7 @@ last = int(sys.argv[2]) if len(sys.argv) > 2 else first
 styles: Counter = Counter()
 rows: list[dict] = []
 city_rows: list[dict] = []
+inventory: list[dict] = []  # one line per report: which layout it was (data/raw/epd/_styles.csv)
 for page in range(first, last + 1):
     links = listing_links(page)
     print(f"page {page}: {len(links)} reports")
@@ -35,15 +36,20 @@ for page in range(first, last + 1):
         except Exception as e:  # keep going; record the failure
             print(f"   FAILED {link.title}: {e}")
             styles["error"] += 1
+            inventory.append({"page": page, "title": link.title, "file": "", "style": "error", "rows": 0})
             continue
         styles[style] += 1
+        inventory.append({"page": page, "title": link.title, "file": pdf.name, "style": style, "rows": len(srows)})
         rows += [r.__dict__ | {"source": "epd_pdf"} for r in srows]
         if avg is not None and avg_date is not None:
             city_rows.append({"date": avg_date, "station_label": "Lahore average", "station_id": None,
                               "city": "Lahore", "pollutant": "pm25", "conc": None, "aqi": avg,
                               "style": style, "source": "epd_pdf"})
 df = pd.DataFrame(rows + city_rows)
-print(f"styles: {dict(styles)}; parsed rows: {len(df)}")
+inv_path = Path("data/raw/epd/_styles.csv")
+inv_path.parent.mkdir(parents=True, exist_ok=True)
+pd.DataFrame(inventory).to_csv(inv_path, index=False)
+print(f"styles: {dict(styles)}; parsed rows: {len(df)}; inventory -> {inv_path}")
 if not df.empty:
     touched = archive.export("epd_daily", df)
     n = Store().upsert_epd_daily(df)

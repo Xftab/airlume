@@ -44,6 +44,9 @@ def list_page(page: int, session: requests.Session | None = None) -> list[Report
         if not href.lower().endswith(".pdf"):
             continue
         url = urljoin(INDEX, href)
+        # The listing uses relative hrefs under /index.php/; joining them with the
+        # redirected base produced ".../index.php/index.php/..." (403 on the server).
+        url = re.sub(r"(/index\.php)+/", "/index.php/", url)
         m = re.search(r"(20\d{6})", href)
         out.append(ReportLink(title=a.get_text(" ", strip=True), url=url, date_hint=m.group(1) if m else None))
     return out
@@ -74,8 +77,20 @@ def download(link: ReportLink, session: requests.Session | None = None) -> Path:
     dest = RAW_DIR / name
     if dest.exists():
         return dest
-    r = s.get(link.url, headers={"User-Agent": USER_AGENT}, timeout=60)
-    r.raise_for_status()
-    dest.write_bytes(r.content)
-    time.sleep(DELAY_S)
-    return dest
+    last_err: Exception | None = None
+    for attempt in range(3):
+        try:
+            r = s.get(link.url, headers={"User-Agent": USER_AGENT}, timeout=90)
+            if r.status_code == 403 and "/index.php/" in link.url:
+                # some files are served only from the bare /system/files/ path
+                r = s.get(link.url.replace("/index.php/", "/", 1), headers={"User-Agent": USER_AGENT}, timeout=90)
+            r.raise_for_status()
+            if not r.content.startswith(b"%PDF"):
+                raise ValueError("not a PDF")
+            dest.write_bytes(r.content)
+            time.sleep(DELAY_S)
+            return dest
+        except Exception as e:  # retry on timeouts / resets
+            last_err = e
+            time.sleep(5 * (attempt + 1))
+    raise RuntimeError(f"download failed after 3 attempts: {last_err}")

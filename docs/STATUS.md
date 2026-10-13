@@ -22,6 +22,8 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - EPD back-fill scaffold: `pipeline/backfill_epd.py` (list + download) and `scripts/epd_fetch_sample.py`; the PDF parser waits for sample files.
 - `collect.bat` added; `_update\collect.yml` commits only `data/archive/`.
 
+- **Supervisor proposal written** (`docs/proposal/proposal.md`, 14-page PDF): abstract, introduction, problem statement, related work with 26 verified references, research questions RQ1-RQ4, system, evaluation E1-E6, ten-week plan, preliminary results, risks, course mapping. Title page lists the three team members with roll numbers and the supervisor.
+
 ## Next steps (rest of Phase 0)
 - [ ] Aftab: run `K:\airlume\setup` then `K:\airlume\run` and confirm the shell opens.
 - [x] Live dry run done 14:00 PKT: 10 Lahore stations, 35/36 districts, Open-Meteo OK. Finding: portal AQI differs from hourly-PM2.5 AQI in the afternoon (8-h mean or gas-dominated); all six pollutants now stored to settle it. See research notes.
@@ -38,6 +40,6 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - [ ] Known cosmetic issue: deck.gl text labels throw a MultiIconLayer error in headless Chromium; check on the laptop's real browser, else switch to HTML labels in Phase 2.
 
 ## Open decisions
-- Supervisor name and roll number for the plan's title page and the EPA email.
+- Supervisor name for the EPA email draft (title pages are now complete: Aftab Ahmad, Kiran Saif, Tehreem Fatima; supervisor Dr Rimsha Anam).
 - Optional RAM upgrade (one 8 GB DDR5 SO-DIMM) for the 8B local model.
 - Make the repository public before Phase 1 (needed for free Actions minutes and Streamlit Cloud).

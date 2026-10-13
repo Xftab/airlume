@@ -35,6 +35,22 @@ date,station_label,station_id,city,pollutant,conc,aqi,style,source
 2023-07-24,Shallay Valley Range Particulate,,Lahore,pm10,59.0,39,B,epd_pdf
 2023-07-25,"II, Lhr-Fsd bypass",,Lahore,pm10,61.0,40,B,epd_pdf
 2023-07-25,Shallay Valley Range Particulate,,Lahore,pm10,88.0,59,B,epd_pdf
+2023-07-29,Shallay Valley Range Particulate,,Lahore,pm10,91.0,61,B,epd_pdf
+2023-07-30,Shallay Valley Range Particulate,,Lahore,pm10,101.0,68,B,epd_pdf
+2023-08-01,Shallay Valley Range Particulate,,Lahore,pm10,96.0,64,B,epd_pdf
+2023-08-02,Shallay Valley Range Particulate,,Lahore,pm10,68.0,45,B,epd_pdf
+2023-08-03,Shallay Valley Range Particulate,,Lahore,pm10,84.0,56,B,epd_pdf
+2023-08-04,Shallay Valley Range Particulate,,Lahore,pm10,94.0,63,B,epd_pdf
+2023-08-05,Shallay Valley Range Particulate,,Lahore,pm10,117.0,78,B,epd_pdf
+2023-08-06,Shallay Valley Range Particulate,,Lahore,pm10,70.0,47,B,epd_pdf
+2023-08-07,Shallay Valley Range Particulate,,Lahore,pm10,92.0,62,B,epd_pdf
+2023-08-08,Shallay Valley Range Particulate,,Lahore,pm10,71.0,47,B,epd_pdf
+2023-08-09,Shallay Valley Range Particulate,,Lahore,pm10,58.0,39,B,epd_pdf
+2023-08-10,Shallay Valley Range Particulate,,Lahore,pm10,103.0,69,B,epd_pdf
+2023-08-11,Shallay Valley Range Particulate,,Lahore,pm10,144.0,96,B,epd_pdf
+2023-08-12,"II, Lhr-Fsd bypass",,Lahore,pm10,133.0,89,B,epd_pdf
+2023-08-13,"II, Lhr-Fsd bypass",,Lahore,pm10,151.0,101,B,epd_pdf
+2023-08-14,"II, Lhr-Fsd bypass",,Lahore,pm10,157.0,104,B,epd_pdf
 2023-08-15,"II, Lhr-Fsd bypass",,Lahore,pm10,132.0,88,B,epd_pdf
 2023-08-16,"II, Lhr-Fsd bypass",,Lahore,pm10,168.0,109,B,epd_pdf
 2023-08-17,"II, Lhr-Fsd bypass",,Lahore,pm10,181.0,115,B,epd_pdf
@@ -134,6 +150,34 @@ date,station_label,station_id,city,pollutant,conc,aqi,style,source
 2023-10-13,Road Rawalpindi,,Rawalpindi,pm10,181.0,116,B,epd_pdf
 2023-10-14,"Lhr-Fsd bypass Road,",,Lahore,pm10,210.0,130,B,epd_pdf
 2023-10-14,Road Rawalpindi,,Rawalpindi,pm10,192.0,121,B,epd_pdf
+2023-10-15,"Lhr-Fsd bypass Road,",,Lahore,pm10,218.0,134,B,epd_pdf
+2023-10-15,Road Rawalpindi,,Rawalpindi,pm10,136.0,91,B,epd_pdf
+2023-10-16,"Lhr-Fsd bypass Road,",,Lahore,pm10,92.0,61,B,epd_pdf
+2023-10-16,Road Rawalpindi,,Rawalpindi,pm10,123.0,82,B,epd_pdf
+2023-10-17,"Lhr-Fsd bypass Road,",,Lahore,pm10,83.0,56,B,epd_pdf
+2023-10-17,Road Rawalpindi,,Rawalpindi,pm10,77.0,52,B,epd_pdf
+2023-10-18,"Lhr-Fsd bypass Road,",,Lahore,pm10,137.0,91,B,epd_pdf
+2023-10-19,"Lhr-Fsd bypass Road,",,Lahore,pm10,163.0,107,B,epd_pdf
+2023-10-21,"Lhr-Fsd bypass Road,",,Lahore,pm10,172.0,111,B,epd_pdf
+2023-10-22,"Lhr-Fsd bypass Road,",,Lahore,pm10,184.0,117,B,epd_pdf
+2023-10-23,"Lhr-Fsd bypass Road,",,Lahore,pm10,194.0,122,B,epd_pdf
+2023-10-24,"Lhr-Fsd bypass Road,",,Lahore,pm10,187.0,118,B,epd_pdf
+2023-10-25,"Lhr-Fsd bypass Road,",,Lahore,pm10,206.0,128,B,epd_pdf
+2023-10-26,"Lhr-Fsd bypass Road,",,Lahore,pm10,212.0,131,B,epd_pdf
+2023-10-27,"Lhr-Fsd bypass Road,",,Lahore,pm10,216.0,133,B,epd_pdf
+2023-10-29,"Lhr-Fsd bypass Road,",,Lahore,pm10,222.0,136,B,epd_pdf
+2023-10-30,"Lhr-Fsd bypass Road,",,Lahore,pm10,219.0,135,B,epd_pdf
+2023-10-31,"Lhr-Fsd bypass Road,",,Lahore,pm10,223.0,136,B,epd_pdf
+2023-10-31,Road Rawalpindi,,Rawalpindi,pm10,311.0,181,B,epd_pdf
+2023-11-01,"Lhr-Fsd bypass Road,",,Lahore,pm10,228.0,139,B,epd_pdf
+2023-11-01,Road Rawalpindi,,Rawalpindi,pm10,329.0,190,B,epd_pdf
+2023-11-02,(Lahore College For Women,,Lahore,pm25,206.0,260,B,epd_pdf
+2023-11-02,PU 1,LHR-PU,Lahore,pm25,163.0,221,B,epd_pdf
+2023-11-02,Town Hall,,Lahore,pm25,257.0,307,B,epd_pdf
+2023-11-02,"bypass Road, Sheikhupura",,Lahore,pm10,242.0,145,B,epd_pdf
+2023-11-03,(Lahore College For Women,,Lahore,pm25,206.0,260,B,epd_pdf
+2023-11-03,PU 1,LHR-PU,Lahore,pm25,187.0,243,B,epd_pdf
+2023-11-03,Town Hall,,Lahore,pm25,243.0,293,B,epd_pdf
 2023-11-04,(Lahore College For Women,,Lahore,pm25,186.0,242,B,epd_pdf
 2023-11-04,PU 1,LHR-PU,Lahore,pm25,159.0,218,B,epd_pdf
 2023-11-04,Town Hall,,Lahore,pm25,215.0,268,B,epd_pdf

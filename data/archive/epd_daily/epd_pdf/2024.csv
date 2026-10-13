@@ -15,6 +15,34 @@ date,station_label,station_id,city,pollutant,conc,aqi,style,source
 2024-01-04,PU 1,LHR-PU,Lahore,pm25,156.0,215,B,epd_pdf
 2024-01-04,Particulate matter,,Lahore,pm10,240.0,145,B,epd_pdf
 2024-01-04,Town Hall,,Lahore,pm25,185.0,241,B,epd_pdf
+2024-01-05,EPA HQ,,Lahore,pm25,220.0,273,B,epd_pdf
+2024-01-05,PU 1,LHR-PU,Lahore,pm25,197.0,252,B,epd_pdf
+2024-01-05,Particulate matter,,Lahore,pm10,266.0,158,B,epd_pdf
+2024-01-05,Town Hall,,Lahore,pm25,214.0,268,B,epd_pdf
+2024-01-07,EPA HQ,,Lahore,pm25,259.0,310,B,epd_pdf
+2024-01-07,PU 1,LHR-PU,Lahore,pm25,215.0,268,B,epd_pdf
+2024-01-07,Particulate matter,,Lahore,pm10,294.0,172,B,epd_pdf
+2024-01-07,Town Hall,,Lahore,pm25,223.0,276,B,epd_pdf
+2024-01-08,EPA HQ,,Lahore,pm25,210.0,264,B,epd_pdf
+2024-01-08,PU 1,LHR-PU,Lahore,pm25,163.0,222,B,epd_pdf
+2024-01-08,Particulate matter,,Lahore,pm10,337.0,194,B,epd_pdf
+2024-01-08,Town Hall,,Lahore,pm25,184.0,241,B,epd_pdf
+2024-01-09,EPA HQ,,Lahore,pm25,225.0,277,B,epd_pdf
+2024-01-09,PU 1,LHR-PU,Lahore,pm25,194.0,250,B,epd_pdf
+2024-01-09,Particulate matter,,Lahore,pm10,214.0,132,B,epd_pdf
+2024-01-09,Town Hall,,Lahore,pm25,224.0,277,B,epd_pdf
+2024-01-10,EPA HQ,,Lahore,pm25,250.0,300,B,epd_pdf
+2024-01-10,PU 1,LHR-PU,Lahore,pm25,226.0,278,B,epd_pdf
+2024-01-10,Particulate matter,,Lahore,pm10,221.0,135,B,epd_pdf
+2024-01-10,Town Hall,,Lahore,pm25,202.0,257,B,epd_pdf
+2024-01-11,EPA HQ,,Lahore,pm25,223.0,276,B,epd_pdf
+2024-01-11,PU 1,LHR-PU,Lahore,pm25,189.0,245,B,epd_pdf
+2024-01-11,Particulate matter,,Lahore,pm10,216.0,133,B,epd_pdf
+2024-01-11,Town Hall,,Lahore,pm25,199.0,254,B,epd_pdf
+2024-01-12,EPA HQ,,Lahore,pm25,245.0,295,B,epd_pdf
+2024-01-12,PU 1,LHR-PU,Lahore,pm25,200.0,255,B,epd_pdf
+2024-01-12,Particulate matter,,Lahore,pm10,198.0,124,B,epd_pdf
+2024-01-12,Town Hall,,Lahore,pm25,210.0,264,B,epd_pdf
 2024-01-13,EPA HQ,,Lahore,pm25,199.0,254,B,epd_pdf
 2024-01-13,PU 1,LHR-PU,Lahore,pm25,144.0,205,B,epd_pdf
 2024-01-13,Particulate matter,,Lahore,pm10,200.0,125,B,epd_pdf
@@ -178,6 +206,70 @@ date,station_label,station_id,city,pollutant,conc,aqi,style,source
 2024-03-07,PU 1,LHR-PU,Lahore,pm25,57.0,132,B,epd_pdf
 2024-03-07,Rawalpindi Shalley Valley,,Rawalpindi,pm10,185.0,118,B,epd_pdf
 2024-03-07,Town Hall,,Lahore,pm25,79.0,157,B,epd_pdf
+2024-03-08,EPA HQ,,Lahore,pm25,62.0,139,B,epd_pdf
+2024-03-08,PU 1,LHR-PU,Lahore,pm25,62.0,139,B,epd_pdf
+2024-03-08,Rawalpindi Shalley Valley,,Rawalpindi,pm10,184.0,117,B,epd_pdf
+2024-03-08,Town Hall,,Lahore,pm25,86.0,162,B,epd_pdf
+2024-03-10,EPA HQ,,Lahore,pm25,71.0,152,B,epd_pdf
+2024-03-10,PU 1,LHR-PU,Lahore,pm25,62.0,139,B,epd_pdf
+2024-03-10,Rawalpindi Shalley Valley,,Rawalpindi,pm10,148.0,99,B,epd_pdf
+2024-03-10,Town Hall,,Lahore,pm25,87.0,163,B,epd_pdf
+2024-03-11,EPA HQ,,Lahore,pm25,88.0,164,B,epd_pdf
+2024-03-11,PU 1,LHR-PU,Lahore,pm25,78.0,157,B,epd_pdf
+2024-03-11,Rawalpindi Shalley Valley,,Rawalpindi,pm10,137.0,91,B,epd_pdf
+2024-03-11,Town Hall,,Lahore,pm25,93.0,167,B,epd_pdf
+2024-03-12,EPA HQ,,Lahore,pm25,117.0,184,B,epd_pdf
+2024-03-12,PU 1,LHR-PU,Lahore,pm25,90.0,165,B,epd_pdf
+2024-03-12,Rawalpindi Shalley Valley,,Rawalpindi,pm10,183.0,117,B,epd_pdf
+2024-03-12,Town Hall,,Lahore,pm25,129.0,192,B,epd_pdf
+2024-03-13,EPA HQ,,Lahore,pm25,85.0,161,B,epd_pdf
+2024-03-13,PU 1,LHR-PU,Lahore,pm25,83.0,160,B,epd_pdf
+2024-03-13,Rawalpindi Shalley Valley,,Rawalpindi,pm10,193.0,122,B,epd_pdf
+2024-03-13,Town Hall,,Lahore,pm25,93.0,167,B,epd_pdf
+2024-03-16,EPA HQ,,Lahore,pm25,37.0,104,B,epd_pdf
+2024-03-16,PU 1,LHR-PU,Lahore,pm25,45.0,115,B,epd_pdf
+2024-03-16,Rawalpindi Shalley Valley,,Rawalpindi,pm10,158.0,104,B,epd_pdf
+2024-03-16,Town Hall,,Lahore,pm25,51.0,123,B,epd_pdf
+2024-03-17,EPA HQ,,Lahore,pm25,68.0,147,B,epd_pdf
+2024-03-17,PU 1,LHR-PU,Lahore,pm25,66.0,144,B,epd_pdf
+2024-03-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,185.0,118,B,epd_pdf
+2024-03-17,Town Hall,,Lahore,pm25,78.0,157,B,epd_pdf
+2024-03-18,EPA HQ,,Lahore,pm25,99.0,171,B,epd_pdf
+2024-03-18,PU 1,LHR-PU,Lahore,pm25,81.0,159,B,epd_pdf
+2024-03-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,198.0,124,B,epd_pdf
+2024-03-18,Town Hall,,Lahore,pm25,59.0,134,B,epd_pdf
+2024-03-19,EPA HQ,,Lahore,pm25,93.0,167,B,epd_pdf
+2024-03-19,PU 1,LHR-PU,Lahore,pm25,83.0,160,B,epd_pdf
+2024-03-19,Rawalpindi Shalley Valley,,Rawalpindi,pm10,209.0,130,B,epd_pdf
+2024-03-19,Town Hall,,Lahore,pm25,95.0,168,B,epd_pdf
+2024-03-20,EPA HQ,,Lahore,pm25,108.0,178,B,epd_pdf
+2024-03-20,PU 1,LHR-PU,Lahore,pm25,92.0,166,B,epd_pdf
+2024-03-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,171.0,111,B,epd_pdf
+2024-03-20,Town Hall,,Lahore,pm25,112.0,180,B,epd_pdf
+2024-03-21,EPA HQ,,Lahore,pm25,78.0,157,B,epd_pdf
+2024-03-21,PU 1,LHR-PU,Lahore,pm25,76.0,155,B,epd_pdf
+2024-03-21,Rawalpindi Shalley Valley,,Rawalpindi,pm10,120.0,80,B,epd_pdf
+2024-03-21,Town Hall,,Lahore,pm25,94.0,168,B,epd_pdf
+2024-03-22,EPA HQ,,Lahore,pm25,74.0,154,B,epd_pdf
+2024-03-22,PU 1,LHR-PU,Lahore,pm25,66.0,144,B,epd_pdf
+2024-03-22,Rawalpindi Shalley Valley,,Rawalpindi,pm10,161.0,106,B,epd_pdf
+2024-03-22,Town Hall,,Lahore,pm25,71.0,152,B,epd_pdf
+2024-03-23,EPA HQ,,Lahore,pm25,67.0,146,B,epd_pdf
+2024-03-23,PU 1,LHR-PU,Lahore,pm25,60.0,136,B,epd_pdf
+2024-03-23,Rawalpindi Shalley Valley,,Rawalpindi,pm10,120.0,80,B,epd_pdf
+2024-03-23,Town Hall,,Lahore,pm25,73.0,153,B,epd_pdf
+2024-03-24,EPA HQ,,Lahore,pm25,64.0,141,B,epd_pdf
+2024-03-24,PU 1,LHR-PU,Lahore,pm25,64.0,141,B,epd_pdf
+2024-03-24,Rawalpindi Shalley Valley,,Rawalpindi,pm10,162.0,107,B,epd_pdf
+2024-03-24,Town Hall,,Lahore,pm25,68.0,147,B,epd_pdf
+2024-03-25,EPA HQ,,Lahore,pm25,43.0,112,B,epd_pdf
+2024-03-25,PU 1,LHR-PU,Lahore,pm25,37.0,104,B,epd_pdf
+2024-03-25,Rawalpindi Shalley Valley,,Rawalpindi,pm10,106.0,71,B,epd_pdf
+2024-03-25,Town Hall,,Lahore,pm25,52.0,125,B,epd_pdf
+2024-03-26,EPA HQ,,Lahore,pm25,59.0,134,B,epd_pdf
+2024-03-26,PU 1,LHR-PU,Lahore,pm25,50.0,122,B,epd_pdf
+2024-03-26,Rawalpindi Shalley Valley,,Rawalpindi,pm10,171.0,111,B,epd_pdf
+2024-03-26,Town Hall,,Lahore,pm25,75.0,154,B,epd_pdf
 2024-03-27,EPA HQ,,Lahore,pm25,100.0,172,B,epd_pdf
 2024-03-27,PU 1,LHR-PU,Lahore,pm25,87.0,163,B,epd_pdf
 2024-03-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,145.0,97,B,epd_pdf

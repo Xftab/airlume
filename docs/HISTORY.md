@@ -3,6 +3,7 @@
 Newest first. Each entry records what was decided and why.
 
 ## 13 October 2026
+- **Supervisor-facing proposal (v2) written** as a separate document from the engineering plan, with a verified reference list (26 items; IQAir's 2025 report now ranks Pakistan first; EcoBot's channel is not confirmed as WhatsApp, so the proposal says "AI assistant"; Dr.Spider (ICLR 2023) cited for the no-code-generation design). Built alongside the plan by `docs/build.sh`.
 - **Phase 0 build started and the skeleton completed in one session.** Package layout follows plan 0.4; 45 tests pass; the fake-data shell runs end to end (question, typed form, validated query, code-written answer, 3D view).
 - **Punjab EPA portal is server-rendered HTML with no public JSON.** Decision: parse the Lahore table at one request per hour with a cache-buster and a named user agent, after asking permission. `api.aqi.punjab.gov.pk` exists but is undocumented; not probed further.
 - **AQI formula settled (W1).** Portal numbers reproduce the US EPA 2012 breakpoints under Punjab's own labels. Both the 2012 and 2024 tables are implemented so the harmonisation study (1.7) can show the difference.

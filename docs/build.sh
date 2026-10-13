@@ -19,6 +19,11 @@ echo "Building the complete project plan..."
   --include-in-header=header.tex --toc --toc-depth=2 --number-sections \
   -V geometry:"a4paper,margin=2.2cm,top=2.5cm,bottom=2.3cm" "${COMMON[@]}")
 
+echo "Building the project proposal (v2, for the supervisor)..."
+(cd proposal && pandoc proposal.md -o ../pdf/Airlume_Project_Proposal.pdf \
+  --include-in-header=header.tex --number-sections -V toc-depth=1 \
+  -V geometry:"a4paper,margin=2.4cm,top=2.6cm,bottom=2.4cm" "${COMMON[@]}")
+
 echo "Building the v1 proposal (archived)..."
 (cd proposal-v1 && pandoc proposal.md -o ../pdf/Airlume_Project_Proposal_v1.pdf \
   --include-in-header=header.tex --toc --toc-depth=2 --number-sections \
