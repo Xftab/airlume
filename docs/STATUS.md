@@ -24,6 +24,9 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 
 - **Supervisor proposal written** (`docs/proposal/proposal.md`, 14-page PDF): abstract, introduction, problem statement, related work with 26 verified references, research questions RQ1-RQ4, system, evaluation E1-E6, ten-week plan, preliminary results, risks, course mapping. Title page lists the three team members with roll numbers and the supervisor.
 
+## Where we stopped (13 Oct, 19:10)
+Session closed by Aftab. Everything below is on the laptop and pushed to GitHub. Tomorrow's first items: send the EPA email; create the accounts; schedule `collect.bat` hourly on the laptop (Task Scheduler) or install `_update\collect.yml`; run `python scripts\w1_check.py` after a day of readings; look at the 41 remaining unknown bulletins (`data\raw\epd\_styles.csv`).
+
 ## Next steps (rest of Phase 0)
 - [ ] Aftab: run `K:\airlume\setup` then `K:\airlume\run` and confirm the shell opens.
 - [x] Live dry run done 14:00 PKT: 10 Lahore stations, 35/36 districts, Open-Meteo OK. Finding: portal AQI differs from hourly-PM2.5 AQI in the afternoon (8-h mean or gas-dominated); all six pollutants now stored to settle it. See research notes.
@@ -31,7 +34,7 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - [x] EPD archive sampled across 2018-2025; parser written for the 2022-2025 layouts (`pipeline/epd_parse.py`, 5 fixture tests). Archive ends 2 Dec 2025.
 - [x] Trial back-fill pages 1-5: 379 rows. Two more layouts (D, E) and scanned files found and handled; parser now covers Aug 2025 - Dec 2025 fully and 2022 - 2024.
 - [x] Full back-fill run: 2,121 rows 2022-2025. Three more layouts handled incl. the 2020-21 Smog Policy 2017 scale (style B17, non-comparable, concentrations kept).
-- [ ] Aftab: re-run `python scripts\backfill_epd.py 1 104` once more (cached PDFs, no downloads, ~10 min) to pick up the 2020-2022 rows.
+- [x] Final back-fill 13 Oct 19:00: **3,144 daily rows, 2020-2025** (B 934, B17 206, E 165, A 34, D 2; C 458 and 144 scanned skipped; 41 still unknown; 73 genuine 404s). Archive files 2020.csv-2025.csv committed.
 - [ ] Decide how to treat the gap 3 Dec 2025 - 12 Oct 2026 (no official per-station data; CAMS city-level or leave empty).
 - [ ] After ~1 day of hourly collection: `python scripts\w1_check.py` to settle the averaging window.
 - [ ] Aftab: create accounts — Groq, Google AI Studio, OpenAQ, CARTO, Streamlit Community Cloud — and put the keys in `K:\airlume\.env` (never in chat).
