@@ -1,0 +1,413 @@
+date,station_label,station_id,city,pollutant,conc,aqi,style,source
+2022-03-09,EPA HQ,,Lahore,pm25,59.0,134,B,epd_pdf
+2022-03-09,"Green Fort 2, Canal Bank Road,",,Lahore,pm25,79.0,157,B,epd_pdf
+2022-03-09,Town Hall,,Lahore,co,8.86,177,B,epd_pdf
+2022-03-10,EPA HQ,,Lahore,pm25,55.0,128,B,epd_pdf
+2022-03-10,Lahore University of,,Lahore,pm25,136.0,197,B,epd_pdf
+2022-03-10,Town Hall,,Lahore,co,7.2,144,B,epd_pdf
+2022-03-11,EPA HQ,,Lahore,pm25,55.0,128,B,epd_pdf
+2022-03-11,Lahore University of,,Lahore,pm25,67.0,145,B,epd_pdf
+2022-03-11,Town Hall,,Lahore,co,8.05,160,B,epd_pdf
+2022-03-12,EPA HQ,,Lahore,pm25,57.0,131,B,epd_pdf
+2022-03-12,Lahore University of,,Lahore,pm25,90.0,165,B,epd_pdf
+2022-03-12,Town Hall,,Lahore,co,7.5,151,B,epd_pdf
+2022-03-13,Lahore University of,,Lahore,pm25,98.0,170,B,epd_pdf
+2022-03-13,Town Hall,,Lahore,co,7.43,148,B,epd_pdf
+2022-03-14,Lahore University of,,Lahore,pm25,119.0,185,B,epd_pdf
+2022-03-15,Lahore University of,,Lahore,pm25,102.0,173,B,epd_pdf
+2022-03-15,Town Hall,,Lahore,co,9.63,193,B,epd_pdf
+2022-03-16,EPA HQ,,Lahore,pm25,119.0,185,B,epd_pdf
+2022-03-16,Lahore University of,,Lahore,pm25,114.0,181,B,epd_pdf
+2022-03-16,Town Hall,,Lahore,co,8.79,175,B,epd_pdf
+2022-03-17,EPA HQ,,Lahore,pm25,98.0,170,B,epd_pdf
+2022-03-17,Lahore University of,,Lahore,pm25,91.0,165,B,epd_pdf
+2022-03-17,Town Hall,,Lahore,co,5.46,108,B,epd_pdf
+2022-03-18,EPA HQ,,Lahore,pm25,83.0,159,B,epd_pdf
+2022-03-18,Lahore University of,,Lahore,pm25,120.0,185,B,epd_pdf
+2022-03-19,EPA HQ,,Lahore,pm25,129.0,192,B,epd_pdf
+2022-03-19,"Kot Lakhpat Industrial Area,",,Lahore,pm25,122.0,187,B,epd_pdf
+2022-03-19,Town Hall,,Lahore,co,6.2,123,B,epd_pdf
+2022-03-20,EPA HQ,,Lahore,pm25,101.0,172,B,epd_pdf
+2022-03-20,"Kot Lakhpat Industrial Area,",,Lahore,pm25,119.0,185,B,epd_pdf
+2022-03-20,Town Hall,,Lahore,co,9.69,194,B,epd_pdf
+2022-03-21,EPA HQ,,Lahore,pm25,89.0,163,B,epd_pdf
+2022-03-21,"Kot Lakhpat Industrial Area,",,Lahore,pm25,116.0,182,B,epd_pdf
+2022-03-22,"Kot Lakhpat Industrial Area,",,Lahore,pm25,129.0,192,B,epd_pdf
+2022-03-22,Town Hall,,Lahore,co,7.13,142,B,epd_pdf
+2022-03-23,Mouza Niaz Baig Lahore,,Lahore,pm25,79.0,157,B,epd_pdf
+2022-03-23,Town Hall,,Lahore,co,5.83,116,B,epd_pdf
+2022-03-23,University of Lahore Riawind,,Lahore,pm25,143.0,203,B,epd_pdf
+2022-03-24,Mouza Niaz Baig Lahore,,Lahore,pm25,93.0,167,B,epd_pdf
+2022-03-24,Town Hall,,Lahore,co,8.31,166,B,epd_pdf
+2022-03-24,University of Lahore Riawind,,Lahore,pm25,146.0,206,B,epd_pdf
+2022-03-25,Mouza Niaz Baig Lahore,,Lahore,pm25,135.0,196,B,epd_pdf
+2022-03-25,Town Hall,,Lahore,co,6.96,139,B,epd_pdf
+2022-03-25,University of Lahore Riawind,,Lahore,pm25,123.0,188,B,epd_pdf
+2022-03-26,Mouza Niaz Baig Lahore,,Lahore,pm25,65.0,142,B,epd_pdf
+2022-03-26,Town Hall,,Lahore,co,5.48,109,B,epd_pdf
+2022-03-26,University of Lahore Riawind,,Lahore,pm25,135.0,196,B,epd_pdf
+2022-03-27,Mouza Niaz Baig Lahore,,Lahore,pm25,62.0,138,B,epd_pdf
+2022-03-27,University of Lahore Riawind,,Lahore,pm25,93.0,167,B,epd_pdf
+2022-03-28,Mouza Niaz Baig Lahore,,Lahore,pm25,59.0,134,B,epd_pdf
+2022-03-29,Mouza Niaz Baig Lahore,,Lahore,pm25,81.0,158,B,epd_pdf
+2022-03-29,Town Hall,,Lahore,co,8.57,171,B,epd_pdf
+2022-03-29,University of Lahore Riawind,,Lahore,pm25,70.0,149,B,epd_pdf
+2022-03-30,Mouza Niaz Baig Lahore,,Lahore,pm25,62.0,138,B,epd_pdf
+2022-03-30,Town Hall,,Lahore,co,10.12,200,B,epd_pdf
+2022-03-30,University of Lahore Riawind,,Lahore,pm25,125.63,190,B,epd_pdf
+2022-03-31,Mouza Niaz Baig Lahore,,Lahore,pm25,91.0,165,B,epd_pdf
+2022-03-31,Town Hall,,Lahore,co,7.5,150,B,epd_pdf
+2022-03-31,University of Lahore Riawind,,Lahore,pm25,160.0,218,B,epd_pdf
+2022-04-01,Mouza Niaz Baig Lahore,,Lahore,pm25,65.0,142,B,epd_pdf
+2022-04-01,Town Hall,,Lahore,co,6.26,125,B,epd_pdf
+2022-04-01,University of Lahore Riawind,,Lahore,pm25,133.0,195,B,epd_pdf
+2022-04-02,Mouza Niaz Baig Lahore,,Lahore,pm25,72.0,152,B,epd_pdf
+2022-04-02,Town Hall,,Lahore,co,6.26,167,B,epd_pdf
+2022-04-02,University of Lahore Riawind,,Lahore,pm25,86.0,162,B,epd_pdf
+2022-04-03,Mouza Niaz Baig Lahore,,Lahore,pm25,81.0,158,B,epd_pdf
+2022-04-03,University of Lahore Riawind,,Lahore,pm25,144.0,204,B,epd_pdf
+2022-04-04,Mouza Niaz Baig Lahore,,Lahore,pm25,76.0,155,B,epd_pdf
+2022-04-04,Town Hall,,Lahore,co,5.57,111,B,epd_pdf
+2022-04-04,University of Lahore Riawind,,Lahore,pm25,87.0,163,B,epd_pdf
+2022-04-05,Mouza Niaz Baig Lahore,,Lahore,pm25,61.0,144,B,epd_pdf
+2022-04-05,Town Hall,,Lahore,co,8.27,165,B,epd_pdf
+2022-04-05,University of Lahore Riawind,,Lahore,pm25,117.0,183,B,epd_pdf
+2022-04-06,Mouza Niaz Baig Lahore,,Lahore,pm25,71.0,151,B,epd_pdf
+2022-04-06,Town Hall,,Lahore,co,9.94,199,B,epd_pdf
+2022-04-06,University of Lahore Riawind,,Lahore,pm25,129.0,192,B,epd_pdf
+2022-04-07,Mouza Niaz Baig Lahore,,Lahore,pm25,75.0,154,B,epd_pdf
+2022-04-07,Town Hall,,Lahore,co,12.21,215,B,epd_pdf
+2022-04-07,University of Lahore Riawind,,Lahore,pm25,138.5,199,B,epd_pdf
+2022-04-08,Mouza Niaz Baig Lahore,,Lahore,pm25,112.0,180,B,epd_pdf
+2022-04-08,Town Hall,,Lahore,co,10.21,201,B,epd_pdf
+2022-04-08,University of Lahore Riawind,,Lahore,pm25,142.78,203,B,epd_pdf
+2022-04-09,Mouza Niaz Baig Lahore,,Lahore,pm25,94.0,167,B,epd_pdf
+2022-04-09,Town Hall,,Lahore,co,10.17,201,B,epd_pdf
+2022-04-09,University of Lahore Riawind,,Lahore,pm25,162.0,220,B,epd_pdf
+2022-04-10,Mouza Niaz Baig Lahore,,Lahore,pm25,85.0,161,B,epd_pdf
+2022-04-10,Town Hall,,Lahore,co,8.71,174,B,epd_pdf
+2022-04-10,University of Lahore Riawind,,Lahore,pm25,152.69,212,B,epd_pdf
+2022-04-11,Mouza Niaz Baig Lahore,,Lahore,pm25,98.0,170,B,epd_pdf
+2022-04-11,Town Hall,,Lahore,co,8.52,170,B,epd_pdf
+2022-04-11,University of Lahore Riawind,,Lahore,pm25,123.91,188,B,epd_pdf
+2022-04-12,Mouza Niaz Baig Lahore,,Lahore,pm25,110.0,179,B,epd_pdf
+2022-04-12,Town Hall,,Lahore,co,12.09,214,B,epd_pdf
+2022-04-12,University of Lahore Riawind,,Lahore,pm25,141.45,202,B,epd_pdf
+2022-04-13,Mouza Niaz Baig Lahore,,Lahore,pm25,92.0,166,B,epd_pdf
+2022-04-13,University of Lahore Riawind,,Lahore,pm25,122.68,188,B,epd_pdf
+2022-04-14,Mouza Niaz Baig Lahore,,Lahore,pm25,60.0,135,B,epd_pdf
+2022-04-14,Pakistan Meteorological,,Lahore,pm25,93.0,167,B,epd_pdf
+2022-04-15,Mouza Niaz Baig Lahore,,Lahore,pm25,48.0,119,B,epd_pdf
+2022-04-15,Pakistan Meteorological,,Lahore,pm25,109.7,178,B,epd_pdf
+2022-04-16,EPA HQ,,Lahore,pm25,66.0,144,B,epd_pdf
+2022-04-16,Pakistan Meteorological,,Lahore,pm25,63.85,141,B,epd_pdf
+2022-04-17,EPA HQ,,Lahore,pm25,74.0,154,B,epd_pdf
+2022-04-17,Pakistan Meteorological,,Lahore,pm25,106.0,176,B,epd_pdf
+2022-04-18,EPA HQ,,Lahore,pm25,48.0,119,B,epd_pdf
+2022-04-18,Pakistan Meteorological,,Lahore,pm25,60.35,136,B,epd_pdf
+2022-04-19,EPA HQ,,Lahore,pm25,82.0,159,B,epd_pdf
+2022-04-19,Pakistan Meteorological,,Lahore,pm25,106.68,176,B,epd_pdf
+2022-04-20,EPA HQ,,Lahore,pm25,67.0,145,B,epd_pdf
+2022-04-20,Pakistan Meteorological,,Lahore,pm25,120.0,186,B,epd_pdf
+2022-04-21,EPA HQ,,Lahore,pm25,49.0,120,B,epd_pdf
+2022-04-21,Pakistan Meteorological,,Lahore,pm25,81.0,158,B,epd_pdf
+2022-04-22,EPA HQ,,Lahore,pm25,39.0,106,B,epd_pdf
+2022-04-22,Pakistan Meteorological,,Lahore,pm25,90.0,165,B,epd_pdf
+2022-04-23,EPA HQ,,Lahore,pm25,53.0,126,B,epd_pdf
+2022-04-23,Pakistan Meteorological,,Lahore,pm25,52.0,124,B,epd_pdf
+2022-04-24,EPA HQ,,Lahore,pm25,61.0,137,B,epd_pdf
+2022-04-24,Pakistan Meteorological,,Lahore,pm25,75.5,155,B,epd_pdf
+2022-04-25,EPA HQ,,Lahore,pm25,72.0,152,B,epd_pdf
+2022-04-25,Pakistan Meteorological,,Lahore,pm25,64.0,141,B,epd_pdf
+2022-04-26,EPA HQ,,Lahore,pm25,51.0,123,B,epd_pdf
+2022-04-26,Pakistan Meteorological,,Lahore,pm25,65.4,143,B,epd_pdf
+2022-04-27,EPA HQ,,Lahore,pm25,62.0,138,B,epd_pdf
+2022-04-27,Pakistan Meteorological,,Lahore,pm25,76.0,155,B,epd_pdf
+2022-04-28,EPA HQ,,Lahore,pm25,75.0,154,B,epd_pdf
+2022-04-28,Pakistan Meteorological,,Lahore,pm25,111.75,180,B,epd_pdf
+2022-04-29,EPA HQ,,Lahore,pm25,69.0,148,B,epd_pdf
+2022-04-29,Pakistan Meteorological,,Lahore,pm25,108.33,178,B,epd_pdf
+2022-04-30,EPA HQ,,Lahore,pm25,75.0,154,B,epd_pdf
+2022-04-30,Pakistan Meteorological,,Lahore,pm25,61.0,137,B,epd_pdf
+2022-05-01,EPA HQ,,Lahore,pm25,87.0,163,B,epd_pdf
+2022-05-01,Pakistan Meteorological,,Lahore,pm25,125.6,190,B,epd_pdf
+2022-05-02,EPA HQ,,Lahore,pm25,98.0,170,B,epd_pdf
+2022-05-02,Pakistan Meteorological,,Lahore,pm25,138.0,198,B,epd_pdf
+2022-05-03,EPA HQ,,Lahore,pm25,104.0,174,B,epd_pdf
+2022-05-03,Pakistan Meteorological,,Lahore,pm25,99.0,171,B,epd_pdf
+2022-05-03,Town Hall,,Lahore,co,5.44,108,B,epd_pdf
+2022-05-04,EPA HQ,,Lahore,pm25,97.0,170,B,epd_pdf
+2022-05-04,Pakistan Meteorological,,Lahore,pm25,107.78,177,B,epd_pdf
+2022-05-04,Town Hall,,Lahore,co,5.87,116,B,epd_pdf
+2022-05-05,EPA HQ,,Lahore,pm25,71.0,151,B,epd_pdf
+2022-05-05,Pakistan Meteorological,,Lahore,pm25,99.9,172,B,epd_pdf
+2022-05-05,Town Hall,,Lahore,co,5.51,109,B,epd_pdf
+2022-05-06,EPA HQ,,Lahore,pm25,79.0,157,B,epd_pdf
+2022-05-06,Pakistan Meteorological,,Lahore,pm25,49.77,121,B,epd_pdf
+2022-05-06,Town Hall,,Lahore,co,5.62,112,B,epd_pdf
+2022-05-07,EPA HQ,,Lahore,pm25,70.0,149,B,epd_pdf
+2022-05-07,Pakistan Meteorological,,Lahore,pm25,63.5,140,B,epd_pdf
+2022-05-07,Town Hall,,Lahore,co,5.71,113,B,epd_pdf
+2022-05-08,EPA HQ,,Lahore,pm25,82.0,160,B,epd_pdf
+2022-05-08,Pakistan Meteorological,,Lahore,pm25,94.0,167,B,epd_pdf
+2022-05-08,Town Hall,,Lahore,co,6.89,137,B,epd_pdf
+2022-05-09,EPA HQ,,Lahore,pm25,78.0,156,B,epd_pdf
+2022-05-09,Pakistan Meteorological,,Lahore,pm25,91.0,165,B,epd_pdf
+2022-05-09,Town Hall,,Lahore,co,7.66,152,B,epd_pdf
+2022-05-10,EPA HQ,,Lahore,pm25,80.0,158,B,epd_pdf
+2022-05-10,Pakistan Meteorological,,Lahore,pm25,96.0,168,B,epd_pdf
+2022-05-10,Town Hall,,Lahore,co,5.58,111,B,epd_pdf
+2022-05-11,EPA HQ,,Lahore,pm25,92.0,166,B,epd_pdf
+2022-05-11,Pakistan Meteorological,,Lahore,pm25,57.0,131,B,epd_pdf
+2022-05-12,EPA HQ,,Lahore,pm25,99.0,171,B,epd_pdf
+2022-05-12,"Faletti's Hotel, Lahore",,Lahore,pm25,76.0,154,B,epd_pdf
+2022-05-13,EPA HQ,,Lahore,pm25,78.0,156,B,epd_pdf
+2022-05-13,"Falletti’s Hotel, Lahore",,Lahore,pm25,89.0,164,B,epd_pdf
+2022-05-14,EPA HQ,,Lahore,pm25,72.0,152,B,epd_pdf
+2022-05-14,Pakistan Meteorological,,Lahore,pm25,81.0,158,B,epd_pdf
+2022-05-15,EPA HQ,,Lahore,pm25,67.0,145,B,epd_pdf
+2022-05-15,Pakistan Meteorological,,Lahore,pm25,94.0,167,B,epd_pdf
+2022-05-16,EPA HQ,,Lahore,pm25,65.0,142,B,epd_pdf
+2022-05-16,Pakistan Meteorological,,Lahore,pm25,94.0,114,B,epd_pdf
+2022-05-17,EPA HQ,,Lahore,pm25,72.0,152,B,epd_pdf
+2022-05-17,Pakistan Meteorological,,Lahore,pm25,119.0,185,B,epd_pdf
+2022-05-18,EPA HQ,,Lahore,pm25,55.0,128,B,epd_pdf
+2022-05-18,Pakistan Meteorological,,Lahore,pm25,66.0,144,B,epd_pdf
+2022-05-18,Town Hall,,Lahore,co,5.6,111,B,epd_pdf
+2022-05-19,EPA HQ,,Lahore,pm25,47.0,117,B,epd_pdf
+2022-05-19,Pakistan Meteorological,,Lahore,pm25,57.0,131,B,epd_pdf
+2022-05-19,Town Hall,,Lahore,co,10.98,207,B,epd_pdf
+2022-05-20,EPA HQ,,Lahore,pm25,71.0,151,B,epd_pdf
+2022-05-20,Pakistan Meteorological,,Lahore,pm25,118.0,184,B,epd_pdf
+2022-05-20,Town Hall,,Lahore,co,6.2,123,B,epd_pdf
+2022-05-21,EPA HQ,,Lahore,pm25,58.0,133,B,epd_pdf
+2022-05-21,Pakistan Meteorological,,Lahore,pm25,57.0,131,B,epd_pdf
+2022-05-21,Town Hall,,Lahore,co,5.39,107,B,epd_pdf
+2022-05-22,EPA HQ,,Lahore,pm25,51.0,123,B,epd_pdf
+2022-05-22,Pakistan Meteorological,,Lahore,pm25,83.0,159,B,epd_pdf
+2022-05-22,Town Hall,,Lahore,co,5.41,107,B,epd_pdf
+2022-05-23,EPA HQ,,Lahore,pm25,78.0,156,B,epd_pdf
+2022-05-23,Pakistan Meteorological,,Lahore,pm25,75.0,154,B,epd_pdf
+2022-05-23,Town Hall,,Lahore,co,5.69,113,B,epd_pdf
+2022-05-24,EPA HQ,,Lahore,pm25,41.0,109,B,epd_pdf
+2022-05-24,Pakistan Meteorological,,Lahore,pm25,29.0,85,B,epd_pdf
+2022-05-24,Town Hall,,Lahore,co,5.08,101,B,epd_pdf
+2022-05-25,EPA HQ,,Lahore,pm25,30.0,87,B,epd_pdf
+2022-05-25,Pakistan Meteorological,,Lahore,pm25,26.0,77,B,epd_pdf
+2022-05-25,Town Hall,,Lahore,co,4.98,100,B,epd_pdf
+2022-05-26,EPA HQ,,Lahore,pm25,45.0,114,B,epd_pdf
+2022-05-26,Pakistan Meteorological,,Lahore,pm25,61.0,137,B,epd_pdf
+2022-05-26,Town Hall,,Lahore,co,5.3,105,B,epd_pdf
+2022-05-27,EPA HQ,,Lahore,pm25,63.0,140,B,epd_pdf
+2022-05-27,Pakistan Meteorological,,Lahore,pm25,78.41,157,B,epd_pdf
+2022-05-27,Town Hall,,Lahore,co,7.13,143,B,epd_pdf
+2022-05-29,EPA HQ,,Lahore,pm25,62.0,138,B,epd_pdf
+2022-05-29,Pakistan Meteorological,,Lahore,pm25,80.0,158,B,epd_pdf
+2022-05-29,Town Hall,,Lahore,co,5.05,101,B,epd_pdf
+2022-05-30,EPA HQ,,Lahore,pm25,58.0,133,B,epd_pdf
+2022-05-30,Pakistan Meteorological,,Lahore,pm25,63.0,140,B,epd_pdf
+2022-05-30,Town Hall,,Lahore,co,5.15,102,B,epd_pdf
+2022-05-31,EPA HQ,,Lahore,pm25,50.0,121,B,epd_pdf
+2022-05-31,Pakistan Meteorological,,Lahore,pm25,62.0,145,B,epd_pdf
+2022-06-01,EPA HQ,,Lahore,pm25,61.0,137,B,epd_pdf
+2022-06-01,Pakistan Meteorological,,Lahore,pm25,91.0,165,B,epd_pdf
+2022-06-01,Town Hall,,Lahore,co,5.46,108,B,epd_pdf
+2022-06-02,EPA HQ,,Lahore,pm25,73.0,152,B,epd_pdf
+2022-06-02,Pakistan Meteorological,,Lahore,pm25,65.0,142,B,epd_pdf
+2022-06-02,Town Hall,,Lahore,co,5.46,108,B,epd_pdf
+2022-06-03,EPA HQ,,Lahore,pm25,53.0,126,B,epd_pdf
+2022-06-03,Pakistan Meteorological,,Lahore,pm25,75.0,154,B,epd_pdf
+2022-06-03,Town Hall,,Lahore,co,4.99,100,B,epd_pdf
+2022-06-04,EPA HQ,,Lahore,pm25,91.0,165,B,epd_pdf
+2022-06-04,Pakistan Meteorological,,Lahore,pm25,92.0,166,B,epd_pdf
+2022-06-04,Town Hall,,Lahore,co,6.67,132,B,epd_pdf
+2022-06-05,EPA HQ,,Lahore,pm25,83.0,159,B,epd_pdf
+2022-06-05,Pakistan Meteorological,,Lahore,pm25,92.0,166,B,epd_pdf
+2022-06-05,Town Hall,,Lahore,co,5.82,116,B,epd_pdf
+2022-06-06,EPA HQ,,Lahore,pm25,51.0,123,B,epd_pdf
+2022-06-06,Pakistan Meteorological,,Lahore,pm25,91.0,165,B,epd_pdf
+2022-06-06,Town Hall,,Lahore,co,6.54,130,B,epd_pdf
+2022-06-07,EPA HQ,,Lahore,pm25,55.0,128,B,epd_pdf
+2022-06-07,Pakistan Meteorological,,Lahore,pm25,82.0,159,B,epd_pdf
+2022-06-07,Town Hall,,Lahore,co,5.86,116,B,epd_pdf
+2022-06-08,EPA HQ,,Lahore,pm25,59.0,134,B,epd_pdf
+2022-06-08,Pakistan Meteorological,,Lahore,pm25,74.53,154,B,epd_pdf
+2022-06-08,Town Hall,,Lahore,co,5.19,103,B,epd_pdf
+2022-06-09,EPA HQ,,Lahore,pm25,61.0,137,B,epd_pdf
+2022-06-09,Pakistan Meteorological,,Lahore,pm25,76.0,155,B,epd_pdf
+2022-06-09,Town Hall,,Lahore,co,6.2,123,B,epd_pdf
+2022-06-10,EPA HQ,,Lahore,pm25,64.0,141,B,epd_pdf
+2022-06-10,Pakistan Meteorological,,Lahore,pm25,89.0,164,B,epd_pdf
+2022-06-10,Town Hall,,Lahore,co,8.71,173,B,epd_pdf
+2022-06-11,EPA HQ,,Lahore,pm25,58.0,132,B,epd_pdf
+2022-06-11,Pakistan Meteorological,,Lahore,pm25,92.0,166,B,epd_pdf
+2022-06-11,Town Hall,,Lahore,co,5.87,117,B,epd_pdf
+2022-06-12,EPA HQ,,Lahore,pm25,47.0,117,B,epd_pdf
+2022-06-12,Pakistan Meteorological,,Lahore,pm25,95.0,168,B,epd_pdf
+2022-06-12,Town Hall,,Lahore,co,5.06,101,B,epd_pdf
+2022-06-13,EPA HQ,,Lahore,pm25,45.0,114,B,epd_pdf
+2022-06-13,Pakistan Meteorological,,Lahore,pm25,81.0,158,B,epd_pdf
+2022-06-13,Town Hall,,Lahore,co,5.98,119,B,epd_pdf
+2022-06-14,EPA HQ,,Lahore,pm25,51.0,123,B,epd_pdf
+2022-06-14,Pakistan Meteorological,,Lahore,pm25,67.0,145,B,epd_pdf
+2022-06-14,Town Hall,,Lahore,co,5.11,101,B,epd_pdf
+2022-06-15,EPA HQ,,Lahore,pm25,49.0,120,B,epd_pdf
+2022-06-15,Pakistan Meteorological,,Lahore,pm25,78.0,156,B,epd_pdf
+2022-06-15,Town Hall,,Lahore,co,5.17,102,B,epd_pdf
+2022-06-16,EPA HQ,,Lahore,pm25,41.0,109,B,epd_pdf
+2022-06-16,Pakistan Meteorological,,Lahore,pm25,60.0,135,B,epd_pdf
+2022-06-16,Town Hall,,Lahore,co,5.5,109,B,epd_pdf
+2022-06-17,EPA HQ,,Lahore,pm25,47.0,117,B,epd_pdf
+2022-06-17,Pakistan Meteorological,,Lahore,pm25,62.0,138,B,epd_pdf
+2022-06-17,Town Hall,,Lahore,co,4.92,98,B,epd_pdf
+2022-06-18,EPA HQ,,Lahore,pm25,38.0,104,B,epd_pdf
+2022-06-18,Pakistan Meteorological,,Lahore,pm25,53.0,125,B,epd_pdf
+2022-06-18,Town Hall,,Lahore,co,5.24,103,B,epd_pdf
+2022-06-19,Daroghawala,,Lahore,pm25,80.0,157,B,epd_pdf
+2022-06-19,EPA HQ,,Lahore,pm25,32.0,92,B,epd_pdf
+2022-06-19,Town Hall,,Lahore,co,5.0,100,B,epd_pdf
+2022-06-20,Daroghawala,,Lahore,pm25,55.0,128,B,epd_pdf
+2022-06-20,EPA HQ,,Lahore,pm25,34.0,97,B,epd_pdf
+2022-06-20,Town Hall,,Lahore,co,5.18,102,B,epd_pdf
+2022-06-21,Daroghawala,,Lahore,pm25,77.0,155,B,epd_pdf
+2022-06-21,EPA HQ,,Lahore,pm25,51.0,122,B,epd_pdf
+2022-06-22,Daroghawala,,Lahore,pm25,46.0,115,B,epd_pdf
+2022-06-22,EPA HQ,,Lahore,pm25,50.0,121,B,epd_pdf
+2022-06-22,Town Hall,,Lahore,co,5.51,109,B,epd_pdf
+2022-06-23,Daroghawala,,Lahore,pm25,55.0,128,B,epd_pdf
+2022-06-23,EPA HQ,,Lahore,pm25,85.0,161,B,epd_pdf
+2022-06-23,Town Hall,,Lahore,co,5.7,113,B,epd_pdf
+2022-06-24,Daroghawala,,Lahore,pm25,129.0,192,B,epd_pdf
+2022-06-24,EPA HQ,,Lahore,pm25,56.0,130,B,epd_pdf
+2022-06-24,Town Hall,,Lahore,co,5.11,101,B,epd_pdf
+2022-06-25,Daroghawala,,Lahore,pm25,83.0,160,B,epd_pdf
+2022-06-25,EPA HQ,,Lahore,pm25,45.0,114,B,epd_pdf
+2022-06-25,Town Hall,,Lahore,co,6.32,126,B,epd_pdf
+2022-06-26,Daroghawala,,Lahore,pm25,110.0,179,B,epd_pdf
+2022-06-26,EPA HQ,,Lahore,pm25,61.0,137,B,epd_pdf
+2022-06-27,Daroghawala,,Lahore,pm25,108.0,177,B,epd_pdf
+2022-06-27,EPA HQ,,Lahore,pm25,78.0,156,B,epd_pdf
+2022-06-27,Town Hall,,Lahore,co,6.96,139,B,epd_pdf
+2022-06-28,Daroghawala,,Lahore,pm25,82.0,159,B,epd_pdf
+2022-06-28,EPA HQ,,Lahore,pm25,83.0,160,B,epd_pdf
+2022-06-28,Town Hall,,Lahore,co,5.6,111,B,epd_pdf
+2022-06-29,Daroghawala,,Lahore,pm25,87.0,162,B,epd_pdf
+2022-06-29,EPA HQ,,Lahore,pm25,85.0,161,B,epd_pdf
+2022-06-29,Town Hall,,Lahore,co,6.23,124,B,epd_pdf
+2022-06-30,Daroghawala,,Lahore,pm25,81.0,158,B,epd_pdf
+2022-06-30,EPA HQ,,Lahore,pm25,83.0,160,B,epd_pdf
+2022-06-30,Town Hall,,Lahore,co,5.76,114,B,epd_pdf
+2022-07-01,Daroghawala,,Lahore,pm25,35.0,99,B,epd_pdf
+2022-07-01,EPA HQ,,Lahore,pm25,75.0,154,B,epd_pdf
+2022-07-01,Town Hall,,Lahore,co,5.31,105,B,epd_pdf
+2022-07-02,Daroghawala,,Lahore,pm25,38.0,104,B,epd_pdf
+2022-07-02,EPA HQ,,Lahore,pm25,41.0,108,B,epd_pdf
+2022-07-02,Town Hall,,Lahore,co,5.46,108,B,epd_pdf
+2022-07-03,Daroghawala,,Lahore,pm25,63.0,140,B,epd_pdf
+2022-07-03,EPA HQ,,Lahore,pm25,62.0,138,B,epd_pdf
+2022-07-03,Town Hall,,Lahore,co,5.88,117,B,epd_pdf
+2022-07-04,Daroghawala,,Lahore,pm25,56.0,130,B,epd_pdf
+2022-07-04,EPA HQ,,Lahore,pm25,42.0,110,B,epd_pdf
+2022-07-04,Town Hall,,Lahore,co,5.72,113,B,epd_pdf
+2022-07-05,Daroghawala,,Lahore,pm25,68.0,147,B,epd_pdf
+2022-07-05,EPA HQ,,Lahore,pm25,55.0,128,B,epd_pdf
+2022-07-05,Town Hall,,Lahore,co,6.14,122,B,epd_pdf
+2022-07-06,EPA HQ,,Lahore,pm25,76.0,154,B,epd_pdf
+2022-07-06,Gajjumata,,Lahore,pm25,85.0,161,B,epd_pdf
+2022-07-06,Town Hall,,Lahore,co,5.39,108,B,epd_pdf
+2022-07-07,EPA HQ,,Lahore,pm25,57.0,131,B,epd_pdf
+2022-07-07,Gajjumata,,Lahore,pm25,79.0,162,B,epd_pdf
+2022-07-07,Town Hall,,Lahore,co,3.78,75,B,epd_pdf
+2022-07-08,EPA HQ,,Lahore,pm25,71.0,151,B,epd_pdf
+2022-07-08,Gajjumata,,Lahore,pm25,73.0,153,B,epd_pdf
+2022-07-08,Town Hall,,Lahore,co,3.91,78,B,epd_pdf
+2022-07-09,EPA HQ,,Lahore,pm25,84.0,158,B,epd_pdf
+2022-07-09,Gajjumata,,Lahore,pm25,76.0,154,B,epd_pdf
+2022-07-09,Town Hall,,Lahore,co,3.96,79,B,epd_pdf
+2022-07-10,EPA HQ,,Lahore,pm25,42.0,110,B,epd_pdf
+2022-07-10,Gajjumata,,Lahore,pm25,59.0,134,B,epd_pdf
+2022-07-10,Town Hall,,Lahore,co,4.06,80,B,epd_pdf
+2022-07-11,EPA HQ,,Lahore,pm25,58.0,132,B,epd_pdf
+2022-07-11,Gajjumata,,Lahore,pm25,35.0,100,B,epd_pdf
+2022-07-11,Town Hall,,Lahore,co,4.1,81,B,epd_pdf
+2022-07-12,EPA HQ,,Lahore,pm25,65.0,142,B,epd_pdf
+2022-07-12,Gajjumata,,Lahore,pm25,54.0,126,B,epd_pdf
+2022-07-12,Town Hall,,Lahore,co,4.09,81,B,epd_pdf
+2022-07-13,EPA HQ,,Lahore,pm25,66.0,143,B,epd_pdf
+2022-07-13,Gajjumata,,Lahore,pm25,73.0,152,B,epd_pdf
+2022-07-13,Town Hall,,Lahore,co,4.15,83,B,epd_pdf
+2022-07-14,EPA HQ,,Lahore,pm25,51.0,122,B,epd_pdf
+2022-07-14,Gajjumata,,Lahore,pm25,42.0,110,B,epd_pdf
+2022-07-14,Town Hall,,Lahore,co,4.12,82,B,epd_pdf
+2022-07-15,EPA HQ,,Lahore,pm25,40.0,107,B,epd_pdf
+2022-07-15,Gajjumata,,Lahore,pm25,45.0,114,B,epd_pdf
+2022-07-15,Town Hall,,Lahore,co,4.17,83,B,epd_pdf
+2022-07-16,EPA HQ,,Lahore,pm25,43.0,111,B,epd_pdf
+2022-07-16,Gajjumata,,Lahore,pm25,45.0,114,B,epd_pdf
+2022-07-16,Town Hall,,Lahore,co,4.13,82,B,epd_pdf
+2022-07-17,EPA HQ,,Lahore,pm25,35.0,100,B,epd_pdf
+2022-07-17,"Gujjumata, Farozpur",,Lahore,pm25,52.0,124,B,epd_pdf
+2022-07-17,Town Hall,,Lahore,co,4.13,82,B,epd_pdf
+2022-07-18,EPA HQ,,Lahore,pm25,38.0,25,B,epd_pdf
+2022-07-18,Lahore,,Lahore,pm25,17.0,11,B,epd_pdf
+2022-07-18,Town Hall,,Lahore,co,4.11,82,B,epd_pdf
+2022-07-19,EPA HQ,,Lahore,pm25,63.0,139,B,epd_pdf
+2022-07-19,Lahore,,Lahore,pm25,64.0,141,B,epd_pdf
+2022-07-19,Town Hall,,Lahore,co,4.12,82,B,epd_pdf
+2022-07-20,EPA HQ,,Lahore,pm25,69.0,148,B,epd_pdf
+2022-07-20,Lahore,,Lahore,pm25,47.0,117,B,epd_pdf
+2022-07-20,Town Hall,,Lahore,co,4.22,84,B,epd_pdf
+2022-07-21,EPA HQ,,Lahore,pm25,49.0,120,B,epd_pdf
+2022-07-21,Lahore,,Lahore,pm25,41.0,108,B,epd_pdf
+2022-07-21,Town Hall,,Lahore,co,4.29,86,B,epd_pdf
+2022-07-22,EPA HQ,,Lahore,pm25,29.0,84,B,epd_pdf
+2022-07-22,Lahore,,Lahore,pm25,35.0,100,B,epd_pdf
+2022-07-22,Town Hall,,Lahore,co,4.14,83,B,epd_pdf
+2022-07-23,EPA HQ,,Lahore,pm25,37.0,103,B,epd_pdf
+2022-07-23,Lahore,,Lahore,pm25,25.0,74,B,epd_pdf
+2022-07-23,Town Hall,,Lahore,co,4.26,84,B,epd_pdf
+2022-07-24,EPA HQ,,Lahore,pm25,52.0,124,B,epd_pdf
+2022-07-24,Lahore,,Lahore,pm25,51.0,122,B,epd_pdf
+2022-07-24,Town Hall,,Lahore,co,4.17,83,B,epd_pdf
+2022-07-25,EPA HQ,,Lahore,pm25,33.0,94,B,epd_pdf
+2022-07-25,Lahore,,Lahore,pm25,33.0,94,B,epd_pdf
+2022-07-25,Town Hall,,Lahore,co,4.15,82,B,epd_pdf
+2022-07-26,Lahore,,Lahore,pm25,32.0,92,B,epd_pdf
+2022-07-26,Town Hall,,Lahore,co,4.16,83,B,epd_pdf
+2022-07-27,Lahore,,Lahore,pm25,41.0,108,B,epd_pdf
+2022-07-27,Town Hall,,Lahore,co,4.15,82,B,epd_pdf
+2022-07-28,Town Hall,,Lahore,co,4.16,83,B,epd_pdf
+2022-07-29,Town Hall,,Lahore,co,4.07,80,B,epd_pdf
+2022-07-30,Town Hall,,Lahore,co,4.16,83,B,epd_pdf
+2022-07-31,Town Hall,,Lahore,co,4.25,85,B,epd_pdf
+2022-08-01,Town Hall,,Lahore,co,4.18,83,B,epd_pdf
+2022-08-02,"Green Fort 2, Lahore",,Lahore,pm25,81.0,158,B,epd_pdf
+2022-08-02,Town Hall,,Lahore,co,4.17,83,B,epd_pdf
+2022-08-03,"Green Fort 2, Lahore Respirable Particulate Matter",,Lahore,pm25,80.0,157,B,epd_pdf
+2022-08-03,Town Hall,,Lahore,co,4.27,85,B,epd_pdf
+2022-08-04,EPA HQs. Lahore,,Lahore,pm25,82.0,159,B,epd_pdf
+2022-08-05,Town Hall,,Lahore,co,4.35,86,B,epd_pdf
+2022-08-06,Town Hall,,Lahore,co,4.3,85,B,epd_pdf
+2022-08-07,Town Hall,,Lahore,co,4.1,81,B,epd_pdf
+2022-08-08,Town Hall,,Lahore,co,4.3,86,B,epd_pdf
+2022-08-09,Town Hall,,Lahore,co,4.4,87,B,epd_pdf
+2022-08-10,Town Hall,,Lahore,co,4.54,90,B,epd_pdf
+2022-08-11,Town Hall,,Lahore,co,4.39,87,B,epd_pdf
+2022-08-12,Town Hall,,Lahore,co,4.07,81,B,epd_pdf
+2022-08-13,Town Hall,,Lahore,co,4.23,84,B,epd_pdf
+2022-08-14,Town Hall,,Lahore,co,4.24,84,B,epd_pdf
+2022-08-15,Town Hall,,Lahore,co,4.23,84,B,epd_pdf
+2022-08-16,Town Hall,,Lahore,co,4.24,85,B,epd_pdf
+2022-08-17,Town Hall,,Lahore,co,4.23,84,B,epd_pdf
+2022-08-18,Town Hall,,Lahore,co,4.24,84,B,epd_pdf
+2022-08-31,Town Hall,,Lahore,co,4.22,84,B,epd_pdf
+2022-09-06,Town Hall,,Lahore,co,4.18,83,B,epd_pdf
+2022-09-07,Town Hall,,Lahore,co,4.23,84,B,epd_pdf
+2022-09-08,Town Hall,,Lahore,co,4.23,84,B,epd_pdf
+2022-09-09,Town Hall,,Lahore,co,4.23,84,B,epd_pdf
+2022-09-10,Town Hall,,Lahore,co,4.21,83,B,epd_pdf
+2022-09-11,Town Hall,,Lahore,co,4.22,84,B,epd_pdf
+2022-09-12,Town Hall,,Lahore,co,4.23,84,B,epd_pdf
+2022-09-13,Town Hall,,Lahore,co,4.22,84,B,epd_pdf
+2022-09-14,Town Hall,,Lahore,co,5.56,110,B,epd_pdf
+2022-09-15,Town Hall,,Lahore,co,5.56,110,B,epd_pdf

@@ -1,0 +1,627 @@
+date,station_label,station_id,city,pollutant,conc,aqi,style,source
+2024-01-01,EPA HQ,,Lahore,pm25,180.0,237,B,epd_pdf
+2024-01-01,PU 1,LHR-PU,Lahore,pm25,175.0,232,B,epd_pdf
+2024-01-01,Rawalpindi Particulate matter,,Rawalpindi,pm10,270.0,160,B,epd_pdf
+2024-01-01,"bypass Road, Sheikhupura Particulate matter",,Lahore,pm10,306.0,178,B,epd_pdf
+2024-01-02,EPA HQ,,Lahore,pm25,197.0,252,B,epd_pdf
+2024-01-02,PU 1,LHR-PU,Lahore,pm25,176.0,233,B,epd_pdf
+2024-01-02,Particulate matter,,Lahore,pm10,267.0,159,B,epd_pdf
+2024-01-02,Town Hall,,Lahore,pm25,191.0,247,B,epd_pdf
+2024-01-03,EPA HQ,,Lahore,pm25,257.0,308,B,epd_pdf
+2024-01-03,PU 1,LHR-PU,Lahore,pm25,249.0,299,B,epd_pdf
+2024-01-03,Particulate matter,,Lahore,pm10,304.0,177,B,epd_pdf
+2024-01-03,Town Hall,,Lahore,pm25,240.0,291,B,epd_pdf
+2024-01-04,EPA HQ,,Lahore,pm25,176.0,233,B,epd_pdf
+2024-01-04,PU 1,LHR-PU,Lahore,pm25,156.0,215,B,epd_pdf
+2024-01-04,Particulate matter,,Lahore,pm10,240.0,145,B,epd_pdf
+2024-01-04,Town Hall,,Lahore,pm25,185.0,241,B,epd_pdf
+2024-01-13,EPA HQ,,Lahore,pm25,199.0,254,B,epd_pdf
+2024-01-13,PU 1,LHR-PU,Lahore,pm25,144.0,205,B,epd_pdf
+2024-01-13,Particulate matter,,Lahore,pm10,200.0,125,B,epd_pdf
+2024-01-13,Town Hall,,Lahore,pm25,201.0,256,B,epd_pdf
+2024-01-14,EPA HQ,,Lahore,pm25,238.0,289,B,epd_pdf
+2024-01-14,PU 1,LHR-PU,Lahore,pm25,206.0,260,B,epd_pdf
+2024-01-14,Particulate matter,,Lahore,pm10,216.0,133,B,epd_pdf
+2024-01-14,Town Hall,,Lahore,pm25,247.0,297,B,epd_pdf
+2024-01-15,EPA HQ,,Lahore,pm25,213.0,267,B,epd_pdf
+2024-01-15,PU 1,LHR-PU,Lahore,pm25,142.0,203,B,epd_pdf
+2024-01-15,Particulate matter,,Lahore,pm10,236.0,143,B,epd_pdf
+2024-01-15,Town Hall,,Lahore,pm25,204.0,259,B,epd_pdf
+2024-01-16,EPA HQ,,Lahore,pm25,210.0,264,B,epd_pdf
+2024-01-16,PU 1,LHR-PU,Lahore,pm25,158.0,217,B,epd_pdf
+2024-01-16,Particulate matter,,Lahore,pm10,192.0,121,B,epd_pdf
+2024-01-16,Town Hall,,Lahore,pm25,222.0,275,B,epd_pdf
+2024-01-17,EPA HQ,,Lahore,pm25,231.0,283,B,epd_pdf
+2024-01-17,PU 1,LHR-PU,Lahore,pm25,196.0,251,B,epd_pdf
+2024-01-17,Particulate matter,,Lahore,pm10,205.0,128,B,epd_pdf
+2024-01-17,Town Hall,,Lahore,pm25,228.0,280,B,epd_pdf
+2024-01-18,EPA HQ,,Lahore,pm25,267.0,318,B,epd_pdf
+2024-01-18,PU 1,LHR-PU,Lahore,pm25,183.0,240,B,epd_pdf
+2024-01-18,Particulate matter,,Lahore,pm10,216.0,133,B,epd_pdf
+2024-01-18,Town Hall,,Lahore,pm25,292.0,342,B,epd_pdf
+2024-01-19,EPA HQ,,Lahore,pm25,220.0,273,B,epd_pdf
+2024-01-19,PU 1,LHR-PU,Lahore,pm25,137.0,198,B,epd_pdf
+2024-01-19,Particulate matter,,Lahore,pm10,214.0,132,B,epd_pdf
+2024-01-19,Town Hall,,Lahore,pm25,222.0,275,B,epd_pdf
+2024-01-21,EPA HQ,,Lahore,pm25,190.0,246,B,epd_pdf
+2024-01-21,PU 1,LHR-PU,Lahore,pm25,175.0,232,B,epd_pdf
+2024-01-21,Particulate matter,,Lahore,pm10,196.0,123,B,epd_pdf
+2024-01-21,Town Hall,,Lahore,pm25,189.0,245,B,epd_pdf
+2024-01-23,EPA HQ,,Lahore,pm25,188.0,244,B,epd_pdf
+2024-01-23,PU 1,LHR-PU,Lahore,pm25,164.0,223,B,epd_pdf
+2024-01-23,Particulate matter,,Lahore,pm10,200.0,125,B,epd_pdf
+2024-01-23,Town Hall,,Lahore,pm25,154.0,214,B,epd_pdf
+2024-01-24,EPA HQ,,Lahore,pm25,186.0,242,B,epd_pdf
+2024-01-24,PU 1,LHR-PU,Lahore,pm25,161.0,220,B,epd_pdf
+2024-01-24,Particulate matter,,Lahore,pm10,269.0,160,B,epd_pdf
+2024-01-24,Town Hall,,Lahore,pm25,170.0,228,B,epd_pdf
+2024-01-25,EPA HQ,,Lahore,pm25,240.0,291,B,epd_pdf
+2024-01-25,PU 1,LHR-PU,Lahore,pm25,133.0,195,B,epd_pdf
+2024-01-25,Particulate matter,,Lahore,pm10,210.0,130,B,epd_pdf
+2024-01-25,Town Hall,,Lahore,pm25,213.0,267,B,epd_pdf
+2024-01-26,EPA HQ,,Lahore,pm25,215.0,268,B,epd_pdf
+2024-01-26,PU 1,LHR-PU,Lahore,pm25,201.0,256,B,epd_pdf
+2024-01-26,Particulate matter,,Lahore,pm10,400.0,250,B,epd_pdf
+2024-01-26,Town Hall,,Lahore,pm25,208.0,262,B,epd_pdf
+2024-01-27,EPA HQ,,Lahore,pm25,185.0,241,B,epd_pdf
+2024-01-27,PU 1,LHR-PU,Lahore,pm25,151.0,211,B,epd_pdf
+2024-01-27,Particulate matter,,Lahore,pm10,181.0,116,B,epd_pdf
+2024-01-27,Town Hall,,Lahore,pm25,173.0,231,B,epd_pdf
+2024-01-28,EPA HQ,,Lahore,pm25,176.0,233,B,epd_pdf
+2024-01-28,PU 1,LHR-PU,Lahore,pm25,136.0,197,B,epd_pdf
+2024-01-28,Particulate matter,,Lahore,pm10,184.0,117,B,epd_pdf
+2024-01-28,Town Hall,,Lahore,pm25,195.0,250,B,epd_pdf
+2024-01-29,EPA HQ,,Lahore,pm25,189.0,245,B,epd_pdf
+2024-01-29,PU 1,LHR-PU,Lahore,pm25,154.0,214,B,epd_pdf
+2024-01-29,Particulate matter,,Lahore,pm10,177.0,114,B,epd_pdf
+2024-01-29,Town Hall,,Lahore,pm25,182.0,239,B,epd_pdf
+2024-01-30,EPA HQ,,Lahore,pm25,184.0,241,B,epd_pdf
+2024-01-30,PU 1,LHR-PU,Lahore,pm25,166.0,224,B,epd_pdf
+2024-01-30,Particulate matter,,Lahore,pm10,194.0,122,B,epd_pdf
+2024-01-30,Town Hall,,Lahore,pm25,190.0,246,B,epd_pdf
+2024-02-01,EPA HQ,,Lahore,pm25,136.0,197,B,epd_pdf
+2024-02-01,PU 1,LHR-PU,Lahore,pm25,107.0,177,B,epd_pdf
+2024-02-01,Particulate matter,,Lahore,pm10,185.0,118,B,epd_pdf
+2024-02-01,Town Hall,,Lahore,pm25,116.0,183,B,epd_pdf
+2024-02-03,EPA HQ,,Lahore,pm25,49.0,120,B,epd_pdf
+2024-02-03,PU 1,LHR-PU,Lahore,pm25,38.0,105,B,epd_pdf
+2024-02-03,Particulate matter,,Lahore,pm10,163.0,107,B,epd_pdf
+2024-02-03,Town Hall,,Lahore,pm25,55.0,129,B,epd_pdf
+2024-02-04,EPA HQ,,Lahore,pm25,80.0,158,B,epd_pdf
+2024-02-04,PU 1,LHR-PU,Lahore,pm25,60.0,136,B,epd_pdf
+2024-02-04,Particulate matter,,Lahore,pm10,166.0,108,B,epd_pdf
+2024-02-04,Town Hall,,Lahore,pm25,63.0,140,B,epd_pdf
+2024-02-05,EPA HQ,,Lahore,pm25,81.0,159,B,epd_pdf
+2024-02-05,PU 1,LHR-PU,Lahore,pm25,61.0,137,B,epd_pdf
+2024-02-05,Particulate matter,,Lahore,pm10,184.0,117,B,epd_pdf
+2024-02-05,Town Hall,,Lahore,pm25,66.0,144,B,epd_pdf
+2024-02-06,EPA HQ,,Lahore,pm25,142.0,203,B,epd_pdf
+2024-02-06,PU 1,LHR-PU,Lahore,pm25,99.0,171,B,epd_pdf
+2024-02-06,Particulate matter,,Lahore,pm10,179.0,115,B,epd_pdf
+2024-02-06,Town Hall,,Lahore,pm25,94.0,168,B,epd_pdf
+2024-02-08,EPA HQ,,Lahore,pm25,115.0,182,B,epd_pdf
+2024-02-08,PU 1,LHR-PU,Lahore,pm25,93.0,167,B,epd_pdf
+2024-02-08,Particulate matter,,Lahore,pm10,184.0,117,B,epd_pdf
+2024-02-08,Town Hall,,Lahore,pm25,116.0,183,B,epd_pdf
+2024-02-10,EPA HQ,,Lahore,pm25,74.0,154,B,epd_pdf
+2024-02-10,PU 1,LHR-PU,Lahore,pm25,67.0,146,B,epd_pdf
+2024-02-10,Particulate matter,,Lahore,pm10,187.0,119,B,epd_pdf
+2024-02-10,Town Hall,,Lahore,pm25,72.0,152,B,epd_pdf
+2024-02-12,EPA HQ,,Lahore,pm25,185.0,241,B,epd_pdf
+2024-02-12,PU 1,LHR-PU,Lahore,pm25,154.0,214,B,epd_pdf
+2024-02-12,Rawalpindi Shalley Valley,,Rawalpindi,pm10,218.0,134,B,epd_pdf
+2024-02-13,EPA HQ,,Lahore,pm25,250.0,300,B,epd_pdf
+2024-02-13,PU 1,LHR-PU,Lahore,pm25,214.0,268,B,epd_pdf
+2024-02-13,Rawalpindi Shalley Valley,,Rawalpindi,pm10,164.0,107,B,epd_pdf
+2024-02-13,Town Hall,,Lahore,pm25,261.0,312,B,epd_pdf
+2024-02-14,EPA HQ,,Lahore,pm25,228.0,280,B,epd_pdf
+2024-02-14,PU 1,LHR-PU,Lahore,pm25,176.0,233,B,epd_pdf
+2024-02-14,Rawalpindi Shalley Valley,,Rawalpindi,pm10,210.0,131,B,epd_pdf
+2024-02-14,Town Hall,,Lahore,pm25,214.0,268,B,epd_pdf
+2024-02-15,EPA HQ,,Lahore,pm25,177.0,234,B,epd_pdf
+2024-02-15,PU 1,LHR-PU,Lahore,pm25,134.0,196,B,epd_pdf
+2024-02-15,Rawalpindi Shalley Valley,,Rawalpindi,pm10,219.0,135,B,epd_pdf
+2024-02-15,Town Hall,,Lahore,pm25,169.0,227,B,epd_pdf
+2024-02-17,EPA HQ,,Lahore,pm25,190.0,246,B,epd_pdf
+2024-02-17,PU 1,LHR-PU,Lahore,pm25,150.0,210,B,epd_pdf
+2024-02-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,266.0,158,B,epd_pdf
+2024-02-18,EPA HQ,,Lahore,pm25,157.0,216,B,epd_pdf
+2024-02-18,PU 1,LHR-PU,Lahore,pm25,133.0,195,B,epd_pdf
+2024-02-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,253.0,152,B,epd_pdf
+2024-02-19,EPA HQ,,Lahore,pm25,124.0,189,B,epd_pdf
+2024-02-19,PU 1,LHR-PU,Lahore,pm25,108.0,178,B,epd_pdf
+2024-02-19,Rawalpindi Shalley Valley,,Rawalpindi,pm10,238.0,144,B,epd_pdf
+2024-02-21,EPA HQ,,Lahore,pm25,99.0,171,B,epd_pdf
+2024-02-21,PU 1,LHR-PU,Lahore,pm25,89.0,164,B,epd_pdf
+2024-02-21,Rawalpindi Shalley Valley,,Rawalpindi,pm10,133.0,89,B,epd_pdf
+2024-02-21,Town Hall,,Lahore,pm25,110.0,179,B,epd_pdf
+2024-02-22,EPA HQ,,Lahore,pm25,97.0,170,B,epd_pdf
+2024-02-22,PU 1,LHR-PU,Lahore,pm25,100.0,172,B,epd_pdf
+2024-02-22,Rawalpindi Shalley Valley,,Rawalpindi,pm10,136.0,91,B,epd_pdf
+2024-02-22,Town Hall,,Lahore,pm25,107.0,177,B,epd_pdf
+2024-02-23,EPA HQ,,Lahore,pm25,64.0,141,B,epd_pdf
+2024-02-23,PU 1,LHR-PU,Lahore,pm25,51.0,123,B,epd_pdf
+2024-02-23,Rawalpindi Shalley Valley,,Rawalpindi,pm10,153.0,103,B,epd_pdf
+2024-02-23,Town Hall,,Lahore,pm25,77.0,156,B,epd_pdf
+2024-02-24,EPA HQ,,Lahore,pm25,50.0,122,B,epd_pdf
+2024-02-24,PU 1,LHR-PU,Lahore,pm25,48.0,119,B,epd_pdf
+2024-02-24,Rawalpindi Shalley Valley,,Rawalpindi,pm10,140.0,93,B,epd_pdf
+2024-02-24,Town Hall,,Lahore,pm25,67.0,146,B,epd_pdf
+2024-02-25,EPA HQ,,Lahore,pm25,61.0,137,B,epd_pdf
+2024-02-25,PU 1,LHR-PU,Lahore,pm25,54.0,127,B,epd_pdf
+2024-02-25,Rawalpindi Shalley Valley,,Rawalpindi,pm10,168.0,109,B,epd_pdf
+2024-02-25,Town Hall,,Lahore,pm25,55.0,129,B,epd_pdf
+2024-02-26,PU 1,LHR-PU,Lahore,pm25,57.0,132,B,epd_pdf
+2024-02-26,Rawalpindi Shalley Valley,,Rawalpindi,pm10,147.0,98,B,epd_pdf
+2024-02-26,Town Hall,,Lahore,pm25,86.0,162,B,epd_pdf
+2024-02-27,EPA HQ,,Lahore,pm25,111.0,180,B,epd_pdf
+2024-02-27,PU 1,LHR-PU,Lahore,pm25,97.0,170,B,epd_pdf
+2024-02-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,176.0,113,B,epd_pdf
+2024-02-27,Town Hall,,Lahore,pm25,113.0,181,B,epd_pdf
+2024-02-28,EPA HQ,,Lahore,pm25,50.0,122,B,epd_pdf
+2024-02-28,PU 1,LHR-PU,Lahore,pm25,43.0,112,B,epd_pdf
+2024-02-28,Rawalpindi Shalley Valley,,Rawalpindi,pm10,120.0,80,B,epd_pdf
+2024-02-28,Town Hall,,Lahore,pm25,58.0,133,B,epd_pdf
+2024-02-29,EPA HQ,,Lahore,pm25,77.0,156,B,epd_pdf
+2024-02-29,PU 1,LHR-PU,Lahore,pm25,64.0,141,B,epd_pdf
+2024-02-29,Rawalpindi Shalley Valley,,Rawalpindi,pm10,168.0,109,B,epd_pdf
+2024-02-29,Town Hall,,Lahore,pm25,99.0,171,B,epd_pdf
+2024-03-03,EPA HQ,,Lahore,pm25,36.0,102,B,epd_pdf
+2024-03-03,PU 1,LHR-PU,Lahore,pm25,47.0,118,B,epd_pdf
+2024-03-03,Rawalpindi Shalley Valley,,Rawalpindi,pm10,83.0,56,B,epd_pdf
+2024-03-03,Town Hall,,Lahore,pm25,55.0,129,B,epd_pdf
+2024-03-06,EPA HQ,,Lahore,pm25,75.0,154,B,epd_pdf
+2024-03-06,PU 1,LHR-PU,Lahore,pm25,69.0,148,B,epd_pdf
+2024-03-06,Rawalpindi Shalley Valley,,Rawalpindi,pm10,112.0,75,B,epd_pdf
+2024-03-06,Town Hall,,Lahore,pm25,102.0,173,B,epd_pdf
+2024-03-07,EPA HQ,,Lahore,pm25,58.0,133,B,epd_pdf
+2024-03-07,PU 1,LHR-PU,Lahore,pm25,57.0,132,B,epd_pdf
+2024-03-07,Rawalpindi Shalley Valley,,Rawalpindi,pm10,185.0,118,B,epd_pdf
+2024-03-07,Town Hall,,Lahore,pm25,79.0,157,B,epd_pdf
+2024-03-27,EPA HQ,,Lahore,pm25,100.0,172,B,epd_pdf
+2024-03-27,PU 1,LHR-PU,Lahore,pm25,87.0,163,B,epd_pdf
+2024-03-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,145.0,97,B,epd_pdf
+2024-03-27,Town Hall,,Lahore,pm25,92.0,166,B,epd_pdf
+2024-03-28,EPA HQ,,Lahore,pm25,68.0,147,B,epd_pdf
+2024-03-28,PU 1,LHR-PU,Lahore,pm25,72.0,152,B,epd_pdf
+2024-03-28,Rawalpindi Shalley Valley,,Rawalpindi,pm10,179.0,115,B,epd_pdf
+2024-03-28,Town Hall,,Lahore,pm25,113.0,181,B,epd_pdf
+2024-03-29,EPA HQ,,Lahore,pm25,46.0,116,B,epd_pdf
+2024-03-29,PU 1,LHR-PU,Lahore,pm25,43.0,112,B,epd_pdf
+2024-03-29,Rawalpindi Shalley Valley,,Rawalpindi,pm10,128.0,85,B,epd_pdf
+2024-03-29,Town Hall,,Lahore,pm25,38.0,105,B,epd_pdf
+2024-03-30,EPA HQ,,Lahore,pm25,25.0,75,B,epd_pdf
+2024-03-30,PU 1,LHR-PU,Lahore,pm25,30.0,88,B,epd_pdf
+2024-03-30,Rawalpindi Shalley Valley,,Rawalpindi,pm10,113.0,76,B,epd_pdf
+2024-03-30,Town Hall,,Lahore,pm25,52.0,125,B,epd_pdf
+2024-03-31,EPA HQ,,Lahore,pm25,16.0,53,B,epd_pdf
+2024-03-31,PU 1,LHR-PU,Lahore,pm25,13.0,43,B,epd_pdf
+2024-03-31,Rawalpindi Shalley Valley,,Rawalpindi,pm10,79.0,53,B,epd_pdf
+2024-03-31,Town Hall,,Lahore,pm25,39.0,106,B,epd_pdf
+2024-04-01,EPA HQ,,Lahore,pm25,22.0,68,B,epd_pdf
+2024-04-01,PU 1,LHR-PU,Lahore,pm25,19.0,61,B,epd_pdf
+2024-04-01,Rawalpindi Shalley Valley,,Rawalpindi,pm10,67.0,45,B,epd_pdf
+2024-04-01,Town Hall,,Lahore,pm25,35.0,100,B,epd_pdf
+2024-04-02,EPA HQ,,Lahore,pm25,38.0,105,B,epd_pdf
+2024-04-02,PU 1,LHR-PU,Lahore,pm25,36.0,102,B,epd_pdf
+2024-04-02,Town Hall,,Lahore,pm25,38.0,105,B,epd_pdf
+2024-04-03,EPA HQ,,Lahore,pm25,62.0,139,B,epd_pdf
+2024-04-03,PU 1,LHR-PU,Lahore,pm25,56.0,130,B,epd_pdf
+2024-04-03,Rawalpindi Shalley Valley,,Rawalpindi,pm10,147.0,98,B,epd_pdf
+2024-04-03,Town Hall,,Lahore,pm25,70.0,150,B,epd_pdf
+2024-04-04,EPA HQ,,Lahore,pm25,39.0,106,B,epd_pdf
+2024-04-04,PU 1,LHR-PU,Lahore,pm25,36.0,102,B,epd_pdf
+2024-04-04,Rawalpindi Shalley Valley,,Rawalpindi,pm10,171.0,111,B,epd_pdf
+2024-04-04,Town Hall,,Lahore,pm25,49.0,120,B,epd_pdf
+2024-04-05,EPA HQ,,Lahore,pm25,44.0,113,B,epd_pdf
+2024-04-05,PU 1,LHR-PU,Lahore,pm25,46.0,116,B,epd_pdf
+2024-04-05,Rawalpindi Shalley Valley,,Rawalpindi,pm10,157.0,104,B,epd_pdf
+2024-04-05,Town Hall,,Lahore,pm25,28.0,83,B,epd_pdf
+2024-04-06,EPA HQ,,Lahore,pm25,57.0,132,B,epd_pdf
+2024-04-06,PU 1,LHR-PU,Lahore,pm25,50.0,122,B,epd_pdf
+2024-04-06,Rawalpindi Shalley Valley,,Rawalpindi,pm10,168.0,109,B,epd_pdf
+2024-04-06,Town Hall,,Lahore,pm25,47.0,118,B,epd_pdf
+2024-04-07,EPA HQ,,Lahore,pm25,59.0,134,B,epd_pdf
+2024-04-07,PU 1,LHR-PU,Lahore,pm25,58.0,133,B,epd_pdf
+2024-04-07,Rawalpindi Shalley Valley,,Rawalpindi,pm10,176.0,113,B,epd_pdf
+2024-04-07,Town Hall,,Lahore,pm25,66.0,144,B,epd_pdf
+2024-04-08,EPA HQ,,Lahore,pm25,44.0,113,B,epd_pdf
+2024-04-08,PU 1,LHR-PU,Lahore,pm25,53.0,126,B,epd_pdf
+2024-04-08,Rawalpindi Shalley Valley,,Rawalpindi,pm10,163.0,107,B,epd_pdf
+2024-04-08,Town Hall,,Lahore,pm25,54.0,127,B,epd_pdf
+2024-04-09,EPA HQ,,Lahore,pm25,47.0,118,B,epd_pdf
+2024-04-09,PU 1,LHR-PU,Lahore,pm25,50.0,122,B,epd_pdf
+2024-04-09,Rawalpindi Shalley Valley,,Rawalpindi,pm10,160.0,105,B,epd_pdf
+2024-04-09,Town Hall,,Lahore,pm25,61.0,137,B,epd_pdf
+2024-04-10,EPA HQ,,Lahore,pm25,59.0,134,B,epd_pdf
+2024-04-10,PU 1,LHR-PU,Lahore,pm25,66.0,144,B,epd_pdf
+2024-04-10,Rawalpindi Shalley Valley,,Rawalpindi,pm10,147.0,98,B,epd_pdf
+2024-04-10,Town Hall,,Lahore,pm25,76.0,155,B,epd_pdf
+2024-04-11,PU 1,LHR-PU,Lahore,pm25,80.0,158,B,epd_pdf
+2024-04-11,Town Hall,,Lahore,pm25,84.0,161,B,epd_pdf
+2024-04-12,EPA HQ,,Lahore,pm25,10.0,33,B,epd_pdf
+2024-04-12,PU 1,LHR-PU,Lahore,pm25,13.0,43,B,epd_pdf
+2024-04-12,Town Hall,,Lahore,pm25,16.0,53,B,epd_pdf
+2024-04-13,EPA HQ,,Lahore,pm25,18.0,58,B,epd_pdf
+2024-04-13,PU 1,LHR-PU,Lahore,pm25,19.0,61,B,epd_pdf
+2024-04-13,Town Hall,,Lahore,pm25,19.0,61,B,epd_pdf
+2024-04-14,EPA HQ,,Lahore,pm25,30.0,88,B,epd_pdf
+2024-04-14,PU 1,LHR-PU,Lahore,pm25,28.0,33,B,epd_pdf
+2024-04-14,Town Hall,,Lahore,pm25,34.0,97,B,epd_pdf
+2024-04-15,EPA HQ,,Lahore,pm25,29.0,85,B,epd_pdf
+2024-04-15,PU 1,LHR-PU,Lahore,pm25,29.0,85,B,epd_pdf
+2024-04-15,Town Hall,,Lahore,pm25,39.0,106,B,epd_pdf
+2024-04-16,EPA HQ,,Lahore,pm25,39.0,106,B,epd_pdf
+2024-04-16,PU 1,LHR-PU,Lahore,pm25,31.0,90,B,epd_pdf
+2024-04-16,Town Hall,,Lahore,pm25,48.0,119,B,epd_pdf
+2024-04-17,EPA HQ,,Lahore,pm25,24.0,73,B,epd_pdf
+2024-04-17,PU 1,LHR-PU,Lahore,pm25,21.0,65,B,epd_pdf
+2024-04-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,74.0,49,B,epd_pdf
+2024-04-17,Town Hall,,Lahore,pm25,34.0,97,B,epd_pdf
+2024-04-18,EPA HQ,,Lahore,pm25,37.0,104,B,epd_pdf
+2024-04-18,PU 1,LHR-PU,Lahore,pm25,36.0,102,B,epd_pdf
+2024-04-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,162.0,106,B,epd_pdf
+2024-04-18,Town Hall,,Lahore,pm25,47.0,118,B,epd_pdf
+2024-04-19,EPA HQ,,Lahore,pm25,52.0,125,B,epd_pdf
+2024-04-19,PU 1,LHR-PU,Lahore,pm25,47.0,118,B,epd_pdf
+2024-04-19,Rawalpindi Shalley Valley,,Rawalpindi,pm10,103.0,69,B,epd_pdf
+2024-04-19,Town Hall,,Lahore,pm25,53.0,126,B,epd_pdf
+2024-04-20,EPA HQ,,Lahore,pm25,31.0,90,B,epd_pdf
+2024-04-20,PU 1,LHR-PU,Lahore,pm25,36.0,102,B,epd_pdf
+2024-04-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,69.0,46,B,epd_pdf
+2024-04-20,Town Hall,,Lahore,pm25,30.0,88,B,epd_pdf
+2024-04-21,EPA HQ,,Lahore,pm25,28.0,83,B,epd_pdf
+2024-04-21,PU 1,LHR-PU,Lahore,pm25,28.0,83,B,epd_pdf
+2024-04-21,Rawalpindi Shalley Valley,,Rawalpindi,pm10,64.0,43,B,epd_pdf
+2024-04-21,Town Hall,,Lahore,pm25,31.0,90,B,epd_pdf
+2024-04-22,EPA HQ,,Lahore,pm25,21.0,65,B,epd_pdf
+2024-04-22,Rawalpindi Shalley Valley,,Rawalpindi,pm10,155.0,103,B,epd_pdf
+2024-04-22,Town Hall,,Lahore,pm25,28.0,83,B,epd_pdf
+2024-04-23,EPA HQ,,Lahore,pm25,33.0,95,B,epd_pdf
+2024-04-23,PU 1,LHR-PU,Lahore,pm25,38.0,105,B,epd_pdf
+2024-04-23,Rawalpindi Shalley Valley,,Rawalpindi,pm10,165.0,108,B,epd_pdf
+2024-04-23,Town Hall,,Lahore,pm25,38.0,105,B,epd_pdf
+2024-04-24,EPA HQ,,Lahore,pm25,20.0,63,B,epd_pdf
+2024-04-24,PU 1,LHR-PU,Lahore,pm25,21.0,65,B,epd_pdf
+2024-04-24,Rawalpindi Shalley Valley,,Rawalpindi,pm10,133.0,89,B,epd_pdf
+2024-04-24,Town Hall,,Lahore,pm25,29.0,85,B,epd_pdf
+2024-04-25,EPA HQ,,Lahore,pm25,32.0,92,B,epd_pdf
+2024-04-25,PU 1,LHR-PU,Lahore,pm25,29.0,85,B,epd_pdf
+2024-04-25,Rawalpindi Shalley Valley,,Rawalpindi,pm10,100.0,67,B,epd_pdf
+2024-04-25,Town Hall,,Lahore,pm25,28.0,83,B,epd_pdf
+2024-04-26,EPA HQ,,Lahore,pm25,45.0,115,B,epd_pdf
+2024-04-26,PU 1,LHR-PU,Lahore,pm25,50.0,122,B,epd_pdf
+2024-04-26,Rawalpindi Shalley Valley,,Rawalpindi,pm10,190.0,120,B,epd_pdf
+2024-04-26,Town Hall,,Lahore,pm25,44.0,113,B,epd_pdf
+2024-04-27,EPA HQ,,Lahore,pm25,68.0,147,B,epd_pdf
+2024-04-27,PU 1,LHR-PU,Lahore,pm25,68.0,147,B,epd_pdf
+2024-04-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,108.0,72,B,epd_pdf
+2024-04-27,Town Hall,,Lahore,pm25,61.0,137,B,epd_pdf
+2024-04-28,EPA HQ,,Lahore,pm25,22.0,68,B,epd_pdf
+2024-04-28,PU 1,LHR-PU,Lahore,pm25,23.0,70,B,epd_pdf
+2024-04-28,Rawalpindi Shalley Valley,,Rawalpindi,pm10,84.0,56,B,epd_pdf
+2024-04-28,Town Hall,,Lahore,pm25,23.0,70,B,epd_pdf
+2024-04-29,EPA HQ,,Lahore,pm25,27.0,80,B,epd_pdf
+2024-04-29,PU 1,LHR-PU,Lahore,pm25,31.0,90,B,epd_pdf
+2024-04-29,Rawalpindi Shalley Valley,,Rawalpindi,pm10,89.0,60,B,epd_pdf
+2024-05-01,EPA HQ,,Lahore,pm25,25.0,75,B,epd_pdf
+2024-05-01,PU 1,LHR-PU,Lahore,pm25,27.0,80,B,epd_pdf
+2024-05-01,Rawalpindi Shalley Valley,,Rawalpindi,pm10,104.0,70,B,epd_pdf
+2024-05-01,Town Hall,,Lahore,pm25,23.0,70,B,epd_pdf
+2024-05-02,EPA HQ,,Lahore,pm25,32.0,92,B,epd_pdf
+2024-05-02,PU 1,LHR-PU,Lahore,pm25,27.0,80,B,epd_pdf
+2024-05-02,Rawalpindi Shalley Valley,,Rawalpindi,pm10,147.0,98,B,epd_pdf
+2024-05-02,Town Hall,,Lahore,pm25,27.0,80,B,epd_pdf
+2024-05-03,EPA HQ,,Lahore,pm25,71.0,152,B,epd_pdf
+2024-05-03,PU 1,LHR-PU,Lahore,pm25,62.0,139,B,epd_pdf
+2024-05-03,Rawalpindi Shalley Valley,,Rawalpindi,pm10,174.0,112,B,epd_pdf
+2024-05-03,Town Hall,,Lahore,pm25,63.0,140,B,epd_pdf
+2024-05-04,EPA HQ,,Lahore,pm25,76.0,155,B,epd_pdf
+2024-05-04,PU 1,LHR-PU,Lahore,pm25,69.0,148,B,epd_pdf
+2024-05-04,Rawalpindi Shalley Valley,,Rawalpindi,pm10,167.0,109,B,epd_pdf
+2024-05-04,Town Hall,,Lahore,pm25,74.0,154,B,epd_pdf
+2024-05-05,EPA HQ,,Lahore,pm25,38.0,105,B,epd_pdf
+2024-05-05,PU 1,LHR-PU,Lahore,pm25,39.0,106,B,epd_pdf
+2024-05-05,Rawalpindi Shalley Valley,,Rawalpindi,pm10,207.0,129,B,epd_pdf
+2024-05-05,Town Hall,,Lahore,pm25,43.0,112,B,epd_pdf
+2024-05-06,EPA HQ,,Lahore,pm25,37.0,104,B,epd_pdf
+2024-05-06,PU 1,LHR-PU,Lahore,pm25,38.0,105,B,epd_pdf
+2024-05-06,Rawalpindi Shalley Valley,,Rawalpindi,pm10,119.0,79,B,epd_pdf
+2024-05-06,Town Hall,,Lahore,pm25,33.0,95,B,epd_pdf
+2024-05-09,EPA HQ,,Lahore,pm25,117.0,184,B,epd_pdf
+2024-05-09,PU 1,LHR-PU,Lahore,pm25,89.0,164,B,epd_pdf
+2024-05-09,Rawalpindi Shalley Valley,,Rawalpindi,pm10,167.0,109,B,epd_pdf
+2024-05-09,Town Hall,,Lahore,pm25,94.0,168,B,epd_pdf
+2024-05-11,"( TNS Beaconhouse, Hali Road,",,Lahore,pm25,64.0,141,B,epd_pdf
+2024-05-11,(college of earth and environmental 401-50,,Lahore,pm25,69.0,148,B,epd_pdf
+2024-05-11,Rawalpindi Shalley Valley,,Rawalpindi,pm10,146.0,97,B,epd_pdf
+2024-05-12,"(National Hockey Stadium, EPA",,Lahore,pm25,26.0,78,B,epd_pdf
+2024-05-12,(college of earth and environmental,,Lahore,pm25,24.0,73,B,epd_pdf
+2024-05-12,Rawalpindi Shalley Valley,,Rawalpindi,pm10,98.0,66,B,epd_pdf
+2024-05-13,"(National Hockey Stadium, EPA",,Lahore,pm25,38.0,105,B,epd_pdf
+2024-05-13,(college of earth and environmental,,Lahore,pm25,31.0,90,B,epd_pdf
+2024-05-13,Rawalpindi Shalley Valley,,Rawalpindi,pm10,121.0,81,B,epd_pdf
+2024-05-15,"(Central Model School, Lower mall",,Lahore,pm25,119.0,185,B,epd_pdf
+2024-05-15,(college of earth and environmental,,Lahore,pm25,74.0,154,B,epd_pdf
+2024-05-15,Rawalpindi Shalley Valley,,Rawalpindi,pm10,156.0,103,B,epd_pdf
+2024-05-16,(Cathedral hall school mall road,,Lahore,pm25,102.0,173,B,epd_pdf
+2024-05-16,(college of earth and environmental,,Lahore,pm25,64.0,141,B,epd_pdf
+2024-05-16,Rawalpindi Shalley Valley,,Rawalpindi,pm10,167.0,109,B,epd_pdf
+2024-05-17,(Cathedral hall school mall road,,Lahore,pm25,127.0,191,B,epd_pdf
+2024-05-17,(college of earth and environmental,,Lahore,pm25,94.0,168,B,epd_pdf
+2024-05-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,166.0,108,B,epd_pdf
+2024-05-18,(college of earth and environmental,,Lahore,pm25,74.0,154,B,epd_pdf
+2024-05-18,Mobile AQMS,,Lahore,pm25,97.0,170,B,epd_pdf
+2024-05-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,157.0,104,B,epd_pdf
+2024-05-19,"(National Hockey Stadium, EPA",,Lahore,pm25,48.0,119,B,epd_pdf
+2024-05-19,(college of earth and environmental,,Lahore,pm25,54.0,127,B,epd_pdf
+2024-05-19,Rawalpindi Shalley Valley,,Rawalpindi,pm10,163.0,107,B,epd_pdf
+2024-05-20,"(National Hockey Stadium, EPA",,Lahore,pm25,63.0,140,B,epd_pdf
+2024-05-20,(college of earth and environmental,,Lahore,pm25,60.0,136,B,epd_pdf
+2024-05-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,172.0,111,B,epd_pdf
+2024-05-21,"(National Hockey Stadium, EPA",,Lahore,pm25,66.0,144,B,epd_pdf
+2024-05-21,(college of earth and environmental,,Lahore,pm25,59.0,134,B,epd_pdf
+2024-05-21,Rawalpindi Shalley Valley,,Rawalpindi,pm10,167.0,109,B,epd_pdf
+2024-05-22,"(Lahore Grammer School, Gulberg",,Lahore,pm25,61.0,137,B,epd_pdf
+2024-05-22,(college of earth and environmental,,Lahore,pm25,44.0,113,B,epd_pdf
+2024-05-22,Rawalpindi Shalley Valley,,Rawalpindi,pm10,169.0,110,B,epd_pdf
+2024-05-23,(college of earth and environmental,,Lahore,pm25,81.0,159,B,epd_pdf
+2024-05-23,Mobile AQMS,,Lahore,pm25,94.0,168,B,epd_pdf
+2024-05-23,Rawalpindi Shalley Valley,,Rawalpindi,pm10,174.0,112,B,epd_pdf
+2024-05-25,(Beacon house school system MM,,Lahore,pm25,60.0,136,B,epd_pdf
+2024-05-25,(college of earth and environmental,,Lahore,pm25,55.0,129,B,epd_pdf
+2024-05-25,Rawalpindi Shalley Valley,,Rawalpindi,pm10,190.0,120,B,epd_pdf
+2024-05-26,(Beacon house school system MM,,Lahore,pm25,26.0,78,B,epd_pdf
+2024-05-26,(college of earth and environmental,,Lahore,pm25,32.0,92,B,epd_pdf
+2024-05-26,Rawalpindi Shalley Valley,,Rawalpindi,pm10,167.0,109,B,epd_pdf
+2024-05-27,(Beacon house school system MM,,Lahore,pm25,47.0,118,B,epd_pdf
+2024-05-27,(college of earth and environmental,,Lahore,pm25,48.0,119,B,epd_pdf
+2024-05-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,179.0,115,B,epd_pdf
+2024-05-28,(Beacon house school system MM,,Lahore,pm25,52.0,125,B,epd_pdf
+2024-05-28,(college of earth and environmental,,Lahore,pm25,59.0,134,B,epd_pdf
+2024-05-28,Rawalpindi Shalley Valley,,Rawalpindi,pm10,177.0,114,B,epd_pdf
+2024-05-29,(college of earth and environmental,,Lahore,pm25,54.0,127,B,epd_pdf
+2024-05-29,Mobile AQMS,,Lahore,pm25,49.0,120,B,epd_pdf
+2024-05-29,Rawalpindi Shalley Valley,,Rawalpindi,pm10,87.0,58,B,epd_pdf
+2024-05-30,(college of earth and environmental,,Lahore,pm25,82.0,159,B,epd_pdf
+2024-05-30,Mobile AQMS,,Lahore,pm25,109.0,178,B,epd_pdf
+2024-05-30,Rawalpindi Shalley Valley,,Rawalpindi,pm10,181.0,116,B,epd_pdf
+2024-05-31,(college of earth and environmental,,Lahore,pm25,78.0,157,B,epd_pdf
+2024-05-31,Mobile AQMS,,Lahore,pm25,88.0,164,B,epd_pdf
+2024-05-31,Rawalpindi Shalley Valley,,Rawalpindi,pm10,151.0,101,B,epd_pdf
+2024-06-01,(college of earth and environmental,,Lahore,pm25,56.0,130,B,epd_pdf
+2024-06-01,Mobile AQMS,,Lahore,pm25,55.0,129,B,epd_pdf
+2024-06-01,Rawalpindi Shalley Valley,,Rawalpindi,pm10,155.0,103,B,epd_pdf
+2024-06-02,(college of earth and environmental,,Lahore,pm25,72.0,152,B,epd_pdf
+2024-06-02,Mobile AQMS,,Lahore,pm25,79.0,157,B,epd_pdf
+2024-06-02,Rawalpindi Shalley Valley,,Rawalpindi,pm10,184.0,117,B,epd_pdf
+2024-06-03,(college of earth and environmental,,Lahore,pm25,59.0,134,B,epd_pdf
+2024-06-03,Mobile AQMS,,Lahore,pm25,54.0,127,B,epd_pdf
+2024-06-03,Rawalpindi Shalley Valley,,Rawalpindi,pm10,182.0,116,B,epd_pdf
+2024-06-04,(college of earth and environmental,,Lahore,pm25,75.0,154,B,epd_pdf
+2024-06-04,Mobile AQMS,,Lahore,pm25,67.0,146,B,epd_pdf
+2024-06-04,Rawalpindi Shalley Valley,,Rawalpindi,pm10,168.0,109,B,epd_pdf
+2024-06-05,(college of earth and environmental,,Lahore,pm25,72.0,152,B,epd_pdf
+2024-06-05,Rawalpindi Shalley Valley,,Rawalpindi,pm10,174.0,112,B,epd_pdf
+2024-06-06,(college of earth and environmental,,Lahore,pm25,86.0,162,B,epd_pdf
+2024-06-06,Mobile AQMS,,Lahore,pm25,67.0,146,B,epd_pdf
+2024-06-06,Rawalpindi Shalley Valley,,Rawalpindi,pm10,177.0,114,B,epd_pdf
+2024-06-07,(college of earth and environmental,,Lahore,pm25,30.0,88,B,epd_pdf
+2024-06-07,Mobile AQMS,,Lahore,pm25,35.0,100,B,epd_pdf
+2024-06-07,Rawalpindi Shalley Valley,,Rawalpindi,pm10,167.0,109,B,epd_pdf
+2024-06-08,(college of earth and environmental,,Lahore,pm25,40.0,108,B,epd_pdf
+2024-06-08,Mobile AQMS,,Lahore,pm25,36.0,102,B,epd_pdf
+2024-06-08,Rawalpindi Shalley Valley,,Rawalpindi,pm10,178.0,114,B,epd_pdf
+2024-06-09,(college of earth and environmental,,Lahore,pm25,49.0,120,B,epd_pdf
+2024-06-09,Mobile AQMS,,Lahore,pm25,42.0,111,B,epd_pdf
+2024-06-09,Rawalpindi Shalley Valley,,Rawalpindi,pm10,180.0,115,B,epd_pdf
+2024-06-10,(college of earth and environmental,,Lahore,pm25,43.0,112,B,epd_pdf
+2024-06-10,Mobile AQMS,,Lahore,pm25,40.0,108,B,epd_pdf
+2024-06-10,Rawalpindi Shalley Valley,,Rawalpindi,pm10,182.0,116,B,epd_pdf
+2024-06-11,(college of earth and environmental,,Lahore,pm25,58.0,133,B,epd_pdf
+2024-06-11,Mobile AQMS,,Lahore,pm25,42.0,111,B,epd_pdf
+2024-06-11,Rawalpindi Shalley Valley,,Rawalpindi,pm10,184.0,117,B,epd_pdf
+2024-06-12,(college of earth and environmental,,Lahore,pm25,47.0,118,B,epd_pdf
+2024-06-12,Mobile AQMS,,Lahore,pm25,31.0,90,B,epd_pdf
+2024-06-12,Rawalpindi Shalley Valley,,Rawalpindi,pm10,187.0,119,B,epd_pdf
+2024-06-13,(college of earth and environmental,,Lahore,pm25,50.0,122,B,epd_pdf
+2024-06-13,Mobile AQMS,,Lahore,pm25,42.0,111,B,epd_pdf
+2024-06-13,Rawalpindi Shalley Valley,,Rawalpindi,pm10,189.0,120,B,epd_pdf
+2024-06-14,(college of earth and environmental,,Lahore,pm25,50.0,122,B,epd_pdf
+2024-06-14,Mobile AQMS,,Lahore,pm25,48.0,119,B,epd_pdf
+2024-06-15,(college of earth and environmental,,Lahore,pm25,48.0,119,B,epd_pdf
+2024-06-15,Mobile AQMS,,Lahore,pm25,43.0,112,B,epd_pdf
+2024-06-15,Rawalpindi Shalley Valley,,Rawalpindi,pm10,177.0,114,B,epd_pdf
+2024-06-16,(college of earth and environmental,,Lahore,pm25,60.0,136,B,epd_pdf
+2024-06-16,Mobile AQMS,,Lahore,pm25,52.0,125,B,epd_pdf
+2024-06-16,Rawalpindi Shalley Valley,,Rawalpindi,pm10,172.0,111,B,epd_pdf
+2024-06-17,(college of earth and environmental,,Lahore,pm25,37.0,104,B,epd_pdf
+2024-06-17,Mobile AQMS,,Lahore,pm25,32.0,92,B,epd_pdf
+2024-06-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,177.0,114,B,epd_pdf
+2024-06-18,(college of earth and environmental,,Lahore,pm25,38.0,105,B,epd_pdf
+2024-06-18,Mobile AQMS,,Lahore,pm25,32.0,92,B,epd_pdf
+2024-06-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,184.0,117,B,epd_pdf
+2024-06-19,(college of earth and environmental,,Lahore,pm25,36.0,102,B,epd_pdf
+2024-06-19,Mobile AQMS,,Lahore,pm25,33.0,95,B,epd_pdf
+2024-06-19,Rawalpindi Shalley Valley,,Rawalpindi,pm10,188.0,119,B,epd_pdf
+2024-06-20,(college of earth and environmental,,Lahore,pm25,60.0,136,B,epd_pdf
+2024-06-20,Mobile AQMS,,Lahore,pm25,44.0,113,B,epd_pdf
+2024-06-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,183.0,117,B,epd_pdf
+2024-06-21,(college of earth and environmental,,Lahore,pm25,30.0,88,B,epd_pdf
+2024-06-21,Mobile AQMS,,Lahore,pm25,26.0,78,B,epd_pdf
+2024-06-21,Rawalpindi Shalley Valley,,Rawalpindi,pm10,184.0,117,B,epd_pdf
+2024-06-22,(college of earth and environmental,,Lahore,pm25,25.0,75,B,epd_pdf
+2024-06-22,Mobile AQMS,,Lahore,pm25,24.0,73,B,epd_pdf
+2024-06-22,Rawalpindi Shalley Valley,,Rawalpindi,pm10,175.0,113,B,epd_pdf
+2024-06-23,(college of earth and environmental,,Lahore,pm25,43.0,112,B,epd_pdf
+2024-06-23,Mobile AQMS,,Lahore,pm25,39.0,106,B,epd_pdf
+2024-06-23,Rawalpindi Shalley Valley,,Rawalpindi,pm10,165.0,108,B,epd_pdf
+2024-06-24,(college of earth and environmental,,Lahore,pm25,43.0,112,B,epd_pdf
+2024-06-24,Mobile AQMS,,Lahore,pm25,49.0,120,B,epd_pdf
+2024-06-24,Rawalpindi Shalley Valley,,Rawalpindi,pm10,102.0,68,B,epd_pdf
+2024-06-25,(college of earth and environmental,,Lahore,pm25,47.0,118,B,epd_pdf
+2024-06-25,Mobile AQMS,,Lahore,pm25,54.0,127,B,epd_pdf
+2024-06-25,Rawalpindi Shalley Valley,,Rawalpindi,pm10,148.0,99,B,epd_pdf
+2024-06-26,(college of earth and environmental,,Lahore,pm25,56.0,130,B,epd_pdf
+2024-06-26,Mobile AQMS,,Lahore,pm25,53.0,126,B,epd_pdf
+2024-06-26,Rawalpindi Shalley Valley,,Rawalpindi,pm10,139.0,93,B,epd_pdf
+2024-06-27,(college of earth and environmental,,Lahore,pm25,76.0,155,B,epd_pdf
+2024-06-27,Mobile AQMS,,Lahore,pm25,82.0,159,B,epd_pdf
+2024-06-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,127.0,85,B,epd_pdf
+2024-06-28,(college of earth and environmental,,Lahore,pm25,34.0,97,B,epd_pdf
+2024-06-28,Mobile AQMS,,Lahore,pm25,32.0,92,B,epd_pdf
+2024-06-28,Rawalpindi Shalley Valley,,Rawalpindi,pm10,115.0,77,B,epd_pdf
+2024-06-29,(college of earth and environmental,,Lahore,pm25,31.0,90,B,epd_pdf
+2024-06-29,Mobile AQMS,,Lahore,pm25,33.0,95,B,epd_pdf
+2024-06-29,Rawalpindi Shalley Valley,,Rawalpindi,pm10,107.0,72,B,epd_pdf
+2024-06-30,(college of earth and environmental,,Lahore,pm25,36.0,102,B,epd_pdf
+2024-06-30,Mobile AQMS,,Lahore,pm25,33.0,95,B,epd_pdf
+2024-06-30,Rawalpindi Shalley Valley,,Rawalpindi,pm10,172.0,111,B,epd_pdf
+2024-07-01,(college of earth and environmental,,Lahore,pm25,29.0,85,B,epd_pdf
+2024-07-01,Mobile AQMS,,Lahore,pm25,30.0,88,B,epd_pdf
+2024-07-01,Rawalpindi Shalley Valley,,Rawalpindi,pm10,97.0,65,B,epd_pdf
+2024-07-02,(college of earth and environmental,,Lahore,pm25,48.0,119,B,epd_pdf
+2024-07-02,Mobile AQMS,,Lahore,pm25,40.0,108,B,epd_pdf
+2024-07-02,Rawalpindi Shalley Valley,,Rawalpindi,pm10,129.0,86,B,epd_pdf
+2024-07-03,(college of earth and environmental,,Lahore,pm25,40.0,108,B,epd_pdf
+2024-07-03,Mobile AQMS,,Lahore,pm25,34.0,97,B,epd_pdf
+2024-07-03,Rawalpindi Shalley Valley,,Rawalpindi,pm10,176.0,117,B,epd_pdf
+2024-07-04,(college of earth and environmental,,Lahore,pm25,36.0,102,B,epd_pdf
+2024-07-04,Mobile AQMS,,Lahore,pm25,31.0,90,B,epd_pdf
+2024-07-04,Rawalpindi Shalley Valley,,Rawalpindi,pm10,182.0,116,B,epd_pdf
+2024-07-05,(college of earth and environmental,,Lahore,pm25,19.0,61,B,epd_pdf
+2024-07-05,Mobile AQMS,,Lahore,pm25,18.0,58,B,epd_pdf
+2024-07-05,Rawalpindi Shalley Valley,,Rawalpindi,pm10,100.0,67,B,epd_pdf
+2024-07-06,(college of earth and environmental,,Lahore,pm25,38.0,105,B,epd_pdf
+2024-07-06,Mobile AQMS,,Lahore,pm25,44.0,113,B,epd_pdf
+2024-07-06,Rawalpindi Shalley Valley,,Rawalpindi,pm10,155.0,103,B,epd_pdf
+2024-07-07,"(Municipal Committee, Pir Mahal,",,Lahore,pm25,18.0,58,B,epd_pdf
+2024-07-07,(college of earth and environmental,,Lahore,pm25,17.0,56,B,epd_pdf
+2024-07-07,Rawalpindi Shalley Valley,,Rawalpindi,pm10,155.0,103,B,epd_pdf
+2024-07-08,(college of earth and environmental,,Lahore,pm25,30.0,88,B,epd_pdf
+2024-07-08,(location Govt. PST college,,Lahore,pm25,14.0,47,B,epd_pdf
+2024-07-08,Rawalpindi Shalley Valley,,Rawalpindi,pm10,167.0,109,B,epd_pdf
+2024-07-09,(college of earth and environmental,,Lahore,pm25,45.0,115,B,epd_pdf
+2024-07-09,(location Govt. PST college,,Lahore,pm25,54.0,127,B,epd_pdf
+2024-07-09,Rawalpindi Shalley Valley,,Rawalpindi,pm10,179.0,115,B,epd_pdf
+2024-07-10,"(National Hockey Stadium, EPA",,Lahore,pm25,49.0,120,B,epd_pdf
+2024-07-10,(college of earth and environmental,,Lahore,pm25,51.0,123,B,epd_pdf
+2024-07-10,Rawalpindi Shalley Valley,,Rawalpindi,pm10,182.0,116,B,epd_pdf
+2024-07-11,"(National Hockey Stadium, EPA",,Lahore,pm25,60.0,136,B,epd_pdf
+2024-07-11,(college of earth and environmental,,Lahore,pm25,56.0,130,B,epd_pdf
+2024-07-11,Rawalpindi Shalley Valley,,Rawalpindi,pm10,34.0,23,B,epd_pdf
+2024-07-12,"(National Hockey Stadium, EPA",,Lahore,pm25,54.0,127,B,epd_pdf
+2024-07-12,(college of earth and environmental,,Lahore,pm25,42.0,111,B,epd_pdf
+2024-07-12,Rawalpindi Shalley Valley,,Rawalpindi,pm10,99.0,66,B,epd_pdf
+2024-07-13,"(National Hockey Stadium, EPA",,Lahore,pm25,32.0,92,B,epd_pdf
+2024-07-13,(college of earth and environmental,,Lahore,pm25,44.0,113,B,epd_pdf
+2024-07-13,Rawalpindi Shalley Valley,,Rawalpindi,pm10,119.0,79,B,epd_pdf
+2024-07-14,"(National Hockey Stadium, EPA",,Lahore,pm25,33.0,95,B,epd_pdf
+2024-07-14,(college of earth and environmental,,Lahore,pm25,34.0,97,B,epd_pdf
+2024-07-14,Rawalpindi Shalley Valley,,Rawalpindi,pm10,134.0,93,B,epd_pdf
+2024-07-15,"(National Hockey Stadium, EPA",,Lahore,pm25,70.0,150,B,epd_pdf
+2024-07-15,(college of earth and environmental,,Lahore,pm25,54.0,127,B,epd_pdf
+2024-07-15,Rawalpindi Shalley Valley,,Rawalpindi,pm10,91.0,61,B,epd_pdf
+2024-07-16,"(National Hockey Stadium, EPA",,Lahore,pm25,60.0,136,B,epd_pdf
+2024-07-16,(college of earth and environmental,,Lahore,pm25,63.0,140,B,epd_pdf
+2024-07-16,Rawalpindi Shalley Valley,,Rawalpindi,pm10,129.0,86,B,epd_pdf
+2024-07-17,"(National Hockey Stadium, EPA",,Lahore,pm25,73.0,153,B,epd_pdf
+2024-07-17,(college of earth and environmental,,Lahore,pm25,70.0,150,B,epd_pdf
+2024-07-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,139.0,93,B,epd_pdf
+2024-07-18,"(National Hockey Stadium, EPA",,Lahore,pm25,52.0,125,B,epd_pdf
+2024-07-18,(college of earth and environmental,,Lahore,pm25,43.0,112,B,epd_pdf
+2024-07-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,127.0,85,B,epd_pdf
+2024-07-19,"(National Hockey Stadium, EPA",,Lahore,pm25,28.0,83,B,epd_pdf
+2024-07-19,(college of earth and environmental,,Lahore,pm25,25.0,75,B,epd_pdf
+2024-07-19,Rawalpindi Shalley Valley,,Rawalpindi,pm10,134.0,89,B,epd_pdf
+2024-07-20,"(National Hockey Stadium, EPA",,Lahore,pm25,48.0,119,B,epd_pdf
+2024-07-20,(college of earth and environmental,,Lahore,pm25,42.0,111,B,epd_pdf
+2024-07-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,96.0,64,B,epd_pdf
+2024-07-21,"(National Hockey Stadium, EPA",,Lahore,pm25,63.0,140,B,epd_pdf
+2024-07-21,(college of earth and environmental,,Lahore,pm25,59.0,134,B,epd_pdf
+2024-07-21,Rawalpindi Shalley Valley,,Rawalpindi,pm10,129.0,86,B,epd_pdf
+2024-07-22,"(National Hockey Stadium, EPA",,Lahore,pm25,49.0,120,B,epd_pdf
+2024-07-22,(college of earth and environmental,,Lahore,pm25,55.0,129,B,epd_pdf
+2024-07-22,Rawalpindi Shalley Valley,,Rawalpindi,pm10,126.0,84,B,epd_pdf
+2024-07-23,"(National Hockey Stadium, EPA",,Lahore,pm25,47.0,118,B,epd_pdf
+2024-07-23,(college of earth and environmental,,Lahore,pm25,59.0,134,B,epd_pdf
+2024-07-23,Rawalpindi Shalley Valley,,Rawalpindi,pm10,137.0,91,B,epd_pdf
+2024-07-24,"(National Hockey Stadium, EPA",,Lahore,pm25,27.0,80,B,epd_pdf
+2024-07-24,(college of earth and environmental,,Lahore,pm25,31.0,90,B,epd_pdf
+2024-07-24,Rawalpindi Shalley Valley,,Rawalpindi,pm10,144.0,96,B,epd_pdf
+2024-07-25,"(National Hockey Stadium, EPA",,Lahore,pm25,41.0,109,B,epd_pdf
+2024-07-25,(college of earth and environmental,,Lahore,pm25,40.0,108,B,epd_pdf
+2024-07-25,Rawalpindi Shalley Valley,,Rawalpindi,pm10,144.0,96,B,epd_pdf
+2024-07-26,"(National Hockey Stadium, EPA",,Lahore,pm25,42.0,111,B,epd_pdf
+2024-07-26,(college of earth and environmental,,Lahore,pm25,38.0,105,B,epd_pdf
+2024-07-26,Rawalpindi Shalley Valley,,Rawalpindi,pm10,158.0,104,B,epd_pdf
+2024-07-27,"(National Hockey Stadium, EPA",,Lahore,pm25,23.0,70,B,epd_pdf
+2024-07-27,(college of earth and environmental,,Lahore,pm25,24.0,73,B,epd_pdf
+2024-07-27,Rawalpindi Shalley Valley,,Rawalpindi,pm10,107.0,79,B,epd_pdf
+2024-07-28,"(National Hockey Stadium, EPA",,Lahore,pm25,25.0,75,B,epd_pdf
+2024-07-28,(college of earth and environmental,,Lahore,pm25,33.0,95,B,epd_pdf
+2024-07-28,Rawalpindi Shalley Valley,,Rawalpindi,pm10,78.0,52,B,epd_pdf
+2024-07-29,"(National Hockey Stadium, EPA",,Lahore,pm25,33.0,95,B,epd_pdf
+2024-07-29,(college of earth and environmental,,Lahore,pm25,39.0,106,B,epd_pdf
+2024-07-29,Rawalpindi Shalley Valley,,Rawalpindi,pm10,109.0,73,B,epd_pdf
+2024-07-30,(college of earth and environmental,,Lahore,pm25,27.0,80,B,epd_pdf
+2024-07-30,Mobile AQMS,,Lahore,pm25,36.0,102,B,epd_pdf
+2024-07-31,"(Ravi Toll Plaza, M2- Motorway",,Lahore,pm25,52.0,125,B,epd_pdf
+2024-07-31,PU 1,LHR-PU,Lahore,pm25,34.0,97,B,epd_pdf
+2024-07-31,Rawalpindi Shalley Valley,,Rawalpindi,pm10,133.0,89,B,epd_pdf
+2024-08-01,"(National Hockey Stadium, EPA",,Lahore,pm25,78.0,157,B,epd_pdf
+2024-08-01,PU 1,LHR-PU,Lahore,pm25,81.0,159,B,epd_pdf
+2024-08-01,Rawalpindi Shalley Valley,,Rawalpindi,pm10,102.0,68,B,epd_pdf
+2024-08-02,PU 1,LHR-PU,Lahore,pm25,27.0,80,B,epd_pdf
+2024-08-02,Rawalpindi Shalley Valley,,Rawalpindi,pm10,104.0,70,B,epd_pdf
+2024-08-03,"(National Hockey Stadium, EPA",,Lahore,pm25,16.0,53,B,epd_pdf
+2024-08-03,PU 1,LHR-PU,Lahore,pm25,27.0,80,B,epd_pdf
+2024-08-03,Rawalpindi Shalley Valley,,Rawalpindi,pm10,98.0,66,B,epd_pdf
+2024-08-04,"(National Hockey Stadium, EPA",,Lahore,pm25,14.0,47,B,epd_pdf
+2024-08-04,PU 1,LHR-PU,Lahore,pm25,13.0,43,B,epd_pdf
+2024-08-04,Rawalpindi Shalley Valley,,Rawalpindi,pm10,96.0,64,B,epd_pdf
+2024-08-05,"(National Hockey Stadium, EPA",,Lahore,pm25,21.0,65,B,epd_pdf
+2024-08-05,PU 1,LHR-PU,Lahore,pm25,20.0,63,B,epd_pdf
+2024-08-05,Rawalpindi Shalley Valley,,Rawalpindi,pm10,104.0,70,B,epd_pdf
+2024-08-06,"(National Hockey Stadium, EPA",,Lahore,pm25,13.0,43,B,epd_pdf
+2024-08-06,PU 1,LHR-PU,Lahore,pm25,14.0,47,B,epd_pdf
+2024-08-06,Rawalpindi Shalley Valley,,Rawalpindi,pm10,106.0,71,B,epd_pdf
+2024-08-07,"(National Hockey Stadium, EPA",,Lahore,pm25,17.0,56,B,epd_pdf
+2024-08-07,PU 1,LHR-PU,Lahore,pm25,15.0,50,B,epd_pdf
+2024-08-07,Rawalpindi Shalley Valley,,Rawalpindi,pm10,122.0,81,B,epd_pdf
+2024-08-08,"(National Hockey Stadium, EPA",,Lahore,pm25,23.0,70,B,epd_pdf
+2024-08-08,PU 1,LHR-PU,Lahore,pm25,20.0,63,B,epd_pdf
+2024-08-08,Rawalpindi Shalley Valley,,Rawalpindi,pm10,52.0,35,B,epd_pdf
+2024-08-09,"(National Hockey Stadium, EPA",,Lahore,pm25,10.0,33,B,epd_pdf
+2024-08-09,PU 1,LHR-PU,Lahore,pm25,13.0,43,B,epd_pdf
+2024-08-09,Rawalpindi Shalley Valley,,Rawalpindi,pm10,74.0,49,B,epd_pdf
+2024-08-10,"(National Hockey Stadium, EPA",,Lahore,pm25,27.0,80,B,epd_pdf
+2024-08-10,PU 1,LHR-PU,Lahore,pm25,25.0,75,B,epd_pdf
+2024-08-10,Rawalpindi Shalley Valley,,Rawalpindi,pm10,103.0,69,B,epd_pdf
+2024-08-11,"(National Hockey Stadium, EPA",,Lahore,pm25,35.0,100,B,epd_pdf
+2024-08-11,PU 1,LHR-PU,Lahore,pm25,37.0,104,B,epd_pdf
+2024-08-11,Rawalpindi Shalley Valley,,Rawalpindi,pm10,101.0,68,B,epd_pdf
+2024-08-12,"(National Hockey Stadium, EPA",,Lahore,pm25,19.0,61,B,epd_pdf
+2024-08-12,PU 1,LHR-PU,Lahore,pm25,26.0,78,B,epd_pdf
+2024-08-12,Rawalpindi Shalley Valley,,Rawalpindi,pm10,99.0,66,B,epd_pdf
+2024-08-14,"(National Hockey Stadium, EPA",,Lahore,pm25,21.0,65,B,epd_pdf
+2024-08-14,PU 1,LHR-PU,Lahore,pm25,20.0,63,B,epd_pdf
+2024-08-14,Rawalpindi Shalley Valley,,Rawalpindi,pm10,125.0,83,B,epd_pdf
+2024-08-15,"(National Hockey Stadium, EPA",,Lahore,pm25,32.0,92,B,epd_pdf
+2024-08-15,PU 1,LHR-PU,Lahore,pm25,27.0,80,B,epd_pdf
+2024-08-15,Rawalpindi Shalley Valley,,Rawalpindi,pm10,106.0,71,B,epd_pdf
+2024-08-16,"(National Hockey Stadium, EPA",,Lahore,pm25,27.0,80,B,epd_pdf
+2024-08-16,PU 1,LHR-PU,Lahore,pm25,25.0,75,B,epd_pdf
+2024-08-16,Rawalpindi Shalley Valley,,Rawalpindi,pm10,93.0,62,B,epd_pdf
+2024-08-17,"(National Hockey Stadium, EPA",,Lahore,pm25,22.0,68,B,epd_pdf
+2024-08-17,PU 1,LHR-PU,Lahore,pm25,16.0,53,B,epd_pdf
+2024-08-17,Rawalpindi Shalley Valley,,Rawalpindi,pm10,84.0,56,B,epd_pdf
+2024-08-18,"(National Hockey Stadium, EPA",,Lahore,pm25,17.0,56,B,epd_pdf
+2024-08-18,PU 1,LHR-PU,Lahore,pm25,21.0,65,B,epd_pdf
+2024-08-18,Rawalpindi Shalley Valley,,Rawalpindi,pm10,67.0,45,B,epd_pdf
+2024-08-19,"(National Hockey Stadium, EPA",,Lahore,pm25,52.0,125,B,epd_pdf
+2024-08-19,PU 1,LHR-PU,Lahore,pm25,41.0,109,B,epd_pdf
+2024-08-19,Rawalpindi Shalley Valley,,Rawalpindi,pm10,81.0,54,B,epd_pdf
+2024-08-20,"(National Hockey Stadium, EPA",,Lahore,pm25,34.0,97,B,epd_pdf
+2024-08-20,PU 1,LHR-PU,Lahore,pm25,33.0,95,B,epd_pdf
+2024-08-20,Rawalpindi Shalley Valley,,Rawalpindi,pm10,41.0,27,B,epd_pdf

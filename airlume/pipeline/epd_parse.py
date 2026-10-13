@@ -11,6 +11,14 @@ Layouts seen in samples (13 Oct 2026):
   AQMS ON dd.mm.yyyy (BASED ON PREVIOUS 24 HOURS DATA)" with 3-4 stations,
   pollutant used, PEQS value, concentration, AQI.  Some 2022 rows use CO with
   min/max 8-hour averages and two AQIs; the maximum is kept.
+- **Style D, Oct 2025:** "AQI Analysis Report of Lahore (Average AQI 78)", window
+  "dd.mm.yyyy (03:00PM) to dd.mm.yyyy (03:00PM)"; table Sr/Location/AQI/Dominant
+  pollutant for Lahore stations (page 1) and districts (page 2).  Both parsed;
+  the AQI is reliable, the dominant-pollutant tag is a best effort because the
+  PM subscript lands on a neighbouring line.
+- **Style E, Aug - Sep 2025:** "Lahore & Punjab AQI Report & Ranking", values
+  drawn on a map; only the printed "Average AQI Lahore NN" is recovered.
+- **Scanned (Nov 2024 and some others):** CamScanner images, no text.  Skipped.
 - **Style C, 2018 - 2020:** concentration tables for the old network
   (Town Hall, Dental College, Met Office, Multan, Faisalabad ...).  Not
   parsed yet; stations do not map to today's network.
@@ -50,6 +58,9 @@ LABEL_ALIASES = {
     "shallay valley range road": "Rawalpindi Shalley Valley",
     "rawalpindi": "Rawalpindi Shalley Valley",
 }
+
+# Transboundary / out-of-Lahore sites that appear in the Lahore table.
+SITE_CITY = {"raja jang": "Kasur", "lathepur": "Sheikhupura", "bhu jandiala": "Sheikhupura"}
 
 # Bulletin label -> registry station_id where the site is the same as today's portal station.
 LABEL_TO_STATION = {
@@ -91,8 +102,14 @@ def extract_pages(path: Path) -> list[str]:
 
 def detect_style(pages: list[str]) -> str:
     joined = "\n".join(pages)
+    if not joined.strip() or joined.strip() == "CamScanner":
+        return "scanned"
     if "Rank" in joined and "Location" in joined and "Hourly Report" in joined:
         return "A"
+    if "AQI" in joined and "Analysis" in joined and "Dominant" in joined:
+        return "D"
+    if re.search(r"Average\s+AQI\s+Lahore\s+\d", joined) and "Name of AQMS" in joined:
+        return "E"
     if TITLE_B_RE.search(joined):
         return "B"
     if "DAILY QUALITY MONITORING" in joined or "Monitoring of Air Quality" in joined:
@@ -160,6 +177,7 @@ def canonical(label: str) -> str:
 def _mk(day: date, label: str, aqi: int, style: str, pollutant: str | None = "pm25",
         conc: float | None = None, city: str = "Lahore") -> DailyRow:
     label = canonical(label)
+    city = SITE_CITY.get(_norm(label), city)
     return DailyRow(day, label, LABEL_TO_STATION.get(_norm(label)), city, pollutant, conc, aqi, style)
 
 
@@ -209,27 +227,81 @@ def _rows_style_b(pages: list[str]) -> list[DailyRow]:
     return rows
 
 
+D_WINDOW_RE = re.compile(r"(\d{2}\.\d{2}\.\d{4})\s*\(\d{2}:\d{2}[AP]M\)\s*to\s*(\d{2}\.\d{2}\.\d{4})")
+D_ROW_RE = re.compile(r"^\s*(\d{1,2})\s+([A-Za-z][A-Za-z .&-]*?)\s+(\d{1,3}(?: \d)?)\s+(PM|O|SO|NO|CO)\b")
+D_DISTRICT_ROW_RE = re.compile(r"^\s*(\d{1,2})\s+([A-Za-z][A-Za-z .&-]*?)\s+(\d{1,3})(?:\s+(PM|O|SO|NO|CO|10|2\.5))?(?:\s|$)")
+D_AVG_RE = re.compile(r"Average\s+AQI\s+(\d{2,3})\)")
+_DPOL = {"PM": "pm", "O": "o3", "SO": "so2", "NO": "no2", "CO": "co"}
+
+
+def _rows_style_d(pages: list[str]) -> tuple[list[DailyRow], int | None]:
+    text = "\n".join(pages)
+    w = D_WINDOW_RE.search(text)
+    if not w:
+        return [], None
+    day = _d(w.group(2))  # the window ends at 3 pm on this day
+    avg = D_AVG_RE.search(text)
+    rows: list[DailyRow] = []
+    for pi, page in enumerate(pages):
+        is_district = bool(re.search(r"Report\s+of\s+Districts", page))
+        lines = page.splitlines()
+        for i, l in enumerate(lines):
+            m = (D_DISTRICT_ROW_RE if is_district else D_ROW_RE).match(l[:60] if is_district else l)
+            if not m:
+                # Name split above and below the rank: "Rahim Yar" / "9   58  PM" / "Khan"
+                m2 = re.match(r"^\s*(\d{1,2})\s+(\d{1,3})\s+(PM|O|SO|NO|CO)\b", l) if is_district else None
+                if m2 and 0 < i < len(lines) - 1:
+                    above, below = lines[i - 1].strip(), lines[i + 1].strip()
+                    label = " ".join(x for x in (above.split("  ")[0], below.split("  ")[0]) if re.match(r"^[A-Z][a-z]+(?: [A-Z][a-z]+)?$", x))
+                    if label:
+                        rows.append(DailyRow(day, f"{label} average", None, label, "pm25", None, int(m2.group(2)), "D"))
+                continue
+            label = m.group(2).strip()
+            if label in {"Rahim Yar", "Dera Ghazi", "Mandi", "Nankana", "Kot", "Toba Tek"} and i + 1 < len(lines):
+                nxt_name = lines[i + 1].strip()
+                if re.match(r"^[A-Z][a-z]+(?: [A-Z][a-z]+)?$", nxt_name):
+                    label += " " + nxt_name
+            aqi = int(m.group(3).replace(" ", ""))
+            tag = m.group(4) or "PM"
+            pol = _DPOL.get(tag, "pm")
+            if pol == "pm":
+                around = " ".join(x.strip() for x in lines[max(0, i - 1):i + 2])
+                pol = "pm10" if re.search(r"PM\s*\(?\s*10|PM\s+\(\d|\b10\s*$|\s10\s", around) and "2.5" not in around.split("PM")[-1][:8] else "pm25"
+            if is_district:
+                rows.append(DailyRow(day, f"{label} average", None, label, pol, None, aqi, "D"))
+            else:
+                rows.append(_mk(day, label, aqi, "D", pol))
+    return rows, int(avg.group(1)) if avg else None
+
+
+def city_average_e(pages: list[str]) -> tuple[date | None, int | None]:
+    text = pages[0]
+    m = re.search(r"Average\s+AQI\s+Lahore\s+(\d{2,3})", text)
+    d = re.search(r"(\d{2}\.\d{2}\.\d{4})\s*\(12:00AM", text)
+    return (_d(d.group(1)) if d else None), (int(m.group(1)) if m else None)
+
+
 def city_average(pages: list[str]) -> int | None:
     m = re.search(r"Average\s+AQI\s+of\s+Lahore[^\n]*?\((\d{2,3})\)", "\n".join(pages))
     return int(m.group(1)) if m else None
 
 
-def parse_pages(pages: list[str]) -> tuple[str, list[DailyRow], int | None]:
-    """Same as parse_report but from already-extracted page text (used by tests)."""
+def parse_pages(pages: list[str]) -> tuple[str, list[DailyRow], int | None, date | None]:
+    """Returns (style, station rows, Lahore average AQI if printed, date of that average)."""
     style = detect_style(pages)
     if style == "A":
-        return style, _rows_style_a(pages), city_average(pages)
+        rows = _rows_style_a(pages)
+        return style, rows, city_average(pages), rows[0].date if rows else None
     if style == "B":
-        return style, _rows_style_b(pages), None
-    return style, [], None
+        return style, _rows_style_b(pages), None, None
+    if style == "D":
+        rows, avg = _rows_style_d(pages)
+        return style, rows, avg, rows[0].date if rows else None
+    if style == "E":
+        d, avg = city_average_e(pages)
+        return style, [], avg, d
+    return style, [], None, None
 
 
-def parse_report(path: Path) -> tuple[str, list[DailyRow], int | None]:
-    """Returns (style, station rows, Lahore city-average AQI if printed)."""
-    pages = extract_pages(path)
-    style = detect_style(pages)
-    if style == "A":
-        return style, _rows_style_a(pages), city_average(pages)
-    if style == "B":
-        return style, _rows_style_b(pages), None
-    return style, [], None
+def parse_report(path: Path) -> tuple[str, list[DailyRow], int | None, date | None]:
+    return parse_pages(extract_pages(path))

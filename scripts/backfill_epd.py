@@ -31,15 +31,15 @@ for page in range(first, last + 1):
     for link in links:
         try:
             pdf = download(link)
-            style, srows, avg = parse_report(pdf)
+            style, srows, avg, avg_date = parse_report(pdf)
         except Exception as e:  # keep going; record the failure
             print(f"   FAILED {link.title}: {e}")
             styles["error"] += 1
             continue
         styles[style] += 1
         rows += [r.__dict__ | {"source": "epd_pdf"} for r in srows]
-        if avg is not None and srows:
-            city_rows.append({"date": srows[0].date, "station_label": "Lahore average", "station_id": None,
+        if avg is not None and avg_date is not None:
+            city_rows.append({"date": avg_date, "station_label": "Lahore average", "station_id": None,
                               "city": "Lahore", "pollutant": "pm25", "conc": None, "aqi": avg,
                               "style": style, "source": "epd_pdf"})
 df = pd.DataFrame(rows + city_rows)

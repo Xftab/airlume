@@ -27,7 +27,8 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - [x] Live dry run done 14:00 PKT: 10 Lahore stations, 35/36 districts, Open-Meteo OK. Finding: portal AQI differs from hourly-PM2.5 AQI in the afternoon (8-h mean or gas-dominated); all six pollutants now stored to settle it. See research notes.
 - [x] Unmatched names were page furniture; ignored. Ozone identified as the afternoon driver; gas sub-indices added to `aqi.py`.
 - [x] EPD archive sampled across 2018-2025; parser written for the 2022-2025 layouts (`pipeline/epd_parse.py`, 5 fixture tests). Archive ends 2 Dec 2025.
-- [ ] Aftab: re-run `K:\airlume\setup` (adds pdfplumber), then `python scripts\backfill_epd.py 1 5` as a trial (~100 PDFs, a few minutes); then the full `1 104` run when convenient (~1.5 h, resumable).
+- [x] Trial back-fill pages 1-5: 379 rows. Two more layouts (D, E) and scanned files found and handled; parser now covers Aug 2025 - Dec 2025 fully and 2022 - 2024.
+- [ ] Aftab: re-run `python scripts\backfill_epd.py 1 5` (re-parses the cached PDFs, no new downloads), then the full `1 104` when convenient (~1.5 h, resumable).
 - [ ] Decide how to treat the gap 3 Dec 2025 - 12 Oct 2026 (no official per-station data; CAMS city-level or leave empty).
 - [ ] After ~1 day of hourly collection: `python scripts\w1_check.py` to settle the averaging window.
 - [ ] Aftab: create accounts — Groq, Google AI Studio, OpenAQ, CARTO, Streamlit Community Cloud — and put the keys in `K:\airlume\.env` (never in chat).
