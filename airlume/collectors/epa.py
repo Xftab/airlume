@@ -60,13 +60,18 @@ def _num(text: str) -> float | None:
 
 
 def _parse_updated(text: str, now: datetime | None = None) -> datetime | None:
-    """'Last updated: 10:00 AM, Oct 13' or '... Oct 13, 2026' -> aware UTC datetime."""
+    """'10:00 AM, Oct 13' / '10:00 AM, Oct 13, 2026' (header) or 'Oct 13, 7:00 AM' (table rows) -> aware UTC."""
     m = re.search(r"(\d{1,2}:\d{2}\s*[AP]M),\s*([A-Z][a-z]{2})\s+(\d{1,2})(?:,\s*(\d{4}))?", text)
-    if not m:
-        return None
+    if m:
+        time_s, mon, day, year_s = m.group(1), m.group(2), m.group(3), m.group(4)
+    else:
+        m2 = re.search(r"([A-Z][a-z]{2})\s+(\d{1,2})(?:,\s*(\d{4}))?,\s*(\d{1,2}:\d{2}\s*[AP]M)", text)
+        if not m2:
+            return None
+        mon, day, year_s, time_s = m2.group(1), m2.group(2), m2.group(3), m2.group(4)
     now = now or datetime.now(KARACHI)
-    year = int(m.group(4)) if m.group(4) else now.year
-    local = datetime.strptime(f"{m.group(1)} {m.group(2)} {m.group(3)} {year}", "%I:%M %p %b %d %Y")
+    year = int(year_s) if year_s else now.year
+    local = datetime.strptime(f"{time_s} {mon} {day} {year}", "%I:%M %p %b %d %Y")
     local = local.replace(tzinfo=KARACHI)
     return local.astimezone(timezone.utc)
 
@@ -211,3 +216,54 @@ def fetch_home_html(session: requests.Session | None = None, timeout: int = 30) 
     )
     r.raise_for_status()
     return r.text
+
+
+# --------------------------------------------------------------------------
+# Lahore page extras: 7-day hourly city trend and the 24-hour forecast
+# --------------------------------------------------------------------------
+
+def parse_lahore_trend(html: str) -> pd.DataFrame:
+    """The 'AQI Trends (Last 7 Days)' widget embeds one <span data-date data-hour data-aqi> per hour.
+    Returns city_hourly rows for Lahore (city_id PB-LHE). Empty hours (future) are skipped."""
+    soup = BeautifulSoup(html, "lxml")
+    sec = soup.find(id="historical-aqi-graph-section") or soup
+    rows = []
+    for sp in sec.find_all("span", attrs={"data-aqi": True}):
+        aqi = sp.get("data-aqi", "").strip()
+        if not aqi.isdigit():
+            continue
+        m = re.search(r"([A-Z][a-z]{2}) (\d{1,2}), (\d{4})", sp.get("data-date", ""))
+        if not m:
+            continue
+        local = datetime.strptime(f"{m.group(1)} {m.group(2)} {m.group(3)} {int(sp['data-hour']):02d}", "%b %d %Y %H")
+        rows.append({
+            "city_id": "PB-LHE",
+            "ts": local.replace(tzinfo=KARACHI).astimezone(timezone.utc),
+            "pm25": None, "pm10": None,
+            "aqi": int(aqi), "n_stations": None,
+            "source": "punjab_epa",
+        })
+    return pd.DataFrame(rows).drop_duplicates(subset=["city_id", "ts"]) if rows else pd.DataFrame()
+
+
+def parse_lahore_forecast(html: str, issued_at: datetime | None = None) -> pd.DataFrame:
+    """The '24-Hour AQI Forecast' widget: <article><time datetime=ISO>..<strong>AQI nnn</strong>.
+    Returns forecast rows: city_id, issued_at, target_ts, aqi, source."""
+    soup = BeautifulSoup(html, "lxml")
+    sec = soup.find(id="aqi-forecast-section")
+    if sec is None:
+        return pd.DataFrame()
+    page_ts = _parse_updated(soup.get_text(" ", strip=True)) or issued_at or datetime.now(timezone.utc)
+    rows = []
+    for art in sec.find_all("article"):
+        t = art.find("time")
+        strong = art.find("strong")
+        if not (t and strong and t.get("datetime")):
+            continue
+        m = re.search(r"(\d{1,3})", strong.get_text())
+        if not m:
+            continue
+        target = datetime.fromisoformat(t["datetime"]).astimezone(timezone.utc)
+        rows.append({"city_id": "PB-LHE", "issued_at": page_ts, "target_ts": target,
+                     "aqi": int(m.group(1)), "source": "punjab_epa_forecast"})
+    return pd.DataFrame(rows)

@@ -26,13 +26,16 @@ KEYS = {
     "readings": ["station_id", "ts", "source"],
     "city_hourly": ["city_id", "ts", "source"],
     "epd_daily": ["date", "station_label", "pollutant", "source"],
+    "forecasts": ["city_id", "issued_at", "target_ts", "source"],
 }
 COLS = {
     "readings": ["station_id", "ts", "pm25", "pm10", "co", "so2", "no2", "o3", "aqi", "aqi_computed", "source"],
     "city_hourly": ["city_id", "ts", "pm25", "pm10", "aqi", "n_stations", "source"],
     "epd_daily": ["date", "station_label", "station_id", "city", "pollutant", "conc", "aqi", "style", "source"],
+    "forecasts": ["city_id", "issued_at", "target_ts", "aqi", "source"],
 }
-TIME_COL = {"readings": "ts", "city_hourly": "ts", "epd_daily": "date"}
+TIME_COL = {"readings": "ts", "city_hourly": "ts", "epd_daily": "date", "forecasts": "issued_at"}
+EXTRA_TS = {"forecasts": ["target_ts"]}
 
 
 def _path(table: str, source: str, month: str) -> Path:
@@ -49,15 +52,19 @@ def export(table: str, df: pd.DataFrame) -> list[Path]:
             df[c] = None
     df = df[COLS[table]]
     tcol = TIME_COL[table]
-    df[tcol] = pd.to_datetime(df[tcol], utc=(tcol == "ts"))
+    df[tcol] = pd.to_datetime(df[tcol], utc=(tcol != "date"))
+    for c in EXTRA_TS.get(table, []):
+        df[c] = pd.to_datetime(df[c], utc=True)
     touched: list[Path] = []
-    bucket = df[tcol].dt.strftime("%Y-%m") if tcol == "ts" else df[tcol].dt.strftime("%Y")
+    bucket = df[tcol].dt.strftime("%Y-%m") if tcol != "date" else df[tcol].dt.strftime("%Y")
     for (source, month), part in df.groupby([df["source"], bucket]):
         p = _path(table, source, month)
         p.parent.mkdir(parents=True, exist_ok=True)
         if p.exists():
             old = pd.read_csv(p)
-            old[tcol] = pd.to_datetime(old[tcol], utc=(tcol == "ts"))
+            old[tcol] = pd.to_datetime(old[tcol], utc=(tcol != "date"))
+            for c in EXTRA_TS.get(table, []):
+                old[c] = pd.to_datetime(old[c], utc=True)
             merged = pd.concat([old, part], ignore_index=True)
         else:
             merged = part
@@ -77,7 +84,9 @@ def load_all(table: str) -> pd.DataFrame:
     tcol = TIME_COL[table]
     for f in files:
         d = pd.read_csv(f)
-        d[tcol] = pd.to_datetime(d[tcol], utc=(tcol == "ts"))
+        d[tcol] = pd.to_datetime(d[tcol], utc=(tcol != "date"))
+        for c in EXTRA_TS.get(table, []):
+            d[c] = pd.to_datetime(d[c], utc=True)
         if tcol == "date":
             d[tcol] = d[tcol].dt.date
         frames.append(d)

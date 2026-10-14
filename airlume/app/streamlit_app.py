@@ -217,7 +217,28 @@ with right:
 # ---------------------------------------------------------------- history
 st.divider()
 st.subheader("History")
-tab_daily, tab_hourly = st.tabs(["Daily bulletins (EPD, 2022-2025)", "Hourly readings (our collection)"])
+tab_fc, tab_daily, tab_replay, tab_hourly = st.tabs(["Next 24 hours", "Daily bulletins (EPD, 2022-2025)", "Replay a day", "Hourly readings (our collection)"])
+
+with tab_fc:
+    fc = store.latest_forecast("PB-LHE")
+    if fc.empty:
+        st.caption("No forecast captured yet. Each collection round stores EPA Punjab's 24-hour forecast and the CAMS model forecast.")
+    else:
+        fc["target_ts"] = pd.to_datetime(fc["target_ts"], utc=True).dt.tz_convert(KARACHI)
+        fc["source"] = fc["source"].map({"punjab_epa_forecast": "EPA Punjab forecast", "open_meteo_cams_forecast": "CAMS model (Open-Meteo)"}).fillna(fc["source"])
+        issued = pd.to_datetime(fc["issued_at"].iloc[0], utc=True).tz_convert(KARACHI)
+        st.caption(f"Issued {issued:%d %b %H:%M} PKT. These are relayed forecasts, not ours; whose they are is always shown.")
+        base = alt.Chart(fc).encode(x=alt.X("target_ts:T", title=None))
+        lines = base.mark_line(point=True).encode(y=alt.Y("forecast:Q", title="AQI"), color=alt.Color("source:N", title=None),
+                                                  tooltip=["source", alt.Tooltip("target_ts:T", format="%d %b %H:%M"), alt.Tooltip("forecast:Q", title="forecast AQI")])
+        actual = base.mark_point(shape="diamond", size=80, color="#E8EEF4").encode(y="actual:Q", tooltip=[alt.Tooltip("actual:Q", title="actual AQI")]).transform_filter("isValid(datum.actual)")
+        st.altair_chart((lines + actual).properties(height=280), width="stretch")
+        err = store.forecast_errors("PB-LHE")
+        if not err.empty:
+            summ = err.groupby("source")["error"].agg(n="count", mean_abs=lambda e: e.abs().mean(), bias="mean").round(1)
+            summ.index = summ.index.map({"punjab_epa_forecast": "EPA Punjab", "open_meteo_cams_forecast": "CAMS"})
+            st.markdown("**Forecast scorecard so far** (forecast minus what the stations later recorded)")
+            st.dataframe(summ, width="stretch")
 
 with tab_daily:
     end = datetime.now(timezone.utc)
@@ -242,6 +263,34 @@ with tab_daily:
                 tooltip=[alt.Tooltip("date:T"), alt.Tooltip("aqi:Q", title="AQI")])
             st.altair_chart((band_rules + line).properties(height=280), width="stretch")
             st.caption(f"{len(series):,} days · 2020-21 bulletins excluded (different index scale) · gap after 2 Dec 2025 until our own collection began")
+
+with tab_replay:
+    end = datetime.now(timezone.utc)
+    hist = store.epd_daily_series("Lahore", end - timedelta(days=4 * 365), end)
+    hist = hist[hist["station_id"].notna() & (hist["pollutant"] == "pm25")]
+    if hist.empty:
+        st.caption("No station-level history for the current network.")
+    else:
+        days = sorted(pd.to_datetime(hist["date"]).dt.date.unique())
+        per_day = hist.groupby("date")["aqi"].agg(["mean", "count"])
+        full = per_day[per_day["count"] >= 5]
+        worst_day = (full if not full.empty else per_day)["mean"].idxmax()
+        idx = days.index(pd.Timestamp(worst_day).date()) if pd.Timestamp(worst_day).date() in days else len(days) - 1
+        day = st.select_slider("Day (slide; defaults to the worst day on record)", options=days, value=days[idx],
+                               format_func=lambda d: d.strftime("%d %b %Y"))
+        rows = hist[pd.to_datetime(hist["date"]).dt.date == day]
+        stations = reg.stations_in("PB-LHE")
+        base = pd.DataFrame([{"station_id": s_.station_id, "name": s_.name, "lat": s_.lat, "lon": s_.lon} for s_ in stations])
+        frame = base.merge(rows.groupby("station_id", as_index=False)["aqi"].max(), on="station_id", how="left")
+        frame["stale"] = frame["aqi"].isna()
+        c1, c2 = st.columns([3, 1.4])
+        with c1:
+            st.pydeck_chart(deck_stations_3d(frame, "overview"), width="stretch", height=420)
+        with c2:
+            st.metric("Stations in that day's bulletin", f"{int(frame['aqi'].notna().sum())} of {len(frame)}")
+            if frame["aqi"].notna().any():
+                st.altair_chart(ranked_bar(frame, "name", height=300), width="stretch")
+        st.caption("24-hour PM2.5 AQI from the EPD bulletin of that day. Only the stations that exist in today's network are shown; the bulletins also covered Town Hall, PKLI, LWMC, FMDRC, PU 2 and EPA HQ.")
 
 with tab_hourly:
     end = datetime.now(timezone.utc)

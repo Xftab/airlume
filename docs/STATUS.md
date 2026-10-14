@@ -29,6 +29,9 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - App rewritten for real data: loads the CSV archive on start (live readings + 3,089 daily history rows), removes fake rows once real data exists; daily-history timeline (2022-2025, B17 excluded) and hourly tab; 2D ranked bar beside every 3D view (W10); show-the-form toggle; model selector; follow-up questions merge with the previous form.
 - `run.bat` now fetches one round before starting; `schedule.bat` registers an hourly Windows task.
 
+- Live page investigated from a saved copy: 7-day hourly city trend and 24-h forecast embedded. Parsers written (fixture tests), `forecasts` table + archive, CAMS forecast captured alongside, "Next 24 hours" tab with scorecard. Replay-a-day slider added. App verified live on the laptop (10 of 11 stations, 09:00 PKT).
+- Fixed: positional INSERT broke on the laptop's migrated table (gas columns at the end) - column lists are explicit now.
+
 ## Where we stopped (13 Oct, 19:10)
 Session closed by Aftab. Everything below is on the laptop and pushed to GitHub. Tomorrow's first items: send the EPA email; create the accounts; schedule `collect.bat` hourly on the laptop (Task Scheduler) or install `_update\collect.yml`; run `python scripts\w1_check.py` after a day of readings; look at the 41 remaining unknown bulletins (`data\raw\epd\_styles.csv`).
 

@@ -49,6 +49,15 @@ CREATE TABLE IF NOT EXISTS epd_daily (
     ingested_at   TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (date, station_label, pollutant, source)
 );
+CREATE TABLE IF NOT EXISTS forecasts (
+    city_id      VARCHAR NOT NULL,
+    issued_at    TIMESTAMPTZ NOT NULL,
+    target_ts    TIMESTAMPTZ NOT NULL,
+    aqi          INTEGER NOT NULL,
+    source       VARCHAR NOT NULL,
+    ingested_at  TIMESTAMPTZ NOT NULL,
+    PRIMARY KEY (city_id, issued_at, target_ts, source)
+);
 CREATE TABLE IF NOT EXISTS city_hourly (
     city_id      VARCHAR NOT NULL,
     ts           TIMESTAMPTZ NOT NULL,
@@ -156,6 +165,51 @@ class Store:
         self.con.unregister("incoming")
         return len(df)
 
+    def upsert_forecasts(self, df: pd.DataFrame) -> int:
+        if df.empty:
+            return 0
+        df = df.copy()
+        for c in ("issued_at", "target_ts"):
+            df[c] = pd.to_datetime(df[c], utc=True).dt.strftime("%Y-%m-%dT%H:%M:%S+00:00")
+        df["aqi"] = pd.to_numeric(df["aqi"]).astype("Int64")
+        self.con.register("incoming", df)
+        self.con.execute(
+            """
+            INSERT OR REPLACE INTO forecasts (city_id, issued_at, target_ts, aqi, source, ingested_at)
+            SELECT city_id, CAST(issued_at AS TIMESTAMPTZ), CAST(target_ts AS TIMESTAMPTZ), aqi, source, now()
+            FROM incoming
+            """
+        )
+        self.con.unregister("incoming")
+        return len(df)
+
+    def latest_forecast(self, city_id: str) -> pd.DataFrame:
+        """Most recently issued forecast for a city, with the actual value where known."""
+        return self.con.execute(
+            """
+            WITH last AS (SELECT max(issued_at) AS issued_at FROM forecasts WHERE city_id = ?)
+            SELECT f.issued_at, f.target_ts, f.aqi AS forecast, f.source, c.aqi AS actual
+            FROM forecasts f JOIN last USING (issued_at)
+            LEFT JOIN city_hourly c ON c.city_id = f.city_id AND c.ts = f.target_ts AND c.source = 'punjab_epa'
+            WHERE f.city_id = ? ORDER BY f.target_ts
+            """,
+            [city_id, city_id],
+        ).df()
+
+    def forecast_errors(self, city_id: str) -> pd.DataFrame:
+        """Every forecast hour that now has an actual: horizon (h), forecast, actual, error."""
+        return self.con.execute(
+            """
+            SELECT f.issued_at, f.target_ts,
+                   CAST(date_diff('hour', f.issued_at, f.target_ts) AS INTEGER) AS horizon_h,
+                   f.aqi AS forecast, c.aqi AS actual, f.aqi - c.aqi AS error, f.source
+            FROM forecasts f JOIN city_hourly c
+              ON c.city_id = f.city_id AND c.ts = f.target_ts AND c.source = 'punjab_epa'
+            WHERE f.city_id = ? ORDER BY f.target_ts
+            """,
+            [city_id],
+        ).df()
+
     # ---- reads ------------------------------------------------------------
     def latest_station_values(self, station_ids: list[str]) -> pd.DataFrame:
         if not station_ids:
@@ -241,7 +295,7 @@ class Store:
         ).df()
 
     def delete_source(self, source: str) -> None:
-        for t in ("readings", "city_hourly", "epd_daily"):
+        for t in ("readings", "city_hourly", "epd_daily", "forecasts"):
             self.con.execute(f"DELETE FROM {t} WHERE source = ?", [source])
 
     def real_counts(self) -> dict[str, int]:

@@ -47,3 +47,16 @@ def test_count_hours_above(store):
     df = store.aggregate(["LHR-MR"], datetime(2026, 10, 11, tzinfo=timezone.utc),
                          datetime(2026, 10, 14, tzinfo=timezone.utc), "aqi", "count_hours_above", 100)
     assert int(df.value.iloc[0]) > 0
+
+
+def test_forecasts_and_errors(store):
+    import pandas as pd
+    issued = datetime(2026, 10, 13, 10, tzinfo=timezone.utc)
+    fc = pd.DataFrame([{"city_id": "PB-LHE", "issued_at": issued, "target_ts": issued + timedelta(hours=h),
+                        "aqi": 150 + h, "source": "punjab_epa_forecast"} for h in (1, 2)])
+    assert store.upsert_forecasts(fc) == 2
+    store.upsert_city_hourly(pd.DataFrame([{"city_id": "PB-LHE", "ts": issued + timedelta(hours=1), "pm25": None, "pm10": None,
+                                            "aqi": 140, "n_stations": None, "source": "punjab_epa"}]))
+    err = store.forecast_errors("PB-LHE")
+    assert len(err) == 1 and int(err.error.iloc[0]) == 11 and int(err.horizon_h.iloc[0]) == 1
+    assert len(store.latest_forecast("PB-LHE")) == 2

@@ -46,6 +46,14 @@ def run(dry_run: bool = False) -> int:
         else:
             results["readings"] = df
             ok += 1
+        trend = epa.parse_lahore_trend(html)
+        print(f"[epa/lahore-trend] {len(trend)} city-hours (last 7 days)")
+        if not trend.empty:
+            results["city_hourly"] = pd.concat([results.get("city_hourly", pd.DataFrame()), trend], ignore_index=True)
+        fc = epa.parse_lahore_forecast(html)
+        print(f"[epa/lahore-forecast] {len(fc)} forecast hours")
+        if not fc.empty:
+            results["forecasts"] = fc
     except Exception:
         print("[epa/lahore] FAILED"); traceback.print_exc()
 
@@ -73,6 +81,13 @@ def run(dry_run: bool = False) -> int:
         print(f"[open-meteo/lahore] {len(om)} hourly rows")
         prev = results.get("city_hourly", pd.DataFrame())
         results["city_hourly"] = pd.concat([prev, om[archive.COLS["city_hourly"]]], ignore_index=True)
+        # CAMS also gives a forecast for the next 24 h: keep it, labelled, for the scorecard (C5).
+        fut = openmeteo.fetch_hourly(*LAHORE, past_days=0, forecast_days=2)
+        fut = fut[fut["ts"] > datetime.now(timezone.utc)].head(24)
+        if not fut.empty:
+            cams_fc = pd.DataFrame({"city_id": "PB-LHE", "issued_at": datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0),
+                                    "target_ts": fut["ts"], "aqi": fut["aqi"].round().astype("Int64"), "source": "open_meteo_cams_forecast"})
+            results["forecasts"] = pd.concat([results.get("forecasts", pd.DataFrame()), cams_fc.dropna(subset=["aqi"])], ignore_index=True)
         ok += 1
     except Exception:
         print("[open-meteo] FAILED"); traceback.print_exc()
@@ -85,7 +100,8 @@ def run(dry_run: bool = False) -> int:
     store = Store()
     for table, df in results.items():
         touched = archive.export(table, df)
-        n = store.upsert_readings(df) if table == "readings" else store.upsert_city_hourly(df)
+        n = {"readings": store.upsert_readings, "city_hourly": store.upsert_city_hourly,
+             "forecasts": store.upsert_forecasts}[table](df)
         print(f"[{table}] {n} rows -> db; archive files: {[str(p.relative_to(archive.ROOT)) for p in touched]}")
     print(store.counts())
     return 0 if ok else 1
