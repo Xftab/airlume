@@ -63,6 +63,28 @@ CREATE TABLE IF NOT EXISTS city_hourly (
 """
 
 _ALLOWED_METRICS = {"aqi", "pm25", "pm10"}
+
+
+def _prepare(df: pd.DataFrame, time_col: str, numeric: tuple[str, ...], ints: tuple[str, ...] = ()) -> pd.DataFrame:
+    """Make column dtypes explicit so DuckDB's pandas scan never guesses
+    (on Windows a tz-aware Python datetime scalar was read as DOUBLE)."""
+    df = df.copy()
+    # Timestamps travel as ISO text and are cast inside SQL: DuckDB's pandas scan on
+    # Windows mis-typed tz-aware datetime columns as DOUBLE.
+    if time_col == "ts":
+        df["ts"] = pd.to_datetime(df["ts"], utc=True).dt.strftime("%Y-%m-%dT%H:%M:%S+00:00")
+    else:
+        df["date"] = pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d")
+    for c in numeric:
+        if c in df.columns:
+            df[c] = pd.to_numeric(df[c], errors="coerce").astype("float64")
+    for c in ints:
+        if c in df.columns:
+            df[c] = pd.to_numeric(df[c], errors="coerce").astype("Int64")
+    for c in ("station_id", "city_id", "source", "station_label", "city", "pollutant", "style"):
+        if c in df.columns:
+            df[c] = df[c].astype(object).where(df[c].notna(), None).map(lambda v: None if v is None else str(v))
+    return df
 _ALLOWED_AGG = {"latest", "mean", "max", "min", "count_hours_above"}
 
 
@@ -89,12 +111,13 @@ class Store:
         for col in ("co", "so2", "no2", "o3"):
             if col not in df.columns:
                 df[col] = None
-        df["ingested_at"] = datetime.now(tz=__import__("datetime").timezone.utc)
+        df = _prepare(df, "ts", ("pm25", "pm10", "co", "so2", "no2", "o3"), ("aqi", "aqi_computed"))
         self.con.register("incoming", df)
         self.con.execute(
             """
             INSERT OR REPLACE INTO readings
-            SELECT station_id, ts, pm25, pm10, co, so2, no2, o3, aqi, aqi_computed, source, ingested_at
+                (station_id, ts, pm25, pm10, co, so2, no2, o3, aqi, aqi_computed, source, ingested_at)
+            SELECT station_id, CAST(ts AS TIMESTAMPTZ), pm25, pm10, co, so2, no2, o3, aqi, aqi_computed, source, now()
             FROM incoming
             """
         )
@@ -104,13 +127,13 @@ class Store:
     def upsert_city_hourly(self, df: pd.DataFrame) -> int:
         if df.empty:
             return 0
-        df = df.copy()
-        df["ingested_at"] = datetime.now(tz=__import__("datetime").timezone.utc)
+        df = _prepare(df, "ts", ("pm25", "pm10"), ("aqi", "n_stations"))
         self.con.register("incoming", df)
         self.con.execute(
             """
             INSERT OR REPLACE INTO city_hourly
-            SELECT city_id, ts, pm25, pm10, aqi, n_stations, source, ingested_at
+                (city_id, ts, pm25, pm10, aqi, n_stations, source, ingested_at)
+            SELECT city_id, CAST(ts AS TIMESTAMPTZ), pm25, pm10, aqi, n_stations, source, now()
             FROM incoming
             """
         )
@@ -120,13 +143,13 @@ class Store:
     def upsert_epd_daily(self, df: pd.DataFrame) -> int:
         if df.empty:
             return 0
-        df = df.copy()
-        df["ingested_at"] = datetime.now(tz=__import__("datetime").timezone.utc)
+        df = _prepare(df, "date", ("conc",), ("aqi",))
         self.con.register("incoming", df)
         self.con.execute(
             """
             INSERT OR REPLACE INTO epd_daily
-            SELECT date, station_label, station_id, city, pollutant, conc, aqi, style, source, ingested_at
+                (date, station_label, station_id, city, pollutant, conc, aqi, style, source, ingested_at)
+            SELECT CAST(date AS DATE), station_label, station_id, city, pollutant, conc, aqi, style, source, now()
             FROM incoming
             """
         )
