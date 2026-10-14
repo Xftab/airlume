@@ -51,7 +51,27 @@ def answer(q: ResolvedQuery, store: Store, reg: Registry) -> str:
     ids = [q.station_id] if q.station_id else [s.station_id for s in stations]
     name_of = {s.station_id: s.name for s in stations}
     df = store.aggregate(ids, q.start, q.end, q.metric, q.aggregation, q.threshold)
-    if df.empty:
+    if df.empty and q.metric == "aqi" and not q.station_id:
+        # Station-level rows start when our own collection started; the city-level hourly
+        # series (from the portal's 7-day trend) reaches further back. Use it, and say so.
+        cur = store.city_series(q.city_id, q.start, q.end, "aqi")
+        cur = cur[cur["source"] == "punjab_epa"]
+        if not cur.empty:
+            if q.aggregation == "count_hours_above" and q.threshold is not None:
+                total = int((q.end - q.start).total_seconds() // 3600)
+                return (f"City-level AQI (no station rows for that window yet): {int((cur['value'] > q.threshold).sum())} of "
+                        f"{total} hours above {q.threshold}.")
+            func = {"mean": "mean", "max": "max", "min": "min", "latest": "mean"}[q.aggregation]
+            v = float(getattr(cur["value"], func)())
+            text = f"{city.name} city-level AQI ({q.aggregation if q.aggregation != 'latest' else 'mean'} over the window): {v:.0f} ({band_for(int(v)).label.lower()})."
+            if q.compare_start is not None:
+                prev = store.city_series(q.city_id, q.compare_start, q.compare_end, "aqi")
+                prev = prev[prev["source"] == "punjab_epa"]
+                if not prev.empty:
+                    pv = float(getattr(prev["value"], func)())
+                    word = "worse" if v > pv else "better"
+                    text += f" Compared window: {pv:.0f}. {word.capitalize()} by {abs(v - pv):.0f} points."
+            return text + " Station-level detail starts from when hourly collection began."
         return "No data for that place and time."
 
     window = f"{q.start.astimezone():%d %b %H:%M} to {q.end.astimezone():%d %b %H:%M}"

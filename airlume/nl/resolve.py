@@ -126,6 +126,10 @@ def resolve(intent: ViewIntent, registry: Registry, now: datetime | None = None)
             notes.append(note)
 
     start, end = resolve_time(intent, now)
+    if intent.compare_to in {"yesterday", "last_week", "last_year"} and intent.time.label == "now":
+        # "better than yesterday?" compares today-so-far with the same hours yesterday
+        start, _ = _day_bounds((now or datetime.now(KARACHI)).date())
+        end = now or datetime.now(KARACHI)
 
     cstart = cend = None
     compare_city_id = None

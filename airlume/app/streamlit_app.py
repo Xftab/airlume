@@ -95,6 +95,21 @@ def station_frame(city_id: str) -> pd.DataFrame:
     return df
 
 
+def station_window_frame(city_id: str, start: datetime, end: datetime, metric: str, aggregation: str) -> pd.DataFrame:
+    """Per-station aggregate over [start, end) for the compare / timeline views."""
+    stations = reg.stations_in(city_id)
+    base = pd.DataFrame([{"station_id": s_.station_id, "name": s_.name, "lat": s_.lat, "lon": s_.lon} for s_ in stations])
+    agg = "mean" if aggregation == "latest" else aggregation
+    df = store.aggregate([s_.station_id for s_ in stations], start, end, metric, agg)
+    if df.empty:
+        base["aqi"] = None; base["stale"] = True
+        return base
+    df = df.rename(columns={"value": "aqi"})[["station_id", "aqi"]]
+    out = base.merge(df, on="station_id", how="left")
+    out["stale"] = out["aqi"].isna()
+    return out
+
+
 def city_frame() -> pd.DataFrame:
     base = pd.DataFrame([{"city_id": c.city_id, "name": c.name, "lat": c.lat, "lon": c.lon} for c in reg.cities])
     latest = store.latest_city_values()
@@ -184,10 +199,54 @@ cam = resolved.camera if resolved else "overview"
 national = view == "city_overview" or (resolved is not None and (city_id != "PB-LHE" or resolved.compare_city_id))
 
 # ---------------------------------------------------------------- main view
+split = resolved is not None and resolved.view == "compare" and resolved.compare_start is not None and not resolved.compare_city_id and city_id == "PB-LHE"
+timeline = resolved is not None and resolved.view == "timeline" and city_id == "PB-LHE"
+
+if split:
+    fmt = lambda d: d.astimezone(KARACHI).strftime("%d %b %H:%M")
+    a = station_window_frame(city_id, resolved.start, resolved.end, resolved.metric, resolved.aggregation)
+    b = station_window_frame(city_id, resolved.compare_start, resolved.compare_end, resolved.metric, resolved.aggregation)
+    ca, cb = st.columns(2)
+    with ca:
+        st.markdown(f"**This window** · {fmt(resolved.start)} - {fmt(resolved.end)}")
+        st.pydeck_chart(deck_stations_3d(a, "north"), width="stretch", height=380)
+    with cb:
+        st.markdown(f"**Compared with** · {fmt(resolved.compare_start)} - {fmt(resolved.compare_end)}")
+        st.pydeck_chart(deck_stations_3d(b, "north"), width="stretch", height=380)
+    delta = a[["name", "aqi"]].merge(b[["name", "aqi"]], on="name", suffixes=("_now", "_then")).dropna()
+    if not delta.empty:
+        delta["change"] = delta["aqi_now"] - delta["aqi_then"]
+        delta["colour"] = delta["change"].map(lambda v: "#E0736A" if v > 0 else "#7FB069")
+        st.altair_chart(
+            alt.Chart(delta).mark_bar().encode(
+                y=alt.Y("name:N", sort="x", title=None), x=alt.X("change:Q", title=f"change in {resolved.metric.upper()} (positive = worse now)"),
+                color=alt.Color("colour:N", scale=None, legend=None),
+                tooltip=["name", alt.Tooltip("aqi_now:Q", title="now", format=".0f"), alt.Tooltip("aqi_then:Q", title="then", format=".0f"), alt.Tooltip("change:Q", format="+.0f")],
+            ).properties(height=260), width="stretch")
+    else:
+        st.caption("Not enough hourly data in one of the two windows yet; the archive grows every hour.")
+
+elif timeline:
+    ids = [resolved.station_id] if resolved.station_id else [s_.station_id for s_ in reg.stations_in("PB-LHE")]
+    ser = store.station_series(ids, resolved.start, resolved.end, resolved.metric)
+    if ser.empty:
+        st.caption("No hourly readings in that window yet.")
+    else:
+        names = {s_.station_id: s_.name for s_ in reg.stations_in("PB-LHE")}
+        ser["station"] = ser["station_id"].map(names)
+        ser["ts"] = pd.to_datetime(ser["ts"], utc=True).dt.tz_convert(KARACHI)
+        st.altair_chart(alt.Chart(ser).mark_line(point=len(ids) == 1).encode(
+            x=alt.X("ts:T", title=None), y=alt.Y("value:Q", title=resolved.metric.upper()), color=alt.Color("station:N", title=None),
+            tooltip=["station", alt.Tooltip("ts:T", format="%d %b %H:%M"), alt.Tooltip("value:Q", format=".0f")]).properties(height=360), width="stretch")
+        best = ser.groupby(ser["ts"].dt.hour)["value"].mean()
+        st.caption(f"Cleanest hour of day in this window: {int(best.idxmin()):02d}:00 (mean {best.min():.0f}); worst: {int(best.idxmax()):02d}:00 (mean {best.max():.0f}).")
+
 left, right = st.columns([3, 1.4])
 
 with left:
-    if national:
+    if split or timeline:
+        pass
+    elif national:
         cf = city_frame()
         st.pydeck_chart(deck_city_overview(cf), width="stretch", height=560)
     else:
@@ -202,7 +261,9 @@ with left:
             st.caption(f"Data as of {latest_ts:%d %b %Y, %H:%M} PKT · Source: Environmental Protection Agency, Punjab · station positions approximate")
 
 with right:
-    if national:
+    if split or timeline:
+        pass
+    elif national:
         cf = city_frame().dropna(subset=["aqi"])
         st.markdown("**Cities, ranked**")
         if cf.empty:
@@ -303,8 +364,17 @@ with tab_hourly:
     ids = [s.station_id for s in reg.stations_in("PB-LHE")]
     ser = store.station_series(ids, start, end, "aqi")
     if ser.empty:
-        st.caption("No hourly readings yet. `collect.bat` adds one row per station per run; the scheduler runs it hourly.")
+        st.caption("No hourly readings yet. The cloud collector adds one row per station every hour.")
     else:
+        hours = sorted(pd.to_datetime(ser["ts"], utc=True).unique())
+        if len(hours) > 1:
+            pick = st.select_slider("Scrub through the collected hours", options=hours, value=hours[-1],
+                                    format_func=lambda t: pd.Timestamp(t).tz_convert(KARACHI).strftime("%d %b %H:%M"))
+            at = ser[pd.to_datetime(ser["ts"], utc=True) == pick]
+            base = pd.DataFrame([{"station_id": s_.station_id, "name": s_.name, "lat": s_.lat, "lon": s_.lon} for s_ in reg.stations_in("PB-LHE")])
+            frame = base.merge(at[["station_id", "value"]].rename(columns={"value": "aqi"}), on="station_id", how="left")
+            frame["stale"] = frame["aqi"].isna()
+            st.pydeck_chart(deck_stations_3d(frame, "overview"), width="stretch", height=360)
         names = {s.station_id: s.name for s in reg.stations_in("PB-LHE")}
         ser["station"] = ser["station_id"].map(names)
         st.altair_chart(
