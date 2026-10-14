@@ -217,6 +217,36 @@ class Store:
             """
         ).df()
 
+    def delete_source(self, source: str) -> None:
+        for t in ("readings", "city_hourly", "epd_daily"):
+            self.con.execute(f"DELETE FROM {t} WHERE source = ?", [source])
+
+    def real_counts(self) -> dict[str, int]:
+        r = self.con.execute("SELECT count(*) FROM readings WHERE source <> 'fake'").fetchone()[0]
+        c = self.con.execute("SELECT count(*) FROM city_hourly WHERE source <> 'fake'").fetchone()[0]
+        e = self.con.execute("SELECT count(*) FROM epd_daily").fetchone()[0]
+        return {"readings": int(r), "city_hourly": int(c), "epd_daily": int(e)}
+
+    def epd_daily_series(self, city: str, start: datetime, end: datetime,
+                         comparable_only: bool = True) -> pd.DataFrame:
+        """Daily bulletin rows for a city. `comparable_only` drops the 2020-21 Smog Policy scale (style B17)."""
+        q = """
+            SELECT date, station_label, station_id, pollutant, conc, aqi, style
+            FROM epd_daily WHERE city = ? AND date >= ? AND date < ?
+        """
+        params: list = [city, start.date(), end.date()]
+        if comparable_only:
+            q += " AND style <> 'B17'"
+        return self.con.execute(q + " ORDER BY date", params).df()
+
+    def city_series(self, city_id: str, start: datetime, end: datetime, metric: str) -> pd.DataFrame:
+        if metric not in _ALLOWED_METRICS:
+            raise ValueError("bad metric")
+        return self.con.execute(
+            f"SELECT ts, {metric} AS value, source FROM city_hourly WHERE city_id = ? AND ts >= ? AND ts < ? ORDER BY ts",
+            [city_id, start, end],
+        ).df()
+
     def counts(self) -> dict[str, int]:
         r = self.con.execute("SELECT count(*) FROM readings").fetchone()[0]
         c = self.con.execute("SELECT count(*) FROM city_hourly").fetchone()[0]

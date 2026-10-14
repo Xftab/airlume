@@ -1,30 +1,34 @@
-"""Airlume - Phase 0 shell.
+"""Airlume - Streamlit application.
 
-Runs on fake data so the 3D map, the city overview and the view-intent form
-can be seen end to end before any real collector or language model exists.
-The question box is wired to a *rule-based* stand-in for the model
-(`nl/stub_router.py`) that fills the same ViewIntent form the model will fill.
+Question -> language model fills the typed ViewIntent form (or the rule-based
+stand-in when no key is configured) -> code validates and resolves it -> code
+builds the query and the answer sentence -> deck.gl renders the view.
+
+Data: the committed CSV archive (live hourly readings + the EPD daily history)
+is the source of record; fake data is used only when nothing real exists yet.
 """
 
 from __future__ import annotations
 
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+import altair as alt  # noqa: E402
 import pandas as pd  # noqa: E402
 import streamlit as st  # noqa: E402
 
 from airlume import __version__  # noqa: E402
-from airlume.aqi import band_for  # noqa: E402
+from airlume.aqi import PUNJAB_BANDS, band_for  # noqa: E402
 from airlume.config import check_secrets, load_settings  # noqa: E402
+from airlume.nl import router  # noqa: E402
 from airlume.nl.answer import answer  # noqa: E402
 from airlume.nl.resolve import ResolveError, resolve  # noqa: E402
-from airlume.nl.stub_router import route  # noqa: E402
+from airlume.pipeline import archive  # noqa: E402
 from airlume.pipeline.fake import fake_city_hourly, fake_readings  # noqa: E402
 from airlume.pipeline.registry import Registry  # noqa: E402
 from airlume.pipeline.store import Store  # noqa: E402
@@ -38,6 +42,8 @@ if PROBLEMS:
     st.error("Configuration problems: " + "; ".join(PROBLEMS))
     st.stop()
 
+KARACHI = timezone(timedelta(hours=5))
+
 
 @st.cache_resource
 def _registry() -> Registry:
@@ -45,32 +51,41 @@ def _registry() -> Registry:
 
 
 @st.cache_resource
-def _store() -> Store:
+def _store() -> tuple[Store, str]:
+    """Returns (store, data_mode) where data_mode is 'live', 'archive' or 'fake'."""
     s = Store()
-    if s.counts()["readings"] == 0:
-        reg = _registry()
-        if SETTINGS.use_fake_data:
-            r = fake_readings(reg)
-            s.upsert_readings(r)
-            s.upsert_city_hourly(fake_city_hourly(reg, r))
-        else:  # fresh clone / cloud deploy: rebuild the cache from the committed CSV archive
-            from airlume.pipeline import archive
-            s.upsert_readings(archive.load_all("readings"))
-            s.upsert_city_hourly(archive.load_all("city_hourly"))
-    return s
+    reg = _registry()
+    # Always load whatever real data the archive holds.
+    s.upsert_readings(archive.load_all("readings"))
+    s.upsert_city_hourly(archive.load_all("city_hourly"))
+    s.upsert_epd_daily(archive.load_all("epd_daily"))
+    real = s.real_counts()
+    if real["readings"] > 0 or real["city_hourly"] > 0:
+        s.delete_source("fake")
+        return s, "live"
+    if real["epd_daily"] > 0:
+        s.delete_source("fake")
+        return s, "archive"
+    if SETTINGS.use_fake_data and s.counts()["readings"] == 0:
+        r = fake_readings(reg)
+        s.upsert_readings(r)
+        s.upsert_city_hourly(fake_city_hourly(reg, r))
+    return s, "fake"
 
 
 reg = _registry()
-store = _store()
+store, DATA_MODE = _store()
 
 
+# ---------------------------------------------------------------- data frames
 def station_frame(city_id: str) -> pd.DataFrame:
     stations = reg.stations_in(city_id)
-    base = pd.DataFrame([{"station_id": s.station_id, "name": s.name, "lat": s.lat, "lon": s.lon} for s in stations])
+    base = pd.DataFrame([{"station_id": s.station_id, "name": s.name, "lat": s.lat, "lon": s.lon,
+                          "confidence": s.confidence} for s in stations])
     latest = store.latest_station_values([s.station_id for s in stations])
     df = base.merge(latest, on="station_id", how="left")
     now = datetime.now(timezone.utc)
-    df["stale"] = df["ts"].map(lambda t: pd.isna(t) or (now - t.to_pydatetime()).total_seconds() > 2 * 3600)
+    df["stale"] = df["ts"].map(lambda t: pd.isna(t) or (now - t.to_pydatetime()).total_seconds() > 3 * 3600)
     df.loc[df["stale"], ["aqi", "pm25", "pm10"]] = None
     return df
 
@@ -78,88 +93,170 @@ def station_frame(city_id: str) -> pd.DataFrame:
 def city_frame() -> pd.DataFrame:
     base = pd.DataFrame([{"city_id": c.city_id, "name": c.name, "lat": c.lat, "lon": c.lon} for c in reg.cities])
     latest = store.latest_city_values()
+    latest = latest[latest["source"] != "open_meteo_cams"] if not latest.empty else latest  # modelled values never shown as measured
     return base.merge(latest, on="city_id", how="left")
 
 
-# ---------------- UI ----------------
-st.markdown(
-    f"<h1 style='margin-bottom:0'>Airlume</h1><p style='color:#9FB0C0;margin-top:0'>"
-    f"Conversational 3D digital twin of air quality in Pakistan's monitored cities · v{__version__} · "
-    f"{'FAKE DATA (Phase 0 shell)' if SETTINGS.use_fake_data else 'live data'}</p>",
-    unsafe_allow_html=True,
-)
+def ranked_bar(df: pd.DataFrame, name_col: str, value_col: str = "aqi", height: int = 320) -> alt.Chart:
+    """2D companion to the 3D view: exact comparison, sorted, official colours (W10)."""
+    d = df.dropna(subset=[value_col]).copy()
+    d["band"] = d[value_col].map(lambda v: band_for(int(v)).label)
+    d["colour"] = d[value_col].map(lambda v: band_for(int(v)).colour)
+    return (
+        alt.Chart(d)
+        .mark_bar()
+        .encode(
+            y=alt.Y(f"{name_col}:N", sort="-x", title=None),
+            x=alt.X(f"{value_col}:Q", title="AQI", scale=alt.Scale(domain=[0, max(100, float(d[value_col].max()) * 1.05)])),
+            color=alt.Color("colour:N", scale=None, legend=None),
+            tooltip=[name_col, alt.Tooltip(f"{value_col}:Q", title="AQI"), "band"],
+        )
+        .properties(height=height)
+    )
 
+
+# ---------------------------------------------------------------- sidebar
 with st.sidebar:
     st.subheader("Ask")
     question = st.text_input("Question", placeholder="e.g. Where is the air worst in Lahore right now?")
-    st.caption("Phase 0: a rule-based stand-in fills the same typed form the language model will fill.")
+    models = router.models_available()
+    model = st.selectbox("Language model", models, index=0,
+                         help="Falls back to the rule-based stand-in if the model call fails.")
+    show_form = st.toggle("Show the form the model filled", value=False)
     st.divider()
     st.subheader("Status")
-    counts = store.counts()
-    st.write(f"readings: {counts['readings']:,}  ·  city rows: {counts['city_hourly']:,}")
-    st.write("Map tiles: " + ("CARTO" if SETTINGS.carto_api_key else "none (keyless mode)"))
+    rc = store.real_counts()
+    st.caption({"live": "Live data", "archive": "History only (no live readings yet)", "fake": "FAKE DATA (demo)"}[DATA_MODE])
+    st.write(f"hourly readings: {rc['readings']:,}\n\ncity-hours: {rc['city_hourly']:,}\n\ndaily history rows: {rc['epd_daily']:,}")
+    st.write("Map tiles: " + ("CARTO" if SETTINGS.carto_api_key else "default"))
 
-intent = route(question) if question else None
+# ---------------------------------------------------------------- header
+st.markdown(
+    f"<h1 style='margin-bottom:0'>Airlume</h1><p style='color:#9FB0C0;margin-top:0'>"
+    f"Conversational 3D digital twin of air quality in Pakistan's monitored cities · v{__version__}</p>",
+    unsafe_allow_html=True,
+)
+
+# ---------------------------------------------------------------- question
+intent = None
+result = None
+if question:
+    result = router.route(question, model=model if model != "stub" else router.PRIMARY_MODEL,
+                          previous=st.session_state.get("previous_form"))
+    intent = result.intent
+    if intent.context_ref and st.session_state.get("previous_form"):
+        # Follow-up: start from the previous form, overlay what the model changed.
+        merged = {**st.session_state["previous_form"], **intent.model_dump(exclude_defaults=True)}
+        merged["context_ref"] = False
+        intent = intent.model_validate(merged)
+    st.session_state["previous_form"] = intent.model_dump()
+
 resolved = None
 if intent is not None:
-    with st.sidebar:
-        st.subheader("View-intent form")
-        st.json(intent.model_dump(), expanded=False)
-    try:
-        resolved = resolve(intent, reg)
-    except ResolveError as e:
-        st.warning(str(e))
+    if show_form:
+        with st.sidebar:
+            st.subheader("View-intent form")
+            st.caption(f"model: {result.model}{' (cached)' if result.cached else ''} · {result.latency_s:.1f}s")
+            st.json(intent.model_dump(), expanded=True)
+    if not intent.in_scope:
+        st.info("I can only answer about air quality in Pakistan's monitored cities.")
+    elif intent.clarify:
+        st.warning(intent.clarify)
+    else:
+        try:
+            resolved = resolve(intent, reg)
+        except ResolveError as e:
+            st.warning(str(e))
+
+if resolved is not None:
+    st.success(answer(resolved, store, reg))
+    for n in resolved.notes:
+        st.info(n)
 
 view = resolved.view if resolved else "stations_3d"
 city_id = resolved.city_id if resolved else "PB-LHE"
 cam = resolved.camera if resolved else "overview"
+national = view == "city_overview" or (resolved is not None and (city_id != "PB-LHE" or resolved.compare_city_id))
 
-if resolved is not None:
-    st.success(answer(resolved, store, reg))
-
-left, right = st.columns([3, 1])
+# ---------------------------------------------------------------- main view
+left, right = st.columns([3, 1.4])
 
 with left:
-    if view == "city_overview" or (resolved and (city_id != "PB-LHE" or resolved.compare_city_id)):
+    if national:
         cf = city_frame()
-        st.pydeck_chart(deck_city_overview(cf), width="stretch", height=620)
+        st.pydeck_chart(deck_city_overview(cf), width="stretch", height=560)
     else:
         sf = station_frame(city_id)
         target = None
         if resolved and resolved.station_id:
-            s = reg.station(resolved.station_id)
-            target = (s.lat, s.lon)
-        st.pydeck_chart(deck_stations_3d(sf, cam, target), width="stretch", height=620)
+            s_ = reg.station(resolved.station_id)
+            target = (s_.lat, s_.lon)
+        st.pydeck_chart(deck_stations_3d(sf, cam, target), width="stretch", height=560)
+        if sf["ts"].notna().any():
+            latest_ts = pd.to_datetime(sf["ts"].max()).tz_convert(KARACHI)
+            st.caption(f"Data as of {latest_ts:%d %b %Y, %H:%M} PKT · Source: Environmental Protection Agency, Punjab · station positions approximate")
 
 with right:
-    if resolved and resolved.notes:
-        for n in resolved.notes:
-            st.info(n)
-    if city_id == "PB-LHE" and view != "city_overview":
+    if national:
+        cf = city_frame().dropna(subset=["aqi"])
+        st.markdown("**Cities, ranked**")
+        if cf.empty:
+            st.caption("No city-level data yet. Run a collection round.")
+        else:
+            st.altair_chart(ranked_bar(cf.head(20), "name", height=520), width="stretch")
+    else:
         sf = station_frame("PB-LHE")
         reporting = int(sf["aqi"].notna().sum())
         st.metric("Stations reporting", f"{reporting} of {len(sf)}")
-        top = sf.dropna(subset=["aqi"]).sort_values("aqi", ascending=False)
-        st.markdown("**Worst right now**")
-        for r in top.head(5).itertuples():
-            b = band_for(int(r.aqi))
-            st.markdown(
-                f"<div style='display:flex;justify-content:space-between'><span>{r.name}</span>"
-                f"<span style='color:{b.colour};font-weight:700'>{int(r.aqi)}</span></div>",
-                unsafe_allow_html=True,
-            )
+        if reporting:
+            st.altair_chart(ranked_bar(sf, "name", height=330), width="stretch")
         stale = sf[sf["stale"]]["name"].tolist()
         if stale:
             st.caption("No recent data: " + ", ".join(stale))
-    else:
-        cf = city_frame().dropna(subset=["aqi"]).sort_values("aqi", ascending=False)
-        st.markdown("**Cities, worst first**")
-        for r in cf.head(8).itertuples():
-            b = band_for(int(r.aqi))
-            st.markdown(
-                f"<div style='display:flex;justify-content:space-between'><span>{r.name}</span>"
-                f"<span style='color:{b.colour};font-weight:700'>{int(r.aqi)}</span></div>",
-                unsafe_allow_html=True,
-            )
 
-st.caption("Student project (UMT, DS494 / CC425). Not an official source. Punjab EPA labels: Good 0-50 · Satisfactory 51-100 · Moderate 101-150 · Unhealthy for sensitive groups 151-200 · Unhealthy 201-300 · Very unhealthy 301-400 · Hazardous 401-500.")
+# ---------------------------------------------------------------- history
+st.divider()
+st.subheader("History")
+tab_daily, tab_hourly = st.tabs(["Daily bulletins (EPD, 2022-2025)", "Hourly readings (our collection)"])
+
+with tab_daily:
+    end = datetime.now(timezone.utc)
+    start = end - timedelta(days=4 * 365)
+    hist = store.epd_daily_series("Lahore", start, end)
+    if hist.empty:
+        st.caption("No daily history loaded.")
+    else:
+        hist["date"] = pd.to_datetime(hist["date"])
+        avg = hist[hist["station_label"] == "Lahore average"]
+        stations_hist = hist[(hist["station_label"] != "Lahore average") & (hist["pollutant"] == "pm25")]
+        choice = st.selectbox("Series", ["Lahore average (where printed)"] + sorted(stations_hist["station_label"].unique().tolist()))
+        series = avg if choice.startswith("Lahore average") else stations_hist[stations_hist["station_label"] == choice]
+        series = series.groupby("date", as_index=False)["aqi"].max()
+        if series.empty:
+            st.caption("Nothing printed for that series.")
+        else:
+            band_rules = alt.Chart(pd.DataFrame([{"y": b.hi, "label": b.label} for b in PUNJAB_BANDS[:-1]])).mark_rule(
+                strokeDash=[2, 4], color="#4A5563").encode(y="y:Q")
+            line = alt.Chart(series).mark_line(point=True, color="#5BC8D6").encode(
+                x=alt.X("date:T", title=None), y=alt.Y("aqi:Q", title="24-h AQI (PM2.5)"),
+                tooltip=[alt.Tooltip("date:T"), alt.Tooltip("aqi:Q", title="AQI")])
+            st.altair_chart((band_rules + line).properties(height=280), width="stretch")
+            st.caption(f"{len(series):,} days · 2020-21 bulletins excluded (different index scale) · gap after 2 Dec 2025 until our own collection began")
+
+with tab_hourly:
+    end = datetime.now(timezone.utc)
+    start = end - timedelta(days=14)
+    ids = [s.station_id for s in reg.stations_in("PB-LHE")]
+    ser = store.station_series(ids, start, end, "aqi")
+    if ser.empty:
+        st.caption("No hourly readings yet. `collect.bat` adds one row per station per run; the scheduler runs it hourly.")
+    else:
+        names = {s.station_id: s.name for s in reg.stations_in("PB-LHE")}
+        ser["station"] = ser["station_id"].map(names)
+        st.altair_chart(
+            alt.Chart(ser).mark_line().encode(
+                x=alt.X("ts:T", title=None), y=alt.Y("value:Q", title="AQI"), color=alt.Color("station:N", title=None),
+                tooltip=["station", alt.Tooltip("ts:T"), alt.Tooltip("value:Q", title="AQI")]).properties(height=280),
+            width="stretch")
+
+st.caption("Student project (UMT, DS494 / CC425). Not an official source. Punjab EPA bands: Good 0-50 · Satisfactory 51-100 · Moderate 101-150 · Unhealthy for sensitive groups 151-200 · Unhealthy 201-300 · Very unhealthy 301-400 · Hazardous 401-500.")

@@ -24,6 +24,11 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 
 - **Supervisor proposal written** (`docs/proposal/proposal.md`, 14-page PDF): abstract, introduction, problem statement, related work with 26 verified references, research questions RQ1-RQ4, system, evaluation E1-E6, ten-week plan, preliminary results, risks, course mapping. Title page lists the three team members with roll numbers and the supervisor.
 
+## 14 Oct (morning)
+- `nl/router.py`: Groq-backed router with JSON-schema output, Pydantic validation, prompt-hash cache, call log, automatic fallback to the rule-based stub. Activates when `GROQ_API_KEY` is in `.env`.
+- App rewritten for real data: loads the CSV archive on start (live readings + 3,089 daily history rows), removes fake rows once real data exists; daily-history timeline (2022-2025, B17 excluded) and hourly tab; 2D ranked bar beside every 3D view (W10); show-the-form toggle; model selector; follow-up questions merge with the previous form.
+- `run.bat` now fetches one round before starting; `schedule.bat` registers an hourly Windows task.
+
 ## Where we stopped (13 Oct, 19:10)
 Session closed by Aftab. Everything below is on the laptop and pushed to GitHub. Tomorrow's first items: send the EPA email; create the accounts; schedule `collect.bat` hourly on the laptop (Task Scheduler) or install `_update\collect.yml`; run `python scripts\w1_check.py` after a day of readings; look at the 41 remaining unknown bulletins (`data\raw\epd\_styles.csv`).
 

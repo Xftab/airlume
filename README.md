@@ -34,6 +34,8 @@ bash docs/build.sh
 K:\airlume\setup      one-time: creates .venv on K: and installs pinned packages
 K:\airlume\run        starts the app at http://localhost:8501 (Ctrl+C stops it)
 K:\airlume\test       runs the test suite
+K:\airlume\collect    fetches one round of readings (--dry-run to only print)
+K:\airlume\schedule   registers an hourly Windows task that runs collect
 ```
 
 Keys go in `K:\airlume\.env` (copy of `.env.example`); that file is never committed. With no keys the app runs on fake data with a plain dark map.
