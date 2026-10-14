@@ -52,6 +52,10 @@ def field_matches(field: str, expected, intent: ViewIntent) -> bool:
         return got is not None and (got == exp or exp.startswith(got) or got.startswith(exp))
     if field in ("note", "compare_to_alt", "last_month_alt"):
         return True
+    if field in ("city", "other_city") and d.get("compare_to") == "other_city":
+        # "Is Karachi cleaner than Lahore?" is the same comparison either way round
+        pair = {norm(d.get("city")), norm(d.get("other_city"))}
+        return norm(expected) in pair
     if field == "clarify_or_other_city":
         return bool(d.get("clarify")) or norm(d.get("other_city")) == norm(expected)
     if field == "compare_to" and expected == "yesterday_or_none":
@@ -73,34 +77,57 @@ def bootstrap_ci(values: list[float], n: int = 2000, seed: int = 0) -> tuple[flo
     return (means[int(0.025 * n)], means[int(0.975 * n)])
 
 
-def route_once(question: str, model: str, previous: dict | None):
+def _minutes_ok(msg: str) -> bool:
+    """True if Groq's retry-after is short (per-minute cap), False for the daily cap."""
+    import re
+    m = re.search(r"try again in ([0-9.]+)(m|s)", msg)
+    return not (m and m.group(2) == "m")
+
+
+def route_once(question: str, model: str, previous: dict | None, use_cache: bool):
     if model == "stub":
         return stub_router.route(question), "stub"
-    r = router.route(question, model=model, previous=previous, use_cache=False, allow_fallback=False)
+    r = router.route(question, model=model, previous=previous, use_cache=use_cache, allow_fallback=False)
     return r.intent, r.model
 
 
 def run(model: str, runs: int) -> dict:
+    # A single run may use the router cache (keyed by prompt version + question), so an
+    # interrupted run resumes where it stopped. Consistency runs (runs > 1) always call live.
+    use_cache = runs == 1
     singles = load("questions.jsonl")
     convs = load("conversations.jsonl")
     results = []
-    for item in singles + convs:
+    items = singles + convs
+    for i, item in enumerate(items, 1):
+        if i % 10 == 0 or i == 1:
+            print(f"  {i}/{len(items)} ...", flush=True)
         forms = []
         for _ in range(runs):
             prev = None
             if "turns" in item:
                 for t in item["turns"][:-1]:
-                    first, _ = route_once(t, model, None)
+                    first, _ = route_once(t, model, None, use_cache)
                     prev = first.model_dump()
                 q = item["turns"][-1]
             else:
                 q = item["question"]
-            intent, used = route_once(q, model, prev)
+            try:
+                intent, used = route_once(q, model, prev, use_cache)
+            except Exception as e:  # noqa: BLE001 - one bad item must not end a 15-minute run
+                print(f"  {item['id']}: {type(e).__name__}: {str(e)[:160]}", flush=True)
+                if "rate_limit_exceeded" in str(e) and "try again in" in str(e) and not _minutes_ok(str(e)):
+                    print("Daily token limit reached on Groq. Re-run later (finished items are cached) "
+                          "or use --model openai/gpt-oss-20b, which has its own limit.", flush=True)
+                    raise SystemExit(2)
+                intent, used = ViewIntent(in_scope=False, clarify="ROUTER_ERROR"), "error"
             if intent.context_ref and prev:
                 merged = {**prev, **intent.model_dump(exclude_defaults=True), "context_ref": False}
                 intent = ViewIntent.model_validate(merged)
             forms.append(intent)
         fields = score_item(item["expected"], forms[0])
+        if forms[0].clarify == "ROUTER_ERROR":
+            fields = {f: False for f in fields}
         consistent = all(f.model_dump() == forms[0].model_dump() for f in forms[1:])
         results.append({"id": item["id"], "class": item["class"], "lang": item.get("lang", "en"),
                         "pass": all(fields.values()), "fields": fields, "consistent": consistent,

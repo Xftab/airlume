@@ -3,6 +3,8 @@
 Newest first. Each entry records what was decided and why.
 
 ## 14 October 2026
+- **Language model wired in and scored.** Groq `gpt-oss-120b` behind the typed schema: first benchmark pass 66.7% (CI 57--77%) against the rule-based stub's 45.6%. Three provider quirks fixed on the way (strict schema shape, reasoning tokens eating the output cap, per-minute and daily token caps). The prompt was then revised from the failure analysis, which makes benchmark v0 a development set; the frozen v1 set will give the reported number.
+- **The pasted Groq key is to be rotated.** It was typed into the chat once; the plan's rule stands: keys go into `.env` by hand, never into chat.
 - **Hourly collection runs in the cloud.** The laptop scheduler was a stopgap; GitHub Actions now fetches the portal every hour and commits the CSV archive, so the laptop can be off. The repo goes public for free Actions minutes. The EPA permission email is still sent as a courtesy; the portal's robots policy permits the one-page-an-hour read.
 - **Lahore page extras captured:** the embedded 7-day hourly city trend and the 24-hour forecast; EPA and CAMS forecasts are stored and scored against actuals (C5).
 - **App reads an in-memory database rebuilt from the archive** every hour, so it never locks the file the collector writes.

@@ -37,6 +37,9 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - **Benchmark v0 written** (60 English + 10 Roman-Urdu single items, 20 two-turn conversations) with gold forms, and the E1 runner (`python -m airlume.eval.run_e1 --model <id> --runs 3`): per-field accuracy, bootstrap 95% CIs, consistency, per-class. **Baseline, rule-based stand-in: 45.6% pass (CI 36-56%)**, weakest on follow-ups (20%), forecasts (0%), thresholds (29%), Roman Urdu (40%). Not yet frozen: classmate items and second annotator pending.
 - Cloud collector verified: first GitHub Actions run green (32 s).
 
+- **Router live on Groq** (`.env` has the key; `check_secrets` masks it). Fixes needed before the first successful call: strict-schema rewrite of the Pydantic schema, output cap 2,048 + low reasoning effort (gpt-oss returned empty JSON at 400), wait-and-retry on the 8,000-TPM cap, fail-fast on the daily cap, cached single benchmark runs that resume. **E1, prompt v1, gpt-oss-120b: 66.7% (CI 57-77%)** vs stub 45.6%; weakest classes where_now 54%, follow_up 55%, compare_time 56%. Prompt v2 written from the failure analysis (field rules, city list, AQI bands, five examples); the 120b daily budget was exhausted before it could be re-scored. **Next: score v2 on `gpt-oss-20b` today and on 120b tomorrow; record both.** Benchmark v0 is now a dev set (see plan 3.2).
+- Prompt v3 (follow-up continuation rule, "now" always latest, zoomed_out for cross-city, small-talk out of scope, neighbourhood kept verbatim); scorer accepts either order of city/other_city. **20b, prompt v2: 81.1% (CI 72-89%)**; v3 being scored.
+- **Benchmark v1 materials written:** classmate question sheet (`docs/pdf/Airlume_Classmate_Questions.pdf`, print 3-4 copies) and second-annotator guide. Aftab: hand the sheet to 3 classmates this week; v1 freezes once 60 classmate questions and the second annotation are in.
 - **Coverage map and station recommendation (C3, C7)** built: 1 km grid over Lahore's urban area, distance to nearest monitor; mean 5.0 km, 45% of the area beyond 5 km, 22% within 3 km; greedy placement suggests ~31.56 N 74.20 E (west, near Bund Road/Sabzazar), 10.9 km from the nearest station today. New tab "Where the city is blind".
 
 ## Where we stopped (13 Oct, 19:10)
@@ -52,7 +55,7 @@ Session closed by Aftab. Everything below is on the laptop and pushed to GitHub.
 - [x] Final back-fill 13 Oct 19:00: **3,144 daily rows, 2020-2025** (B 934, B17 206, E 165, A 34, D 2; C 458 and 144 scanned skipped; 41 still unknown; 73 genuine 404s). Archive files 2020.csv-2025.csv committed.
 - [ ] Decide how to treat the gap 3 Dec 2025 - 12 Oct 2026 (no official per-station data; CAMS city-level or leave empty).
 - [ ] After ~1 day of hourly collection: `python scripts\w1_check.py` to settle the averaging window.
-- [ ] Aftab: create accounts — Groq, Google AI Studio, OpenAQ, CARTO, Streamlit Community Cloud — and put the keys in `K:\airlume\.env` (never in chat).
+- [x] Groq key in `.env` (14 Oct). Still to create: OpenAQ, CARTO (optional), Streamlit Community Cloud. **Aftab: rotate the Groq key** (it was pasted into chat once): delete it at console.groq.com, create a new one, paste into `K:\airlume\.env` with Notepad.
 - [ ] Aftab: send the two emails (`docs/emails/`), with supervisor name filled in.
 - [ ] Claude: once `.env` has an OpenAQ key, run station discovery for Islamabad/Karachi/Peshawar and add licensed stations to the registry.
 - [ ] Claude: `collect.yml` GitHub Actions workflow (hourly) — placed in `_update\` for Aftab to move, since remote tools cannot write `.github/workflows/`.

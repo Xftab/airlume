@@ -510,6 +510,8 @@ pmtiles extract https://build.protomaps.com/<latest>.pmtiles lahore.pmtiles \
 - **Second annotator:** another person independently writes gold forms for 20 questions; report agreement (Cohen's kappa per field) and resolve disagreements by discussion. *(Fixes W2.)*
 - **Camera scored in categories**, not exact numbers: level (city / district / station) and rough direction (N, NE, E ...). *(Fixes W5.)*
 - **Freeze the test set in week 5. Never tune on it.**
+- **Materials ready (14 Oct):** `docs/benchmark/classmate-questions.md` (printable sheet, 20 questions per classmate, blind to the schema, with Roman-Urdu and out-of-scope minimums) and `docs/benchmark/annotator-guide.md` (field table and ten agreed conventions for the second annotator; kappa per field).
+- **Status (14 Oct):** benchmark v0 (90 items) is a *development* set --- the router prompt was revised after reading its failures, so its scores are optimistic. The frozen v1 set (classmate items, second annotator) is what the report's headline number comes from; the prompt is not touched after the freeze.
 
 ### 3.3 Model router and caching
 
@@ -517,6 +519,8 @@ pmtiles extract https://build.protomaps.com/<latest>.pmtiles lahore.pmtiles \
 - **Temperature 0 on every call**, so answers are as repeatable as the provider allows. *(Part of the fix for W6.)*
 - Cache every call by prompt hash in SQLite; repeated runs cost nothing.
 - Keep prompts short: Groq's limit is tokens per day, so a 400-token prompt gets four times the calls of a 1,600-token one.
+- **What the first live calls taught (14 Oct):** Groq's strict `json_schema` mode rejects the schema Pydantic emits (`$ref`, `default`, `title`), so the router sends a flattened strict copy (`strict_schema()`), with `additionalProperties: false` and every field required; `gpt-oss` reasons before it answers and the reasoning counts against the output cap, so the cap is 2,048 with `reasoning_effort: low` (a 400-token cap returned empty output). Free-tier limits are 8,000 tokens per minute and a daily cap: the router sleeps for Groq's stated retry time on the per-minute cap and fails fast on the daily one; the benchmark caches single runs so an interrupted run resumes. A full 90-item run costs about 140k tokens and ~15 minutes.
+- **First result, prompt v1, `gpt-oss-120b`: 66.7% pass (95% CI 57--77%) against the stub's 45.6%.** Failure groups: station names not placed in `area` (8 items; the prompt only mentioned neighbourhoods), "worst right now" read as `max` (3), wrong AQI thresholds for band words (2), districts treated as out of scope (1), comparisons unflagged (6), follow-ups not inheriting the previous form (7). Prompt v2 states a rule per field, lists the 40 cities and the Punjab bands, and gives five worked examples; re-scored next.
 - Log model id, timestamp, prompt and response for every call --- free model ids change without notice, and the log is what makes the evaluation reproducible.
 
 ```bash

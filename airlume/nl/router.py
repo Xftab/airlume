@@ -15,6 +15,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import re
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -35,21 +36,34 @@ SMALL_MODEL = "openai/gpt-oss-20b"
 CACHE_DIR = ROOT / "data" / "cache" / "router"
 LOG_PATH = ROOT / "data" / "cache" / "router_calls.jsonl"
 
-SYSTEM_PROMPT = """You convert a user's question about air quality in Pakistan into a JSON form.
-Return ONLY a JSON object that matches the schema. Never write code, SQL or prose.
+SYSTEM_PROMPT = """You convert a question about air quality in Pakistan into a JSON form. Return ONLY the JSON object. Never write code, SQL or prose. Fill every field; use null where nothing applies.
 
-Rules:
-- Cities with data: Lahore (station level) and Punjab districts, Islamabad, Karachi, Peshawar, Quetta (city level). Default city is Lahore.
-- Lahore stations: GT Road, Shahdara, Multan Road, Barki Road, Kahna Nau, Gulberg III, DHA Phase 6, Egerton Road, Punjab University, Wagha Border, Safari Park. If the user names a neighbourhood that is not a station (e.g. Model Town), put the neighbourhood name in `area`; code will find the nearest station.
-- `time.label`: "now" for current conditions, "today", "yesterday", "last_7_days", "last_30_days", "this_month", "last_month", "same_day_last_year", or "custom_date"/"custom_range" with ISO dates.
-- `aggregation`: "latest" for current values; "mean"/"max"/"min" over a window; "count_hours_above" with `threshold` for "how many hours above X".
-- `compare_to`: "yesterday", "last_week", "last_year", or "other_city" (set `other_city`) when the question compares.
-- `view`: "stations_3d" for Lahore station questions, "city_overview" for questions across cities or about one non-Lahore city, "compare" for comparisons, "timeline" for trends over days, "forecast" for tomorrow.
-- `camera`: "station" when one place is asked about, "zoomed_out" for national questions, else "overview".
-- If the question is not about air quality in these places, set `in_scope` to false.
-- If the question is too vague to answer (e.g. "is it bad?"), set `clarify` to one short question back to the user.
-- If the question refers to the previous answer ("and yesterday?"), set `context_ref` true and fill only what changed.
-- Roman Urdu is allowed (e.g. "aaj Gulberg ki hawa kaisi hai" = how is the air in Gulberg today).
+Places
+- Lahore has stations: GT Road, Shahdara, Multan Road, Barki Road, Kahna Nau, Gulberg III, DHA Phase 6, Egerton Road, Punjab University, Wagha Border, Safari Park.
+- Other cities (city level only): Okara, Nankana Sahib, Muzaffargarh, Rajanpur, Chiniot, Jhang, Vehari, Khanewal, Sahiwal, Faisalabad, Gujranwala, Pakpattan, Multan, Sheikhupura, Attock, Dera Ghazi Khan, Kot Addu, Bahawalpur, Rahim Yar Khan, Kasur, Rawalpindi, Bhakkar, Sargodha, Narowal, Hafizabad, Murree, Khushab, Gujrat, Jhelum, Sialkot, Wazirabad, Mandi Bahauddin, Chakwal, Mianwali, Talagang, Islamabad, Karachi, Peshawar, Quetta.
+- `city`: the city asked about; default "Lahore" when none is named. `area`: the station OR neighbourhood named inside the city (e.g. "Wagha Border", "DHA", "Model Town"); null when the question is about the whole city or ranks places. Code maps neighbourhoods to the nearest station: write the neighbourhood as the user said it ("Model Town"), never replace it with a station name.
+
+Fields
+- `metric`: "aqi" unless PM2.5 ("pm25") or PM10 ("pm10") is named.
+- `time.label`: "now" (current, right now, at the moment, abhi), "today", "yesterday", "last_7_days" (last/this week, past week), "last_30_days", "this_month", "last_month", "same_day_last_year", "custom_date" (+date) or "custom_range" (+start,end). Nothing else is allowed. "Best time of day" questions use "last_7_days".
+- `aggregation`: ALWAYS "latest" when time.label is "now" or the question is about this moment/this morning, even for "where is it worst/cleanest" (code ranks the latest values; "max"/"min" are for a past window only). Over a past window use "mean" (how bad was it), "max" (worst/peak), "min" (cleanest/best). "count_hours_above" with `threshold` for "how many hours above X" or "how often was it <band>".
+- AQI bands (Punjab): Satisfactory >50, Moderate >100, Unhealthy for sensitive >150, Unhealthy >200, Very unhealthy >300, Hazardous >400. "hours unhealthy" means threshold 200; "hazardous" 400.
+- `compare_to`: "yesterday", "last_week", "last_year" when the question compares with an earlier time (better/worse than, improved since, kal se); "other_city" with `other_city` when two cities are compared or shown side by side (`city` is the first one); else "none".
+- `view`: "compare" whenever compare_to is not "none"; "forecast" for tomorrow, tonight, this evening, later today, will it be safe; "timeline" for trends, hour-of-day patterns, last N days; "city_overview" for a non-Lahore city or questions across cities/districts; "stations_3d" for Lahore station questions.
+- `camera`: "station" when one station or area is asked about; "zoomed_out" whenever the question ranks or spans cities or districts (Pakistan, Punjab, "which city"); "north" if asked to look from the north; else "overview".
+- `in_scope`: false if the question is not about air quality in these places, asks why/for causes/advice rather than data, or is only thanks/greeting/small talk ("thanks, that's all").
+- `clarify`: one short question back when the request cannot be filled (no place and no time, e.g. "is it bad?", "how many hours?"); otherwise null.
+
+Follow-ups
+- When a "previous form" is supplied, assume the new message continues it unless it clearly names a different place or topic. Short messages like "and yesterday?", "over the last 7 days?", "show PM10 instead", "only Safari Park", "add Multan", "look from the north", "how far is that station?" are continuations: set `context_ref` true, start from the previous form (keep its city, area, compare_to and so on) and change only what the message changes.
+
+Examples
+- "What's the AQI at Wagha Border?" -> city Lahore, area "Wagha Border", time now, aggregation latest, view stations_3d, camera station.
+- "Which district in Punjab is cleanest today?" -> city Lahore, area null, time today, aggregation min, view city_overview, camera overview.
+- "Is Multan's air better than yesterday?" -> city Multan, time now, compare_to yesterday, view compare.
+- "Which is cleaner this month, Multan or Bahawalpur?" -> city Multan, other_city Bahawalpur, compare_to other_city, time this_month, aggregation mean, view compare.
+- "How many unhealthy hours in Kahna Nau yesterday?" -> area "Kahna Nau", time yesterday, aggregation count_hours_above, threshold 200.
+- Roman Urdu is fine: "aaj Gulberg ki hawa kaisi hai" = how is the air in Gulberg today.
 """
 
 
@@ -76,8 +90,89 @@ def _log(entry: dict) -> None:
         pass
 
 
+def strict_schema(schema: dict) -> dict:
+    """Rewrite Pydantic's JSON schema into the subset structured-output APIs accept.
+
+    - inline every ``$ref`` (no ``$defs``)
+    - drop ``title``, ``default`` and ``description`` (defaults are not allowed in
+      strict mode; descriptions duplicate the system prompt and cost tokens on
+      every call, which matters under the free tier's tokens-per-minute cap)
+    - every property required, ``additionalProperties: false``
+    Optional fields stay nullable through their ``anyOf [..., {"type": "null"}]``.
+    """
+    defs = schema.get("$defs", {})
+
+    def walk(node):
+        if isinstance(node, list):
+            return [walk(n) for n in node]
+        if not isinstance(node, dict):
+            return node
+        if "$ref" in node:
+            name = node["$ref"].rsplit("/", 1)[-1]
+            return walk(defs[name])
+        out = {k: walk(v) for k, v in node.items() if k not in ("title", "default", "description", "$defs")}
+        if out.get("type") == "object" and "properties" in out:
+            out["required"] = list(out["properties"].keys())
+            out["additionalProperties"] = False
+        return out
+
+    return walk(schema)
+
+
+STRICT_SCHEMA = strict_schema(JSON_SCHEMA)
+
+
+class GroqError(RuntimeError):
+    """HTTP error from Groq with the response body attached (the status alone says little)."""
+
+
+_RETRY_RE = re.compile(r"try again in ([0-9.]+)(ms|s|m)")
+
+
+def _retry_after(r: requests.Response) -> float:
+    """Seconds to wait before retrying a 429, from the header or Groq's message text."""
+    h = r.headers.get("retry-after")
+    if h:
+        try:
+            return float(h)
+        except ValueError:
+            pass
+    m = _RETRY_RE.search(r.text)
+    if m:
+        v, unit = float(m.group(1)), m.group(2)
+        return v / 1000 if unit == "ms" else v * 60 if unit == "m" else v
+    return 10.0
+
+
+def _post(body: dict, key: str, timeout: int, retries: int = 6) -> requests.Response:
+    """POST with wait-and-retry on 429 (free tier: 8,000 tokens per minute)."""
+    for attempt in range(retries):
+        r = requests.post(
+            GROQ_URL,
+            headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json",
+                     "User-Agent": f"Airlume/{__version__}"},
+            json=body,
+            timeout=timeout,
+        )
+        if r.status_code != 429 or attempt == retries - 1:
+            return r
+        wait = _retry_after(r) + 0.5
+        if wait > 120:
+            # Not the per-minute cap but the daily one: waiting will not help. Fail now.
+            log.warning("Groq daily token limit reached (retry in %.0f min); giving up", wait / 60)
+            return r
+        log.warning("rate limited; waiting %.0fs", wait)
+        time.sleep(wait)
+    return r
+
+
 def call_groq(question: str, model: str, previous: dict | None = None, timeout: int = 30) -> tuple[str, dict]:
-    """Return (raw JSON text, usage). Raises on HTTP or missing key."""
+    """Return (raw JSON text, usage). Raises on HTTP or missing key.
+
+    First try strict ``json_schema`` mode. If the API rejects the request (400),
+    retry once in ``json_object`` mode with the schema pasted into the prompt;
+    Pydantic validates the result either way, so the guarantee is unchanged.
+    """
     key = load_settings().groq_api_key
     if not key:
         raise RuntimeError("GROQ_API_KEY not set")
@@ -89,24 +184,28 @@ def call_groq(question: str, model: str, previous: dict | None = None, timeout: 
         "model": model,
         "messages": messages,
         "temperature": 0,
-        "max_tokens": 400,
+        # gpt-oss reasons before it answers; the thinking counts against this cap,
+        # so it must be far larger than the ~150-token form. Low effort suits a
+        # form-filling task and keeps the tokens-per-minute budget small.
+        "max_completion_tokens": 2048,
+        "reasoning_effort": "low",
         "response_format": {
             "type": "json_schema",
-            "json_schema": {"name": "view_intent", "schema": JSON_SCHEMA},
+            "json_schema": {"name": "view_intent", "strict": True, "schema": STRICT_SCHEMA},
         },
     }
-    r = requests.post(
-        GROQ_URL,
-        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json",
-                 "User-Agent": f"Airlume/{__version__}"},
-        json=body,
-        timeout=timeout,
-    )
-    if r.status_code == 400 and "json_schema" in r.text:
-        # Model without strict schema support: fall back to json_object mode.
+    r = _post(body, key, timeout)
+    if r.status_code == 400 and "json_validate_failed" in r.text:
+        # the model's output did not satisfy the schema once; one more try at the same settings
+        log.warning("schema validation failed once; retrying")
+        r = _post(body, key, timeout)
+    if r.status_code == 400:
+        log.warning("json_schema mode rejected (%s); retrying in json_object mode", r.text[:300])
+        body["messages"] = [messages[0] | {"content": SYSTEM_PROMPT + "\nJSON schema:\n" + json.dumps(STRICT_SCHEMA)}] + messages[1:]
         body["response_format"] = {"type": "json_object"}
-        r = requests.post(GROQ_URL, headers={"Authorization": f"Bearer {key}"}, json=body, timeout=timeout)
-    r.raise_for_status()
+        r = _post(body, key, timeout)
+    if r.status_code >= 400:
+        raise GroqError(f"{r.status_code} from Groq: {r.text[:500]}")
     data = r.json()
     return data["choices"][0]["message"]["content"], data.get("usage", {})
 

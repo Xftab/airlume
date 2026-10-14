@@ -29,4 +29,8 @@ echo "Building the v1 proposal (archived)..."
   --include-in-header=header.tex --toc --toc-depth=2 --number-sections \
   -V geometry:"a4paper,margin=2.4cm,top=2.6cm,bottom=2.4cm" "${COMMON[@]}")
 
+echo "Building the classmate question sheet (printable)..."
+(cd benchmark && pandoc classmate-questions.md -o ../pdf/Airlume_Classmate_Questions.pdf \
+  -V geometry:"a4paper,margin=2cm" "${COMMON[@]}")
+
 echo "Done:"; ls -la pdf/

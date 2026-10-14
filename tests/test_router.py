@@ -45,3 +45,23 @@ def test_bad_model_output_falls_back(monkeypatch, tmp_path):
 
 def test_schema_sent_is_the_real_one():
     assert router.JSON_SCHEMA == ViewIntent.model_json_schema()
+
+
+def test_strict_schema_is_api_safe():
+    from airlume.nl.router import STRICT_SCHEMA
+
+    def walk(n):
+        if isinstance(n, dict):
+            assert "$ref" not in n and "default" not in n and "title" not in n
+            if n.get("type") == "object" and "properties" in n:
+                assert n["additionalProperties"] is False
+                assert set(n["required"]) == set(n["properties"])
+            for v in n.values():
+                walk(v)
+        elif isinstance(n, list):
+            for v in n:
+                walk(v)
+
+    walk(STRICT_SCHEMA)
+    assert "time" in STRICT_SCHEMA["properties"]
+    assert STRICT_SCHEMA["properties"]["time"]["type"] == "object"
