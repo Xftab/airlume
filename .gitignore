@@ -26,3 +26,6 @@ data/cache/
 .streamlit/secrets.toml
 *.egg-info/
 _update/
+
+# evaluation outputs
+data/eval/

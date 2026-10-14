@@ -32,6 +32,7 @@ from airlume.pipeline import archive  # noqa: E402
 from airlume.pipeline.fake import fake_city_hourly, fake_readings  # noqa: E402
 from airlume.pipeline.registry import Registry  # noqa: E402
 from airlume.pipeline.store import Store  # noqa: E402
+from airlume.viz import coverage as cov_mod  # noqa: E402
 from airlume.viz.views import deck_city_overview, deck_stations_3d  # noqa: E402
 
 st.set_page_config(page_title="Airlume", page_icon="🌫️", layout="wide")
@@ -221,7 +222,7 @@ with right:
 # ---------------------------------------------------------------- history
 st.divider()
 st.subheader("History")
-tab_fc, tab_daily, tab_replay, tab_hourly = st.tabs(["Next 24 hours", "Daily bulletins (EPD, 2022-2025)", "Replay a day", "Hourly readings (our collection)"])
+tab_fc, tab_daily, tab_replay, tab_hourly, tab_cov = st.tabs(["Next 24 hours", "Daily bulletins (EPD, 2022-2025)", "Replay a day", "Hourly readings (our collection)", "Where the city is blind"])
 
 with tab_fc:
     fc = store.latest_forecast("PB-LHE")
@@ -313,3 +314,31 @@ with tab_hourly:
             width="stretch")
 
 st.caption("Student project (UMT, DS494 / CC425). Not an official source. Punjab EPA bands: Good 0-50 · Satisfactory 51-100 · Moderate 101-150 · Unhealthy for sensitive groups 151-200 · Unhealthy 201-300 · Very unhealthy 301-400 · Hazardous 401-500.")
+
+
+@st.cache_data(ttl=24 * 3600)
+def _coverage():
+    c = cov_mod.coverage(reg)
+    return c, cov_mod.coverage_stats(c), cov_mod.recommend_station(c, reg.stations_in("PB-LHE"))
+
+
+with tab_cov:
+    cov, stats, rec = _coverage()
+    c1, c2 = st.columns([3, 1.4])
+    with c1:
+        import pydeck as pdk
+        from airlume.viz import camera as cam_mod
+        from airlume.viz import layers as layer_mod
+        base = station_frame("PB-LHE")
+        deck = pdk.Deck(
+            layers=[cov_mod.coverage_layer(cov), layer_mod.station_columns(base.assign(aqi=base["aqi"].fillna(0))), cov_mod.recommendation_layer(rec), layer_mod.labels(base)],
+            initial_view_state=cam_mod.view_state("top"), tooltip={"text": "{label}"},
+            map_provider=None if not SETTINGS.carto_api_key else "carto", map_style=None if not SETTINGS.carto_api_key else "dark",
+        )
+        st.pydeck_chart(deck, width="stretch", height=480)
+    with c2:
+        st.metric("Mean distance to nearest monitor", f"{stats['mean_km_urban']:.1f} km", help="Across the built-up area, about 18 km around the centre")
+        st.metric("Share of the city more than 5 km from a monitor", f"{stats['share_beyond_5km']:.0%}")
+        st.metric("Share within 3 km", f"{stats['share_within_3km']:.0%}")
+        st.markdown(f"**Suggested next station:** {rec['lat']:.3f} N, {rec['lon']:.3f} E - currently {rec['current_km']:.1f} km from {rec['nearest_now']}; would cut the city mean by {rec['gain_km']:.2f} km.")
+    st.caption("Colour = distance from each 1 km cell to the nearest EPA station (teal close, orange far). No air-quality value is shown for places without a monitor; this map shows where measurement is missing, not what the air is like there. Station positions approximate.")

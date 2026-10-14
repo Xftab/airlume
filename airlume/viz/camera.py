@@ -14,6 +14,8 @@ def view_state(camera: str, target: tuple[float, float] | None = None) -> pdk.Vi
     lat, lon = target or LAHORE
     if camera == "station":
         return pdk.ViewState(latitude=lat, longitude=lon, zoom=12.5, pitch=60, bearing=-20)
+    if camera == "top":
+        return pdk.ViewState(latitude=lat, longitude=lon, zoom=10.4, pitch=0, bearing=0)
     if camera == "north":
         return pdk.ViewState(latitude=lat, longitude=lon, zoom=10.3, pitch=45, bearing=0)
     # overview

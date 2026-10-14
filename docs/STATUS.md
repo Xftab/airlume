@@ -34,6 +34,11 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 
 - **Collection moved to the cloud** (decision 14 Oct 09:55): `collect.yml` runs hourly on GitHub Actions and commits `data/archive/`; laptop scheduled task to be removed; `run.bat` no longer collects by default (`run --collect` does). Needs the repo public and the workflow moved into `.github\workflows\`.
 
+- **Benchmark v0 written** (60 English + 10 Roman-Urdu single items, 20 two-turn conversations) with gold forms, and the E1 runner (`python -m airlume.eval.run_e1 --model <id> --runs 3`): per-field accuracy, bootstrap 95% CIs, consistency, per-class. **Baseline, rule-based stand-in: 45.6% pass (CI 36-56%)**, weakest on follow-ups (20%), forecasts (0%), thresholds (29%), Roman Urdu (40%). Not yet frozen: classmate items and second annotator pending.
+- Cloud collector verified: first GitHub Actions run green (32 s).
+
+- **Coverage map and station recommendation (C3, C7)** built: 1 km grid over Lahore's urban area, distance to nearest monitor; mean 5.0 km, 45% of the area beyond 5 km, 22% within 3 km; greedy placement suggests ~31.56 N 74.20 E (west, near Bund Road/Sabzazar), 10.9 km from the nearest station today. New tab "Where the city is blind".
+
 ## Where we stopped (13 Oct, 19:10)
 Session closed by Aftab. Everything below is on the laptop and pushed to GitHub. Tomorrow's first items: send the EPA email; create the accounts; schedule `collect.bat` hourly on the laptop (Task Scheduler) or install `_update\collect.yml`; run `python scripts\w1_check.py` after a day of readings; look at the 41 remaining unknown bulletins (`data\raw\epd\_styles.csv`).
 
