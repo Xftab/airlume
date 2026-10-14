@@ -2,6 +2,11 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 14 October 2026
+- **Hourly collection runs in the cloud.** The laptop scheduler was a stopgap; GitHub Actions now fetches the portal every hour and commits the CSV archive, so the laptop can be off. The repo goes public for free Actions minutes. The EPA permission email is still sent as a courtesy; the portal's robots policy permits the one-page-an-hour read.
+- **Lahore page extras captured:** the embedded 7-day hourly city trend and the 24-hour forecast; EPA and CAMS forecasts are stored and scored against actuals (C5).
+- **App reads an in-memory database rebuilt from the archive** every hour, so it never locks the file the collector writes.
+
 ## 13 October 2026
 - **Supervisor-facing proposal (v2) written** as a separate document from the engineering plan, with a verified reference list (26 items; IQAir's 2025 report now ranks Pakistan first; EcoBot's channel is not confirmed as WhatsApp, so the proposal says "AI assistant"; Dr.Spider (ICLR 2023) cited for the no-code-generation design). Built alongside the plan by `docs/build.sh`.
 - **Phase 0 build started and the skeleton completed in one session.** Package layout follows plan 0.4; 45 tests pass; the fake-data shell runs end to end (question, typed form, validated query, code-written answer, 3D view).

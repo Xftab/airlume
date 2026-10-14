@@ -50,15 +50,19 @@ def _registry() -> Registry:
     return Registry.load()
 
 
-@st.cache_resource
+@st.cache_resource(ttl=3600)
 def _store() -> tuple[Store, str]:
-    """Returns (store, data_mode) where data_mode is 'live', 'archive' or 'fake'."""
-    s = Store()
+    """Returns (store, data_mode) where data_mode is 'live', 'archive' or 'fake'.
+
+    The app builds an in-memory database from the CSV archive (the source of
+    record), so it never locks the on-disk file the hourly collector writes to,
+    and it rebuilds itself every hour to pick up new rows."""
+    s = Store(":memory:")
     reg = _registry()
-    # Always load whatever real data the archive holds.
     s.upsert_readings(archive.load_all("readings"))
     s.upsert_city_hourly(archive.load_all("city_hourly"))
     s.upsert_epd_daily(archive.load_all("epd_daily"))
+    s.upsert_forecasts(archive.load_all("forecasts"))
     real = s.real_counts()
     if real["readings"] > 0 or real["city_hourly"] > 0:
         s.delete_source("fake")

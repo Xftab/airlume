@@ -100,9 +100,13 @@ _ALLOWED_AGG = {"latest", "mean", "max", "min", "count_hours_above"}
 class Store:
     def __init__(self, path: Path | str | None = None, read_only: bool = False):
         settings = load_settings()
-        self.path = Path(path) if path else settings.db_path
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.con = duckdb.connect(str(self.path), read_only=read_only)
+        if path == ":memory:":
+            self.path = Path(":memory:")
+            self.con = duckdb.connect(":memory:")
+        else:
+            self.path = Path(path) if path else settings.db_path
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            self.con = duckdb.connect(str(self.path), read_only=read_only)
         if not read_only:
             self.con.execute(SCHEMA)
             for col in ("co", "so2", "no2", "o3"):  # migrate databases created before 13 Oct

@@ -32,6 +32,8 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - Live page investigated from a saved copy: 7-day hourly city trend and 24-h forecast embedded. Parsers written (fixture tests), `forecasts` table + archive, CAMS forecast captured alongside, "Next 24 hours" tab with scorecard. Replay-a-day slider added. App verified live on the laptop (10 of 11 stations, 09:00 PKT).
 - Fixed: positional INSERT broke on the laptop's migrated table (gas columns at the end) - column lists are explicit now.
 
+- **Collection moved to the cloud** (decision 14 Oct 09:55): `collect.yml` runs hourly on GitHub Actions and commits `data/archive/`; laptop scheduled task to be removed; `run.bat` no longer collects by default (`run --collect` does). Needs the repo public and the workflow moved into `.github\workflows\`.
+
 ## Where we stopped (13 Oct, 19:10)
 Session closed by Aftab. Everything below is on the laptop and pushed to GitHub. Tomorrow's first items: send the EPA email; create the accounts; schedule `collect.bat` hourly on the laptop (Task Scheduler) or install `_update\collect.yml`; run `python scripts\w1_check.py` after a day of readings; look at the 41 remaining unknown bulletins (`data\raw\epd\_styles.csv`).
 

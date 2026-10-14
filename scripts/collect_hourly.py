@@ -97,13 +97,20 @@ def run(dry_run: bool = False) -> int:
             print(f"\n== {k} ==\n{v.head(15).to_string()}")
         return 0 if ok else 1
 
-    store = Store()
+    # The CSV archive is the record. The local DuckDB file is a convenience cache and may be
+    # locked by another process; that is not a failure.
     for table, df in results.items():
         touched = archive.export(table, df)
-        n = {"readings": store.upsert_readings, "city_hourly": store.upsert_city_hourly,
+        print(f"[{table}] {len(df)} rows -> archive: {[str(p.relative_to(archive.ROOT)) for p in touched]}")
+    try:
+        store = Store()
+        for table, df in results.items():
+            {"readings": store.upsert_readings, "city_hourly": store.upsert_city_hourly,
              "forecasts": store.upsert_forecasts}[table](df)
-        print(f"[{table}] {n} rows -> db; archive files: {[str(p.relative_to(archive.ROOT)) for p in touched]}")
-    print(store.counts())
+        print(f"[db] {store.counts()}")
+        store.close()
+    except Exception as e:  # e.g. file locked
+        print(f"[db] skipped ({type(e).__name__}); archive is up to date")
     return 0 if ok else 1
 
 
