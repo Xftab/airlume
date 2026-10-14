@@ -28,13 +28,36 @@ _STATIONS = [
 ]
 
 
-def route(question: str) -> ViewIntent:
+_FOLLOW_UP = re.compile(r"^(and|what about|how about|only|just|now|instead|show)\b|\binstead\b|^(kal|aur)\b")
+
+
+def route(question: str, previous: dict | None = None) -> ViewIntent:
     q = " ".join(question.lower().split())
     if not q:
         return ViewIntent(in_scope=False)
 
     air_words = ("air", "aqi", "smog", "pollut", "pm", "breath", "worst", "clean", "best", "unhealthy")
-    if not any(w in q for w in air_words) and not any(c in q for c in _CITIES):
+    names_city = any(re.search(rf"\b{re.escape(c)}\b", q) for c in _CITIES)
+    if previous and not names_city and (_FOLLOW_UP.search(q) or len(q.split()) <= 3):
+        # Short follow-up ("and yesterday?"): keep the previous form, change what the words change.
+        form = dict(previous)
+        form["time"] = dict(form.get("time") or {})
+        for label in ("yesterday", "today", "last_7_days", "last_30_days", "this_month", "last_month"):
+            if label.replace("_", " ") in q or label in q or (label == "last_7_days" and "week" in q) or (label == "yesterday" and "kal" in q):
+                form["time"]["label"] = label
+                form["aggregation"] = "latest" if label in ("now", "today") else "mean"
+        if re.search(r"pm\s*2\.?5", q):
+            form["metric"] = "pm25"
+        elif re.search(r"pm\s*10", q):
+            form["metric"] = "pm10"
+        if "north" in q:
+            form["camera"] = "north"
+        for st_name in _STATIONS:
+            if st_name in q:
+                form["area"] = st_name
+        form["context_ref"] = False
+        return ViewIntent.model_validate(form)
+    if not any(w in q for w in air_words) and not names_city:
         return ViewIntent(in_scope=False, clarify="I can only answer about air quality in monitored cities.")
 
     metric = "pm25" if re.search(r"pm\s*2\.?5", q) else "pm10" if re.search(r"pm\s*10", q) else "aqi"

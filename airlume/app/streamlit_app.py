@@ -25,9 +25,10 @@ import streamlit as st  # noqa: E402
 from airlume import __version__  # noqa: E402
 from airlume.aqi import PUNJAB_BANDS, band_for  # noqa: E402
 from airlume.config import check_secrets, load_settings  # noqa: E402
-from airlume.nl import router  # noqa: E402
+from airlume.nl import router, stub_router  # noqa: E402
 from airlume.nl.answer import answer  # noqa: E402
 from airlume.nl.resolve import ResolveError, resolve  # noqa: E402
+from airlume.nl.schema import ViewIntent  # noqa: E402
 from airlume.pipeline import archive  # noqa: E402
 from airlume.pipeline.fake import fake_city_hourly, fake_readings  # noqa: E402
 from airlume.pipeline.registry import Registry  # noqa: E402
@@ -143,6 +144,11 @@ with st.sidebar:
     model = st.selectbox("Language model", models, index=0,
                          help="Falls back to the rule-based stand-in if the model call fails.")
     show_form = st.toggle("Show the form the model filled", value=False)
+    if st.button("Start over", help="Forget the previous questions; the next one is read on its own."):
+        for k in ("previous_form", "thread", "last_question"):
+            st.session_state.pop(k, None)
+        st.rerun()
+    thread_box = st.empty()  # filled at the end of the script, once the answer exists
     st.divider()
     st.subheader("Status")
     rc = store.real_counts()
@@ -161,15 +167,28 @@ st.markdown(
 intent = None
 result = None
 if question:
-    result = router.route(question, model=model if model != "stub" else router.PRIMARY_MODEL,
-                          previous=st.session_state.get("previous_form"))
-    intent = result.intent
-    if intent.context_ref and st.session_state.get("previous_form"):
-        # Follow-up: start from the previous form, overlay what the model changed.
-        merged = {**st.session_state["previous_form"], **intent.model_dump(exclude_defaults=True)}
-        merged["context_ref"] = False
-        intent = intent.model_validate(merged)
-    st.session_state["previous_form"] = intent.model_dump()
+    # Streamlit re-runs this script on every click. Route only when the question is new,
+    # so toggling a switch never feeds a question back to the model as its own follow-up.
+    if question != st.session_state.get("last_question"):
+        prev = st.session_state.get("previous_form")
+        if model == "stub":
+            result = router.RouteResult(stub_router.route(question, prev), "stub", False, 0.0)
+        else:
+            result = router.route(question, model=model, previous=prev)
+        intent = result.intent
+        if intent.context_ref and st.session_state.get("previous_form"):
+            # Follow-up: start from the previous form, overlay what the model changed.
+            merged = {**st.session_state["previous_form"], **intent.model_dump(exclude_defaults=True)}
+            merged["context_ref"] = False
+            intent = intent.model_validate(merged)
+        st.session_state["last_question"] = question
+        st.session_state["last_result"] = result
+        if intent.in_scope and not intent.clarify:
+            st.session_state["previous_form"] = intent.model_dump()
+        st.session_state["last_intent"] = intent.model_dump()
+    else:
+        result = st.session_state.get("last_result")
+        intent = ViewIntent.model_validate(st.session_state["last_intent"])
 
 resolved = None
 if intent is not None:
@@ -189,9 +208,19 @@ if intent is not None:
             st.warning(str(e))
 
 if resolved is not None:
-    st.success(answer(resolved, store, reg))
+    text = answer(resolved, store, reg)
+    st.success(text)
     for n in resolved.notes:
         st.info(n)
+    thread = st.session_state.setdefault("thread", [])
+    if not thread or thread[-1][0] != question:
+        thread.append((question, text))
+
+if st.session_state.get("thread"):
+    with thread_box.container():
+        st.caption("This conversation")
+        for q, a in st.session_state["thread"][-4:]:
+            st.markdown(f"**You:** {q}  \n{a}")
 
 view = resolved.view if resolved else "stations_3d"
 city_id = resolved.city_id if resolved else "PB-LHE"

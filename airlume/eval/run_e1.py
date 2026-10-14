@@ -117,8 +117,10 @@ def run(model: str, runs: int) -> dict:
             except Exception as e:  # noqa: BLE001 - one bad item must not end a 15-minute run
                 print(f"  {item['id']}: {type(e).__name__}: {str(e)[:160]}", flush=True)
                 if "rate_limit_exceeded" in str(e) and "try again in" in str(e) and not _minutes_ok(str(e)):
-                    print("Daily token limit reached on Groq. Re-run later (finished items are cached) "
-                          "or use --model openai/gpt-oss-20b, which has its own limit.", flush=True)
+                    other = "openai/gpt-oss-20b" if "120b" in model else "openai/gpt-oss-120b"
+                    print(f"Daily token limit reached on Groq for {model}. Re-run the same command when the "
+                          f"message's retry time has passed (finished items are cached and skipped), "
+                          f"or score --model {other}, which has its own limit.", flush=True)
                     raise SystemExit(2)
                 intent, used = ViewIntent(in_scope=False, clarify="ROUTER_ERROR"), "error"
             if intent.context_ref and prev:

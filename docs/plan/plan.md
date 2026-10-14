@@ -431,6 +431,8 @@ on:
 - Each run writes a heartbeat timestamp, so a commit always lands and GitHub's 60-day inactivity rule can never disable the job.
 - Run unattended for **48 hours** before trusting it.
 
+- **Observed (14 Oct):** GitHub started only one of the first five hourly slots (all runs that did start were green). Schedule changed to two slots an hour (`17,47 * * * *`); the collector de-duplicates. If coverage stays below ~80% of hours after a day, the fallback is an external timer (cron-job.org) calling `workflow_dispatch` with a fine-grained token scoped to this one repository's Actions, or making the repository public (public repos get unlimited minutes and, anecdotally, more reliable scheduling). Coverage is measured as hours with at least one round in `data/archive/readings/punjab_epa/`.
+
 ### 1.5 Historical backfill --- the CC425 component
 
 - Harvest the EPD daily-report index (about 105 pages, about 2,000 PDFs).
@@ -565,6 +567,8 @@ ollama pull qwen3:8b
 **Exit:** the 10 follow-up dialogues run correctly end to end.
 
 **Exit criterion for Phase 3:** every question class works end to end in the app; refusals, clarifications and follow-ups behave correctly; the benchmark is frozen.
+
+- **Status (14 Oct):** built. The app keeps the previous form in the session, routes a question only when it changes (Streamlit re-runs the script on every click, which otherwise fed a question back as its own follow-up), shows the last four exchanges in the sidebar, and has a *Start over* button that clears the context. The offline stub also handles short follow-ups ("and yesterday?", "show PM10 instead") by editing the previous form, so the demo degrades gracefully without the model.
 
 ## Phase 4 --- Forecasting and Validation (Week 8: 1--7 Dec)
 

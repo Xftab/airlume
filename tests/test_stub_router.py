@@ -28,3 +28,13 @@ def test_out_of_scope():
 def test_benchmark_file_is_valid_jsonl():
     rows = [json.loads(l) for l in BENCH.read_text(encoding="utf-8").splitlines() if l.strip()]
     assert len(rows) >= 10 and len({r["id"] for r in rows}) == len(rows)
+
+
+def test_stub_follow_up_keeps_previous_form():
+    from airlume.nl.stub_router import route
+    first = route("How is the air at Gulberg?").model_dump()
+    second = route("and yesterday?", previous=first)
+    assert second.in_scope and second.area and "gulberg" in second.area.lower()
+    assert second.time.label == "yesterday" and second.aggregation == "mean"
+    third = route("show PM10 instead", previous=first)
+    assert third.metric == "pm10" and third.area == second.area

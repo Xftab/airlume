@@ -241,7 +241,7 @@ def route(question: str, model: str = PRIMARY_MODEL, previous: dict | None = Non
         log.warning("router fallback to stub: %s", e)
         if not allow_fallback:
             raise
-        return RouteResult(stub_router.route(q), "stub", False, latency)
+        return RouteResult(stub_router.route(q, previous), "stub", False, latency)
 
 
 def models_available() -> list[str]:

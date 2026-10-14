@@ -1,13 +1,16 @@
 # Hourly collector. Lives at .github/workflows/collect.yml (moved there by hand;
 # Claude's tools cannot write inside .github/workflows/).
 #
-# Every hour at :17 it fetches the EPA Punjab portal (Lahore stations, 36 districts,
+# Twice an hour (:17 and :47) it fetches the EPA Punjab portal (Lahore stations, 36 districts,
 # 7-day trend, 24-h forecast) and Open-Meteo CAMS, appends to data/archive/*.csv and
 # commits. The CSVs are the project's data of record; the app rebuilds from them.
 name: Collect hourly readings
 on:
   schedule:
-    - cron: "17 * * * *"
+    # Two slots per hour: GitHub starts scheduled runs on a best-effort basis and
+    # skipped four of the first five hourly slots on 14 Oct. The collector
+    # de-duplicates, so a double catch within the hour is harmless.
+    - cron: "17,47 * * * *"
   workflow_dispatch:
 permissions:
   contents: write
