@@ -832,14 +832,14 @@ A standing requirement for this project: it must not be an easy target. The list
 | S5 | Authentication and authorisation | *N/A by design:* no user accounts; the site is read-only for everyone. If accounts are ever added: passwords hashed with Argon2id, sessions server-side | Phase 6 |
 | S6 | Forms sanitised, XSS prevented | One input (the question). Treated as data; never rendered as HTML; `unsafe_allow_html` banned by a test | Phase 3 |
 | S7 | Injection prevented | Model fills a typed form only; code builds SQL with parameters; no shell calls with user text | Phase 3 |
-| S8 | Rate limiting | Per-visitor and global daily caps on the question box; cache serves repeats | Phase 6 |
+| S8 | Rate limiting | Per-visitor and global daily caps on the question box; cache serves repeats. **Done 15 Oct:** 30 calls/session/hour, 150/hour global, 400-character input cap | Phase 6 |
 | S9 | API endpoints secured | Only the question endpoint is public; it accepts a bounded string, returns JSON, has the rate limit above | Phase 6 |
 | S10 | Core settings and security headers | Debug off; no stack traces; CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy | Phase 6 |
 | S11 | Unneeded things removed | Unused packages, routes and files deleted; `pip-audit` clean | Phase 6 |
 | S12 | Exposed files checked | Review of every served and committed file before going public | Phase 6 |
 | S13 | Database secured | DuckDB opened read-only by the app; writers run outside it; no network database unless needed, then least-privilege role over TLS | Phase 1, 6 |
 | S14 | Passwords hashed properly | *N/A by design* (no passwords). Argon2id if ever added | --- |
-| S15 | Full security audit | Whole checklist re-run, plus `gitleaks`, `pip-audit` and `bandit`, before going public and before submission | Phase 6, 7 |
+| S15 | Full security audit | Whole checklist re-run, plus `gitleaks`, `pip-audit` and `bandit`, before going public and before submission. **First pass 15 Oct:** `docs/security/audit-2026-10-15.md` | Phase 6, 7 |
 
 ## Ethics and licensing
 

@@ -1,0 +1,7 @@
+# bandit configuration (security linter). Run:  bandit -r airlume scripts -ll --ini .bandit
+[bandit]
+# B608 (string-built SQL) is skipped on purpose: every SQL statement lives in
+# airlume/pipeline/store.py, metric/aggregation/table names come from allow-lists
+# or literal tuples, and all values are bound with "?" placeholders. tests/test_store.py
+# covers the rejection of unknown metric names.
+skips = B608

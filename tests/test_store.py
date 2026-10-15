@@ -60,3 +60,14 @@ def test_forecasts_and_errors(store):
     err = store.forecast_errors("PB-LHE")
     assert len(err) == 1 and int(err.error.iloc[0]) == 11 and int(err.horizon_h.iloc[0]) == 1
     assert len(store.latest_forecast("PB-LHE")) == 2
+
+
+def test_unknown_metric_is_rejected(tmp_path):
+    import pytest
+    from datetime import datetime, timezone
+    from airlume.pipeline.store import Store
+    s = Store(":memory:")
+    with pytest.raises(ValueError):
+        s.station_series(["PB-LHE-01"], datetime(2026, 1, 1, tzinfo=timezone.utc), datetime(2026, 1, 2, tzinfo=timezone.utc), "aqi; DROP TABLE readings")
+    with pytest.raises((ValueError, KeyError)):
+        s.aggregate(["PB-LHE-01"], datetime(2026, 1, 1, tzinfo=timezone.utc), datetime(2026, 1, 2, tzinfo=timezone.utc), "aqi", "sum")

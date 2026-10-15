@@ -210,11 +210,39 @@ def call_groq(question: str, model: str, previous: dict | None = None, timeout: 
     return data["choices"][0]["message"]["content"], data.get("usage", {})
 
 
+MAX_CALLS_PER_HOUR = 150  # global guard: a public app must not be able to drain the daily budget
+
+
+def calls_in_last(minutes: int) -> int:
+    """Count live model calls in the last N minutes from the call log (cheap tail read)."""
+    try:
+        if not LOG_PATH.exists():
+            return 0
+        cutoff = time.time() - minutes * 60
+        n = 0
+        with open(LOG_PATH, "rb") as f:
+            f.seek(0, 2)
+            size = f.tell()
+            f.seek(max(0, size - 200_000))
+            for line in f.read().decode("utf-8", "replace").splitlines():
+                try:
+                    if json.loads(line).get("ts", 0) >= cutoff:
+                        n += 1
+                except ValueError:
+                    continue
+        return n
+    except OSError:
+        return 0
+
+
 def route(question: str, model: str = PRIMARY_MODEL, previous: dict | None = None,
-          use_cache: bool = True, allow_fallback: bool = True) -> RouteResult:
+          use_cache: bool = True, allow_fallback: bool = True, max_len: int = 400) -> RouteResult:
     q = " ".join(question.split())
     if not q:
         return RouteResult(ViewIntent(in_scope=False), "stub", False, 0.0)
+    if len(q) > max_len:
+        # Long inputs cost tokens and are not questions; answer with a clarification, no model call.
+        return RouteResult(ViewIntent(clarify="Please ask a shorter question (one or two sentences)."), "stub", False, 0.0)
 
     key = _cache_key(q, model, previous)
     cache_file = CACHE_DIR / f"{key}.json"
@@ -227,6 +255,8 @@ def route(question: str, model: str = PRIMARY_MODEL, previous: dict | None = Non
 
     t0 = time.time()
     try:
+        if allow_fallback and calls_in_last(60) >= MAX_CALLS_PER_HOUR:
+            raise RuntimeError("hourly model-call budget reached; using the rule-based router")
         raw, usage = call_groq(q, model, previous)
         intent = ViewIntent.model_validate_json(raw)
         latency = time.time() - t0

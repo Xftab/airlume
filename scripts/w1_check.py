@@ -13,17 +13,22 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import pandas as pd
 
 from airlume.aqi import aqi_from_concentrations
-from airlume.pipeline.store import Store
+from airlume.pipeline import archive
 
 POLS = ["pm25", "pm10", "o3", "no2", "so2", "co"]
 
-store = Store(read_only=True)
-df = store.con.execute(
-    "SELECT station_id, ts, pm25, pm10, o3, no2, so2, co, aqi FROM readings "
-    "WHERE source = 'punjab_epa' AND aqi IS NOT NULL ORDER BY station_id, ts"
-).df()
-if len(df) < 8:
-    sys.exit(f"only {len(df)} rows; collect for at least 8 hours first")
+# Read the CSV archive (data of record, includes rows the cloud collector committed),
+# not the local DuckDB cache, which only sees rounds run on this machine.
+df = archive.load_all("readings")
+df = df[(df["source"] == "punjab_epa") & df["aqi"].notna()].copy()
+df["ts"] = pd.to_datetime(df["ts"], utc=True)
+for c in POLS:
+    df[c] = pd.to_numeric(df.get(c), errors="coerce")
+df = df.sort_values(["station_id", "ts"])
+hours = df["ts"].dt.floor("h").nunique()
+print(f"{len(df)} station-rows over {hours} distinct hours")
+if hours < 8:
+    sys.exit("collect for at least 8 hours first")
 
 out = []
 for sid, g in df.groupby("station_id"):
@@ -38,5 +43,9 @@ for sid, g in df.groupby("station_id"):
 r = pd.DataFrame(out)
 r["abs_err"] = (r.ours - r.portal).abs()
 print(r.groupby("window_h").abs_err.agg(["mean", "median", "max", "count"]).round(1))
+print("\nshare of hours where each pollutant dominates (1-h window):")
+print(r[r.window_h == 1].dominant.value_counts(normalize=True).round(2).to_string())
+print("\nby station, 1-h vs 8-h mean abs error:")
+print(r.pivot_table(index="station_id", columns="window_h", values="abs_err", aggfunc="mean").round(1).to_string())
 print("\nworst 10 station-hours (8-h window):")
 print(r[r.window_h == 8].sort_values("abs_err", ascending=False).head(10).to_string(index=False))

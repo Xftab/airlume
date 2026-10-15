@@ -11,6 +11,7 @@ is the source of record; fake data is used only when nothing real exists yet.
 from __future__ import annotations
 
 import sys
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -136,6 +137,11 @@ def ranked_bar(df: pd.DataFrame, name_col: str, value_col: str = "aqi", height: 
     )
 
 
+def md_escape(text: str) -> str:
+    """Neutralise Markdown so user or model text renders literally (HTML is already escaped by Streamlit)."""
+    return "".join("\\" + c if c in "\\`*_{}[]()#+-.!|<>" else c for c in str(text))
+
+
 # ---------------------------------------------------------------- sidebar
 with st.sidebar:
     st.subheader("Ask")
@@ -171,6 +177,15 @@ if question:
     # so toggling a switch never feeds a question back to the model as its own follow-up.
     if question != st.session_state.get("last_question"):
         prev = st.session_state.get("previous_form")
+        # Per-session cap: 30 live model calls per rolling hour; beyond that the stub answers.
+        calls = [t for t in st.session_state.get("call_times", []) if t > time.time() - 3600]
+        over_cap = len(calls) >= 30
+        if model != "stub" and not over_cap:
+            calls.append(time.time())
+        st.session_state["call_times"] = calls
+        if over_cap and model != "stub":
+            st.sidebar.caption("Question limit for this session reached (30 per hour); answering with the rule-based router.")
+            model = "stub"
         if model == "stub":
             result = router.RouteResult(stub_router.route(question, prev), "stub", False, 0.0)
         else:
@@ -200,7 +215,7 @@ if intent is not None:
     if not intent.in_scope:
         st.info("I can only answer about air quality in Pakistan's monitored cities.")
     elif intent.clarify:
-        st.warning(intent.clarify)
+        st.warning(md_escape(intent.clarify))
     else:
         try:
             resolved = resolve(intent, reg)
@@ -220,7 +235,7 @@ if st.session_state.get("thread"):
     with thread_box.container():
         st.caption("This conversation")
         for q, a in st.session_state["thread"][-4:]:
-            st.markdown(f"**You:** {q}  \n{a}")
+            st.markdown(f"**You:** {md_escape(q)}  \n{md_escape(a)}")
 
 view = resolved.view if resolved else "stations_3d"
 city_id = resolved.city_id if resolved else "PB-LHE"

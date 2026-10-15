@@ -15,3 +15,8 @@ maxUploadSize = 1
 
 [browser]
 gatherUsageStats = false
+
+[client]
+# Viewers see the error type, not the traceback (which can reveal paths and internals).
+# Full tracebacks still go to the terminal/log.
+showErrorDetails = "type"
