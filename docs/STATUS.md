@@ -45,6 +45,7 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - Collector overnight: 4 of 36 slots fired on GitHub (6 of 24 hours have station rows). **Aftab: set up the cron-job.org trigger with a fine-grained token (instructions given 15 Oct 10:45)**; GitHub's schedule stays as second chance. City-level hours are recoverable from the portal's 7-day trend; station rows are not.
 - `scripts/w1_check.py` reads the CSV archive now (needs 8 distinct hours; had 6).
 - **Security pass 1 (S1-S15)** written to `docs/security/audit-2026-10-15.md`: pip-audit clean, bandit reviewed (`.bandit`), rate limits added (session 30/h, global 150/h, 400-char cap), Markdown escaping of user/model text, tracebacks hidden from viewers, 4 new guard tests (84 total).
+- **4.1 persistence baselines** in the scorecard + horizon chart (`airlume/forecast/skill.py`). Found and fixed a collector bug that dropped the 7-day city trend every round (next run back-fills). Early numbers: EPA bias +28, CAMS bias -17, skill ~0.1 vs last value on 34 hours.
 - **E1 on prompt v3: 120b 88.9% (CI 82-96), 20b 88.9% (CI 82-94).** Prompt frozen. Write-up in `docs/research/e1-results.md`; four debatable gold items flagged for the second annotator. Date fields now accept datetimes (truncate to day).
 
 ## 14 Oct (afternoon)

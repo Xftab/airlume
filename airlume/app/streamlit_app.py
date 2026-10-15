@@ -30,6 +30,7 @@ from airlume.nl import router, stub_router  # noqa: E402
 from airlume.nl.answer import answer  # noqa: E402
 from airlume.nl.resolve import ResolveError, resolve  # noqa: E402
 from airlume.nl.schema import ViewIntent  # noqa: E402
+from airlume.forecast.skill import by_horizon, scorecard  # noqa: E402
 from airlume.pipeline import archive  # noqa: E402
 from airlume.pipeline.fake import fake_city_hourly, fake_readings  # noqa: E402
 from airlume.pipeline.registry import Registry  # noqa: E402
@@ -339,16 +340,33 @@ with tab_fc:
         issued = pd.to_datetime(fc["issued_at"].iloc[0], utc=True).tz_convert(KARACHI)
         st.caption(f"Issued {issued:%d %b %H:%M} PKT. These are relayed forecasts, not ours; whose they are is always shown.")
         base = alt.Chart(fc).encode(x=alt.X("target_ts:T", title=None))
-        lines = base.mark_line(point=True).encode(y=alt.Y("forecast:Q", title="AQI"), color=alt.Color("source:N", title=None),
+        palette = alt.Scale(domain=["EPA Punjab forecast", "CAMS model (Open-Meteo)"], range=["#F2A44A", "#5BC8D6"])
+        lines = base.mark_line(point=True).encode(y=alt.Y("forecast:Q", title="AQI"), color=alt.Color("source:N", title=None, scale=palette),
                                                   tooltip=["source", alt.Tooltip("target_ts:T", format="%d %b %H:%M"), alt.Tooltip("forecast:Q", title="forecast AQI")])
         actual = base.mark_point(shape="diamond", size=80, color="#E8EEF4").encode(y="actual:Q", tooltip=[alt.Tooltip("actual:Q", title="actual AQI")]).transform_filter("isValid(datum.actual)")
         st.altair_chart((lines + actual).properties(height=280), width="stretch")
-        err = store.forecast_errors("PB-LHE")
+        err = store.forecast_errors_with_baselines("PB-LHE")
         if not err.empty:
-            summ = err.groupby("source")["error"].agg(n="count", mean_abs=lambda e: e.abs().mean(), bias="mean").round(1)
-            summ.index = summ.index.map({"punjab_epa_forecast": "EPA Punjab", "open_meteo_cams_forecast": "CAMS"})
-            st.markdown("**Forecast scorecard so far** (forecast minus what the stations later recorded)")
-            st.dataframe(summ, width="stretch")
+            sc = scorecard(err)
+            show = sc.rename(columns={"n": "hours scored", "mae": "mean abs error", "bias": "bias",
+                                      "mae_same_hour_yesterday": "same-hour-yesterday error",
+                                      "skill_vs_same_hour_yesterday": "skill vs yesterday",
+                                      "mae_last_value": "last-value error", "skill_vs_last_value": "skill vs last value"})
+            cols = [c for c in ["hours scored", "mean abs error", "bias", "same-hour-yesterday error", "skill vs yesterday", "last-value error", "skill vs last value"] if c in show.columns]
+            st.markdown("**Forecast scorecard** - error in AQI points against what the stations later recorded, "
+                        "next to the two no-skill baselines on the same hours. Skill = 1 - forecast error / baseline error: "
+                        "above 0 the forecast adds information; at or below 0 you could have guessed as well from yesterday.")
+            st.dataframe(show[cols].round(2).astype(object).where(show[cols].notna(), "not yet"), width="stretch")
+            hz = by_horizon(err)
+            if not hz.empty and hz["horizon_h"].nunique() >= 3:
+                long = hz.melt(id_vars=["source", "horizon_h"], value_vars=["abs_forecast", "abs_persist"], var_name="series", value_name="mae")
+                long["series"] = long["series"].map({"abs_forecast": "forecast", "abs_persist": "same hour yesterday"})
+                chart = alt.Chart(long).mark_line(point=True).encode(
+                    x=alt.X("horizon_h:Q", title="hours ahead"), y=alt.Y("mae:Q", title="mean abs error (AQI)"),
+                    color=alt.Color("series:N", title=None), strokeDash=alt.StrokeDash("source:N", title=None),
+                    tooltip=["source", "series", "horizon_h", alt.Tooltip("mae:Q", format=".1f")])
+                st.altair_chart(chart.properties(height=220), width="stretch")
+            st.caption("Baselines: 'same hour yesterday' repeats the city's AQI 24 h before the target hour; 'last value' repeats the AQI at the time the forecast was issued. A forecast that cannot beat these has no skill (plan 4.1).")
 
 with tab_daily:
     end = datetime.now(timezone.utc)

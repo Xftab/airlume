@@ -71,3 +71,23 @@ def test_unknown_metric_is_rejected(tmp_path):
         s.station_series(["PB-LHE-01"], datetime(2026, 1, 1, tzinfo=timezone.utc), datetime(2026, 1, 2, tzinfo=timezone.utc), "aqi; DROP TABLE readings")
     with pytest.raises((ValueError, KeyError)):
         s.aggregate(["PB-LHE-01"], datetime(2026, 1, 1, tzinfo=timezone.utc), datetime(2026, 1, 2, tzinfo=timezone.utc), "aqi", "sum")
+
+
+def test_forecast_baselines_and_skill(store):
+    import pandas as pd
+    from airlume.forecast.skill import scorecard
+    issued = datetime(2026, 10, 20, 10, tzinfo=timezone.utc)
+    hours = [issued + timedelta(hours=h) for h in range(-24, 7)]
+    # actual AQI: 100 yesterday, 120 today; a forecast of 118 beats persistence (100), 90 loses
+    store.upsert_city_hourly(pd.DataFrame([{"city_id": "PB-LHE", "ts": t, "pm25": None, "pm10": None,
+                                            "aqi": 100 if t < issued else 120, "n_stations": None, "source": "punjab_epa"} for t in hours]))
+    store.upsert_forecasts(pd.DataFrame([{"city_id": "PB-LHE", "issued_at": issued, "target_ts": issued + timedelta(hours=h),
+                                          "aqi": 118, "source": "good_fc"} for h in (1, 2, 3, 4)] +
+                                        [{"city_id": "PB-LHE", "issued_at": issued, "target_ts": issued + timedelta(hours=h),
+                                          "aqi": 90, "source": "bad_fc"} for h in (1, 2, 3, 4)]))
+    err = store.forecast_errors_with_baselines("PB-LHE")
+    good = err[err.source == "good_fc"]
+    assert set(good.persist_24h) == {100} and set(good.persist_last) == {120}
+    sc = scorecard(err)
+    assert sc.loc["good_fc", "skill_vs_same_hour_yesterday"] > 0.8
+    assert sc.loc["bad_fc", "skill_vs_same_hour_yesterday"] < 0

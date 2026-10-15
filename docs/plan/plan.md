@@ -577,6 +577,8 @@ ollama pull qwen3:8b
 
 - "Tomorrow equals today", per station. Every model must beat this or the result is reported as a negative finding.
 
+- **Built 15 Oct (early):** `store.forecast_errors_with_baselines` joins every scored forecast hour with two baselines on the same hour, and `forecast/skill.py` computes MAE, bias and skill = 1 - MAE(forecast)/MAE(baseline). The scorecard and a by-horizon chart live in the *Next 24 hours* tab. First 34 scored hours (14-15 Oct): EPA forecast MAE 33, bias +28 (too pessimistic); CAMS MAE 36, bias -17 (too optimistic); both skill 0.1 against "last value" --- barely better than repeating the current reading. Too few hours to conclude; the number to watch is skill after two weeks.
+
 ### 4.2 Forecast model
 
 - LightGBM on lagged readings, hour of day, day of week and weather. Trained on history, tested on the most recent weeks only.

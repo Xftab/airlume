@@ -68,7 +68,8 @@ def run(dry_run: bool = False) -> int:
         if absent:
             print(f"[epa/districts] registry districts not on the page today: {absent}")
         if not df.empty:
-            results["city_hourly"] = df
+            # append: the Lahore 7-day trend from step 1 is already in results["city_hourly"]
+            results["city_hourly"] = pd.concat([results.get("city_hourly", pd.DataFrame()), df], ignore_index=True)
             ok += 1
     except Exception:
         print("[epa/districts] FAILED"); traceback.print_exc()

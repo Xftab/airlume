@@ -3,6 +3,8 @@
 Newest first. Each entry records what was decided and why.
 
 ## 15 October 2026
+- **Collector bug found and fixed:** the district step overwrote the Lahore 7-day trend in the same result dictionary, so the trend was parsed every round and never stored. Harmless to recover: the portal republishes the last 7 days, so the next run back-fills city-level hours since 8 Oct.
+- **Persistence baselines added to the forecast scorecard (4.1).** First reading: neither relayed forecast is clearly better than repeating the last value; EPA's runs high, CAMS runs low.
 - **Router prompt frozen at v3** after two revisions driven by failure analysis on benchmark v0: 88.9% pass for both `gpt-oss-120b` and `gpt-oss-20b` (stub 45.6%). Because v0 was used for tuning it is declared a development set; the reported number will come from the classmate-authored, second-annotated v1 set. Four debatable gold labels were listed for the second annotator rather than changed by us.
 - **Collector moved to an external timer.** GitHub ran 4 of 36 scheduled slots overnight; a cron-job.org job with a fine-grained token (Actions: write, one repository, 90 days) will call `workflow_dispatch` hourly, with GitHub's own schedule kept as a second chance.
 - **Security pass 1 completed** (`docs/security/audit-2026-10-15.md`); rate limits added to the app before any public deployment.

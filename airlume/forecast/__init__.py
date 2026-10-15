@@ -1,1 +1,1 @@
-"""Forecasting (Phase 4). Phase 0 holds only the persistence baseline."""
+"""Forecast evaluation (plan Phase 4): persistence baselines and skill scores."""

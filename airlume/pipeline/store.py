@@ -214,6 +214,31 @@ class Store:
             [city_id],
         ).df()
 
+    def forecast_errors_with_baselines(self, city_id: str) -> pd.DataFrame:
+        """forecast_errors plus two persistence baselines evaluated on the same hours (plan 4.1):
+
+        - persist_24h: the city's AQI 24 hours before the target hour (same hour yesterday)
+        - persist_last: the city's AQI at the hour the forecast was issued (the latest value then)
+        Rows where a baseline value is missing keep NULL; skill is computed on rows that have both.
+        """
+        return self.con.execute(
+            """
+            SELECT f.issued_at, f.target_ts,
+                   CAST(date_diff('hour', f.issued_at, f.target_ts) AS INTEGER) AS horizon_h,
+                   f.aqi AS forecast, c.aqi AS actual, f.aqi - c.aqi AS error, f.source,
+                   p24.aqi AS persist_24h, pl.aqi AS persist_last
+            FROM forecasts f
+            JOIN city_hourly c
+              ON c.city_id = f.city_id AND c.ts = f.target_ts AND c.source = 'punjab_epa'
+            LEFT JOIN city_hourly p24
+              ON p24.city_id = f.city_id AND p24.ts = f.target_ts - INTERVAL 24 HOUR AND p24.source = 'punjab_epa'
+            LEFT JOIN city_hourly pl
+              ON pl.city_id = f.city_id AND pl.ts = date_trunc('hour', f.issued_at) AND pl.source = 'punjab_epa'
+            WHERE f.city_id = ? ORDER BY f.target_ts
+            """,
+            [city_id],
+        ).df()
+
     # ---- reads ------------------------------------------------------------
     def latest_station_values(self, station_ids: list[str]) -> pd.DataFrame:
         if not station_ids:
