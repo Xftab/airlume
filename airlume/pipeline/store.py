@@ -277,7 +277,8 @@ class Store:
         placeholders = ",".join("?" for _ in station_ids)
         return self.con.execute(
             f"""
-            SELECT r.station_id, r.ts, r.pm25, r.pm10, r.co, r.so2, r.no2, r.o3, r.aqi, r.aqi_computed, r.source
+            SELECT r.station_id, r.ts, r.pm25, r.pm10, r.co, r.so2, r.no2, r.o3, r.aqi, r.aqi_computed, r.source,
+                   r.portal_dominant, r.temperature, r.humidity, r.wind_speed, r.wind_direction
             FROM readings r
             JOIN (SELECT station_id, max(ts) AS ts FROM readings
                   WHERE station_id IN ({placeholders}) GROUP BY station_id) m

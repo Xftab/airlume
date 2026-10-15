@@ -483,12 +483,14 @@ pmtiles extract https://build.protomaps.com/<latest>.pmtiles lahore.pmtiles \
 
 ### 2.3 Time animation
 
-- Play/pause, scrubber across 24 hours, 7 days or 30 days.
+- Play/pause, scrubber across 24 hours, 7 days or 30 days. **Done 15 Oct**, in the "Hourly readings" tab: a window selector (24 hours / 7 days / 30 days), a scrubber over the hours actually collected in that window, and a play toggle that steps one hour at a time and wraps. The animation runs inside a Streamlit fragment, so a tick redraws only the map rather than re-querying the store and rebuilding the page. The frame counter states the position ("hour 7 of 10") because the number of frames is the number of hours collected, not a fixed 24.
 
 ### 2.4 Wind layer
 
 - Wind arrows from Open-Meteo, shown as context and labelled as correlation, never cause.
-- **Prefer the stations' own wind.** The portal's embedded snapshot carries `wind_speed`, `wind_direction`, `temperature` and `humidity` *per station*, hourly, from the same request we already make (found 15 Oct, `docs/research/portal-snapshot.md`). That is measured at the monitor rather than interpolated from a ~45 km model cell, so it is the better layer for Lahore; Open-Meteo stays the source for cities with no EPA station. Storing it needs new columns in `archive.COLS["readings"]` --- a data-of-record schema change, still to be decided.
+- **Prefer the stations' own wind. Done 15 Oct.** The portal's embedded snapshot carries `wind_speed`, `wind_direction`, `temperature` and `humidity` *per station*, hourly, from the same request we already make (`docs/research/portal-snapshot.md`), and those columns are now stored. The layer draws from the monitors themselves rather than interpolating a ~45 km model cell; Open-Meteo stays the source for cities with no EPA station.
+- **Direction convention, pinned by test.** The portal reports the meteorological convention --- the direction the wind blows *from*. An arrow on a map reads as motion, so it is drawn towards `direction + 180`, while the label keeps the "from" wording people quote. Reversing this would be invisible on screen and wrong in every figure in the report.
+- Arrow length is proportional to speed with a floor, so a calm station still shows its direction instead of vanishing. Stations without wind are omitted rather than drawn at zero, and the whole layer is omitted when no station has wind. Arrows render beneath the columns so they never hide the value they are context for.
 
 ### 2.5 View types
 
@@ -498,9 +500,11 @@ pmtiles extract https://build.protomaps.com/<latest>.pmtiles lahore.pmtiles \
 ### 2.6 Coverage map --- a finding in itself
 
 - Draw 3 km and 5 km buffers around each station over Lahore's neighbourhoods and population.
-- Report the share of the city's area and population more than 5 km from any monitor.
+- Report the share of the city's area and population more than 5 km from any monitor. **Area done** (15 Oct figures: mean 4.93 km to the nearest monitor, 44% of the built-up area beyond 5 km, 23% within 3 km, p90 8.29 km). **Population not done** --- it needs a population raster (WorldPop or GHSL), which the build environment cannot download. Every coverage figure is therefore an *area* share and is labelled as one; nothing claims people were counted.
 
 **Exit criterion for Phase 2:** all six views render from real data at 30 frames per second or better; coverage statistics computed.
+
+**Phase 2 status, 15 Oct:** 2.1--2.5 are done and render from real data; 2.6 is done for area and open for population. Frame rate has not been measured and belongs to E6 in Phase 5; with eleven columns and a 1 km grid there is no reason to expect trouble, but it is not yet a measurement.
 
 ## Phase 3 --- The Language Layer (Weeks 5--7: 10--30 Nov)
 
@@ -615,20 +619,23 @@ ollama pull qwen3:8b
 - For each candidate, compute the population brought within 3 km and 5 km of a monitor that is not covered today, using WorldPop or census population layers (both free).
 - **Second criterion: proximity to likely sources** --- major roads and industrial land use from OpenStreetMap --- combined with population in a weighted score. Report results for both the population-only and combined versions. *(Reduces W8.)*
 - Describe it in the report as a **coverage-maximising heuristic** and state what it ignores: pollution gradients, official siting rules (Punjab follows US EPA siting criteria) and land access.
-- Greedy selection: choose the best site, update coverage, repeat --- giving a ranked list of the next five stations and the coverage each adds.
+- Greedy selection: choose the best site, update coverage, repeat --- giving a ranked list of the next five stations and the coverage each adds. **Done 15 Oct on area coverage** (`recommend_stations`, shown in the app): the five together cut the mean distance from 4.93 km to 3.54 km and the share of the built-up area beyond 5 km from 44% to 18%, with the gain per station falling from 0.57 km to 0.13 km. That falling curve is the result worth reporting; the coordinates themselves are provisional, because the population, land-use and proximity-to-sources criteria below are not yet applied.
 - Show the proposals on the map as hollow columns, distinct from real stations.
 - Compare the ranking with the locations recommended in the 2022 ISPRS Lahore study [8] and discuss agreement and difference.
 - Wording: "recommended for consideration", never presented as an official siting plan.
 
-**Exit:** a ranked list of five sites, with population coverage before and after, shown on the map.
+**Exit:** a ranked list of five sites, with population coverage before and after, shown on the map. **Partly met 15 Oct:** the ranked five exist with *area* coverage before and after. Population coverage, the OpenStreetMap land-use exclusions (rivers, airport, restricted land), the proximity-to-sources criterion and the ISPRS comparison all remain, and all four need data this build environment cannot fetch. **Aftab: download a WorldPop or GHSL population raster for Punjab and an OSM extract for Lahore, and the rest follows.** Until then the report must say "area" wherever it would otherwise say "coverage".
 
 ### 4.6 Lowest-AQI window today (added)
 
-- From the 24-hour forecast, find the contiguous two-hour window with the lowest predicted AQI for the nearest station.
-- Answer form: *"Lowest predicted AQI near Gulberg III today: 05:00--07:00 (around 142)."* Always with the forecast error from the accuracy page beside it.
-- Never phrased as advice about going out, exercising or health --- only as a prediction.
+- From the 24-hour forecast, find the contiguous two-hour window with the lowest predicted AQI. **Done 15 Oct** (`airlume/forecast/window.py`, shown in the "Next 24 hours" tab for both relayed sources).
+- **City-level, not per-station.** The original wording ("for the nearest station") assumed a per-station forecast. Neither source has one: the portal publishes its 24-hour forecast for Lahore as a whole, and CAMS resolves to roughly one 45 km cell over the city. Naming a neighbourhood would imply a spatial precision that does not exist, so the answer names Lahore.
+- Answer form: *"Lowest predicted AQI in Lahore over the next 24 hours: 16:00--18:00 on 15 Oct (around 119), from the EPA Punjab forecast."* Always with that source's own mean error beside it, or a plain statement that there is not yet enough scored history to know it.
+- **Hours already past are excluded.** The portal's forecast still contains the hour it was issued in, so without this filter the "lowest window in the next 24 hours" can point at a time that has already gone --- which it did on the first live run. Pinned by test.
+- A gap in the forecast series never becomes a window: only genuinely consecutive hours are considered, so a mean is never reported over times that were not adjacent.
+- Never phrased as advice about going out, exercising or health --- only as a prediction. A test asserts the sentence contains no advice-like wording.
 
-**Exit:** the "best time" question class answers from the forecast with its error shown.
+**Exit:** the "best time" question class answers from the forecast with its error shown. **The computation and the app surface are done; wiring it into the `best_time` question class in the language layer is still open** --- the router recognises the class, but `nl/answer.py` still answers it from the stored series rather than from this window.
 
 **Exit criterion for Phase 4:** forecast and baseline scored; validation statistics computed; station recommendations and lowest-AQI windows produced.
 

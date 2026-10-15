@@ -80,6 +80,52 @@ def recommend_station(cov: pd.DataFrame, stations: list[Station], candidates: in
     return best or {}
 
 
+def recommend_stations(cov: pd.DataFrame, stations: list[Station], n: int = 5,
+                       candidates: int = 400) -> pd.DataFrame:
+    """Greedy ranked list: pick a site, update coverage, repeat (plan 4.5).
+
+    Each row reports the mean urban distance to a monitor before and after that
+    site is added, so the diminishing return of each extra station is visible --
+    which is the point of the exercise, not the individual coordinates.
+
+    **Area coverage only.** The plan's exit criterion asks for *population*
+    brought within 3 km and 5 km, which needs a population raster (WorldPop or
+    GHSL) that this environment cannot download. Until that layer exists these
+    are area-maximising sites, and the report must say so rather than implying
+    people were counted. The same gap means the OpenStreetMap land-use exclusions
+    (rivers, the airport, restricted land) and the proximity-to-sources criterion
+    are not applied either, so a proposed point may land somewhere unusable.
+    """
+    urban = cov[cov["urban"]].copy()
+    km = urban["km"].to_numpy(copy=True)
+    lats, lons = urban["lat"].to_numpy(), urban["lon"].to_numpy()
+    rows = []
+    for rank in range(1, n + 1):
+        base = float(km.mean())
+        order = km.argsort()[::-1][:candidates]
+        best = None
+        for i in order:
+            trial = [min(k, haversine_km(la, lo, lats[i], lons[i]))
+                     for la, lo, k in zip(lats, lons, km)]
+            after = sum(trial) / len(trial)
+            if best is None or after < best[1]:
+                best = (i, after, trial)
+        if best is None:
+            break
+        i, after, trial = best
+        rows.append({
+            "rank": rank,
+            "lat": float(lats[i]), "lon": float(lons[i]),
+            "mean_km_before": round(base, 2),
+            "mean_km_after": round(after, 2),
+            "gain_km": round(base - after, 3),
+            "current_km": round(float(km[i]), 2),
+            "share_beyond_5km_after": round(float((pd.Series(trial) > 5).mean()), 3),
+        })
+        km = pd.Series(trial).to_numpy()
+    return pd.DataFrame(rows)
+
+
 def coverage_layer(cov: pd.DataFrame) -> pdk.Layer:
     d = cov[cov["urban"]].copy()
     # colour ramp: close = dim teal, far = bright orange

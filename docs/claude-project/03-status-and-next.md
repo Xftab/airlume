@@ -28,10 +28,15 @@ Last updated: 15 Oct 2026, 15:10 PKT
    or Tehreem); freeze benchmark v1; score it once, report with CIs.
 4. Rotate the GitHub fine-grained token (first value was exposed) and the Groq key.
 5. Send the EPA permission email (`docs/emails/punjab-epa-permission.md`).
-6. Phase 2.4 wind layer; 2.3 time animation. *(1.6 data-quality flags done 15 Oct.)*
+6. Phase 4.2 forecast model (LightGBM) once weeks of history exist. *(1.6, 2.3, 2.4, 4.5-on-area and 4.6 all done 15 Oct.)*
 7. CAMS-vs-ground validation (C4) once two weeks of readings exist.
 8. Go public: re-run security checklist, make repo public, deploy to Streamlit Cloud.
 9. Report and demo (Phase 7).
+
+## Needs Aftab to fetch (blocks finishing 2.6 and 4.5)
+- A WorldPop or GHSL population raster for Punjab, and an OpenStreetMap extract for Lahore. The
+  build environment cannot download either. Without them, coverage figures are area shares only,
+  and the five proposed station sites ignore population, rivers, the airport and restricted land.
 
 ## Blockers / waiting on time
 - Groq daily budgets reset ~24 h after use (rolling).

@@ -20,9 +20,16 @@ def _map_kwargs() -> dict:
 
 
 def deck_stations_3d(stations: pd.DataFrame, cam: str = "overview",
-                     target: tuple[float, float] | None = None) -> pdk.Deck:
+                     target: tuple[float, float] | None = None,
+                     wind: bool = False) -> pdk.Deck:
+    stack = [layers.station_columns(stations), layers.labels(stations)]
+    if wind:
+        arrows = layers.wind_arrows(stations)
+        if arrows is not None:
+            # Under the columns, so an arrow never hides the value it is context for.
+            stack.insert(0, arrows)
     return pdk.Deck(
-        layers=[layers.station_columns(stations), layers.labels(stations)],
+        layers=stack,
         initial_view_state=camera.view_state(cam, target),
         tooltip=TOOLTIP,
         **_map_kwargs(),

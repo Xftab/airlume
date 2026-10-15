@@ -30,7 +30,8 @@ from airlume.nl import router, stub_router  # noqa: E402
 from airlume.nl.answer import answer  # noqa: E402
 from airlume.nl.resolve import ResolveError, resolve  # noqa: E402
 from airlume.nl.schema import ViewIntent  # noqa: E402
-from airlume.forecast.skill import by_horizon, scorecard  # noqa: E402
+from airlume.forecast.skill import SOURCE_LABELS, by_horizon, scorecard  # noqa: E402
+from airlume.forecast.window import describe, lowest_window  # noqa: E402
 from airlume.pipeline import archive, quality  # noqa: E402
 from airlume.pipeline.fake import fake_city_hourly, fake_readings  # noqa: E402
 from airlume.pipeline.registry import Registry  # noqa: E402
@@ -151,6 +152,10 @@ with st.sidebar:
     model = st.selectbox("Language model", models, index=0,
                          help="Falls back to the rule-based stand-in if the model call fails.")
     show_form = st.toggle("Show the form the model filled", value=False)
+    show_wind = st.toggle(
+        "Show wind", value=False,
+        help="Wind measured at each station, from the EPA's own data. Context only: "
+             "wind moves pollution around, but an arrow never explains a reading.")
     if st.button("Start over", help="Forget the previous questions; the next one is read on its own."):
         for k in ("previous_form", "thread", "last_question"):
             st.session_state.pop(k, None)
@@ -300,10 +305,20 @@ with left:
         if resolved and resolved.station_id:
             s_ = reg.station(resolved.station_id)
             target = (s_.lat, s_.lon)
-        st.pydeck_chart(deck_stations_3d(sf, cam, target), width="stretch", height=560)
+        st.pydeck_chart(deck_stations_3d(sf, cam, target, wind=show_wind), width="stretch", height=560)
         if sf["ts"].notna().any():
             latest_ts = pd.to_datetime(sf["ts"].max()).tz_convert(KARACHI)
             st.caption(f"Data as of {latest_ts:%d %b %Y, %H:%M} PKT · Source: Environmental Protection Agency, Punjab · station coordinates as published by the EPA")
+        if show_wind:
+            n_wind = int(sf["wind_speed"].notna().sum()) if "wind_speed" in sf.columns else 0
+            if n_wind:
+                st.caption(
+                    f"Arrows show the direction the wind is blowing, measured at {n_wind} "
+                    "station(s); length is proportional to speed. Wind is shown as context "
+                    "and is **correlation, never cause** — it moves pollution around, but "
+                    "nothing here attributes a reading to it.")
+            else:
+                st.caption("No wind readings stored yet. The EPA's per-station wind arrives with each hourly round from 15 October.")
 
 with right:
     if split or timeline:
@@ -345,6 +360,26 @@ with tab_fc:
                                                   tooltip=["source", alt.Tooltip("target_ts:T", format="%d %b %H:%M"), alt.Tooltip("forecast:Q", title="forecast AQI")])
         actual = base.mark_point(shape="diamond", size=80, color="#E8EEF4").encode(y="actual:Q", tooltip=[alt.Tooltip("actual:Q", title="actual AQI")]).transform_filter("isValid(datum.actual)")
         st.altair_chart((lines + actual).properties(height=280), width="stretch")
+
+        # Plan 4.6: the lowest predicted two-hour window, with the source's own error
+        # beside it. A prediction, never advice about going outside.
+        raw_fc = archive.load_all("forecasts")
+        if not raw_fc.empty:
+            sc = scorecard(store.forecast_errors_with_baselines("PB-LHE"))
+            st.markdown("**Lowest predicted window**")
+            cols = st.columns(2)
+            for col, src in zip(cols, ("punjab_epa_forecast", "open_meteo_cams_forecast")):
+                label = SOURCE_LABELS.get(src, src)
+                w = lowest_window(raw_fc[raw_fc["source"] == src], hours=2)
+                mae = None
+                if not sc.empty and label in sc.index and pd.notna(sc.loc[label, "mae"]):
+                    mae = float(sc.loc[label, "mae"])
+                with col:
+                    st.caption(describe(w, mae=mae, source_label=label))
+            st.caption("The two consecutive forecast hours with the lowest mean predicted AQI, "
+                       "from each source's most recent issue, counting only hours still ahead. "
+                       "City-level: neither source forecasts individual stations, so no "
+                       "neighbourhood is named.")
         err = store.forecast_errors_with_baselines("PB-LHE")
         if not err.empty:
             sc = scorecard(err)
@@ -421,22 +456,62 @@ with tab_replay:
         st.caption("24-hour PM2.5 AQI from the EPD bulletin of that day. Only the stations that exist in today's network are shown; the bulletins also covered Town Hall, PKLI, LWMC, FMDRC, PU 2 and EPA HQ.")
 
 with tab_hourly:
+    # Plan 2.3: play/pause and a scrubber across 24 hours, 7 days or 30 days.
+    RANGES = {"24 hours": 1, "7 days": 7, "30 days": 30}
+    rc1, rc2 = st.columns([2, 1])
+    with rc1:
+        span = st.radio("Window", list(RANGES), index=0, horizontal=True, key="anim_span")
     end = datetime.now(timezone.utc)
-    start = end - timedelta(days=14)
+    start = end - timedelta(days=RANGES[span])
     ids = [s.station_id for s in reg.stations_in("PB-LHE")]
     ser = store.station_series(ids, start, end, "aqi")
     if ser.empty:
-        st.caption("No hourly readings yet. The cloud collector adds one row per station every hour.")
+        st.caption(f"No hourly readings in the last {span.lower()}. The cloud collector adds one row per station every hour.")
     else:
         hours = sorted(pd.to_datetime(ser["ts"], utc=True).unique())
+        base = pd.DataFrame([{"station_id": s_.station_id, "name": s_.name, "lat": s_.lat, "lon": s_.lon}
+                             for s_ in reg.stations_in("PB-LHE")])
+
+        def _frame_at(hour):
+            at = ser[pd.to_datetime(ser["ts"], utc=True) == hour]
+            f = base.merge(at[["station_id", "value"]].rename(columns={"value": "aqi"}),
+                           on="station_id", how="left")
+            f["stale"] = f["aqi"].isna()
+            return f
+
         if len(hours) > 1:
-            pick = st.select_slider("Scrub through the collected hours", options=hours, value=hours[-1],
-                                    format_func=lambda t: pd.Timestamp(t).tz_convert(KARACHI).strftime("%d %b %H:%M"))
-            at = ser[pd.to_datetime(ser["ts"], utc=True) == pick]
-            base = pd.DataFrame([{"station_id": s_.station_id, "name": s_.name, "lat": s_.lat, "lon": s_.lon} for s_ in reg.stations_in("PB-LHE")])
-            frame = base.merge(at[["station_id", "value"]].rename(columns={"value": "aqi"}), on="station_id", how="left")
-            frame["stale"] = frame["aqi"].isna()
-            st.pydeck_chart(deck_stations_3d(frame, "overview"), width="stretch", height=360)
+            with rc2:
+                playing = st.toggle("Play", value=False, key="anim_play",
+                                    help="Steps through the window one collected hour at a time.")
+            # The index lives in session state so play and the slider share one position.
+            st.session_state.setdefault("anim_i", len(hours) - 1)
+            st.session_state["anim_i"] = min(st.session_state["anim_i"], len(hours) - 1)
+
+            # Only this fragment reruns on the timer, so playing does not re-query
+            # the store or redraw the rest of the page every tick.
+            @st.fragment(run_every=0.9 if playing else None)
+            def _animate():
+                if st.session_state.get("anim_play"):
+                    st.session_state["anim_i"] = (st.session_state["anim_i"] + 1) % len(hours)
+                i = st.session_state["anim_i"]
+                pick = st.select_slider(
+                    "Scrub through the collected hours", options=hours, value=hours[i],
+                    format_func=lambda t: pd.Timestamp(t).tz_convert(KARACHI).strftime("%d %b %H:%M"),
+                    key="anim_slider",
+                    disabled=bool(st.session_state.get("anim_play")),
+                )
+                if not st.session_state.get("anim_play"):
+                    st.session_state["anim_i"] = hours.index(pick)
+                    i = st.session_state["anim_i"]
+                st.pydeck_chart(deck_stations_3d(_frame_at(hours[i]), "overview", wind=show_wind),
+                                width="stretch", height=360)
+                shown = pd.Timestamp(hours[i]).tz_convert(KARACHI)
+                st.caption(f"Hour {i + 1} of {len(hours)} collected in this window · {shown:%d %b %Y, %H:%M} PKT")
+
+            _animate()
+            if len(hours) < 6:
+                st.caption("Only a few hours are stored so far, so the animation is short. "
+                           "It lengthens by one frame an hour as the collector runs.")
         names = {s.station_id: s.name for s in reg.stations_in("PB-LHE")}
         ser["station"] = ser["station_id"].map(names)
         st.altair_chart(
@@ -501,6 +576,12 @@ def _coverage():
     return c, cov_mod.coverage_stats(c), cov_mod.recommend_station(c, reg.stations_in("PB-LHE"))
 
 
+@st.cache_data(ttl=24 * 3600)
+def _ranked_sites():
+    """Five greedy sites (plan 4.5). Cached: each round rescans the grid."""
+    return cov_mod.recommend_stations(cov_mod.coverage(reg), reg.stations_in("PB-LHE"), n=5)
+
+
 with tab_cov:
     cov, stats, rec = _coverage()
     c1, c2 = st.columns([3, 1.4])
@@ -520,4 +601,24 @@ with tab_cov:
         st.metric("Share of the city more than 5 km from a monitor", f"{stats['share_beyond_5km']:.0%}")
         st.metric("Share within 3 km", f"{stats['share_within_3km']:.0%}")
         st.markdown(f"**Suggested next station:** {rec['lat']:.3f} N, {rec['lon']:.3f} E - currently {rec['current_km']:.1f} km from {rec['nearest_now']}; would cut the city mean by {rec['gain_km']:.2f} km.")
+    ranked = _ranked_sites()
+    if not ranked.empty:
+        st.markdown("**The next five, in order** (plan 4.5)")
+        show = ranked.rename(columns={
+            "rank": "#", "lat": "latitude", "lon": "longitude",
+            "mean_km_before": "mean km before", "mean_km_after": "mean km after",
+            "gain_km": "km gained", "share_beyond_5km_after": "share >5 km after"})
+        show["share >5 km after"] = (show["share >5 km after"] * 100).round(0).astype(int).astype(str) + "%"
+        st.dataframe(show.drop(columns=["current_km"]), hide_index=True, width="stretch")
+        st.caption(
+            f"Greedy: pick the best site, update coverage, repeat. Together the five would cut the "
+            f"mean distance from {ranked['mean_km_before'].iloc[0]:.2f} km to "
+            f"{ranked['mean_km_after'].iloc[-1]:.2f} km, and the share of the built-up area more than "
+            f"5 km from a monitor from {stats['share_beyond_5km']:.0%} to "
+            f"{ranked['share_beyond_5km_after'].iloc[-1]:.0%}. The gain per station falls from "
+            f"{ranked['gain_km'].iloc[0]:.2f} km to {ranked['gain_km'].iloc[-1]:.2f} km, which is the "
+            "result worth reporting rather than the coordinates themselves. "
+            "**Recommended for consideration, not a siting plan.** These maximise *area* coverage: "
+            "population is not counted yet, and river, airport and restricted-land exclusions are not "
+            "applied, so a point may fall somewhere unusable.")
     st.caption("Colour = distance from each 1 km cell to the nearest EPA station (teal close, orange far). No air-quality value is shown for places without a monitor; this map shows where measurement is missing, not what the air is like there. Station coordinates as published by the EPA.")
