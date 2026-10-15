@@ -582,6 +582,18 @@ def _ranked_sites():
     return cov_mod.recommend_stations(cov_mod.coverage(reg), reg.stations_in("PB-LHE"), n=5)
 
 
+@st.cache_data(ttl=24 * 3600)
+def _population():
+    """Population coverage and both ranked variants (plan 2.6, 4.5)."""
+    pc = cov_mod.population_coverage(reg)
+    if pc.empty:
+        return pc, {}, pd.DataFrame(), pd.DataFrame()
+    return (pc, cov_mod.population_stats(pc),
+            cov_mod.recommend_stations_by_population(pc, n=5, apply_exclusions=True),
+            cov_mod.recommend_stations_by_population(pc, n=5, apply_exclusions=True,
+                                                     source_weight=0.3))
+
+
 with tab_cov:
     cov, stats, rec = _coverage()
     c1, c2 = st.columns([3, 1.4])
@@ -601,9 +613,59 @@ with tab_cov:
         st.metric("Share of the city more than 5 km from a monitor", f"{stats['share_beyond_5km']:.0%}")
         st.metric("Share within 3 km", f"{stats['share_within_3km']:.0%}")
         st.markdown(f"**Suggested next station:** {rec['lat']:.3f} N, {rec['lon']:.3f} E - currently {rec['current_km']:.1f} km from {rec['nearest_now']}; would cut the city mean by {rec['gain_km']:.2f} km.")
+    popcov, popstats, pop_sites, combo_sites = _population()
+    if popstats:
+        st.markdown("**How many people, not how much ground**")
+        p1, p2, p3 = st.columns(3)
+        p1.metric("People in the Lahore box", f"{popstats['total_population']/1e6:.1f} M")
+        p2.metric("More than 5 km from a monitor",
+                  f"{popstats['people_beyond_5km']/1e6:.2f} M",
+                  f"{popstats['share_beyond_5km']:.0%} of the city")
+        p3.metric("Within 3 km", f"{popstats['share_within_3km']:.0%}")
+        st.caption(
+            f"WorldPop 2025, 1 km cells. Population-weighted mean distance to a monitor is "
+            f"{popstats['mean_km_pop_weighted']:.2f} km, against {stats['mean_km_urban']:.2f} km "
+            "measured by area - people are a little better covered than the average square "
+            "kilometre, because the monitors sit in the built-up city. The two are reported "
+            "separately because they answer different questions.")
+
+        st.markdown("**Where the next five should go**")
+        t1, t2 = st.tabs(["By population", "Population + likely sources"])
+        for tab, (df_, note) in zip((t1, t2), (
+            (pop_sites, "Ranked purely by the people each site brings within 5 km."),
+            (combo_sites, "Population blended with closeness to major roads and industrial "
+                          "land (weight 0.3), so a monitor sits where pollution is produced "
+                          "as well as where people are."))):
+            with tab:
+                if df_.empty:
+                    st.caption("Not computed.")
+                    continue
+                show = df_.rename(columns={
+                    "rank": "#", "lat": "latitude", "lon": "longitude",
+                    "people_brought_within_5km": "people brought within 5 km",
+                    "people_beyond_5km_after": "still beyond 5 km",
+                    "share_beyond_5km_after": "share beyond 5 km after",
+                    "mean_km_before": "mean km before", "mean_km_after": "mean km after",
+                    "km_major_road": "km to major road", "km_industrial": "km to industry"})
+                show["share beyond 5 km after"] = (show["share beyond 5 km after"] * 100).round(0).astype(int).astype(str) + "%"
+                st.dataframe(show, hide_index=True, width="stretch")
+                st.caption(
+                    f"{note} Together: **{df_['people_brought_within_5km'].sum():,.0f} people** "
+                    f"brought within 5 km, cutting the underserved share from "
+                    f"{popstats['share_beyond_5km']:.0%} to "
+                    f"{df_['share_beyond_5km_after'].iloc[-1]:.0%}.")
+        st.caption(
+            "Greedy: pick the best site, update coverage, repeat. Cells on the airport, on "
+            "military land or in water are excluded, so no site is proposed where a monitor "
+            "could not stand. **Recommended for consideration, never an official siting plan** "
+            "- this is a coverage heuristic and ignores pollution gradients, the EPA's own "
+            "siting rules and land access. Population: WorldPop (CC BY 4.0). Land use: "
+            "OpenStreetMap contributors (ODbL).")
+        st.divider()
+
     ranked = _ranked_sites()
     if not ranked.empty:
-        st.markdown("**The next five, in order** (plan 4.5)")
+        st.markdown("**The same five chosen by area instead** (for comparison)")
         show = ranked.rename(columns={
             "rank": "#", "lat": "latitude", "lon": "longitude",
             "mean_km_before": "mean km before", "mean_km_after": "mean km after",

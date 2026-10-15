@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import math
 
+import numpy as np
 import pandas as pd
 import pydeck as pdk
 
@@ -54,6 +55,175 @@ def nearest_station_km(df: pd.DataFrame, stations: list[Station]) -> pd.DataFram
 
 def coverage(reg: Registry, step_deg: float = 0.01) -> pd.DataFrame:
     return nearest_station_km(grid(step_deg), reg.stations_in("PB-LHE"))
+
+
+# --------------------------------------------------------------------------
+# Population (plan 2.6 and 4.5)
+# --------------------------------------------------------------------------
+#
+# The population grid is WorldPop 2025, 1 km, cut to the Lahore box once by
+# `scripts/extract_population.py` and committed as a small CSV so that nothing at
+# runtime needs rasterio or GDAL.
+#
+# This replaces the `urban` disc for population work. The disc was a stand-in for
+# "where people are" drawn as an 18 km circle around the centre; the raster is the
+# real thing, so coverage of *people* is computed on the raster's own cells rather
+# than resampled onto the geometry grid. Area coverage still uses the disc, and the
+# two are reported separately because they answer different questions.
+
+def _population_path():
+    from airlume.config import ROOT
+    return ROOT / "data" / "registry" / "lahore_population_1km.csv"
+
+
+def population_grid() -> pd.DataFrame:
+    """lat, lon, pop for every populated 1 km cell over Lahore. Empty if not extracted."""
+    p = _population_path()
+    if not p.exists():
+        return pd.DataFrame(columns=["lat", "lon", "pop"])
+    return pd.read_csv(p)
+
+
+def population_coverage(reg: Registry, pop: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Each populated cell with its distance to the nearest monitor."""
+    pop = population_grid() if pop is None else pop
+    if pop.empty:
+        return pop
+    return nearest_station_km(pop, reg.stations_in("PB-LHE"))
+
+
+def population_stats(popcov: pd.DataFrame) -> dict:
+    """Share of *people* within 3 km / 5 km of a monitor, and the mean distance
+    weighted by population rather than by area."""
+    if popcov.empty:
+        return {}
+    total = float(popcov["pop"].sum())
+    if total <= 0:
+        return {}
+    w = popcov["pop"]
+    return {
+        "total_population": total,
+        "mean_km_pop_weighted": float((popcov["km"] * w).sum() / total),
+        "share_within_3km": float(w[popcov["km"] <= 3].sum() / total),
+        "share_within_5km": float(w[popcov["km"] <= 5].sum() / total),
+        "share_beyond_5km": float(w[popcov["km"] > 5].sum() / total),
+        "people_beyond_5km": float(w[popcov["km"] > 5].sum()),
+    }
+
+
+def landuse_grid() -> pd.DataFrame:
+    """Per-cell exclusions and source proximity from OpenStreetMap. Empty if not extracted."""
+    from airlume.config import ROOT
+    p = ROOT / "data" / "registry" / "lahore_landuse_1km.csv"
+    if not p.exists():
+        return pd.DataFrame(columns=["lat", "lon", "excluded", "exclusion",
+                                     "km_major_road", "km_industrial"])
+    return pd.read_csv(p)
+
+
+def with_landuse(popcov: pd.DataFrame, landuse: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Join the land-use flags onto the population coverage grid."""
+    lu = landuse_grid() if landuse is None else landuse
+    if popcov.empty or lu.empty:
+        out = popcov.copy()
+        out["excluded"] = False
+        out["km_major_road"] = float("nan")
+        out["km_industrial"] = float("nan")
+        return out
+    return popcov.merge(lu, on=["lat", "lon"], how="left").assign(
+        excluded=lambda d: d["excluded"].fillna(False).astype(bool))
+
+
+def _source_score(df: pd.DataFrame) -> "np.ndarray":
+    """0-1 score for how close a cell is to likely pollution sources.
+
+    Major roads and industrial land, each as 1/(1+km) so the score falls away
+    smoothly, averaged. Cells with no road or industrial data score 0 rather than
+    being favoured by a missing value.
+    """
+    road = 1.0 / (1.0 + pd.to_numeric(df.get("km_major_road"), errors="coerce").fillna(1e6))
+    ind = 1.0 / (1.0 + pd.to_numeric(df.get("km_industrial"), errors="coerce").fillna(1e6))
+    s = (road + ind) / 2.0
+    hi = float(s.max()) if len(s) and float(s.max()) > 0 else 1.0
+    return (s / hi).to_numpy()
+
+
+def recommend_stations_by_population(popcov: pd.DataFrame, n: int = 5,
+                                     candidates: int = 400,
+                                     apply_exclusions: bool = False,
+                                     source_weight: float = 0.0) -> pd.DataFrame:
+    """Greedy ranked sites that bring the most *people* within 5 km (plan 4.5).
+
+    Candidates are the populated cells themselves, ranked by the population
+    currently beyond 5 km of a monitor, so a site is only considered where people
+    actually live. Each round reports the people newly brought inside 5 km and the
+    population-weighted mean distance before and after, which is the "population
+    coverage before and after" the plan's exit criterion asks for.
+
+    Still a coverage heuristic, not a siting plan: it ignores pollution gradients,
+    official siting rules and land access, and the land-use exclusions are applied
+    separately by the caller.
+    """
+    if popcov.empty:
+        return pd.DataFrame()
+    df = popcov
+    if apply_exclusions or source_weight:
+        df = with_landuse(popcov)
+    km = df["km"].to_numpy(copy=True)
+    lats, lons = df["lat"].to_numpy(), df["lon"].to_numpy()
+    w = df["pop"].to_numpy()
+    total = float(w.sum())
+    siteable = (~df["excluded"].to_numpy()) if apply_exclusions and "excluded" in df else np.ones(len(df), bool)
+    src = _source_score(df) if source_weight else np.zeros(len(df))
+
+    rows = []
+    for rank in range(1, n + 1):
+        before_beyond = float(w[km > 5].sum())
+        before_mean = float((km * w).sum() / total)
+        # Only look where people are currently underserved, and where a station could stand.
+        order = np.argsort(-(w * (km > 5) * siteable))[:candidates]
+        best = None
+        for i in order:
+            if w[i] <= 0 or not siteable[i]:
+                continue
+            trial = np.minimum(km, _hav_vec(lats, lons, lats[i], lons[i]))
+            gained = before_beyond - float(w[trial > 5].sum())
+            if gained <= 0:
+                continue
+            # Combined score: normalised people gained, blended with source proximity.
+            score = (1 - source_weight) * (gained / before_beyond if before_beyond else 0) \
+                + source_weight * src[i]
+            if best is None or score > best[1]:
+                best = (i, score, gained, trial)
+        if best is None:
+            break
+        i, _score, gained, trial = best
+        after_mean = float((trial * w).sum() / total)
+        row = {
+            "rank": rank,
+            "lat": float(lats[i]), "lon": float(lons[i]),
+            "people_brought_within_5km": int(round(gained)),
+            "people_beyond_5km_after": int(round(float(w[trial > 5].sum()))),
+            "share_beyond_5km_after": round(float(w[trial > 5].sum() / total), 4),
+            "mean_km_before": round(before_mean, 2),
+            "mean_km_after": round(after_mean, 2),
+        }
+        if source_weight:
+            row["km_major_road"] = round(float(df["km_major_road"].iloc[i]), 2)
+            row["km_industrial"] = round(float(df["km_industrial"].iloc[i]), 2)
+        rows.append(row)
+        km = trial
+    return pd.DataFrame(rows)
+
+
+def _hav_vec(lats, lons, lat0: float, lon0: float):
+    """Vectorised haversine from one point to many, in km."""
+    r1 = np.radians(lats)
+    r0 = math.radians(lat0)
+    dlat = r1 - r0
+    dlon = np.radians(lons - lon0)
+    a = np.sin(dlat / 2) ** 2 + np.cos(r0) * np.cos(r1) * np.sin(dlon / 2) ** 2
+    return 6371.0 * 2 * np.arcsin(np.sqrt(a))
 
 
 def coverage_stats(cov: pd.DataFrame) -> dict:

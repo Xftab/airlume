@@ -500,11 +500,20 @@ pmtiles extract https://build.protomaps.com/<latest>.pmtiles lahore.pmtiles \
 ### 2.6 Coverage map --- a finding in itself
 
 - Draw 3 km and 5 km buffers around each station over Lahore's neighbourhoods and population.
-- Report the share of the city's area and population more than 5 km from any monitor. **Area done** (15 Oct figures: mean 4.93 km to the nearest monitor, 44% of the built-up area beyond 5 km, 23% within 3 km, p90 8.29 km). **Population not done** --- it needs a population raster (WorldPop or GHSL), which the build environment cannot download. Every coverage figure is therefore an *area* share and is labelled as one; nothing claims people were counted.
+- Report the share of the city's area and population more than 5 km from any monitor. **Both done 15 Oct** (`docs/research/population.md`).
+
+| | Area | Population |
+|---|---|---|
+| Mean distance to the nearest monitor | 4.93 km | **4.31 km** |
+| Within 3 km | 23% | 32% |
+| **Beyond 5 km** | 44% | **33% --- 4.67 million people** |
+
+- **The headline figure for the report: 4.67 million people in Lahore live more than 5 km from an air-quality monitor.** People are better covered than the average square kilometre because the eleven stations sit in the built-up city while the bounding box includes farmland. Both numbers are kept, because they answer different questions, and the report never says "coverage" without saying which.
+- Population is WorldPop 2025 at 1 km (CC BY 4.0), cut to Lahore once by `scripts/extract_population.py` into a 72 KB committed CSV, so nothing at runtime needs `rasterio` or GDAL.
 
 **Exit criterion for Phase 2:** all six views render from real data at 30 frames per second or better; coverage statistics computed.
 
-**Phase 2 status, 15 Oct:** 2.1--2.5 are done and render from real data; 2.6 is done for area and open for population. Frame rate has not been measured and belongs to E6 in Phase 5; with eleven columns and a 1 km grid there is no reason to expect trouble, but it is not yet a measurement.
+**Phase 2 status, 15 Oct: met, with one measurement outstanding.** 2.1--2.6 all render from real data and the coverage statistics are computed for both area and population. Frame rate has not been measured; it belongs to E6 in Phase 5, and with eleven columns over a 1 km grid there is no reason to expect trouble, but it is not yet a measurement and is not claimed as one.
 
 ## Phase 3 --- The Language Layer (Weeks 5--7: 10--30 Nov)
 
@@ -615,16 +624,16 @@ ollama pull qwen3:8b
 
 ### 4.5 Where should the next station go? (added --- contribution C7)
 
-- Build a grid of candidate sites (about 500 m spacing) over Lahore, using OpenStreetMap land use to exclude rivers, the airport and restricted areas.
-- For each candidate, compute the population brought within 3 km and 5 km of a monitor that is not covered today, using WorldPop or census population layers (both free).
-- **Second criterion: proximity to likely sources** --- major roads and industrial land use from OpenStreetMap --- combined with population in a weighted score. Report results for both the population-only and combined versions. *(Reduces W8.)*
+- Build a grid of candidate sites over Lahore, using OpenStreetMap land use to exclude rivers, the airport and restricted areas. **Done 15 Oct** at 1 km spacing, matching the population raster rather than the 500 m first planned: candidates are the populated cells themselves, so no site is proposed where nobody lives. Ten cells are excluded (seven airport, two military, one water). **Caveat recorded:** only closed ways become exclusion polygons, multipolygon relations are not assembled, so the Ravi river is under-caught and a site proposed near it should be checked by eye.
+- For each candidate, compute the population brought within 3 km and 5 km of a monitor that is not covered today, using WorldPop or census population layers (both free). **Done 15 Oct** with WorldPop 2025 at 1 km.
+- **Second criterion: proximity to likely sources** --- major roads and industrial land use from OpenStreetMap --- combined with population in a weighted score. Report results for both the population-only and combined versions. **Done 15 Oct**, and the comparison is itself the finding: population-only brings **3.15 million** people within 5 km (underserved share 33% -> 11%); blending in source proximity at weight 0.3 brings 2.35 million (33% -> 16%) but puts every proposed monitor within 200 m of a major road. Weighting towards sources costs roughly 800,000 people of coverage. Which is right depends on whether the network is meant to measure *exposure* or *emissions*, so both are reported and neither is picked. *(Reduces W8.)*
 - Describe it in the report as a **coverage-maximising heuristic** and state what it ignores: pollution gradients, official siting rules (Punjab follows US EPA siting criteria) and land access.
 - Greedy selection: choose the best site, update coverage, repeat --- giving a ranked list of the next five stations and the coverage each adds. **Done 15 Oct on area coverage** (`recommend_stations`, shown in the app): the five together cut the mean distance from 4.93 km to 3.54 km and the share of the built-up area beyond 5 km from 44% to 18%, with the gain per station falling from 0.57 km to 0.13 km. That falling curve is the result worth reporting; the coordinates themselves are provisional, because the population, land-use and proximity-to-sources criteria below are not yet applied.
 - Show the proposals on the map as hollow columns, distinct from real stations.
 - Compare the ranking with the locations recommended in the 2022 ISPRS Lahore study [8] and discuss agreement and difference.
 - Wording: "recommended for consideration", never presented as an official siting plan.
 
-**Exit:** a ranked list of five sites, with population coverage before and after, shown on the map. **Partly met 15 Oct:** the ranked five exist with *area* coverage before and after. Population coverage, the OpenStreetMap land-use exclusions (rivers, airport, restricted land), the proximity-to-sources criterion and the ISPRS comparison all remain, and all four need data this build environment cannot fetch. **Aftab: download a WorldPop or GHSL population raster for Punjab and an OSM extract for Lahore, and the rest follows.** Until then the report must say "area" wherever it would otherwise say "coverage".
+**Exit:** a ranked list of five sites, with population coverage before and after, shown on the map. **Met 15 Oct** --- both rankings, with population before and after, exclusions applied, shown in the app. **One item remains:** the comparison against the 2022 ISPRS Lahore siting study, which needs that paper's recommended coordinates.
 
 ### 4.6 Lowest-AQI window today (added)
 

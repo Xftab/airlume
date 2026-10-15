@@ -10,3 +10,5 @@
 | IQAir station pages | Station coordinates (one-time lookup) | Website content | Registry only, marked unverified | noted in registry-notes.md |
 | Wikipedia / GeoNames | City centroids | CC BY-SA / CC BY | Registry only | — |
 | US EPA Technical Assistance Document | AQI breakpoints | Public domain | `airlume/aqi.py` | — |
+| WorldPop | Pakistan 1 km population grid, 2025 (`pak_pop_2025_UC_1km_R2024B_UA_v1.tif`) | **CC BY 4.0** | Cut to Lahore once by `scripts/extract_population.py`; drives population coverage (2.6) and station placement (4.5). Raw raster git-ignored; the 72 KB derived CSV is committed | "Population data: WorldPop (www.worldpop.org), CC BY 4.0" |
+| OpenStreetMap, via Geofabrik Pakistan extract | Water, aerodrome and military polygons; major roads; industrial land use | **ODbL**, attribution required | Cut to Lahore once by `scripts/extract_landuse.py`; excludes unsiteable cells and scores source proximity (4.5). Raw `.osm.pbf` git-ignored; the 103 KB derived CSV is committed | "Land use: © OpenStreetMap contributors, ODbL" |
