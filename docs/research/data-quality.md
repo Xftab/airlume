@@ -71,11 +71,20 @@ They are not the same measurement. The trend is the portal's retrospective value
 the ranking is a live snapshot. Conflating them loses a disagreement we should be able to see and
 report, and whichever survives depends on collection order rather than on anything about the air.
 
-**Recommendation, not yet applied:** give the trend widget its own source name
-(`punjab_epa_trend`), exactly as the forecast tables already separate `punjab_epa_forecast` from
-`open_meteo_cams_forecast`. Then both values persist, the disagreement becomes measurable, and
-`check_source_collisions` has something to report. Not done unilaterally because it changes the
-semantics of data of record and creates a labelled discontinuity in the archive — **Aftab's call.**
+**Recommendation superseded the same day — see `docs/research/portal-snapshot.md`.** The first
+recommendation here was to give the trend widget its own source name (`punjab_epa_trend`). Then
+the portal's embedded snapshot turned up, and it offers a better answer to both causes:
+
+- **(b) dissolves.** The snapshot exposes the trend as `historicalData.organized_data` and the live
+  figures as separate named fields. Read from there and there is nothing left to conflate — no
+  source-name split needed, and no discontinuity in the archive.
+- **(a) becomes measurable.** The snapshot carries `latestHourlyTimestamp`, the instant the portal
+  last refreshed (15:10:15 while the page displayed "3:00 PM"). Recording it alongside the hour is
+  what tells us whether two reads of one clock hour saw the same refresh — the thing the empty
+  `n_stations` column was reaching for.
+
+Still **Aftab's call**, and now a larger one: it means moving the trend and forecast readers onto
+the snapshot, which touches the forecast scorecard (4.1).
 
 Note that `check_source_collisions` can only see a collision in a frame *about to be written*:
 once the archive has deduplicated, only the survivor is stored. To measure how often the two

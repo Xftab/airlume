@@ -93,6 +93,49 @@ request for the official list stands — but the coordinate question is no longe
 
 Tests: `tests/test_epa_snapshot.py`, against a fixture reproducing the two-array shape.
 
+## The snapshot holds everything we scrape, and two timestamps we did not have
+
+Checked the rest of `pageData` on 15 Oct, 15:10 PKT. Every HTML widget we currently parse
+separately is in there as a named, structured field:
+
+| Field | What it is | We currently get this by |
+|---|---|---|
+| `lahoreData[0].stations` | 11 stations, full detail | parsing the HTML table (10 stations) |
+| `stations` | the 10 the table is rendered from | — |
+| `historicalData.organized_data` | the 7-day hourly trend, 7 x 24, plus `last_24_hours`, `stats`, `date_range`, `total_records` | regex over `<span data-aqi data-date data-hour>` |
+| `aqiForecastData` | 23 hourly forecast points, each with an ISO `datetime` and health index | parsing the "24-Hour AQI Forecast" article list |
+| `hourly24ForecastData` | the same, plus forecast `temperature`, `wind_speed`, `wind_direction`, `weather_condition` | not collected at all |
+| `currentAqi`, `currentCategory`, `worstStationName` | the city headline figures | derived by us |
+
+And two timestamps that matter more than they look:
+
+- **`lastUpdated` = `2026-10-15T15:00:00+05:00`** — the hour the data *represents*, as a proper ISO
+  string with offset. We currently recover this by regex over "Last updated: 3:00 PM, Oct 15".
+- **`latestHourlyTimestamp` = `2026-10-15 15:10:15`** — the instant the portal last *refreshed*.
+  The page displays "3:00 PM" while the data was actually refreshed at 15:10:15.
+
+The home page (`/`) carries a snapshot too, but a 384-byte one: `latestHourlyTimestamp`,
+`pageUrl`, `pollIntervalSeconds` (120) and nothing else. The 36-district ranking is **not** in it,
+so that table still has to be parsed from HTML.
+
+### This changes the city-hour recommendation in `data-quality.md`
+
+That note recommended giving the 7-day trend widget its own source name so the two widgets stop
+overwriting each other. With the snapshot in hand there is a better answer to the same problem:
+
+- **Cause (b) dissolves.** `historicalData` and the live station/city figures are separate named
+  fields in one structured object, so there is nothing left to conflate. The trend is the portal's
+  retrospective series; take it from `historicalData` and label it as such.
+- **Cause (a) becomes measurable.** Two collections inside one clock hour currently write the same
+  key with slightly different values and no way to tell whether the portal had refreshed in
+  between. `latestHourlyTimestamp` answers exactly that. Recording it alongside the hour makes a
+  revision explicable instead of silent — which is what the empty `n_stations` column was reaching
+  for and never delivered.
+
+So the decision to take is no longer "split the source name" but "move the trend and forecast
+readers onto the snapshot and store the refresh instant". Bigger, and it touches the forecast
+scorecard (4.1), so it is not something to do in passing.
+
 ## Open
 
 - The extra columns (`lat`, `lon`, weather, `portal_dominant`) are carried on the frame but not yet

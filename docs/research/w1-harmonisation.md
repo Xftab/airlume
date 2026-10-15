@@ -69,6 +69,34 @@ Truncating to an integer helps slightly and is what the EPA document specifies, 
 about an eighth of the gap. A ±1 hour lag between the concentrations shown and the AQI published
 is ruled out: lag 0 is clearly best.
 
+### A concrete lead, 15 Oct 16:00 PKT: ozone may use a maximum 8-hour average
+
+The snapshot parser (`docs/research/portal-snapshot.md`) gave us the portal's own
+`major_pollutant` per station, which is a free per-row check on the sub-index logic. On the first
+live round, 9 of 11 stations agree with us. The two that disagree both point the same way:
+
+| Station | Portal | Ours | O3 the portal's number implies | O3 displayed |
+|---|---|---|---|---|
+| Gulberg III | 64, **O3** | 68, PM2.5 | ~59 ppb (116 µg/m³) | 82.4 µg/m³ (42 ppb) |
+| Wagha Border | 71, **O3** | 57, PM10 | ~61 ppb (120 µg/m³) | 92.0 µg/m³ (47 ppb) |
+
+In both the portal's ozone sub-index implies roughly **1.3–1.4× the ozone concentration the same
+page displays**. The obvious candidate is that the portal computes ozone on a **maximum 8-hour
+average** — which is exactly what the US EPA specifies for O3, and is not what it does for PM —
+while the table shows the latest hour. Feeding µg/m³ straight into the ppb table is ruled out: that
+would give 140 and 164, far above the portal's 64 and 71.
+
+This partially rehabilitates the 13 October instinct. That note guessed an 8-hour window for
+*everything* and was wrong — Result 1 above rules that out decisively for the overall index. But
+ozone alone on an 8-hour maximum is both standard practice and consistent with every afternoon row
+that first prompted the guess.
+
+**Testable now**, because hourly O3 is stored per station: recompute the O3 sub-index from a
+running maximum 8-hour mean and see whether the dominance disagreements and part of the residual
+disappear. Needs ~8 consecutive hours, which the archive nearly has. Note this does **not** by
+itself explain the +4 PM-dominated bias — Shahdara on the same round reads 124 to the portal's 115
+with both of us agreeing PM2.5 dominates — so there are probably two separate things here.
+
 Still untested, in the order worth trying: a sub-hourly averaging window (the portal may publish
 a 15- or 30-minute mean while showing one instantaneous concentration); a PM2.5 breakpoint table
 of Punjab's own that happens to sit near the 2012 one; the portal rounding each sub-index down
