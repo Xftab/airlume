@@ -2,6 +2,11 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 15 October 2026
+- **Router prompt frozen at v3** after two revisions driven by failure analysis on benchmark v0: 88.9% pass for both `gpt-oss-120b` and `gpt-oss-20b` (stub 45.6%). Because v0 was used for tuning it is declared a development set; the reported number will come from the classmate-authored, second-annotated v1 set. Four debatable gold labels were listed for the second annotator rather than changed by us.
+- **Collector moved to an external timer.** GitHub ran 4 of 36 scheduled slots overnight; a cron-job.org job with a fine-grained token (Actions: write, one repository, 90 days) will call `workflow_dispatch` hourly, with GitHub's own schedule kept as a second chance.
+- **Security pass 1 completed** (`docs/security/audit-2026-10-15.md`); rate limits added to the app before any public deployment.
+
 ## 14 October 2026
 - **Language model wired in and scored.** Groq `gpt-oss-120b` behind the typed schema: first benchmark pass 66.7% (CI 57--77%) against the rule-based stub's 45.6%. Three provider quirks fixed on the way (strict schema shape, reasoning tokens eating the output cap, per-minute and daily token caps). The prompt was then revised from the failure analysis, which makes benchmark v0 a development set; the frozen v1 set will give the reported number.
 - **The pasted Groq key is to be rotated.** It was typed into the chat once; the plan's rule stands: keys go into `.env` by hand, never into chat.

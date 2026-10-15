@@ -44,6 +44,10 @@ class TimeSpec(BaseModel):
             return v
         from datetime import date
 
+        v = v.strip()
+        if "T" in v or " " in v:
+            # Models sometimes write a datetime ("2026-10-16T18:00"); keep the day only.
+            v = v.split("T")[0].split(" ")[0]
         date.fromisoformat(v)  # raises ValueError if malformed
         return v
 

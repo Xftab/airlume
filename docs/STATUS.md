@@ -45,7 +45,7 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - Collector overnight: 4 of 36 slots fired on GitHub (6 of 24 hours have station rows). **Aftab: set up the cron-job.org trigger with a fine-grained token (instructions given 15 Oct 10:45)**; GitHub's schedule stays as second chance. City-level hours are recoverable from the portal's 7-day trend; station rows are not.
 - `scripts/w1_check.py` reads the CSV archive now (needs 8 distinct hours; had 6).
 - **Security pass 1 (S1-S15)** written to `docs/security/audit-2026-10-15.md`: pip-audit clean, bandit reviewed (`.bandit`), rate limits added (session 30/h, global 150/h, 400-char cap), Markdown escaping of user/model text, tracebacks hidden from viewers, 4 new guard tests (84 total).
-- Groq budgets reopen ~11:15: run 120b (prompt v3) and finish 20b.
+- **E1 on prompt v3: 120b 88.9% (CI 82-96), 20b 88.9% (CI 82-94).** Prompt frozen. Write-up in `docs/research/e1-results.md`; four debatable gold items flagged for the second annotator. Date fields now accept datetimes (truncate to day).
 
 ## 14 Oct (afternoon)
 - **Collector coverage problem found:** only 2 of 7 hourly slots ran on GitHub today (scheduler best-effort). `_update\collect.yml` now has two slots an hour; Aftab moves it into `.github\workflows\`. Check tomorrow: rows in `data\archive\readings\punjab_epa\2026-10.csv` should grow by ~10 per hour.
