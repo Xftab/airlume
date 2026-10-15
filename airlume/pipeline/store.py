@@ -33,6 +33,16 @@ CREATE TABLE IF NOT EXISTS readings (
     aqi          INTEGER,
     aqi_computed INTEGER,
     source       VARCHAR NOT NULL,
+    -- From the portal's embedded snapshot (15 Oct 2026). Null for rows collected
+    -- from the HTML table, which carries none of these.
+    portal_station_id INTEGER,
+    portal_dominant   VARCHAR,
+    lat          DOUBLE,
+    lon          DOUBLE,
+    temperature  DOUBLE,
+    humidity     DOUBLE,
+    wind_speed   DOUBLE,
+    wind_direction DOUBLE,
     ingested_at  TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (station_id, ts, source)
 );
@@ -111,6 +121,15 @@ class Store:
             self.con.execute(SCHEMA)
             for col in ("co", "so2", "no2", "o3"):  # migrate databases created before 13 Oct
                 self.con.execute(f"ALTER TABLE readings ADD COLUMN IF NOT EXISTS {col} DOUBLE")
+            # Migrate databases created before 15 Oct, when the portal's embedded
+            # snapshot added these. CREATE TABLE IF NOT EXISTS leaves an existing
+            # table alone, so without this the INSERT below fails on a stale cache
+            # (the laptop's, or a Streamlit Cloud deploy's) rather than on a fresh one.
+            for col, typ in (("portal_station_id", "INTEGER"), ("portal_dominant", "VARCHAR"),
+                             ("lat", "DOUBLE"), ("lon", "DOUBLE"), ("temperature", "DOUBLE"),
+                             ("humidity", "DOUBLE"), ("wind_speed", "DOUBLE"),
+                             ("wind_direction", "DOUBLE")):
+                self.con.execute(f"ALTER TABLE readings ADD COLUMN IF NOT EXISTS {col} {typ}")
 
     def close(self) -> None:
         self.con.close()
@@ -121,16 +140,28 @@ class Store:
         if df.empty:
             return 0
         df = df.copy()
-        for col in ("co", "so2", "no2", "o3"):
+        extra = ("portal_station_id", "portal_dominant", "lat", "lon",
+                 "temperature", "humidity", "wind_speed", "wind_direction")
+        for col in ("co", "so2", "no2", "o3") + extra:
             if col not in df.columns:
                 df[col] = None
-        df = _prepare(df, "ts", ("pm25", "pm10", "co", "so2", "no2", "o3"), ("aqi", "aqi_computed"))
+        df = _prepare(
+            df, "ts",
+            ("pm25", "pm10", "co", "so2", "no2", "o3",
+             "lat", "lon", "temperature", "humidity", "wind_speed", "wind_direction"),
+            ("aqi", "aqi_computed", "portal_station_id"),
+        )
+        df["portal_dominant"] = df["portal_dominant"].astype("object").where(df["portal_dominant"].notna(), None)
         self.con.register("incoming", df)
         self.con.execute(
             """
             INSERT OR REPLACE INTO readings
-                (station_id, ts, pm25, pm10, co, so2, no2, o3, aqi, aqi_computed, source, ingested_at)
-            SELECT station_id, CAST(ts AS TIMESTAMPTZ), pm25, pm10, co, so2, no2, o3, aqi, aqi_computed, source, now()
+                (station_id, ts, pm25, pm10, co, so2, no2, o3, aqi, aqi_computed, source,
+                 portal_station_id, portal_dominant, lat, lon,
+                 temperature, humidity, wind_speed, wind_direction, ingested_at)
+            SELECT station_id, CAST(ts AS TIMESTAMPTZ), pm25, pm10, co, so2, no2, o3, aqi, aqi_computed, source,
+                   portal_station_id, portal_dominant, lat, lon,
+                   temperature, humidity, wind_speed, wind_direction, now()
             FROM incoming
             """
         )

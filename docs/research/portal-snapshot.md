@@ -136,12 +136,29 @@ So the decision to take is no longer "split the source name" but "move the trend
 readers onto the snapshot and store the refresh instant". Bigger, and it touches the forecast
 scorecard (4.1), so it is not something to do in passing.
 
-## Open
+## Decided 15 Oct: the extra columns join the archive
 
-- The extra columns (`lat`, `lon`, weather, `portal_dominant`) are carried on the frame but not yet
-  stored: `archive.COLS["readings"]` does not declare them, so they are dropped at write time.
-  Adding them is a schema change to data of record — **Aftab's call**, same as the city-hour source
-  question in `data-quality.md`.
+Aftab's call, taken once the W1 ozone test showed the missing `portal_dominant` was the thing
+blocking a clean answer. `archive.COLS["readings"]` and the DuckDB `readings` table now carry
+`portal_station_id`, `portal_dominant`, `lat`, `lon`, `temperature`, `humidity`, `wind_speed`,
+`wind_direction`.
+
+How the change avoids disturbing data of record:
+
+- **Appended, never inserted.** Every CSV written before today keeps its eleven columns in their
+  existing order; the new ones are added on the end, and older rows read back blank in them. Pinned
+  by `test_snapshot_columns_append_without_disturbing_existing_files`.
+- **The DuckDB cache is migrated, not rebuilt.** `CREATE TABLE IF NOT EXISTS` leaves an existing
+  table alone, so a database created before today would have failed the insert while a fresh one
+  passed — exactly the asymmetry that broke the laptop once before, on 14 Oct, when gas columns
+  were added. `Store.__init__` now runs `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` for each, in the
+  same way as the 13 Oct migration. Pinned by `test_old_database_is_migrated_for_snapshot_columns`.
+- **The HTML-table fallback still works.** It produces none of these columns; they default to null.
+  Pinned by `test_rows_without_snapshot_columns_still_insert`.
+
+Nothing needs rebuilding by hand: existing archives and caches migrate in place on next use.
+
+## Open
 - Gulberg III will start appearing from the next collection round. Its history before 15 Oct 2026
   cannot be recovered; the gap should be stated wherever station history is shown.
 - Worth re-checking whether the district/home page carries an equivalent snapshot with all 36

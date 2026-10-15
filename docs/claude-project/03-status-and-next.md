@@ -21,10 +21,9 @@ Last updated: 15 Oct 2026, 15:10 PKT
 ## Next (in order)
 1. Re-run `python scripts\w1_check.py` once 24 consecutive hours exist (earliest 16 Oct): test the
    24-hour window and the sub-hourly hypothesis for the +4 bias.
-2. Decide the two schema questions: whether the 7-day trend widget gets its own source name
-   (`docs/research/data-quality.md`), and whether the snapshot's extra columns -- official lat/lon,
-   per-station wind, the portal's own dominant pollutant -- are added to `archive.COLS["readings"]`
-   (`docs/research/portal-snapshot.md`). Both change data of record.
+2. Once a day of rows carries `portal_dominant`, run the W1 dominance test properly: compare the
+   portal's own dominant pollutant against ours per row, instead of the weak "portal exceeds our
+   maximum sub-index" proxy. The snapshot columns were added to the archive on 15 Oct for this.
 3. Hand the classmate sheet to 3 classmates; collect 60 questions; second annotation (Kiran
    or Tehreem); freeze benchmark v1; score it once, report with CIs.
 4. Rotate the GitHub fine-grained token (first value was exposed) and the Groq key.

@@ -91,3 +91,64 @@ def test_forecast_baselines_and_skill(store):
     sc = scorecard(err)
     assert sc.loc["good_fc", "skill_vs_same_hour_yesterday"] > 0.8
     assert sc.loc["bad_fc", "skill_vs_same_hour_yesterday"] < 0
+
+
+def test_old_database_is_migrated_for_snapshot_columns(tmp_path):
+    """A cache created before 15 Oct has none of the snapshot columns.
+
+    CREATE TABLE IF NOT EXISTS leaves it alone, so without the ALTER migration the
+    insert fails on the laptop's existing database while passing on a fresh one.
+    """
+    import duckdb
+    import pandas as pd
+
+    from airlume.pipeline.store import Store
+
+    db = tmp_path / "old.duckdb"
+    con = duckdb.connect(str(db))
+    con.execute(
+        """
+        CREATE TABLE readings (
+            station_id VARCHAR NOT NULL, ts TIMESTAMPTZ NOT NULL,
+            pm25 DOUBLE, pm10 DOUBLE, co DOUBLE, so2 DOUBLE, no2 DOUBLE, o3 DOUBLE,
+            aqi INTEGER, aqi_computed INTEGER, source VARCHAR NOT NULL,
+            ingested_at TIMESTAMPTZ NOT NULL,
+            PRIMARY KEY (station_id, ts, source))
+        """
+    )
+    con.close()
+
+    s = Store(db)
+    n = s.upsert_readings(pd.DataFrame([{
+        "station_id": "LHR-GB3", "ts": pd.Timestamp("2026-10-15T10:00:00Z"),
+        "pm25": 20.18, "pm10": 70.53, "co": 0.48, "so2": 3.79, "no2": 12.56, "o3": 82.39,
+        "aqi": 64, "aqi_computed": 68, "source": "punjab_epa",
+        "portal_station_id": 27, "portal_dominant": "O3",
+        "lat": 31.507172, "lon": 74.338461,
+        "temperature": 27.88, "humidity": 78.66, "wind_speed": 1.64, "wind_direction": 152.16,
+    }]))
+    assert n == 1
+    got = s.con.execute(
+        "SELECT portal_dominant, lat, wind_speed FROM readings WHERE station_id = 'LHR-GB3'"
+    ).fetchone()
+    s.close()
+    assert got[0] == "O3"
+    assert got[1] == pytest.approx(31.507172, abs=1e-5)
+    assert got[2] == pytest.approx(1.64)
+
+
+def test_rows_without_snapshot_columns_still_insert(tmp_path):
+    """The HTML-table fallback produces none of them; they must default to null."""
+    import pandas as pd
+
+    from airlume.pipeline.store import Store
+
+    s = Store(tmp_path / "fresh.duckdb")
+    n = s.upsert_readings(pd.DataFrame([{
+        "station_id": "LHR-GT", "ts": pd.Timestamp("2026-10-15T10:00:00Z"),
+        "pm25": 39.0, "pm10": 70.04, "aqi": 106, "aqi_computed": 110, "source": "punjab_epa",
+    }]))
+    assert n == 1
+    got = s.con.execute("SELECT portal_dominant, lat FROM readings WHERE station_id = 'LHR-GT'").fetchone()
+    s.close()
+    assert got == (None, None)

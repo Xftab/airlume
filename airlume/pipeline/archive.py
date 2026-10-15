@@ -29,7 +29,12 @@ KEYS = {
     "forecasts": ["city_id", "issued_at", "target_ts", "source"],
 }
 COLS = {
-    "readings": ["station_id", "ts", "pm25", "pm10", "co", "so2", "no2", "o3", "aqi", "aqi_computed", "source"],
+    # The snapshot columns are appended, never inserted, so every existing CSV stays
+    # readable and its column order unchanged; rows written before 15 Oct 2026 read
+    # back blank in them. See docs/research/portal-snapshot.md.
+    "readings": ["station_id", "ts", "pm25", "pm10", "co", "so2", "no2", "o3", "aqi", "aqi_computed", "source",
+                 "portal_station_id", "portal_dominant", "lat", "lon",
+                 "temperature", "humidity", "wind_speed", "wind_direction"],
     "city_hourly": ["city_id", "ts", "pm25", "pm10", "aqi", "n_stations", "source"],
     "epd_daily": ["date", "station_label", "station_id", "city", "pollutant", "conc", "aqi", "style", "source"],
     "forecasts": ["city_id", "issued_at", "target_ts", "aqi", "source"],
