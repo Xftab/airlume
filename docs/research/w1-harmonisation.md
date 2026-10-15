@@ -91,11 +91,33 @@ This partially rehabilitates the 13 October instinct. That note guessed an 8-hou
 ozone alone on an 8-hour maximum is both standard practice and consistent with every afternoon row
 that first prompted the guess.
 
-**Testable now**, because hourly O3 is stored per station: recompute the O3 sub-index from a
-running maximum 8-hour mean and see whether the dominance disagreements and part of the residual
-disappear. Needs ~8 consecutive hours, which the archive nearly has. Note this does **not** by
-itself explain the +4 PM-dominated bias — Shahdara on the same round reads 124 to the portal's 115
-with both of us agreeing PM2.5 dominates — so there are probably two separate things here.
+#### First test against stored data: not supported
+
+Checked the same hour against all 100 stored station-rows before writing this up further. The lead
+does **not** survive its first contact with the archive:
+
+- The portal exceeds *every* sub-index we can compute in only **3 of 100 rows**. If its ozone were
+  systematically inflated relative to what it displays, this should be common in the afternoon, not
+  rare.
+- On those 3 rows the implied O3 multiplier is 1.49, 2.85 and 3.51 — scattered, not the consistent
+  ~1.4× the two dry-run rows suggested.
+- The dominant pattern is the opposite one: **we read higher than the portal in 81 of 100 rows**.
+
+The one thing that does survive is a time-of-day shape. Mean (portal − ours) by Pakistan hour is
+negative everywhere — between −1 and −7 — except at 13:00 and 14:00 PKT, where it turns slightly
+positive (+1.0, +0.6). Ozone peaks in exactly those hours, so *something* ozone-shaped is moving
+the portal's number relative to ours. That is a weak signal on ten stations across one day, and it
+is not evidence for the 8-hour-maximum mechanism specifically.
+
+**What the clean test needs is `portal_dominant`, which we do not store.** The archive drops it,
+because `archive.COLS["readings"]` does not declare it, so the test above had to use the much
+weaker proxy "portal exceeds our maximum sub-index". With the portal's own dominant pollutant on
+every row, each row becomes a direct check. This turns the pending schema decision in
+`portal-snapshot.md` from a convenience into the thing blocking W1.
+
+Note also that this does **not** explain the +4 PM-dominated bias — Shahdara on the live round read
+124 to the portal's 115 with both of us agreeing PM2.5 dominates — so there remain at least two
+separate things here.
 
 Still untested, in the order worth trying: a sub-hourly averaging window (the portal may publish
 a 15- or 30-minute mean while showing one instantaneous concentration); a PM2.5 breakpoint table
