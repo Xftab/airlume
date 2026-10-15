@@ -381,7 +381,7 @@ Note `waqi_display.py` sits apart from every other collector and writes nothing 
 Done on day one, all in the repository:
 
 - **Portal investigated** (Appendix D): Laravel, server-rendered, no public JSON; the Lahore page's HTML table is the data path. A parser with tests (`collectors/epa.py`) and a dry-run script exist. Live hourly collection waits for the permission email or one week of silence.
-- **AQI formula identified --- W1 is now solvable in code.** Punjab's station numbers reproduce the US EPA 2012 PM2.5/PM10 breakpoints with max-of-sub-indices (within 0--3 points) under Punjab's own seven labels. `airlume/aqi.py` implements the 2012 and 2024 tables and the Punjab bands; tests pin four published portal readings.
+- **AQI formula narrowed, not settled --- W1 part-way.** Punjab's station numbers follow the US EPA 2012 PM2.5/PM10 breakpoints with max-of-sub-indices under Punjab's own seven labels; the 2024 table fits far worse (mean error 10.4 against 5.4). `airlume/aqi.py` implements both tables and the Punjab bands. Measured over 90 stored station-rows the agreement is **mean 5.4 AQI points, median 4, max 24, with a systematic +4 point bias that is not yet explained** --- not the "within 0--3 points" that four hand-checked readings suggested on 13 Oct. Appendix D and `docs/research/w1-harmonisation.md` carry the evidence.
 - **Registry built:** 11 Lahore stations with coordinates (9 station-level from IQAir pages, 2 neighbourhood centroids), 36 Punjab districts and 4 other cities (`data/registry/`). Confidence is recorded per row and shown on the map until the EPA confirms.
 - **Code skeleton:** typed view-intent schema (Pydantic), resolver with Asia/Karachi dates and the nearest-station rule, DuckDB store with parameterised queries only, fake-data generator, deck.gl layers and cameras, code-written answer sentences, and a rule-based stand-in router. 45 tests pass.
 - **Shell runs** on fake data in keyless map mode: question in, typed form out, validated query, answer sentence, 3D columns or national city view.
@@ -448,12 +448,14 @@ on:
 
 ### 1.7 AQI harmonisation (weakness fix W1)
 
-- Write one converter, `to_aqi(pollutant, concentration, scale)`, implementing exactly the breakpoint table Punjab EPA uses.
+- Write one converter, `to_aqi(pollutant, concentration, scale)`, implementing the breakpoint table Punjab EPA uses. **Done, with a known residual** --- see `docs/research/w1-harmonisation.md`.
+- **Settle the averaging window.** Re-run `scripts/w1_check.py` once 24 consecutive hours are stored: the 1-hour window currently beats the 8-hour one decisively (5.4 against 24.3 mean error), and the 24-hour window is still untestable.
+- **Explain or bound the +4 point bias.** We read higher than the portal in 83% of rows. A ±1 hour publication lag, integer truncation and dropping the gas sub-indices have each been ruled out. Next candidates: a sub-hourly averaging window, a Punjab-specific PM2.5 table, per-sub-index rounding down. If it cannot be explained, report it as a stated uncertainty on every station-to-CAMS comparison rather than calling the values harmonised.
 - Convert every CAMS concentration into that AQI before any comparison with station AQI. Where stations publish raw PM2.5, compare concentrations directly as well.
 - Unit-test the converter against at least 10 published EPA readings where both concentration and AQI are shown.
 - Store the scale used alongside every value, so AQI from different formulas can never be mixed silently.
 
-**Exit:** converter passes all tests; every value in the store carries its unit and scale.
+**Exit:** the averaging window is decided on at least 24 consecutive hours; the residual bias is explained or quoted as an interval wherever a comparison is shown; every value in the store carries its unit and scale.
 
 **Exit criterion for Phase 1:** 48-hour soak passes with no missed runs; EPD backfill extracted and spot-checked; data-quality report generated; AQI harmonisation tested.
 
@@ -774,7 +776,7 @@ A self-review identified fifteen weaknesses. They fall into three kinds: **solva
 
 | ID | Weakness | Fix | Phase | Resolved by | Exit check |
 |:----|:-------------------------|:-------------------------------------|:------|:----------|:---------------------------|
-| W1 | Station AQI compared with CAMS concentration --- different units and formulas | **Formula identified 13 Oct** (US EPA 2012 breakpoints, Punjab labels); converter written and tested on 4 portal readings; extend to 10 and convert CAMS | 0.2 done, 1.7 | Week 3 | Converter passes tests on 10 published readings |
+| W1 | Station AQI compared with CAMS concentration --- different units and formulas | Table identified 13 Oct (US EPA 2012, Punjab labels); converter written and tested. **Measured 15 Oct on 90 stored rows: mean error 5.4 points and a +4 bias not yet explained**; 1-hour window beats 8-hour, 24-hour untestable until a full day is stored | 0.2 done, 1.7 | Week 3 | Window decided on 24+ consecutive hours; bias explained or quoted as an interval on every comparison |
 | W2 | Benchmark written by the same person who built the system | Classmates write half the questions blind; second annotator on 20 items; report kappa | 3.2 | Week 5 | Kappa reported; benchmark frozen |
 | W3 | Contribution mistaken for "just structured output" | Frame as scoring the visual answer; cite VayuBuddy's stated gap | 7.1 | Week 10 | Framing used in report and viva slides |
 | W4 | 60 questions is a small sample | Bootstrap 95% confidence intervals; no claims inside the noise | 5 (E1) | Week 9 | Every accuracy figure carries an interval |
@@ -1022,5 +1024,6 @@ Full notes: `docs/research/epa-portal.md` and `docs/research/registry-notes.md`.
 - **Coordinates:** not published by the portal. Nine Lahore stations located from IQAir station pages, two (Multan Road, Kahna Nau) from neighbourhood centroids. Confidence is stored per station and displayed. The permission email asks the EPA to confirm.
 - **Other cities:** Islamabad, Karachi and Peshawar have The Urban Unit's AirGradient sensors on OpenAQ (licensed, storable). Quetta's sensors are on WAQI/IQAir only, so Quetta is display-only. The US Embassy and Consulate monitors have been dormant since March 2025.
 - **Standards:** NEQS/PEQS PM2.5 limits 15 µg/m³ annual, 35 µg/m³ 24-hour.
-- **Afternoon ozone (13 Oct, 14:00):** the live portal's AQI is a maximum over six pollutants; at Egerton Road, Punjab University and Wagha the ozone sub-index dominated. The converter now includes O3, NO2, SO2 and CO with unit conversion. The remaining 10--30 point differences at ozone stations are consistent with an 8-hour averaging window, to be confirmed from accumulated hourly data (`scripts/w1_check.py`).
+- **Afternoon ozone (13 Oct, 14:00):** the live portal's AQI is a maximum over six pollutants; at Egerton Road, Punjab University and Wagha the ozone sub-index dominated. The converter now includes O3, NO2, SO2 and CO with unit conversion.
+- **Averaging window tested (15 Oct, 90 stored station-rows, `scripts/w1_check.py`):** the 8-hour window hypothesis above is **wrong**. The latest-hour values reproduce the portal to a mean 5.4 AQI points; an 8-hour trailing mean gives 24.3 and is worse at all ten stations. The 24-hour window cannot be tested until a full day of consecutive hours is stored. The 2012 PM2.5 table beats the 2024 one (5.4 against 10.4), confirming the 13 Oct identification. PM2.5 dominates 93% of station-hours. A **systematic +4 point bias remains** (we read higher than the portal in 83% of rows); a ±1 hour publication lag, integer truncation and dropping the gases are each ruled out. Note that the EPD order's 8-hour averaging applies to the printed 9 am / 5 pm / 1 am bulletins, not to the live portal table. Full working: `docs/research/w1-harmonisation.md`.
 - **EPD bulletin archive:** daily reports from 2 January 2018 to **2 December 2025** (about 2,300 PDFs; nothing for 2026). Bulletins compute AQI from the **24-hour PM2.5 mean**, uncapped above 500. Layouts 2022--2025 are parsed; the 2018--2020 layout covers the old station network and is skipped. Lahore had 13 monitors in late 2025 under different names (UET = GT Road, PU 1 = Punjab University; Town Hall, PKLI, LWMC, FMDRC, PU 2, EPA HQ have no portal counterpart). There is **no permitted official per-station data for 3 December 2025 -- 12 October 2026**; whether to fill that gap at city level from CAMS (labelled "modelled") or leave it empty is an open decision (risk R16).

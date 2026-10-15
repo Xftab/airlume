@@ -1,6 +1,6 @@
 # Status
 
-_Last updated: 13 October 2026_
+_Last updated: 15 October 2026, 15:10 PKT_
 
 ## Where we are
 **Phase 0: Foundations and Access (week 1, 13–19 Oct)** — day one done. The code skeleton, registry, tests and fake-data shell exist and run.
@@ -48,6 +48,12 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - **4.1 persistence baselines** in the scorecard + horizon chart (`airlume/forecast/skill.py`). Found and fixed a collector bug that dropped the 7-day city trend every round (next run back-fills). Early numbers: EPA bias +28, CAMS bias -17, skill ~0.1 vs last value on 34 hours.
 - **E1 on prompt v3: 120b 88.9% (CI 82-96), 20b 88.9% (CI 82-94).** Prompt frozen. Write-up in `docs/research/e1-results.md`; four debatable gold items flagged for the second annotator. Date fields now accept datetimes (truncate to day).
 
+### 15 Oct, afternoon session
+- **Hourly coverage verified.** 05:00-08:00 UTC are consecutive at 10 station-rows each: the cron-job.org trigger works. Earlier rows are 2-6 h apart (pre-trigger). Archive now 90 station-rows over 10 distinct hours; the local copy was 20 rows behind GitHub and was fast-forwarded (verified append-only first, one conflict found - see below).
+- **`aqi.py` crashed on NaN; fixed.** `sub_index` guarded `None` but not NaN, so a gap in a rolling mean reached `int()` and raised - which is why `w1_check.py` had never produced output. Shared `_missing()` guard, regression test. **85 tests pass.**
+- **W1 measured for the first time** (`docs/research/w1-harmonisation.md`). Latest-hour values reproduce the portal to mean 5.4 AQI points; the 8-hour mean gives 24.3 and is worse at all 10 stations, so **the 8-hour guess of 13 Oct is wrong**. 2012 table beats 2024 (5.4 vs 10.4). **A +4 point bias remains unexplained** after ruling out a +/-1 h lag, integer truncation and the gases. 24-hour window still untestable. Plan corrected in three places: the "within 0-3 points" claim was from four hand-picked readings and is too strong.
+- **City archive rows get revised.** Lahore 06:00 UTC city AQI was committed as 73, then 77 (the 06:00 round saw 9 of 10 stations). `city_hourly/` is not append-only, unlike `readings/`. For Phase 1.6: populate the empty `n_stations` column or stop revising a published hour.
+
 ## 14 Oct (afternoon)
 - **Collector coverage problem found:** only 2 of 7 hourly slots ran on GitHub today (scheduler best-effort). `_update\collect.yml` now has two slots an hour; Aftab moves it into `.github\workflows\`. Check tomorrow: rows in `data\archive\readings\punjab_epa\2026-10.csv` should grow by ~10 per hour.
 - **Coverage map and station recommendation (C3, C7)** built: 1 km grid over Lahore's urban area, distance to nearest monitor; mean 5.0 km, 45% of the area beyond 5 km, 22% within 3 km; greedy placement suggests ~31.56 N 74.20 E (west, near Bund Road/Sabzazar), 10.9 km from the nearest station today. New tab "Where the city is blind".
@@ -64,7 +70,7 @@ Session closed by Aftab. Everything below is on the laptop and pushed to GitHub.
 - [x] Full back-fill run: 2,121 rows 2022-2025. Three more layouts handled incl. the 2020-21 Smog Policy 2017 scale (style B17, non-comparable, concentrations kept).
 - [x] Final back-fill 13 Oct 19:00: **3,144 daily rows, 2020-2025** (B 934, B17 206, E 165, A 34, D 2; C 458 and 144 scanned skipped; 41 still unknown; 73 genuine 404s). Archive files 2020.csv-2025.csv committed.
 - [ ] Decide how to treat the gap 3 Dec 2025 - 12 Oct 2026 (no official per-station data; CAMS city-level or leave empty).
-- [ ] After ~1 day of hourly collection: `python scripts\w1_check.py` to settle the averaging window.
+- [x] First run of `python scripts\w1_check.py` done 15 Oct: 1-hour window wins, 8-hour ruled out, +4 bias open. **Re-run once 24 consecutive hours exist** (earliest 16 Oct) to test the 24-hour window and the sub-hourly hypothesis.
 - [x] Groq key in `.env` (14 Oct). Still to create: OpenAQ, CARTO (optional), Streamlit Community Cloud. **Aftab: rotate the Groq key** (it was pasted into chat once): delete it at console.groq.com, create a new one, paste into `K:\airlume\.env` with Notepad.
 - [ ] Aftab: send the two emails (`docs/emails/`), with supervisor name filled in.
 - [ ] Claude: once `.env` has an OpenAQ key, run station discovery for Islamabad/Karachi/Peshawar and add licensed stations to the registry.

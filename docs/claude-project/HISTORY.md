@@ -1,0 +1,55 @@
+# Decision history
+
+Newest first. Each entry records what was decided and why.
+
+## 15 October 2026
+- **W1 tested against stored data for the first time; the 8-hour averaging guess was wrong.** The latest-hour values reproduce the portal's AQI to a mean 5.4 points over 90 station-rows; an 8-hour trailing mean gives 24.3 and is worse at every station. The 2012 PM2.5 table beats the 2024 one, confirming the 13 Oct identification. A **+4 point systematic bias remains unexplained** (we read higher in 83% of rows) after ruling out a publication lag, integer truncation and the gas sub-indices. Consequence: the plan's "within 0--3 points" claim, which came from four hand-checked readings, was corrected in the Phase 0 section, Appendix D and the W1 row; 1.7's exit criterion is now "window decided on 24+ consecutive hours and the bias explained or quoted as an interval", not "tests pass". The EPD order's 8-hour averaging applies to the printed bulletins, not the live table. Working: `docs/research/w1-harmonisation.md`.
+- **`aqi.py` crashed on NaN --- fixed.** `sub_index` guarded `None` but not NaN, and NaN fails every comparison silently (`NaN < 0` is false), so a gap in a rolling mean reached `int()` and raised. This is why `w1_check.py` had never produced output. A shared `_missing()` guard now covers both entry points; regression test added. 85 tests pass.
+- **City-level archive rows are revised, not appended.** Lahore's 15 Oct 06:00 UTC city AQI was committed as 73 and later as 77: the 06:00 round saw 9 of 10 stations and a later round recomputed the mean. `data/archive/city_hourly/` is therefore not append-only, unlike `readings/`. Decision deferred to Phase 1.6: either populate the existing empty `n_stations` column so a revision is explicable, or stop revising an hour once published. Recorded so the archive's guarantee is not overstated in the report.
+- **Hourly collection confirmed live.** 05:00--08:00 UTC are consecutive at 10 station-rows each, the first clean hourly run since the cron-job.org trigger was installed; earlier rows are 2--6 hours apart.
+- **Collector bug found and fixed:** the district step overwrote the Lahore 7-day trend in the same result dictionary, so the trend was parsed every round and never stored. Harmless to recover: the portal republishes the last 7 days, so the next run back-fills city-level hours since 8 Oct.
+- **Persistence baselines added to the forecast scorecard (4.1).** First reading: neither relayed forecast is clearly better than repeating the last value; EPA's runs high, CAMS runs low.
+- **Router prompt frozen at v3** after two revisions driven by failure analysis on benchmark v0: 88.9% pass for both `gpt-oss-120b` and `gpt-oss-20b` (stub 45.6%). Because v0 was used for tuning it is declared a development set; the reported number will come from the classmate-authored, second-annotated v1 set. Four debatable gold labels were listed for the second annotator rather than changed by us.
+- **Collector moved to an external timer.** GitHub ran 4 of 36 scheduled slots overnight; a cron-job.org job with a fine-grained token (Actions: write, one repository, 90 days) will call `workflow_dispatch` hourly, with GitHub's own schedule kept as a second chance.
+- **Security pass 1 completed** (`docs/security/audit-2026-10-15.md`); rate limits added to the app before any public deployment.
+
+## 14 October 2026
+- **Language model wired in and scored.** Groq `gpt-oss-120b` behind the typed schema: first benchmark pass 66.7% (CI 57--77%) against the rule-based stub's 45.6%. Three provider quirks fixed on the way (strict schema shape, reasoning tokens eating the output cap, per-minute and daily token caps). The prompt was then revised from the failure analysis, which makes benchmark v0 a development set; the frozen v1 set will give the reported number.
+- **The pasted Groq key is to be rotated.** It was typed into the chat once; the plan's rule stands: keys go into `.env` by hand, never into chat.
+- **Hourly collection runs in the cloud.** The laptop scheduler was a stopgap; GitHub Actions now fetches the portal every hour and commits the CSV archive, so the laptop can be off. The repo goes public for free Actions minutes. The EPA permission email is still sent as a courtesy; the portal's robots policy permits the one-page-an-hour read.
+- **Lahore page extras captured:** the embedded 7-day hourly city trend and the 24-hour forecast; EPA and CAMS forecasts are stored and scored against actuals (C5).
+- **App reads an in-memory database rebuilt from the archive** every hour, so it never locks the file the collector writes.
+
+## 13 October 2026
+- **Supervisor-facing proposal (v2) written** as a separate document from the engineering plan, with a verified reference list (26 items; IQAir's 2025 report now ranks Pakistan first; EcoBot's channel is not confirmed as WhatsApp, so the proposal says "AI assistant"; Dr.Spider (ICLR 2023) cited for the no-code-generation design). Built alongside the plan by `docs/build.sh`.
+- **Phase 0 build started and the skeleton completed in one session.** Package layout follows plan 0.4; 45 tests pass; the fake-data shell runs end to end (question, typed form, validated query, code-written answer, 3D view).
+- **Punjab EPA portal is server-rendered HTML with no public JSON.** Decision: parse the Lahore table at one request per hour with a cache-buster and a named user agent, after asking permission. `api.aqi.punjab.gov.pk` exists but is undocumented; not probed further.
+- **AQI formula settled (W1).** Portal numbers reproduce the US EPA 2012 breakpoints under Punjab's own labels. Both the 2012 and 2024 tables are implemented so the harmonisation study (1.7) can show the difference.
+- **Portal covers 36 districts, not 28.** Scope text, resource table and scope-cut list corrected.
+- **Station coordinates taken from IQAir station pages** (9 of 11) and neighbourhood centroids (2), each with a confidence label displayed in the app, pending EPA confirmation. The EPA email asks for the official list.
+- **Quetta is display-only** (sensors exist only on WAQI/IQAir). Islamabad, Karachi and Peshawar use Urban Unit sensors on OpenAQ.
+- **Map runs keyless by default** (`map_provider=None`); CARTO is used only when a key is present, so the demo never depends on a third-party tile service.
+- **Ozone added to the AQI computation.** First live afternoon fetch showed the portal's AQI exceeding the PM2.5 sub-index exactly where O3 was high; gas sub-indices with ug/m3 -> ppb conversion were added. Remaining differences point to an 8-hour averaging window, to be tested with a day of data.
+- **EPD bulletin back-fill scoped.** Archive runs Jan 2018 - 2 Dec 2025 (newest first). Bulletins compute AQI from the 24-hour PM2.5 mean. Parser covers 2022-2025; pre-2022 layouts use the old station network and are skipped. The Dec 2025 - Oct 2026 gap has no permitted official source; decision pending.
+- **CSV archive is the data of record** (one file per source per month, append-only); DuckDB is a rebuildable cache. Chosen so GitHub Actions can commit hourly data as plain-text line appends, never a binary file that conflicts.
+- **Answer sentences are written by code, not the model** (new `nl/answer.py`), so text can never contradict the numbers.
+
+## 12 October 2026
+- **Scope widened to Pakistan's monitored cities.** Every city with monitoring stations (Punjab's 28 EPA cities; Islamabad, Karachi, Peshawar, Quetta via third-party stations) appears at city level; Lahore keeps the full 3D twin. A nationwide CAMS model grid was considered and rejected: the student chose to show only measured values, never modelled ones, on the map. City comparison moved from stretch to core.
+- **GitHub workflow changed to check-only.** Its first run committed rebuilt PDFs, which conflicted with the PDFs saved locally (git cannot merge two PDFs). The workflow now only verifies the build and attaches the PDFs to the run. `save.bat` now keeps the laptop's version on any conflict and reports failures instead of claiming success.
+- **Security standard adopted.** A 15-item security checklist (keys, secrets in history, XSS, injection, rate limiting, headers, debug off, exposed files, database, audit) was added to the plan as a standing requirement, with a hardening sub-phase (6.7) that must pass before the site goes public. Git history scanned the same day: clean.
+- **GitHub Actions PDF workflow installed by hand.** Remote tools are not allowed to write workflow files (they run code on GitHub automatically), so Claude placed the file in the project folder and Aftab moved it into `.github/workflows/`. It is a backup; Claude still rebuilds the PDFs in each session.
+- **Working folder set to `K:\airlume`** on the laptop (C: is nearly full). Claude writes files there directly; `save.bat` commits and pushes to GitHub. GitHub was not linked to Claude, by the student's choice.
+- **Renamed the project to Airlume** (air + *lume*, light). "Hawa" was dropped at the student's request. "AeroVue" was rejected because it is a Honeywell avionics trademark; "Airora" because search engines autocorrect it to "Aurora". "Airlume" is used elsewhere only by a 2017 art installation.
+- **Repository created** with automatic PDF rebuilds on every source change.
+- **Hardware checked:** the laptop (i7-1355U, 8 GB) can build everything; the local model drops to `qwen3:4b`. An optional 8 GB RAM upgrade is possible because one SO-DIMM slot is free.
+- **Fifteen weaknesses identified and scheduled** (W1–W15). Validity fixes take priority over features. Shareable answer cards and replay mode became optional to make room.
+- **Eight features added:** show-the-query toggle, clarifying questions, follow-up questions, lowest-AQI window, station-placement recommendation (contribution C7), local-model comparison, shareable cards (optional), replay the worst day (optional).
+- **Resource audit (all verified on 12 Oct):** WAQI terms forbid archiving and analysis, so it is display-only. Punjab EPA has no API and no licence, so we build without needing permission and publish derived statistics only. CARTO basemaps now need a free key. Hugging Face Spaces is no longer free for Streamlit. The Gemini free tier is about 500 requests/day on Flash-Lite, so Groq `gpt-oss-120b` is the primary model.
+- **Novelty repositioned** after finding VayuBuddy (2024), VayuChat (2025) and Punjab's EcoBot (2025). The contribution is now the scoring rubric for *visual* answers that VayuBuddy left as future work.
+
+## 8 October 2026
+- **Project chosen:** a smog digital twin combined with a natural-language "Ask the City" interface.
+- **CAMS resolution problem found:** about 45 km over Pakistan, so all of Lahore is one cell. Punjab EPA stations became the intra-city data source, and CAMS became a validation target (contribution C4).
+- **Scope:** Lahore as the deep city; Multan and Karachi as stretch comparison points.
+- First proposal (v1) written; now superseded by the complete plan.

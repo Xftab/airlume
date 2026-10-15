@@ -145,7 +145,7 @@ For a subset of forty answered questions, two raters score the rendered view on 
 
 ## AQI harmonisation and CAMS validation (E3)
 
-Before any comparison between stations and the global model is meaningful, the two must be on the same scale. The project's converter reproduces the portal's AQI from its published concentrations; the remaining question --- whether the portal averages over one, eight or twenty-four hours --- is settled by recomputing the index under each window over a week of hourly data and reporting the error against the published value. The CAMS comparison then reports mean absolute error, bias and correlation per station and by hour of day over the collection period, which answers RQ3.
+Before any comparison between stations and the global model is meaningful, the two must be on the same scale. The project's converter reproduces the portal's AQI from its published concentrations approximately but not exactly: over the first ninety stored station-readings it agrees to a mean 5.4 index points using the US EPA 2012 breakpoints on the latest hour, and reads systematically about four points high. The eight-hour window that the provincial order prescribes for printed bulletins fits the live table far worse, and the twenty-four-hour window cannot yet be tested. Settling the window over a week of hourly data, and either explaining that residual bias or reporting it as a stated interval on every station-to-model comparison, is the substance of E3; a converter presented as exact when it is not would make RQ3's error figures meaningless. The CAMS comparison then reports mean absolute error, bias and correlation per station and by hour of day over the collection period, which answers RQ3.
 
 ## Forecast scorecard (E4) and user check (E5)
 

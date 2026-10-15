@@ -18,6 +18,7 @@ document.airnow.gov technical assistance document (Table 6).
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from typing import Literal
 
@@ -72,9 +73,19 @@ BREAKPOINTS: dict[str, dict[Scale, list[tuple[float, float, int, int]]]] = {
 }
 
 
+def _missing(conc: float | None) -> bool:
+    """True when there is no usable value.
+
+    NaN counts as missing: pandas hands us NaN for a gap, and NaN fails every
+    comparison silently (NaN < 0 is False), so it must be caught explicitly or
+    it reaches int() and raises.  See docs/HISTORY.md, 15 Oct.
+    """
+    return conc is None or (isinstance(conc, float) and math.isnan(conc))
+
+
 def to_epa_units(pollutant: str, conc: float | None) -> float | None:
     """Portal units (ug/m3; CO mg/m3) -> EPA table units (ppb; CO ppm). PM unchanged."""
-    if conc is None:
+    if _missing(conc):
         return None
     if pollutant in UGM3_PER_PPB:
         return conc / UGM3_PER_PPB[pollutant]
@@ -97,7 +108,7 @@ def _interp(table: list[tuple[float, float, int, int]], c: float) -> int | None:
 
 def sub_index(pollutant: str, conc: float | None, scale: Scale = "us_2012") -> int | None:
     """Piecewise-linear AQI sub-index for one pollutant. None if no data."""
-    if conc is None or conc < 0:
+    if _missing(conc) or conc < 0:
         return None
     table = BREAKPOINTS[pollutant][scale]
     # Truncate like the EPA does (PM2.5 and CO to 0.1, the rest to integer).

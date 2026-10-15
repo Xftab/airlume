@@ -1,4 +1,4 @@
-from airlume.aqi import aqi_from_concentrations, band_for, sub_index
+from airlume.aqi import aqi_from_concentrations, band_for, sub_index, to_epa_units
 
 
 def test_matches_punjab_portal_values_2012_table():
@@ -44,3 +44,17 @@ def test_ozone_can_dominate_afternoon():
 def test_gas_units_converted():
     assert sub_index("no2", 34.4 / 1.88) < 51  # 18 ppb -> Good
     assert aqi_from_concentrations(pm25=24.2, pm10=68.3, o3=89.2, no2=16.0, so2=37.5, co=0.6)[0] in range(70, 80)  # GT Road 73
+
+
+def test_nan_treated_as_missing():
+    """Pandas hands us NaN for a gap; NaN fails every comparison silently, so the
+    guards must catch it explicitly.  Regression for the w1_check crash, 15 Oct."""
+    nan = float("nan")
+    assert sub_index("pm25", nan) is None
+    assert sub_index("o3", nan) is None
+    assert to_epa_units("o3", nan) is None
+    assert aqi_from_concentrations(nan, nan, o3=nan, no2=nan, so2=nan, co=nan) == (None, None)
+    # One real value among NaNs still scores, and the NaNs do not become zeros.
+    assert aqi_from_concentrations(79.5, nan, o3=nan, no2=nan, so2=nan, co=nan) == (163, "pm25")
+    # A rolling mean over a gap (the w1_check path) must not raise.
+    assert aqi_from_concentrations(pm25=nan, pm10=116.5)[1] == "pm10"
