@@ -86,6 +86,41 @@ Two further points worth making in the report:
 - **The gain falls away fast.** The first site serves 1.1 million people, the fifth 278,000. A
   network planner gets most of the benefit from two or three well-placed monitors.
 
+## Comparison with the 2022 ISPRS Lahore study
+
+The plan asks for agreement and difference against the siting study it cites [8]. **The paper
+publishes no coordinates**, so a numeric overlap cannot be computed from the published record: its
+nine recommended sites appear only as markers on a map (Figure 6), and digitising them would give
+±1–2 km estimates — too soft to report as an overlap figure. What can be compared rigorously is
+method, criteria and count.
+
+| | ISPRS 2022 | This project |
+|---|---|---|
+| Sites recommended | 9 | 5 (ranked; more can be generated) |
+| Why that number | Lahore's smog commission called for 12 reference-grade stations against the 3 then operating | No target; the ranking is reported with its falling returns so a planner can choose where to stop |
+| Method | Affinity-graph extension of Hsieh et al. (2015): city as graph nodes, entropy-based selection, feature weights learned by gradient descent | Greedy coverage maximisation: pick the site serving the most people beyond 5 km, update, repeat |
+| Criteria | Commercial hubs, industrial areas, traffic hotspots, drainage streams, meteorology | Population (WorldPop), with an optional blend of major-road and industrial proximity |
+| Input measurements | Reference-grade stations plus PurpleAir low-cost sensors | None — pure geometry over the station registry |
+| Anti-clustering | One site per iteration, fed back as a labelled node | Same idea: coverage is updated after each pick, which prevents bunching |
+
+Three points worth making in the report:
+
+- **Their criteria are source-led, ours are exposure-led.** Commercial hubs, industry, traffic and
+  drainage are all proxies for where pollution is *produced*. That makes their approach closer in
+  spirit to variant B above than to variant A, and it is a reason to present B rather than quietly
+  prefer A.
+- **Both methods independently avoid clustering the same way** — selecting one site at a time and
+  updating state before the next — despite starting from very different machinery.
+- **The station count has moved since.** The paper was written when 3 reference-grade stations were
+  operating and 12 were the target. The portal now lists 11 for Lahore, and this project collects
+  from all 11. So the gap that motivated their nine recommendations has largely been filled, and
+  the question has shifted from "how many" to "are they in the right places" — which is what the
+  4.67 million figure above answers.
+
+To close this properly with a numeric overlap, the authors would need to be asked for the
+coordinates. That is a reasonable email to send and is the honest route; estimating them off a
+figure is not.
+
 ## What this does not do
 
 - **Multipolygon relations are not assembled.** Only closed ways become exclusion polygons, so a
@@ -95,9 +130,6 @@ Two further points worth making in the report:
   ways. A site proposed near the river should be checked by eye.
 - **Distances to roads and industry are measured to the nearest node**, not to the nearest point
   on the line. At 1 km resolution the difference is immaterial, and it is far cheaper.
-- **The ISPRS 2022 Lahore siting study is still not compared against.** The plan asks for
-  agreement and difference against its recommendations; that needs the paper's coordinates, which
-  are not in hand. Open.
 - **No pollution gradient, no siting rules, no land access.** Punjab follows US EPA siting
   criteria; nothing here checks them. The wording everywhere is "recommended for consideration".
 
