@@ -15,6 +15,7 @@ one request per hour per page, with a descriptive User-Agent.
 
 from __future__ import annotations
 
+import json
 import re
 import time
 from datetime import datetime, timezone
@@ -51,12 +52,37 @@ STATION_MAP = {
     "safari park": "LHR-SP",
 }
 
+UNMATCHED_STATIONS: list[str] = []  # Lahore station labels seen but absent from STATION_MAP
+
+
+def _station_key(label: str) -> str:
+    """Portal station label -> STATION_MAP key.
+
+    The portal is inconsistent: the HTML table says "Gulberg III" while the
+    embedded JSON says "Gulberg III, Lahore".  Lower-case it, drop the city
+    name and any punctuation, collapse the spaces.
+    """
+    key = re.sub(r"[^a-z0-9 ]+", " ", label.lower())
+    key = key.replace("lahore", "")
+    return " ".join(key.split())
+
+
 _NUM = re.compile(r"^-?\d+(\.\d+)?$")
 
 
 def _num(text: str) -> float | None:
     t = text.strip().replace(",", "")
     return float(t) if _NUM.match(t) else None
+
+
+def _f(value) -> float | None:
+    """Snapshot numbers arrive as JSON strings ("16.64") or numbers (62)."""
+    if value is None or isinstance(value, (list, dict, bool)):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def _parse_updated(text: str, now: datetime | None = None) -> datetime | None:
@@ -97,9 +123,15 @@ def parse_lahore_html(html: str, now: datetime | None = None) -> pd.DataFrame:
             if not cells or col_station is None or col_station >= len(cells):
                 continue
             label = cells[col_station]
-            key = re.sub(r"\s+", " ", label.lower()).replace("lahore", "").strip()
-            station_id = STATION_MAP.get(key)
+            if _NUM.match(label):  # the rank column, when the table has no <td> for it
+                continue
+            station_id = STATION_MAP.get(_station_key(label))
             if station_id is None:
+                # Never drop a station silently: an unmatched label is how
+                # Gulberg III could have vanished unnoticed (it did not --- the
+                # portal omits it from the table --- but nothing would have said so).
+                if label and label not in UNMATCHED_STATIONS:
+                    UNMATCHED_STATIONS.append(label)
                 continue
             # A per-row timestamp like 'Oct 13, 7:00 AM' may be present.
             row_ts = _parse_updated(" ".join(cells), now) or page_ts
@@ -124,6 +156,128 @@ def parse_lahore_html(html: str, now: datetime | None = None) -> pd.DataFrame:
     if not df.empty:
         df = df.dropna(subset=["ts"]).drop_duplicates(subset=["station_id", "ts"])
     return df
+
+
+# --------------------------------------------------------------------------
+# The embedded Livewire snapshot: the portal's own data, before it renders
+# --------------------------------------------------------------------------
+#
+# Found 15 Oct 2026.  The page carries a `wire:snapshot` attribute holding the
+# Livewire component's state as JSON -- about 150 KB -- and it contains *two*
+# Lahore station arrays: one of 11 stations and one of 10.  The table the page
+# renders is built from the 10, so **Gulberg III is in the portal's data but
+# never appears in its own HTML table**, which is why we had collected 10 of 11
+# stations since the first round.
+#
+# The snapshot is also richer than the table: official latitude and longitude
+# per station (the portal publishes none in its HTML), temperature, humidity,
+# wind speed and direction, the portal's own dominant pollutant, and a proper
+# ISO timestamp with offset instead of a "last updated" line to parse.
+#
+# Livewire wraps every array and object as [value, {"s": "arr"}], so values are
+# unwrapped on the way out.  Rather than hard-coding the path to the station
+# array -- which a portal redesign would silently break -- we walk the whole
+# structure for arrays of station records and take the largest, which is also
+# what makes the 11-station array win over the 10-station one.
+
+_SNAPSHOT_ATTR = "wire:snapshot"
+
+
+def _unwrap(value):
+    """Livewire serialises containers as [payload, {"s": ...}]; return the payload."""
+    if isinstance(value, list) and len(value) == 2 and isinstance(value[1], dict) and "s" in value[1]:
+        return value[0]
+    return value
+
+
+def _find_station_arrays(node, out: list[list[dict]] | None = None) -> list[list[dict]]:
+    """Every array of station records anywhere in the snapshot."""
+    out = [] if out is None else out
+    node = _unwrap(node)
+    if isinstance(node, list):
+        records = [_unwrap(x) for x in node]
+        if records and all(isinstance(r, dict) and "station_name" in r for r in records):
+            out.append(records)
+        for item in node:
+            _find_station_arrays(item, out)
+    elif isinstance(node, dict):
+        for v in node.values():
+            _find_station_arrays(v, out)
+    return out
+
+
+def parse_lahore_snapshot(html: str) -> pd.DataFrame:
+    """Read the Lahore stations from the page's embedded Livewire snapshot.
+
+    Returns the same tidy readings frame as `parse_lahore_html`, plus the
+    weather columns the snapshot carries.  Returns an empty frame if the page
+    has no snapshot (so the caller can fall back to the table parser).
+    """
+    soup = BeautifulSoup(html, "lxml")
+    best: list[dict] = []
+    for el in soup.find_all(attrs={_SNAPSHOT_ATTR: True}):
+        raw = el.get(_SNAPSHOT_ATTR) or ""
+        if "station_name" not in raw:
+            continue
+        try:
+            snap = json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+        for arr in _find_station_arrays(snap.get("data", snap)):
+            if len(arr) > len(best):
+                best = arr
+    if not best:
+        return pd.DataFrame()
+
+    rows: list[dict] = []
+    for rec in best:
+        label = str(rec.get("station_name") or "")
+        station_id = STATION_MAP.get(_station_key(label))
+        if station_id is None:
+            if label and label not in UNMATCHED_STATIONS:
+                UNMATCHED_STATIONS.append(label)
+            continue
+        ts_raw = _unwrap(rec.get("timestamp"))
+        ts = pd.to_datetime(ts_raw, utc=True, errors="coerce") if ts_raw else pd.NaT
+        vals = {k: _f(rec.get(k)) for k in ("pm25", "pm10", "co", "so2", "no2", "o3")}
+        aqi_rep = _f(rec.get("aqi"))
+        aqi_comp, dominant = aqi_from_concentrations(**vals)
+        rows.append({
+            "station_id": station_id,
+            "ts": ts,
+            **vals,
+            "aqi": int(aqi_rep) if aqi_rep is not None else None,
+            "aqi_computed": aqi_comp,
+            "source": "punjab_epa",
+            # Extra columns the table never had. `archive.export` keeps only the
+            # declared COLS, so these reach the app without changing the archive.
+            "portal_station_id": rec.get("station_id"),
+            "portal_dominant": rec.get("major_pollutant"),
+            "our_dominant": dominant,
+            "lat": _f(rec.get("latitude")),
+            "lon": _f(rec.get("longitude")),
+            "temperature": _f(rec.get("temperature")),
+            "humidity": _f(rec.get("humidity")),
+            "wind_speed": _f(rec.get("wind_speed")),
+            "wind_direction": _f(rec.get("wind_direction")),
+        })
+    df = pd.DataFrame(rows)
+    if not df.empty:
+        df = df.dropna(subset=["ts"]).drop_duplicates(subset=["station_id", "ts"])
+    return df
+
+
+def parse_lahore(html: str, now: datetime | None = None) -> pd.DataFrame:
+    """Preferred reader: the embedded snapshot, falling back to the HTML table.
+
+    The snapshot carries all 11 stations; the rendered table carries 10.  The
+    table parser is kept because it is what a portal redesign is most likely to
+    leave working, and because its fixtures pin the behaviour we already trust.
+    """
+    df = parse_lahore_snapshot(html)
+    if not df.empty:
+        return df
+    return parse_lahore_html(html, now)
 
 
 def fetch_lahore_html(session: requests.Session | None = None, timeout: int = 30) -> str:

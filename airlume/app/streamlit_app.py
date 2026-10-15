@@ -31,7 +31,7 @@ from airlume.nl.answer import answer  # noqa: E402
 from airlume.nl.resolve import ResolveError, resolve  # noqa: E402
 from airlume.nl.schema import ViewIntent  # noqa: E402
 from airlume.forecast.skill import by_horizon, scorecard  # noqa: E402
-from airlume.pipeline import archive  # noqa: E402
+from airlume.pipeline import archive, quality  # noqa: E402
 from airlume.pipeline.fake import fake_city_hourly, fake_readings  # noqa: E402
 from airlume.pipeline.registry import Registry  # noqa: E402
 from airlume.pipeline.store import Store  # noqa: E402
@@ -303,7 +303,7 @@ with left:
         st.pydeck_chart(deck_stations_3d(sf, cam, target), width="stretch", height=560)
         if sf["ts"].notna().any():
             latest_ts = pd.to_datetime(sf["ts"].max()).tz_convert(KARACHI)
-            st.caption(f"Data as of {latest_ts:%d %b %Y, %H:%M} PKT · Source: Environmental Protection Agency, Punjab · station positions approximate")
+            st.caption(f"Data as of {latest_ts:%d %b %Y, %H:%M} PKT · Source: Environmental Protection Agency, Punjab · station coordinates as published by the EPA")
 
 with right:
     if split or timeline:
@@ -328,7 +328,7 @@ with right:
 # ---------------------------------------------------------------- history
 st.divider()
 st.subheader("History")
-tab_fc, tab_daily, tab_replay, tab_hourly, tab_cov = st.tabs(["Next 24 hours", "Daily bulletins (EPD, 2022-2025)", "Replay a day", "Hourly readings (our collection)", "Where the city is blind"])
+tab_fc, tab_daily, tab_replay, tab_hourly, tab_cov, tab_dq = st.tabs(["Next 24 hours", "Daily bulletins (EPD, 2022-2025)", "Replay a day", "Hourly readings (our collection)", "Where the city is blind", "Data quality"])
 
 with tab_fc:
     fc = store.latest_forecast("PB-LHE")
@@ -445,6 +445,53 @@ with tab_hourly:
                 tooltip=["station", alt.Tooltip("ts:T"), alt.Tooltip("value:Q", title="AQI")]).properties(height=280),
             width="stretch")
 
+with tab_dq:
+    st.markdown("**What we know about our own data (plan 1.6)**")
+    st.caption(
+        "Nothing here is corrected automatically: the archive is the data of record, so every "
+        "suspect value is flagged and left in place for a human to judge. Uptime is measured over "
+        "the hours the collector actually ran, never a wall-clock range, so the irregular "
+        "collection before 15 October is not counted against the stations.")
+    dq_raw = archive.load_all("readings")
+    dq_raw = dq_raw[dq_raw["source"] == "punjab_epa"] if not dq_raw.empty else dq_raw
+    if dq_raw.empty:
+        st.caption("No readings collected yet.")
+    else:
+        dq_expected = [s_.station_id for s_ in reg.stations_in("PB-LHE")]
+        rep = quality.check_readings(dq_raw, all_stations=dq_expected)
+        names = {s_.station_id: s_.name for s_ in reg.stations_in("PB-LHE")}
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Collected hours", len(rep.expected_hours))
+        c2.metric("Stations seen", f"{dq_raw.station_id.nunique()} of {len(dq_expected)}")
+        c3.metric("Flags raised", sum(rep.counts.values()))
+
+        up = rep.uptime.copy()
+        up["station"] = up["station_id"].map(names).fillna(up["station_id"])
+        up["uptime %"] = (up["uptime"] * 100).round(0).astype(int)
+        up["last seen (PKT)"] = pd.to_datetime(up["last_seen"], utc=True).dt.tz_convert(KARACHI).dt.strftime("%d %b %H:%M")
+        st.markdown("**Station uptime**")
+        st.dataframe(up[["station", "hours_reported", "hours_expected", "uptime %", "last seen (PKT)"]],
+                     hide_index=True, width="stretch")
+
+        if rep.flags:
+            st.markdown("**Flags**")
+            fl = pd.DataFrame([{
+                "kind": f.kind,
+                "station": names.get(f.station_id, f.station_id),
+                "when (PKT)": "-" if f.ts is None else pd.Timestamp(f.ts).tz_convert(KARACHI).strftime("%d %b %H:%M"),
+                "detail": f.detail,
+            } for f in rep.flags])
+            st.dataframe(fl, hide_index=True, width="stretch")
+        else:
+            st.success("No gaps, stuck sensors, impossible values or spikes in the stored readings.")
+        st.caption(
+            f"Thresholds: a gap is {quality.THRESHOLDS['gap_hours']}+ consecutive collected hours "
+            f"with no row; a sensor is stuck at {quality.THRESHOLDS['stuck_repeats']} identical "
+            f"readings in consecutive hours; a spike is a one-hour move over "
+            f"{quality.THRESHOLDS['spike_min_abs']:.0f} ug/m3 *and* over "
+            f"{quality.THRESHOLDS['spike_sigma']:.0f}x that station's own usual hourly step. "
+            "Changes measured across a collection gap are never called spikes.")
+
 st.caption("Student project (UMT, DS494 / CC425). Not an official source. Punjab EPA bands: Good 0-50 · Satisfactory 51-100 · Moderate 101-150 · Unhealthy for sensitive groups 151-200 · Unhealthy 201-300 · Very unhealthy 301-400 · Hazardous 401-500.")
 
 
@@ -473,4 +520,4 @@ with tab_cov:
         st.metric("Share of the city more than 5 km from a monitor", f"{stats['share_beyond_5km']:.0%}")
         st.metric("Share within 3 km", f"{stats['share_within_3km']:.0%}")
         st.markdown(f"**Suggested next station:** {rec['lat']:.3f} N, {rec['lon']:.3f} E - currently {rec['current_km']:.1f} km from {rec['nearest_now']}; would cut the city mean by {rec['gain_km']:.2f} km.")
-    st.caption("Colour = distance from each 1 km cell to the nearest EPA station (teal close, orange far). No air-quality value is shown for places without a monitor; this map shows where measurement is missing, not what the air is like there. Station positions approximate.")
+    st.caption("Colour = distance from each 1 km cell to the nearest EPA station (teal close, orange far). No air-quality value is shown for places without a monitor; this map shows where measurement is missing, not what the air is like there. Station coordinates as published by the EPA.")

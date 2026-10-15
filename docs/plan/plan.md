@@ -132,7 +132,8 @@ Every resource was checked on **12 October 2026** against official documentation
 ### Key facts about the data
 
 - **Lahore EPA stations (11):** GT Road, Shahdara, Multan Road, Barki Road, Kahna Nau, Gulberg III, DHA Phase 6, Egerton Road, Punjab University, Wagha Border, Safari Park. **Coordinates are not published** --- they must be geocoded in Phase 1.
-- **The EPA portal has no public API and no licence**, but its `robots.txt` explicitly allows all crawling. A JSON backend exists (the site and mobile app consume one). Contacts: `support@aqi.punjab.gov.pk`, `ddisepa@punjab.gov.pk`.
+- **The EPA portal has no public API and no licence**, but its `robots.txt` explicitly allows all crawling. A JSON backend exists (the site and mobile app consume one), and **the page itself embeds its data as JSON** in a `wire:snapshot` attribute --- richer than the rendered table, on the same single request. Contacts: `support@aqi.punjab.gov.pk`, `ddisepa@punjab.gov.pk`.
+- **The portal renders fewer stations than it holds.** Its embedded data lists eleven Lahore stations; its HTML table shows ten, omitting Gulberg III, while the page heading still reads "Lahore (11 stations)". Anything built on the rendered table silently loses that station.
 - **CAMS resolution over Pakistan is about 45 km**, 3-hourly [7]. All of Lahore falls inside roughly one model cell, so CAMS **cannot** show differences between neighbourhoods. Stations provide the intra-city picture; CAMS is used only as a validation target and regional context.
 - **CAMS archive for Pakistan starts August 2022**; the API returns up to 92 past days per request.
 - **Open-Meteo limits:** 10,000 calls/day, 5,000/hour, 600/minute. Airlume needs about 100/day.
@@ -443,8 +444,12 @@ on:
 
 ### 1.6 Data quality
 
-- Flag gaps, stuck sensors (identical values for hours), impossible values and sudden spikes.
-- Track per-station uptime; show "x of 11 stations reporting" in the app.
+- Flag gaps, stuck sensors (identical values for hours), impossible values and sudden spikes. **Done 15 Oct** (`airlume/pipeline/quality.py`, `scripts/quality_report.py`, 17 tests): nothing is corrected automatically, because the archive is the data of record; every suspect value is flagged and left in place. Thresholds are stated in the report rather than buried in code.
+- Track per-station uptime; show "x of 11 stations reporting" in the app. **Done** --- uptime is measured over the hours the collector *actually ran*, never a wall-clock range, so the irregular collection before 15 Oct is not counted against the stations. A new **Data quality** tab shows uptime, flags and the thresholds.
+- **Settle the city-hour revision problem.** Two portal widgets (the 7-day trend and the home-page district ranking) write the same archive key `(city_id, ts, source)` under one source name, so they overwrite each other and the disagreement is lost; separately, two collections inside one clock hour overwrite each other. 4 of 10 commits revise an already-committed city value. See `docs/research/data-quality.md`; the recommendation is to give the trend widget its own source name, as the forecast tables already do.
+- **Open findings to act on:** Gulberg III (`LHR-GB3`) has never reported in any collected hour --- confirm on the live page whether it is renamed or withdrawn, then add a parser alias or mark it inactive, so "10 of 11" stops reading as a failure.
+
+**Exit:** the quality report runs over a week of data; the city-hour revision rule is decided and documented; no unexplained flag is left unexamined.
 
 ### 1.7 AQI harmonisation (weakness fix W1)
 
@@ -483,6 +488,7 @@ pmtiles extract https://build.protomaps.com/<latest>.pmtiles lahore.pmtiles \
 ### 2.4 Wind layer
 
 - Wind arrows from Open-Meteo, shown as context and labelled as correlation, never cause.
+- **Prefer the stations' own wind.** The portal's embedded snapshot carries `wind_speed`, `wind_direction`, `temperature` and `humidity` *per station*, hourly, from the same request we already make (found 15 Oct, `docs/research/portal-snapshot.md`). That is measured at the monitor rather than interpolated from a ~45 km model cell, so it is the better layer for Lahore; Open-Meteo stays the source for cities with no EPA station. Storing it needs new columns in `archive.COLS["readings"]` --- a data-of-record schema change, still to be decided.
 
 ### 2.5 View types
 
@@ -1021,7 +1027,7 @@ Full notes: `docs/research/epa-portal.md` and `docs/research/registry-notes.md`.
 - **Data path:** `GET /lahore` returns an HTML table (Rank, Station, AQI, Level, PM2.5, PM10, CO, SO2, NO2, O3) with a "Last updated" line in Pakistan time. Plain URLs can be served stale from a cache; a throwaway query parameter fetches fresh data. Hourly cadence; single stations can lag or drop out (Gulberg III was absent in one snapshot).
 - **AQI scale:** labels Good 0--50, Satisfactory 51--100, Moderate 101--150, Unhealthy for sensitive groups 151--200, Unhealthy 201--300, Very unhealthy 301--400, Hazardous 401--500. Numbers match the US EPA 2012 breakpoints with max-of-sub-indices. The EPD order of 1 October 2025 says official bulletins use 8-hour averages at 9 am, 5 pm and 1 am.
 - **Districts on the home page:** 36 (Okara, Nankana Sahib, Muzaffargarh, Rajanpur, Chiniot, Jhang, Vehari, Khanewal, Sahiwal, Faisalabad, Gujranwala, Pakpattan, Multan, Lahore, Sheikhupura, Attock, DG Khan, Kot Addu, Bahawalpur, Rahim Yar Khan, Kasur, Rawalpindi, Bhakkar, Sargodha, Narowal, Hafizabad, Murree, Khushab, Gujrat, Jhelum, Sialkot, Wazirabad, Mandi Bahauddin, Chakwal, Mianwali, Talagang). The plan's earlier figure of 28 was out of date.
-- **Coordinates:** not published by the portal. Nine Lahore stations located from IQAir station pages, two (Multan Road, Kahna Nau) from neighbourhood centroids. Confidence is stored per station and displayed. The permission email asks the EPA to confirm.
+- **Coordinates:** **published by the portal after all** --- inside the page's embedded Livewire snapshot, found 15 Oct 2026. (This plan previously recorded them as unpublished.) The registry now carries the EPA's own latitude and longitude for all eleven Lahore stations, `confidence: official`. The earlier IQAir-derived values were right to within 130 m for nine of eleven; Multan Road was 6.13 km out and Kahna Nau 0.58 km, both neighbourhood-centroid guesses, and both are corrected. The permission email still goes --- a published attribute is not a licence --- but it no longer needs to ask for coordinates. See `docs/research/portal-snapshot.md`.
 - **Other cities:** Islamabad, Karachi and Peshawar have The Urban Unit's AirGradient sensors on OpenAQ (licensed, storable). Quetta's sensors are on WAQI/IQAir only, so Quetta is display-only. The US Embassy and Consulate monitors have been dormant since March 2025.
 - **Standards:** NEQS/PEQS PM2.5 limits 15 µg/m³ annual, 35 µg/m³ 24-hour.
 - **Afternoon ozone (13 Oct, 14:00):** the live portal's AQI is a maximum over six pollutants; at Egerton Road, Punjab University and Wagha the ozone sub-index dominated. The converter now includes O3, NO2, SO2 and CO with unit conversion.

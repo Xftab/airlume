@@ -36,8 +36,13 @@ def run(dry_run: bool = False) -> int:
     # 1. Punjab EPA, Lahore stations
     try:
         html = epa.fetch_lahore_html()
-        df = epa.parse_lahore_html(html)
-        print(f"[epa/lahore] {len(df)} station rows")
+        epa.UNMATCHED_STATIONS.clear()
+        df = epa.parse_lahore(html)
+        via = "snapshot" if "lat" in df.columns else "html table"
+        print(f"[epa/lahore] {len(df)} station rows (via {via})")
+        if epa.UNMATCHED_STATIONS:
+            # Never let a station disappear from the dataset without a word.
+            print(f"[epa/lahore] station labels not in STATION_MAP: {epa.UNMATCHED_STATIONS}")
         if df.empty:
             raw = Path("data/raw") / f"lahore_empty_{datetime.now(timezone.utc):%Y%m%dT%H%M}Z.html"
             raw.parent.mkdir(parents=True, exist_ok=True)

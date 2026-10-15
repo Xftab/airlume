@@ -1,12 +1,12 @@
-station_id,name,city,province,operator,lat,lon,source,confidence,waqi_id,notes
-LHR-GT,GT Road,Lahore,Punjab,Punjab EPA,31.57982567,74.35500334,IQAir station page map link,station-level unverified,576559,"UET Ayesha Hall Road, Begampura"
-LHR-SHD,Shahdara,Lahore,Punjab,Punjab EPA,31.63812639,74.28518245,IQAir station page map link,station-level unverified,576544,"Govt Teaching Hospital Shahdara, GT Road"
-LHR-MR,Multan Road,Lahore,Punjab,Punjab EPA,31.4314,74.1736,GeoNames Chung centroid,neighbourhood centroid,576547,"City Traffic Police Lines, Chung. Exact point not published"
-LHR-BR,Barki Road,Lahore,Punjab,Punjab EPA,31.53590314,74.43518805,IQAir station page map link,station-level unverified,576568,"Baoowala, Lahore Cantt"
-LHR-KN,Kahna Nau,Lahore,Punjab,Punjab EPA,31.3669,74.3689,GeoNames Kahna Nau centroid,neighbourhood centroid,576562,"Chandiya, Model Town Tehsil. Exact point not published"
-LHR-GB3,Gulberg III,Lahore,Punjab,Punjab EPA / Urban Unit,31.508051,74.337544,IQAir station page map link,station-level unverified,542224,"Listed on aqi.punjab.gov.pk; IQAir credits The Urban Unit"
-LHR-DHA6,DHA Phase 6,Lahore,Punjab,Punjab EPA,31.45594422,74.46377265,IQAir station page map link,station-level unverified,576565,
-LHR-EG,Egerton Road,Lahore,Punjab,Punjab EPA,31.56094017,74.33080805,IQAir station page map link,station-level unverified,576577,"Aiwan-e-Iqbal, Civil Lines"
-LHR-PU,Punjab University,Lahore,Punjab,Punjab EPA,31.47965946,74.26608654,IQAir station page map link,medium (4 km SW of main campus),576556,"Verify against EPD"
-LHR-WB,Wagha Border,Lahore,Punjab,Punjab EPA,31.60217088,74.54493878,IQAir station page map link,station-level unverified,582631,"Santpur, ~2.7 km west of crossing"
-LHR-SP,Safari Park,Lahore,Punjab,Punjab EPA,31.38231477,74.21817282,IQAir station page map link,station-level unverified,576550,"Chamru Pur, Raiwind Road"
+station_id,name,city,province,operator,lat,lon,source,confidence,waqi_id,notes,portal_station_id
+LHR-GT,GT Road,Lahore,Punjab,Punjab EPA,31.57982567,74.35500334,"Punjab EPA portal embedded snapshot (wire:snapshot), 15 Oct 2026",official,576559,"UET Ayesha Hall Road, Begampura",25
+LHR-SHD,Shahdara,Lahore,Punjab,Punjab EPA,31.63812639,74.28518245,"Punjab EPA portal embedded snapshot (wire:snapshot), 15 Oct 2026",official,576544,"Govt Teaching Hospital Shahdara, GT Road",15
+LHR-MR,Multan Road,Lahore,Punjab,Punjab EPA,31.46379729,74.22594175,"Punjab EPA portal embedded snapshot (wire:snapshot), 15 Oct 2026",official,576547,"City Traffic Police Lines, Chung. Coordinate corrected 15 Oct 2026 from the portal's own data; the earlier neighbourhood centroid was 6.1 km away.",19
+LHR-BR,Barki Road,Lahore,Punjab,Punjab EPA,31.53590314,74.43518805,"Punjab EPA portal embedded snapshot (wire:snapshot), 15 Oct 2026",official,576568,"Baoowala, Lahore Cantt",12
+LHR-KN,Kahna Nau,Lahore,Punjab,Punjab EPA,31.37096864,74.36509796,"Punjab EPA portal embedded snapshot (wire:snapshot), 15 Oct 2026",official,576562,Coordinate corrected 15 Oct 2026 from the portal's own data; the earlier neighbourhood centroid was 0.6 km away.,18
+LHR-GB3,Gulberg III,Lahore,Punjab,Punjab EPA / Urban Unit,31.507172,74.338461,"Punjab EPA portal embedded snapshot (wire:snapshot), 15 Oct 2026",official,542224,"Present in the portal's embedded data but absent from its rendered HTML table, so it was missing from our archive until 15 Oct 2026.",27
+LHR-DHA6,DHA Phase 6,Lahore,Punjab,Punjab EPA,31.45594422,74.46377265,"Punjab EPA portal embedded snapshot (wire:snapshot), 15 Oct 2026",official,576565,,22
+LHR-EG,Egerton Road,Lahore,Punjab,Punjab EPA,31.56103547,74.33099891,"Punjab EPA portal embedded snapshot (wire:snapshot), 15 Oct 2026",official,576577,"Aiwan-e-Iqbal, Civil Lines",30
+LHR-PU,Punjab University,Lahore,Punjab,Punjab EPA,31.47965946,74.26608654,"Punjab EPA portal embedded snapshot (wire:snapshot), 15 Oct 2026",official,576556,"Portal confirms this point, about 4 km SW of the main campus. The earlier 'medium confidence' doubt is resolved.",23
+LHR-WB,Wagha Border,Lahore,Punjab,Punjab EPA,31.60234176,74.54494994,"Punjab EPA portal embedded snapshot (wire:snapshot), 15 Oct 2026",official,582631,"Santpur, ~2.7 km west of crossing",29
+LHR-SP,Safari Park,Lahore,Punjab,Punjab EPA,31.38231477,74.21817282,"Punjab EPA portal embedded snapshot (wire:snapshot), 15 Oct 2026",official,576550,"Chamru Pur, Raiwind Road",24

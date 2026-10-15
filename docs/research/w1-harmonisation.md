@@ -103,9 +103,9 @@ committed), not the local DuckDB cache.
   comparison silently, so a gap in a rolling mean reached `int()` and raised. This is why the
   check had never been run. Fixed; regression test in `tests/test_aqi.py`.
 - **City rows are upserted, not appended.** Lahore's city AQI for 15 Oct 06:00 UTC was 73 in one
-  commit and 77 in a later one — the 06:00 round collected 9 of 10 stations and a later round
-  recomputed the city mean. `data/archive/city_hourly/` therefore is not append-only, unlike
-  `readings/`. Phase 1.6 should either record `n_stations` per row (the column exists but is
-  empty) or stop revising a published hour.
+  commit and 77 in a later one. `data/archive/city_hourly/` therefore is not append-only, unlike
+  `readings/`. *(First explanation here — that a later round recomputed the city mean from more
+  stations — was wrong: nothing in the pipeline computes a city value from our station rows, and
+  `n_stations` is always empty. The measured causes are in `docs/research/data-quality.md`.)*
 - **Hourly collection is live.** 05:00–08:00 UTC on 15 Oct are consecutive with 10 rows each.
   Earlier rows are 2–6 hours apart, from before the cron-job.org trigger was installed.
