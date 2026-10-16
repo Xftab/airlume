@@ -25,6 +25,8 @@
 - Numbers: station AQIs on 13 Oct 07:00 match the **US EPA 2012 PM2.5 breakpoints** (0-12 / 12.1-35.4 / 35.5-55.4 / 55.5-150.4 / 150.5-250.4 / 250.5-350.4 / 350.5-500.4) with max-of-sub-indices, within 0-3 points (e.g. PM2.5 310.8 → 361, portal 361). The 2024 US revision would give >400 for that value, so it is the old table. `airlume/aqi.py` implements both; tests pin the portal values.
 - EPD order says AQI uses 8-hourly averages and is published 9am/5pm/1am; the live portal updates hourly. The 0-3 point residuals are consistent with the index being computed on an average while the table shows the hourly concentration.
 
+> **Resolved 16 Oct 2026.** Neither table above is the one the portal uses. It uses its own, anchored on Pakistan's NEQS limits with gases in µg/m³; reproduced 99.7% exactly on 304 stored rows. The 13 Oct readings matched the US table because all four sat where the two converge. See `docs/research/w1-harmonisation.md`.
+
 > **Corrected 15 Oct 2026** (`docs/research/w1-harmonisation.md`). Both bullets above are too optimistic. The 2012 table is confirmed as the right one, but "within 0-3 points" came from four readings chosen because both concentration and AQI were visible; over 90 stored station-rows the agreement is mean 5.4, median 4, max 24, exact in only 9% of rows, with a systematic +4 point bias. The 8-hour-average explanation is **wrong**: an 8-hour trailing mean is worse at all ten stations (24.3 against 5.4). The EPD order's 8-hour averaging applies to the printed bulletins, not the live table.
 - No EPD document publishes the breakpoints themselves.
 

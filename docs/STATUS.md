@@ -1,6 +1,6 @@
 # Status
 
-_Last updated: 15 October 2026, 15:10 PKT_
+_Last updated: 16 October 2026, 10:50 PKT_
 
 ## Where we are
 **Phase 0: Foundations and Access (week 1, 13–19 Oct)** — day one done. The code skeleton, registry, tests and fake-data shell exist and run.
@@ -47,6 +47,11 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - **Security pass 1 (S1-S15)** written to `docs/security/audit-2026-10-15.md`: pip-audit clean, bandit reviewed (`.bandit`), rate limits added (session 30/h, global 150/h, 400-char cap), Markdown escaping of user/model text, tracebacks hidden from viewers, 4 new guard tests (84 total).
 - **4.1 persistence baselines** in the scorecard + horizon chart (`airlume/forecast/skill.py`). Found and fixed a collector bug that dropped the 7-day city trend every round (next run back-fills). Early numbers: EPA bias +28, CAMS bias -17, skill ~0.1 vs last value on 34 hours.
 - **E1 on prompt v3: 120b 88.9% (CI 82-96), 20b 88.9% (CI 82-94).** Prompt frozen. Write-up in `docs/research/e1-results.md`; four debatable gold items flagged for the second annotator. Date fields now accept datetimes (truncate to day).
+
+### 16 Oct, morning
+- **W1 solved.** The portal uses its own NEQS-anchored AQI table with gases in ug/m3, not the US EPA 2012 table. On all 304 stored station-hours (30 hours, 24 consecutive): **99.7% exact, 100% within 1 point, dominant pollutant 100%** (US 2012: 6.2% exact). Now the default scale (`pk_portal`) in `aqi.py`. An AQI of 100 is exactly the NEQS short-term limit for each pollutant. Explains both the +8 bias and the rejected ozone hypothesis. Averaging window: latest hour, settled on 24 consecutive hours.
+- **Open on W1:** PM2.5 >350 and PM10 >550 are extrapolated - re-run `scripts\w1_check.py` once November smog exceeds them. NO2 101-150 band rests on one point.
+- Unblocks **4.3 (CAMS vs ground)**: CAMS concentrations can now go onto the portal's own scale. Needs two weeks of readings (from ~29 Oct).
 
 ### 15 Oct, evening session - Phase 2 and parts of Phase 4
 - **Population coverage done (2.6) and 4.5 nearly closed.** **4.67 M people (33% of Lahore) live more than 5 km from a monitor**; only 32% are within 3 km. By area those figures are 44% and 23% - both kept, because they answer different questions. WorldPop 2025 1 km + OSM land use, each cut once into a committed CSV (72 KB / 103 KB) so runtime needs no rasterio/GDAL/osmium. Five ranked sites in two variants: population-only brings 3.15 M within 5 km (33% -> 11%); population+sources brings 2.35 M (33% -> 16%) but sits every monitor within 200 m of a major road. Both shown in the app; the trade-off is the finding. Airport, military and water cells excluded. **4.5 now closed:** the ISPRS 2022 comparison is done as a method comparison - that paper publishes no coordinates, so a numeric overlap is not possible from the published record; their criteria are source-led where ours are exposure-led, and the 3-station network behind their 9 recommendations is now the 11 we collect from. Write-up: `docs/research/population.md`.

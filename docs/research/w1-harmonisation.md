@@ -1,12 +1,108 @@
-# W1: which averaging window and breakpoint table reproduces the portal's AQI?
+# W1: which formula does the Punjab EPA portal use for its AQI?
 
-**Status: interim. 90 station-rows over 10 distinct hours (14–15 Oct 2026).** Enough to rule two
-things out, not enough to settle the question. Re-run `python scripts\w1_check.py` once 24
-consecutive hours exist; this file is replaced then.
+**Status: solved, 16 Oct 2026.** The portal computes AQI from the **latest hour's**
+concentrations, as the **maximum of per-pollutant sub-indices**, on **its own breakpoint table
+anchored on Pakistan's NEQS limits**, with gases banded in **µg/m³** rather than ppb. Implemented
+as the `pk_portal` scale in `airlume/aqi.py`, now the default.
 
-W1 is the weakness that station AQI and CAMS concentrations cannot be compared until we know the
-formula the portal publishes. Phase 0 identified the breakpoint table from four hand-checked
-readings. This is the first test against stored data.
+Checked against every stored station-hour (304, over 30 hours, 24 of them consecutive, 14–16 Oct):
+
+| Scale | Exact | Within 1 | Mean abs error | Bias | Max | Dominant pollutant agrees |
+|---|---|---|---|---|---|---|
+| **`pk_portal` (fitted)** | **99.7%** | **100%** | **0.00** | **+0.00** | **1** | **100%** |
+| US EPA 2012 (used until today) | 6.2% | 18.8% | 7.48 | +5.87 | 50 | 94% |
+| US EPA 2024 | 2.0% | 7.9% | 11.12 | +9.62 | 50 | 94% |
+
+The single non-exact row is off by one, which is rounding. Every one of the portal readings
+published on 13 Oct and pinned in our tests is reproduced exactly.
+
+## The table
+
+Concentrations in the units the portal shows: µg/m³, CO in mg/m³.
+
+| AQI | PM2.5 | PM10 | O₃ | NO₂ |
+|---|---|---|---|---|
+| 0–50 | 0–15 | 0–75 | 0–65 | 0–40 |
+| 51–100 | 15.1–**35** | 75.1–**150** | 65.1–**130** | 40.1–**80** |
+| 101–150 | 35.1–70 | 150.1–250 | 130.1–195 | 80.1–130 ‡ |
+| 151–200 | 70.1–150 | 250.1–350 | — | — |
+| 201–300 | 150.1–250 | 350.1–450 | — | — |
+| 301–400 | 250.1–350 | 450.1–550 | — | — |
+| 401–500 | 350.1–500 † | 550.1–650 † | — | — |
+
+**Bold = the NEQS short-term limit.** For every pollutant the data can fit, an AQI of exactly 100
+on the portal *is* the national legal limit: PM2.5 35 (24 h), PM10 150 (24 h), O₃ 130 (1 h), NO₂ 80
+(24 h). The lower edges are the NEQS annual limits for PM2.5 (15) and NO₂ (40), and half the
+short-term limit for PM10 and O₃. The scale was built so that "Satisfactory" ends where the law
+does — which is a better story for the report than "it is the US scale".
+
+† **Not yet observed** — extrapolated from the pattern, and identical to the US table at that
+level. Lahore's November smog routinely passes 350 µg/m³ PM2.5, so the top band gets its first
+real test within weeks. Re-run `scripts\w1_check.py` then.
+‡ One point (87.2 → 108). Plausible, not confirmed.
+
+Above the last fitted gas band the sub-index is **refused, not extrapolated**, so a guess can never
+set a reported AQI. SO₂ and CO have never been the dominant pollutant in our data; their bands are
+NEQS-anchored placeholders (SO₂ 80 / 120 µg/m³, CO 5 / 10 mg/m³) that cannot have affected any
+value so far.
+
+## How it was found
+
+1. **Dominance test.** The snapshot carries the portal's own `major_pollutant`. Against ours on 204
+   rows it agreed 94% — and on the rows where both said PM2.5, our PM2.5 sub-index exceeded the
+   portal's AQI on essentially *every* row (mean +8.3, mean absolute 8.3). The bias was inside the
+   PM2.5 calculation, not in which pollutant won.
+2. **Inverting it.** The concentration the portal's AQI implies, divided by the concentration it
+   displays, varied by band (0.80, 0.98, 0.91, 0.84, 1.00). Not a scale factor, not an offset —
+   the signature of different breakpoints.
+3. **NowCast ruled out.** The US 12-hour weighted average cut the bias (+8.3 → +3.5) but made the
+   error worse (8.4 → 9.7).
+4. **Fitting each band.** Regressing concentration on AQI inside each band gave r² = 1.00 for
+   every PM2.5 and PM10 band and recovered the edges directly: 15 / 35 / 70 / 150 / 250, and
+   75 / 150 / 250 / 350 / 450 / 550. Gases fell out the same way.
+
+## Why the first identification looked right and was not
+
+On 13 Oct the US 2012 table was chosen because four hand-checked readings matched "within 0–3
+points". They did — and under the true table they match exactly too. All four were smog-morning
+values (141, 190, 227, 311 µg/m³) sitting where the two tables converge: both agree at 150–350.
+
+**The tables part most at 35–70 µg/m³**, where the US table ends its 101–150 band at 55.4 and the
+portal ends it at 70. That is Lahore's ordinary October afternoon. A reading of 60 µg/m³ is
+"Moderate" on the portal and "Unhealthy for sensitive groups" on the US table. Four readings chosen
+because they were easy to check all came from the one region that could not tell the tables
+apart; ninety stored rows exposed the bias, three hundred settled it.
+
+## What this resolves
+
+- **The +4/+8 bias** recorded on 15 Oct — it was the wrong table, nothing else.
+- **The rejected ozone hypothesis.** The two rows that suggested an 8-hour maximum were the portal
+  banding O₃ in µg/m³ on a 65/130 scale while we converted to ppb for the US table. Gulberg III,
+  82.39 µg/m³ → 64 (portal 64); Wagha, 91.97 → 71 (portal 71). There never was an averaging effect.
+- **The averaging window**, now on 24 consecutive hours: latest hour, unambiguously. Mean error
+  0.0 against 20.2 for an 8-hour mean and 26.8 for a 24-hour one, at all eleven stations.
+- **Plan 1.7's first bullet** — "implementing exactly the breakpoint table Punjab EPA uses" — is
+  now literally met.
+- **4.3 (CAMS vs ground) can now be done honestly**: CAMS concentrations can be put on the portal's
+  own scale, so the comparison measures model agreement rather than a table mismatch.
+
+## Data-of-record note
+
+`aqi_computed` in `data/archive/readings/` was written with the US 2012 table until 16 Oct 2026 and
+with `pk_portal` from then on. It is a derived column, fully recomputable from the stored
+concentrations, and earlier rows are **not** rewritten — the archive is append-only. Anything that
+needs a consistent series recomputes from concentrations rather than reading that column.
+
+## Reproducing
+
+```
+python scripts\w1_check.py
+```
+
+---
+
+# Earlier record (14–16 Oct), kept for the history of the finding
+
 
 ## What the data allows
 
