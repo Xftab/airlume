@@ -1,8 +1,9 @@
 # Airlume — status and next steps (update this file after each session)
 
-Last updated: 16 Oct 2026, 10:50 PKT
+Last updated: 16 Oct 2026, 12:00 PKT
 
 ## Done this week (13–16 Oct)
+- 4.3 CAMS validation built; preliminary on 30 h: CAMS PM2.5 ~20 low (at night), PM10 not tracked.
 - W1 solved: portal uses its own NEQS-anchored table, gases in ug/m3; 99.7% exact on 304 rows.
 - Forecast questions now answered from the forecast (they were answered with current readings); 4.6 met.
 - Hourly coverage verified (10 rows/hour, consecutive since 05:00 UTC 15 Oct); W1 measured for the
@@ -23,7 +24,8 @@ Last updated: 16 Oct 2026, 10:50 PKT
 ## Next (in order)
 1. *(W1 solved 16 Oct - portal's own NEQS-anchored table, 99.7% exact on 304 rows.)* Re-run
    `python scripts\w1_check.py` once November smog pushes PM2.5 above 350 to confirm the top band.
-2. 4.3 CAMS-vs-ground validation once two weeks of readings exist (~29 Oct); W1 no longer blocks it.
+2. 4.3 final run: `python scripts\cams_validation.py` on two weeks (~29 Oct); update
+   `docs/research/cams-validation.md`, retest the 1-2 h lag. (Built and run preliminary 16 Oct.)
 3. Hand the classmate sheet to 3 classmates; collect 60 questions; second annotation (Kiran
    or Tehreem); freeze benchmark v1; score it once, report with CIs.
 4. Rotate the GitHub fine-grained token (first value was exposed) and the Groq key.
@@ -32,10 +34,8 @@ Last updated: 16 Oct 2026, 10:50 PKT
 7. Go public: re-run security checklist, make repo public, deploy to Streamlit Cloud.
 8. Report and demo (Phase 7).
 
-## Needs Aftab to fetch (blocks finishing 2.6 and 4.5)
-- A WorldPop or GHSL population raster for Punjab, and an OpenStreetMap extract for Lahore. The
-  build environment cannot download either. Without them, coverage figures are area shares only,
-  and the five proposed station sites ignore population, rivers, the airport and restricted land.
+## Needs Aftab to fetch
+- Nothing. (WorldPop and OSM files fetched 15 Oct; cut into committed CSVs.)
 
 ## Blockers / waiting on time
 - Groq daily budgets reset ~24 h after use (rolling).

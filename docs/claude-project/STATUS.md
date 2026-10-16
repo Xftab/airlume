@@ -1,6 +1,6 @@
 # Status
 
-_Last updated: 16 October 2026, 10:50 PKT_
+_Last updated: 16 October 2026, 12:00 PKT_
 
 ## Where we are
 **Phase 0: Foundations and Access (week 1, 13–19 Oct)** — day one done. The code skeleton, registry, tests and fake-data shell exist and run.
@@ -49,6 +49,7 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 - **E1 on prompt v3: 120b 88.9% (CI 82-96), 20b 88.9% (CI 82-94).** Prompt frozen. Write-up in `docs/research/e1-results.md`; four debatable gold items flagged for the second annotator. Date fields now accept datetimes (truncate to day).
 
 ### 16 Oct, morning
+- **4.3 CAMS validation built** (`airlume/validation.py`, `scripts/cams_validation.py`, 10 tests, 197 total). Preliminary on 30 hours: CAMS PM2.5 ~20 ug/m3 low (night-time gap), PM10 not tracked, stations lag CAMS 1-2 h (not significant yet). `docs/research/cams-validation.md`. Final run ~29 Oct.
 - **W1 solved.** The portal uses its own NEQS-anchored AQI table with gases in ug/m3, not the US EPA 2012 table. On all 304 stored station-hours (30 hours, 24 consecutive): **99.7% exact, 100% within 1 point, dominant pollutant 100%** (US 2012: 6.2% exact). Now the default scale (`pk_portal`) in `aqi.py`. An AQI of 100 is exactly the NEQS short-term limit for each pollutant. Explains both the +8 bias and the rejected ozone hypothesis. Averaging window: latest hour, settled on 24 consecutive hours.
 - **Open on W1:** PM2.5 >350 and PM10 >550 are extrapolated - re-run `scripts\w1_check.py` once November smog exceeds them. NO2 101-150 band rests on one point.
 - **Forecast questions fixed.** A question about the future was routed correctly but answered with current readings; `answer()` now answers from the stored forecasts (per source, mean / peak / lowest 2-hour window, each source's error, city-level caveat, never advice). 4.6's exit now met - the plan's wording, which named the retrospective `best_time` class, is corrected. EPA forecast covers only 8 h because the HTML parser reads 8 points (snapshot has 23) - another reason for the deferred migration. 187 tests.

@@ -622,6 +622,7 @@ ollama pull qwen3:8b
 - Report MAE, signed bias, correlation, per station and by hour of day. Published whatever it shows.
 - **Framed as agreement, not error:** station instruments are uncalibrated and sometimes offline, so C4 measures how far model and stations agree, not how wrong CAMS is. Report each station's uptime, and cross-check against the US Consulate monitor where available. *(Handles W9.)*
 - Comparisons use harmonised AQI from 1.7 only.
+- **Built 16 Oct; preliminary run on 30 hours** (`airlume/validation.py`, `scripts/cams_validation.py`, `docs/research/cams-validation.md`). Concentrations are compared directly; AQI only on the portal's own scale, PM-only on both sides because CAMS has no gases; 95% intervals from a block bootstrap over hours. First results: CAMS reads PM2.5 **about 20 ug/m3 low** for the city mean (CI -28 to -4, r 0.70), almost entirely at night (bias -0.1 over 10:00--19:00 PKT, -28 overnight); it **does not track PM10** (bias -78, r -0.16), consistent with coarse local dust missing from the model; per-station bias ranges from -52 (Multan Road) to +18 (Wagha). Correlation peaks with CAMS shifted 1--2 hours later (0.83 against 0.70); our timestamps were checked and are not the cause; not corrected, since the difference is not significant on 30 hours and the bias does not move with the shift. **Final run on two weeks, about 29 October.** The US Consulate cross-check needs an archivable source (WAQI is display-only).
 
 ### 4.4 City-level comparison across Pakistan (core)
 
