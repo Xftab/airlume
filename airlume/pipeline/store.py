@@ -231,6 +231,18 @@ class Store:
             [city_id, city_id],
         ).df()
 
+    def all_forecasts(self, city_id: str) -> pd.DataFrame:
+        """Every stored forecast row for a city: issued_at, target_ts, aqi, source.
+
+        The answer layer picks each source's own latest issue from this, rather than
+        the single latest issue across sources that `latest_forecast` returns.
+        """
+        return self.con.execute(
+            "SELECT issued_at, target_ts, aqi, source FROM forecasts WHERE city_id = ? "
+            "ORDER BY source, issued_at, target_ts",
+            [city_id],
+        ).df()
+
     def forecast_errors(self, city_id: str) -> pd.DataFrame:
         """Every forecast hour that now has an actual: horizon (h), forecast, actual, error."""
         return self.con.execute(

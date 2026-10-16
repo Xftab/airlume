@@ -94,6 +94,52 @@ def lowest_window(forecasts: pd.DataFrame, hours: int = 2,
     return best
 
 
+@dataclass(frozen=True)
+class Outlook:
+    """The hours still ahead in one source's most recent forecast issue."""
+    source: str
+    issued_at: pd.Timestamp
+    n_hours: int
+    mean_aqi: float
+    max_aqi: float
+    max_at: pd.Timestamp
+    min_aqi: float
+    min_at: pd.Timestamp
+
+
+def outlook(forecasts: pd.DataFrame, source: str,
+            now: pd.Timestamp | None = None) -> Outlook | None:
+    """Summarise the future hours of one source's latest issue.
+
+    Per source, deliberately: the two relayed forecasts are issued at different
+    times, and taking the latest issue across sources together silently drops
+    whichever was issued earlier.
+    """
+    if forecasts.empty:
+        return None
+    df = forecasts[forecasts["source"] == source].copy()
+    if df.empty:
+        return None
+    df["target_ts"] = pd.to_datetime(df["target_ts"], utc=True)
+    df["issued_at"] = pd.to_datetime(df["issued_at"], utc=True)
+    df["aqi"] = pd.to_numeric(df["aqi"], errors="coerce")
+    df = df.dropna(subset=["aqi"])
+    if df.empty:
+        return None
+    latest = df["issued_at"].max()
+    df = df[df["issued_at"] == latest].drop_duplicates(subset=["target_ts"], keep="last")
+    now = pd.Timestamp.now(tz="UTC") if now is None else pd.Timestamp(now).tz_convert("UTC")
+    df = df[df["target_ts"] >= now.floor("h")].sort_values("target_ts")
+    if df.empty:
+        return None
+    hi = df.loc[df["aqi"].idxmax()]
+    lo = df.loc[df["aqi"].idxmin()]
+    return Outlook(source=source, issued_at=latest, n_hours=len(df),
+                   mean_aqi=float(df["aqi"].mean()),
+                   max_aqi=float(hi["aqi"]), max_at=hi["target_ts"],
+                   min_aqi=float(lo["aqi"]), min_at=lo["target_ts"])
+
+
 def describe(window: Window | None, mae: float | None = None,
              tz: str = "Asia/Karachi", source_label: str | None = None) -> str:
     """One sentence, written by code from the numbers. A prediction, not advice."""

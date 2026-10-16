@@ -51,6 +51,7 @@ Also done on 13 Oct (afternoon, Phase 1 started early):
 ### 16 Oct, morning
 - **W1 solved.** The portal uses its own NEQS-anchored AQI table with gases in ug/m3, not the US EPA 2012 table. On all 304 stored station-hours (30 hours, 24 consecutive): **99.7% exact, 100% within 1 point, dominant pollutant 100%** (US 2012: 6.2% exact). Now the default scale (`pk_portal`) in `aqi.py`. An AQI of 100 is exactly the NEQS short-term limit for each pollutant. Explains both the +8 bias and the rejected ozone hypothesis. Averaging window: latest hour, settled on 24 consecutive hours.
 - **Open on W1:** PM2.5 >350 and PM10 >550 are extrapolated - re-run `scripts\w1_check.py` once November smog exceeds them. NO2 101-150 band rests on one point.
+- **Forecast questions fixed.** A question about the future was routed correctly but answered with current readings; `answer()` now answers from the stored forecasts (per source, mean / peak / lowest 2-hour window, each source's error, city-level caveat, never advice). 4.6's exit now met - the plan's wording, which named the retrospective `best_time` class, is corrected. EPA forecast covers only 8 h because the HTML parser reads 8 points (snapshot has 23) - another reason for the deferred migration. 187 tests.
 - Unblocks **4.3 (CAMS vs ground)**: CAMS concentrations can now go onto the portal's own scale. Needs two weeks of readings (from ~29 Oct).
 
 ### 15 Oct, evening session - Phase 2 and parts of Phase 4

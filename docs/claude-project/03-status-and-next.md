@@ -4,6 +4,7 @@ Last updated: 16 Oct 2026, 10:50 PKT
 
 ## Done this week (13–16 Oct)
 - W1 solved: portal uses its own NEQS-anchored table, gases in ug/m3; 99.7% exact on 304 rows.
+- Forecast questions now answered from the forecast (they were answered with current readings); 4.6 met.
 - Hourly coverage verified (10 rows/hour, consecutive since 05:00 UTC 15 Oct); W1 measured for the
   first time: 1-hour window wins, 8-hour guess wrong, +4 point bias open; `aqi.py` NaN crash fixed.
 - Phase 1.6 data quality built: flags + per-station uptime + app tab (114 tests). Found that

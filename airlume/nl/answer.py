@@ -20,8 +20,85 @@ def _fmt(v: float, metric: str) -> str:
     return f"{v:.0f}" if metric == "aqi" else f"{v:.1f}"
 
 
+_FC_SOURCES = (("punjab_epa_forecast", "EPA Punjab"), ("open_meteo_cams_forecast", "CAMS model"))
+
+
+def _when(ts: pd.Timestamp, now: pd.Timestamp, tz: str = "Asia/Karachi") -> str:
+    """'16:00' today, '10:00 tomorrow' otherwise -- a 24-hour horizon crosses midnight."""
+    local, today = ts.tz_convert(tz), now.tz_convert(tz).date()
+    if local.date() == today:
+        return f"{local:%H:%M}"
+    if (local.date() - today).days == 1:
+        return f"{local:%H:%M} tomorrow"
+    return f"{local:%H:%M} on {local:%d %b}"
+
+
+def _forecast_answer(q: ResolvedQuery, store: Store, reg: Registry,
+                     now: pd.Timestamp | None = None) -> str:
+    """Answer a question about the future from the stored relayed forecasts.
+
+    Before 16 Oct a forecast question fell through to the station path and was
+    answered with current readings -- the present given as an answer about the
+    future. Rules kept here:
+
+    * A prediction, never advice. "Will it be safe to go out?" gets the predicted
+      AQI and the portal's own band label, never "safe" or "go out".
+    * City-level only. Neither source forecasts a station, so a named station or
+      neighbourhood is answered for Lahore and the sentence says so.
+    * Every number carries its source and that source's measured error, or says
+      plainly that there is not yet enough history to know it.
+    """
+    from airlume.forecast.skill import scorecard
+    from airlume.forecast.window import lowest_window, outlook
+
+    city = reg.city(q.city_id)
+    fc = store.all_forecasts(q.city_id)
+    if fc.empty:
+        if q.city_id != "PB-LHE":
+            return (f"No forecast is published for {city.name}; the EPA Punjab portal "
+                    "publishes one for Lahore only.")
+        return "No forecast is stored yet. Each hourly round captures the next 24 hours."
+
+    sc = scorecard(store.forecast_errors_with_baselines(q.city_id))
+    tz = "Asia/Karachi"
+    ref = pd.Timestamp.now(tz="UTC") if now is None else pd.Timestamp(now).tz_convert("UTC")
+    parts = []
+    for src, label in _FC_SOURCES:
+        o = outlook(fc, src, now)
+        if o is None:
+            continue
+        mae = None
+        key = {"punjab_epa_forecast": "EPA Punjab", "open_meteo_cams_forecast": "CAMS"}[src]
+        if not sc.empty and key in sc.index and pd.notna(sc.loc[key, "mae"]):
+            mae = float(sc.loc[key, "mae"])
+        w = lowest_window(fc, hours=2, source=src, now=now)
+        band = band_for(int(round(o.mean_aqi)))
+        text = (f"{label} forecasts {city.name}'s AQI over the next {o.n_hours} hours at around "
+                f"{o.mean_aqi:.0f} ({band.label.lower() if band else 'unbanded'}), highest about "
+                f"{o.max_aqi:.0f} at {_when(o.max_at, ref, tz)}")
+        if w is not None:
+            end = w.end + pd.Timedelta(hours=1)
+            text += (f" and lowest around {w.mean_aqi:.0f} between "
+                     f"{_when(w.start, ref, tz)} and {_when(end, ref, tz)}")
+        text += "."
+        text += (f" It has been out by about {mae:.0f} points on average so far."
+                 if mae is not None else " Not enough scored history yet to say how accurate it is.")
+        parts.append(text)
+
+    if not parts:
+        return "No forecast hours remain ahead in the stored issues; the next hourly round will add some."
+
+    lead = ""
+    if q.station_id:
+        st = {s.station_id: s.name for s in reg.stations_in(q.city_id)}.get(q.station_id, q.station_id)
+        lead = f"Forecasts are published for {city.name} as a whole, not for {st}. "
+    return lead + " ".join(parts)
+
+
 def answer(q: ResolvedQuery, store: Store, reg: Registry) -> str:
     city = reg.city(q.city_id)
+    if q.view == "forecast":
+        return _forecast_answer(q, store, reg)
     if q.city_id != "PB-LHE" or q.view == "city_overview" or q.compare_city_id:
         cf = store.latest_city_values().dropna(subset=[q.metric])
         if cf.empty:
