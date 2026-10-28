@@ -16,6 +16,36 @@ Checked against every stored station-hour (304, over 30 hours, 24 of them consec
 The single non-exact row is off by one, which is rounding. Every one of the portal readings
 published on 13 Oct and pinned in our tests is reproduced exactly.
 
+## Confirmed at scale (24 October 2026)
+
+Re-running `scripts\w1_check.py` against the full archive --- **2206 station-hours over 210
+consecutive hours**, up from the 304 rows and 30 hours the table was fitted on --- the latest-hour
+`pk_portal` AQI still reproduces the portal's published value almost exactly:
+
+| Averaging window | Mean abs error | Median | Max | n |
+|---|---|---|---|---|
+| **1 hour (latest reading)** | **1.7** | **0.0** | 99 | 2206 |
+| 8-hour trailing mean | 45.1 | — | — | 2206 |
+| 24-hour trailing mean | 54.7 | — | — | 2206 |
+
+The latest-hour window still wins by a wide margin. The dominant-pollutant mix has broadened to
+**PM2.5 71%, PM10 24%, O₃ 4%, NO₂ 1%** (against 93% PM2.5 on the first 30 hours) as the archive came
+to span more of the day and more weather, so the 16 Oct fit is not an artefact of a short,
+PM2.5-dominated sample.
+
+**The 99-point outlier is top-band saturation (closed 28 Oct 2026).** Re-run against the archive on
+GitHub, the five largest errors are all **22--23 October smog peaks where the portal saturates at
+AQI 500** --- PM2.5 above 350 ug/m3 and PM10 above 540 --- while the extrapolated top band computes
+401--404. Four of the five are PM-dominated; one row at `LHR-GT 2026-10-16 15:00` is marked
+CO-dominant by the portal and our CO band is a NEQS-anchored placeholder, so the 96-point error
+there is from the placeholder rather than the data. This exercises the caveat recorded on 16 Oct
+("PM2.5 above 350 and PM10 above 550 are extrapolated"): November smog has already arrived, so the
+top band now needs **refitting**, not extrapolating. The open work is a top-band refit once more
+above-350 rows accumulate, and a proper CO band if CO ever dominates again.
+
+**One open item: no confidence interval on the at-scale error yet.** A moving-block bootstrap over
+hours (as used for the CAMS validation) is the next step.
+
 ## The table
 
 Concentrations in the units the portal shows: µg/m³, CO in mg/m³.

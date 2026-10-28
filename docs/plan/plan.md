@@ -3,7 +3,7 @@ title: "Airlume: Complete Project Plan"
 subtitle: "A Conversational 3D Digital Twin of Air Quality in Pakistan's Monitored Cities --- Problem, Product, Resources and Phased Build Plan"
 author:
   - "Aftab Ahmad, Kiran Saif and Tehreem Fatima"
-date: "13 October 2026 (revision 2)"
+date: "13 October 2026 (revision 4, updated 28 October 2026: four-week sprint to 28 November)"
 ---
 
 # Part A --- The Project
@@ -156,7 +156,7 @@ Every resource was checked on **12 October 2026** against official documentation
 
 | Service | Free | Use in Airlume | Watch out for |
 |:--------------------|:-----------|:-----------------------|:-----------------------------------------|
-| **GitHub** + **GitHub Actions** (public repo) | Yes, unlimited minutes | Code, hourly collector | **Scheduled jobs are disabled after 60 days without repo activity.** Schedule at minute 17, not 0 |
+| **GitHub** + **GitHub Actions** (public repo) | Yes, unlimited minutes | Code, hourly CAMS collector (**from 28 Oct 2026**; see 1.4) | **Scheduled jobs are disabled after 60 days without repo activity.** Schedule at minute 17, not 0. Punjab EPA fetch does not reach the portal from datacenter runners and now runs on the laptop. |
 | **Streamlit Community Cloud** | Yes | Primary app hosting | Sleeps after 12 hours without visitors; commits do not wake it |
 | **Cloudflare Pages / R2** | Yes | Static build option; PMTiles host | None at this scale; never sleeps |
 | Neon Postgres | Yes, permanent | Only if a database is needed | Compute sleeps after 5 min, resumes automatically |
@@ -434,6 +434,7 @@ on:
 
 - **External timer installed (15 Oct):** a cron-job.org job calls `POST /repos/Xftab/airlume/actions/workflows/collect.yml/dispatches` every hour at :00 with a fine-grained GitHub token (repository: this one only; permission: Actions read/write + Metadata read; expires 13 Jan 2027 --- renew before then). First test returned 204 and run #8 appeared within a minute. GitHub's own `17,47` schedule stays as a second chance; the collector de-duplicates. Overnight 14-15 Oct GitHub alone fired 5 of 16 hourly slots.
 - **Observed (14 Oct):** GitHub started only one of the first five hourly slots (all runs that did start were green). Schedule changed to two slots an hour (`17,47 * * * *`); the collector de-duplicates. If coverage stays below ~80% of hours after a day, the fallback is an external timer (cron-job.org) calling `workflow_dispatch` with a fine-grained token scoped to this one repository's Actions, or making the repository public (public repos get unlimited minutes and, anecdotally, more reliable scheduling). Coverage is measured as hours with at least one round in `data/archive/readings/punjab_epa/`.
+- **Hybrid architecture adopted (28 Oct):** since 25 Oct 11:00Z the GitHub Actions runner's EPA fetch has silently failed (the runs still succeed and commit CAMS, which is why nothing alarmed), while the same code from the laptop still reaches the portal cleanly. The most parsimonious explanation is a portal-side IP/geo filter on datacenter addresses. From 28 Oct Punjab EPA collection moves back to the laptop via Windows Task Scheduler (`schedule.bat` --> `collect_push.bat`): collect, commit `data/archive/` only, pull `--rebase -X theirs --autostash`, push. Open-Meteo CAMS keeps running in the cloud (`collect.yml`) unchanged; its silently-failing EPA calls are harmless, because the collector writes nothing when a source fails. The two sides write to different archive files, so the CSVs do not conflict. Trade-off: EPA collection depends on the laptop being on; the only alternative inside the budget is a Pakistan-hosted VPS, which is out of scope for the semester.
 
 ### 1.5 Historical backfill --- the CC425 component
 
@@ -463,13 +464,14 @@ on:
 
 - **The table is built on Pakistan's NEQS limits.** An AQI of exactly 100 is the national short-term limit for every pollutant the data can fit: PM2.5 35, PM10 150, NO₂ 80 (24 h) and O₃ 130 µg/m³ (1 h). Bands: PM2.5 15 / 35 / 70 / 150 / 250 / 350; PM10 75 / 150 / 250 / 350 / 450 / 550; O₃ 65 / 130 / 195; NO₂ 40 / 80 / 130. Each fitted with r² = 1.00 per band.
 - **Averaging window settled on 24 consecutive hours:** latest hour. Mean error 0.0, against 20.2 for an 8-hour mean and 26.8 for 24 hours, at all eleven stations.
+- **Confirmed at scale (24 Oct 2026).** Re-run on the full archive --- **2206 station-hours over 210 consecutive hours**, up from the 304 rows the table was fitted on --- the latest-hour `pk_portal` AQI still reproduces the portal to **mean absolute error 1.7, median 0.0**. The 8-hour and 24-hour windows remain far worse (mean error 45.1 and 54.7), so the latest-hour choice holds at scale. The dominant-pollutant mix broadened to PM2.5 71% / PM10 24% / O₃ 4% / NO₂ 1% as the archive came to span more of the day, so the original fit was not an artefact of a short, PM2.5-dominated sample. **Open:** one row is off by 99 points and is not yet traced (most likely a bad input row --- a dropped or zero concentration), and no confidence interval is attached to the at-scale error yet; trace the 99 and add a moving-block bootstrap CI to the W1 table.
 - **Why 13 Oct looked right:** the four hand-checked readings were all high (141--311 µg/m³), where the two tables converge. They diverge most at 35--70 µg/m³ --- Lahore's ordinary afternoon --- which is where the +8 bias came from. The rejected ozone "8-hour maximum" hypothesis was the same mismatch in disguise: O₃ banded in µg/m³ on a 65/130 scale, not converted to ppb.
 - **Still provisional:** PM2.5 above 350 and PM10 above 550 have not been observed and are extrapolated (they match the US table at that level); November's smog will test the top PM2.5 band, so re-run `scripts/w1_check.py` then. The NO₂ 101--150 band rests on one point. Above the last fitted gas band the sub-index is refused rather than guessed. SO₂ and CO have never been dominant, so their bands are NEQS-anchored placeholders that cannot yet have affected any value.
 - Convert every CAMS concentration into this AQI before any comparison with station AQI (4.3). Where stations publish raw PM2.5, compare concentrations directly as well. **Now possible honestly**, since the scale is the portal's own.
 - Unit-test the converter against at least 10 published EPA readings where both concentration and AQI are shown. **Done: 13 published readings pinned in `tests/test_aqi.py`, all exact.**
 - Store the scale used alongside every value. **Partly:** `aqi_computed` in the archive used US 2012 until 16 Oct and `pk_portal` after; it is derived and recomputable, earlier rows are not rewritten (append-only), and anything needing a consistent series recomputes from the stored concentrations.
 
-**Exit: met 16 Oct**, with the top PM2.5 band to be confirmed on winter data.
+**Exit: met 16 Oct** (confirmed at scale 24 Oct: mean absolute error 1.7 on 2206 station-hours over 210 hours), with the top PM2.5 band to be confirmed on winter data and one 99-point outlier still to trace.
 
 **Exit criterion for Phase 1:** 48-hour soak passes with no missed runs; EPD backfill extracted and spot-checked; data-quality report generated; AQI harmonisation tested.
 
@@ -758,26 +760,37 @@ See Part F.
 
 # Part E --- Timeline, Risks, Limitations and Ethics
 
-## Ten-week timeline
+## Timeline
 
-| Week | Dates | Phase | Milestone |
-|:------|:--------------|:----------------------------------------|:------------------------------------|
-| 1 | 13--19 Oct | 0 Foundations | Shell runs, keys work, emails sent |
-| 2 | 20--26 Oct | 1 Data pipeline; AQI formula identified | Live collection running; versions pinned |
-| 3 | 27 Oct -- 2 Nov | 1 Backfill, **AQI harmonisation** + 2 Twin begins | Soak passed; EPD extracted; **W1 fixed** |
-| 4 | 3--9 Nov | 2 Digital twin, **2D companion views**; recruit classmates | All views live; **W10 fixed** |
-| 5 | 10--16 Nov | 3 Schema + benchmark: **blind questions, second annotator, camera categories, Roman-Urdu** | **Benchmark frozen; W2, W5 fixed** |
-| 6 | 17--23 Nov | 3 Language: router, validator, clarifying questions | Questions answered in console; clarifications work |
-| 7 | 24--30 Nov | 3 Language: integration, show-the-query, follow-ups | **End-to-end system complete** |
-| 8 | 1--7 Dec | 4 Forecast **with CAMS input**, validation **as agreement**, placement **with source criterion**, lowest-AQI window | C4, C7 produced; **W7, W8, W9 handled** |
-| 9 | 8--14 Dec | 5 Evaluation: **3 runs, confidence intervals**, local model + 6 Deployment and **security hardening** | Results in; URL live; **W4, W6 fixed**; security checklist passed |
-| 10 | 15--21 Dec | 7 Report **with weaknesses section**, demo; optional features if time remains | Submission; **W3, W11 handled** |
+The project was planned over ten weeks (13 October 2026 to 21 December 2026). On 28 October the submission date was brought in to **28 November 2026** --- four weeks from today --- because most of the ten-week plan is already built: Phase 0 is complete, Phases 1 and 2 are largely complete, Phase 3 is at prompt v3 and benchmark v0 with follow-ups in the app, and Phase 4 has the forecast scorecard, persistence baselines, population coverage, placement candidates and a preliminary CAMS validation. The remaining work is a final CAMS run, benchmark v1 (classmate questions and a second annotator), the forecast model, the public deploy with a security re-check, and the report and demo. Nothing in the ten-week plan has been cut; the earlier phases are already met.
 
-**Critical weeks:** week 1 (removes integration risk early), week 5 (freezing the benchmark protects the honesty of every later number) and week 7 (the system becomes one product).
+### The ten weeks as originally planned (13 Oct -- 21 Dec)
 
-**Scope cuts, decided now, in this order if behind:** (1) satellite layer, (2) non-Punjab cities (keep the 36 Punjab EPA districts), (3) shareable answer cards, (4) replay-the-worst-day mode, (5) voice input, (6) lowest-AQI window, (7) follow-up questions, (8) split-screen view, (9) Roman-Urdu test set. **Never cut:** the 3D map, time animation, the language layer, the evaluation, the show-the-query toggle, clarifying questions, station placement, **or any of the fully-solvable weakness fixes W1--W6, W10, W13.**
+| Week | Dates | Phase | Milestone | Status |
+|:--|:--|:--|:--|:--|
+| 1 | 13--19 Oct | 0 Foundations | Shell runs, keys work, emails sent | **Done** |
+| 2 | 20--26 Oct | 1 Data pipeline; AQI formula identified | Live collection running; versions pinned | **Done** |
+| 3 | 27 Oct -- 2 Nov | 1 Backfill, AQI harmonisation + 2 Twin begins | Soak passed; EPD extracted; **W1 fixed** | **Done** (W1 solved 16 Oct, confirmed at scale 24 Oct) |
+| 4 | 3--9 Nov | 2 Digital twin, 2D companion views; recruit classmates | All views live; **W10 fixed** | **Done** (2D companion, time animation and wind layer all delivered 15 Oct) |
+| 5--10 | 10 Nov -- 21 Dec | 3 Schema + benchmark; language; 4 Forecast + validation; 5 Evaluation; 6 Deployment; 7 Report | — | **Compressed into the four-week sprint below** |
 
-**Honest capacity note:** the weakness fixes add about 10 days; making cards and replay optional frees about 4. The plan remains tight --- weeks 6--9 have no slack. **Validity fixes come before every feature:** a polished demo with an unsound number fails a viva; a plain demo with sound numbers passes it.
+### Four-week sprint to submission (28 Oct -- 28 Nov)
+
+| Week | Dates | Focus | Deliverable |
+|:--|:--|:--|:--|
+| **1** | 28 Oct -- 3 Nov | Data recovery and foundation | Hybrid collector live from the laptop (28 Oct, done); supervisor meeting and R&D decision; GitHub fine-grained token and Groq key rotated; EPA permission email sent; final CAMS validation run (~29 Oct, two weeks of data available); W1 bootstrap CI; classmate question sheets handed to three classmates |
+| **2** | 4 Nov -- 10 Nov | Models and benchmark build | ERA5 + EPD daily feature table; Model A baselines (persistence + LightGBM) for Phase 4.2; second-annotator pass on benchmark v0; classmate questions collected; **IF R&D approved**: Model A neural variant on daily features; Materials-and-Methods draft (07) placeholders filled |
+| **3** | 11 Nov -- 17 Nov | Freeze and insights | Benchmark v1 frozen; one scored run with 95% CIs; results written up; W1 top-band refit as above-350 rows accumulate; security pass 2 (S1--S15); Streamlit Cloud deploy from the public repo; **IF R&D approved**: priority score, graded response, scenario calculator |
+| **4** | 18 Nov -- 24 Nov | Report and demo | Final report (plan.md is the engineering spine, proposal.md the research framing, HISTORY.md the decision log); weaknesses section with W1--W15 verdicts and R&D results; demo slides; screenshot capture; demo rehearsal |
+| **Submit** | 25 Nov -- 28 Nov | Polish and submit | Final pass; submission; viva prep |
+
+**Critical weeks:** week 1 (final CAMS run and supervisor decision gate every later choice), week 3 (freezing the benchmark protects the honesty of every reported number), and week 4 (the report either reads as one argument or it does not).
+
+**R&D extension is a conditional branch, not an additional load.** If the supervisor confirms the R&D framing, week 2 and week 3 pick up Materials-and-Methods, the neural variant and the three insight modules. If the supervisor does not, those slots fall to extra benchmark coverage, documentation polish and additional CAMS-vs-ground analysis; the base plan still completes.
+
+**Scope cuts, in this order if behind:** (1) non-Punjab cities (keep the 36 Punjab EPA districts), (2) shareable answer cards, (3) replay-the-worst-day mode, (4) split-screen view, (5) voice input, (6) local-model comparison (keep only if a hour is free), (7) satellite layer, (8) Roman-Urdu test set expansion beyond what is already in v0. **Never cut:** the 3D map, time animation, the language layer, the evaluation, the show-the-query toggle, clarifying questions, station placement, **or any of the fully-solvable weakness fixes W1--W6, W10, W13.** The follow-ups and lowest-AQI window are already shipped and stay.
+
+**Honest capacity note.** The sprint is tight. Four weeks allows the final CAMS run, Benchmark v1 with CIs, one trained forecast model (plus a neural variant conditional on R&D approval), the public deploy and the report. It does not allow a second training round if the first forecast model underperforms --- a negative result is reported honestly rather than iterated. The laptop-dependent collector means EPA data gaps during weekends away or extended laptop-off hours; those gaps are shown in the app rather than filled silently. **Validity fixes come before every feature:** a polished demo with an unsound number fails a viva; a plain demo with sound numbers passes it.
 
 ## Risk register
 
@@ -808,7 +821,7 @@ A self-review identified fifteen weaknesses. They fall into three kinds: **solva
 
 | ID | Weakness | Fix | Phase | Resolved by | Exit check |
 |:----|:-------------------------|:-------------------------------------|:------|:----------|:---------------------------|
-| W1 | Station AQI compared with CAMS concentration --- different units and formulas | **Solved 16 Oct.** The portal uses its own NEQS-anchored table with gases in µg/m³, recovered from 304 stored rows: 99.7% exact, 100% within one point (US 2012 table: 6% exact). Default scale in `aqi.py` | 0.2, 1.7 | Week 1 (planned week 3) | **Met**; top PM2.5 band to be confirmed on November data |
+| W1 | Station AQI compared with CAMS concentration --- different units and formulas | **Solved 16 Oct.** The portal uses its own NEQS-anchored table with gases in µg/m³, recovered from 304 stored rows: 99.7% exact, 100% within one point (US 2012 table: 6% exact). Default scale in `aqi.py`. **Confirmed at scale 24 Oct** (2206 station-hours / 210 h: MAE 1.7, median 0.0) | 0.2, 1.7 | Week 1 (planned week 3) | **Met**; top PM2.5 band to be confirmed on November data; one 99-point outlier still to trace |
 | W2 | Benchmark written by the same person who built the system | Classmates write half the questions blind; second annotator on 20 items; report kappa | 3.2 | Week 5 | Kappa reported; benchmark frozen |
 | W3 | Contribution mistaken for "just structured output" | Frame as scoring the visual answer; cite VayuBuddy's stated gap | 7.1 | Week 10 | Framing used in report and viva slides |
 | W4 | 60 questions is a small sample | Bootstrap 95% confidence intervals; no claims inside the noise | 5 (E1) | Week 9 | Every accuracy figure carries an interval |
