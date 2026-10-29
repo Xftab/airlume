@@ -1,16 +1,16 @@
 # Status
 
-_Last updated: 28 October 2026, 21:00 PKT_
+_Last updated: 29 October 2026, 09:00 PKT_
 
 ## Where we are
 
-**Latest — 28 Oct 2026.** Final sprint: submission 28 Nov 2026 (4 weeks). The project is largely built; the remaining work is a final CAMS validation run, Benchmark v1, the forecast model, public deploy, and the report.
+**Latest — 29 Oct 2026.** Final sprint: submission 28 Nov 2026 (4 weeks). Week 2 items 9, 10, 11 completed ahead of schedule. ERA5 + EPD feature table built (657 rows). Model A baselines: LightGBM MAE 13.9 beats persistence 14.5. Neural variant: LSTM overfits (MAE 18.1), GRU ties LightGBM (MAE 14.1) — valid negative result, tree-based wins. Materials draft at v2 with full model results. Remaining: Models B and C, Benchmark v1, insight modules, deploy, report.
 
 - **Collector architecture changed to hybrid.** The cloud EPA fetch has been silently failing from GitHub Actions since 25 Oct 11:00Z — the runs ran, reported success, and committed only the CAMS rows. From the laptop the portal responds normally (all 11 stations fresh at 20:00 PKT 28 Oct), so the laptop now owns the EPA fetch and GitHub Actions keeps CAMS. The laptop runs `collect_push.bat` hourly via Windows Task Scheduler (registered by `schedule.bat`); it writes to `data/archive/`, commits that folder only, pulls with autostash, and pushes. The two sides write to different archive files so there is no CSV merge conflict. The 25–28 Oct station-row gap is not recoverable (the portal only exposes current readings); city-level is partially recoverable from the portal's own 7-day trend.
 - **W1 at scale: 99-outlier is explained.** The five largest at-scale errors (max 99 points) are all 22–23 Oct smog peaks where the portal saturates at AQI 500 for PM2.5 > 350 and PM10 > 540, while our extrapolated top band computes 401–404. This is the top-band caveat recorded on 16 Oct — November smog has already arrived; the band needs refitting rather than extrapolating. One CO-dominant row (LHR-GT 16 Oct 15:00) is from the NEQS-anchored CO placeholder, flagged.
 - **Repo synced with GitHub** on 24 Oct (123 commits pulled); working tree clean.
 - **Known data gaps.** One archive hour is missing on the laptop, 2026-10-17T03:00:00Z (14 `city_hourly` + 8 forecast rows), held locally in `K:\airlume_stash_backup` and in a git stash, not merged. On GitHub that hour is present. About 4.5% of station-hours are missing overall in the sample before 25 Oct (single stations lagging). The 25–28 Oct station rows are a new, permanent gap caused by the Actions outage.
-- **R&D extension proposed, awaiting supervisor.** Materials-and-Methods framing plus a neural-network / deep-learning component and insight modules (priority score, graded response, scenario calculator). The 4-week plan completes without them; week 2 branches into them if the supervisor confirms. See project files 05 and 07.
+- **R&D extension confirmed (28 Oct).** Materials-and-Methods framing, neural-network variant, and insight modules (priority score, graded response, scenario calculator) are firm deliverables in weeks 2--3. See project files 05 and 07.
 
 ### Phase 0 (13 Oct)
 **Phase 0: Foundations and Access (week 1, 13–19 Oct)** — day one done. The code skeleton, registry, tests and fake-data shell exist and run.

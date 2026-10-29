@@ -1,0 +1,50 @@
+{
+  "description": "Model A neural variants for daily PM2.5 forecast, Lahore",
+  "train_period": "2020-10-17 to 2024-04-04",
+  "test_period": "2024-04-05 to 2024-08-20",
+  "architecture": "Window=7, Hidden=64, Layers=2, Dropout=0.2",
+  "training": "Adam lr=0.001, ReduceLROnPlateau patience=10, early stop patience=20, max 100 epochs",
+  "bootstrap": "2000 resamples, 7-day blocks",
+  "results": [
+    {
+      "model": "LSTM",
+      "mae": 18.1,
+      "mae_ci": [
+        16.16,
+        20.65
+      ],
+      "rmse": 21.15,
+      "rmse_ci": [
+        19.08,
+        23.68
+      ],
+      "r2": -0.0802,
+      "r2_ci": [
+        -0.6733,
+        0.1877
+      ],
+      "n_test": 131,
+      "parameters": 56897
+    },
+    {
+      "model": "GRU",
+      "mae": 14.08,
+      "mae_ci": [
+        12.05,
+        16.85
+      ],
+      "rmse": 17.63,
+      "rmse_ci": [
+        14.75,
+        20.99
+      ],
+      "r2": 0.25,
+      "r2_ci": [
+        -0.022,
+        0.3884
+      ],
+      "n_test": 131,
+      "parameters": 43201
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "description": "Model A daily PM2.5 forecast baselines for Lahore",
+  "train_period": "2020-10-17 to 2024-04-04",
+  "test_period": "2024-04-05 to 2024-08-20",
+  "target": "next-day PM2.5 concentration (ug/m3)",
+  "bootstrap": "2000 resamples, 7-day blocks",
+  "results": [
+    {
+      "model": "Persistence (lag-1)",
+      "mae": 14.55,
+      "mae_ci": [
+        12.16,
+        17.73
+      ],
+      "rmse": 19.99,
+      "rmse_ci": [
+        16.47,
+        24.1
+      ],
+      "r2": 0.0351,
+      "r2_ci": [
+        -0.3012,
+        0.2657
+      ],
+      "n_test": 131
+    },
+    {
+      "model": "LightGBM",
+      "mae": 13.95,
+      "mae_ci": [
+        12.58,
+        15.72
+      ],
+      "rmse": 17.24,
+      "rmse_ci": [
+        15.49,
+        19.32
+      ],
+      "r2": 0.2827,
+      "r2_ci": [
+        -0.0723,
+        0.4577
+      ],
+      "n_test": 131
+    }
+  ],
+  "top_features": [
+    {
+      "feature": "pm25_conc_roll7",
+      "importance": 605
+    },
+    {
+      "feature": "wind_direction_10m_dominant",
+      "importance": 597
+    },
+    {
+      "feature": "pm25_conc_lag2",
+      "importance": 574
+    },
+    {
+      "feature": "pm25_conc_lag1",
+      "importance": 568
+    },
+    {
+      "feature": "temp_range",
+      "importance": 520
+    },
+    {
+      "feature": "pm25_conc_lag3",
+      "importance": 511
+    },
+    {
+      "feature": "pm25_aqi_lag1",
+      "importance": 503
+    },
+    {
+      "feature": "wind_speed_10m_max",
+      "importance": 468
+    },
+    {
+      "feature": "day_of_year",
+      "importance": 464
+    },
+    {
+      "feature": "wind_speed_10m_mean",
+      "importance": 456
+    }
+  ]
+}
