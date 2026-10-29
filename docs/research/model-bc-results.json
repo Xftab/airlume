@@ -1,0 +1,119 @@
+{
+  "description": "Model B (CAMS bias correction) and Model C (climatology) for hourly PM2.5",
+  "paired_hours": 209,
+  "train_period": "2026-10-14 20:00:00+00:00 to 2026-10-22 07:00:00+00:00",
+  "test_period": "2026-10-22 09:00:00+00:00 to 2026-10-28 17:00:00+00:00",
+  "bootstrap": "2000 resamples, 6-hour blocks",
+  "results": [
+    {
+      "model": "Raw CAMS",
+      "mae": 80.38,
+      "mae_ci": [
+        47.79,
+        127.68
+      ],
+      "rmse": 101.56,
+      "rmse_ci": [
+        63.38,
+        146.17
+      ],
+      "r2": -1.3725,
+      "r2_ci": [
+        -4.3815,
+        -0.5938
+      ],
+      "n_test": 42
+    },
+    {
+      "model": "Model B (LightGBM correction)",
+      "mae": 37.26,
+      "mae_ci": [
+        22.51,
+        62.05
+      ],
+      "rmse": 50.98,
+      "rmse_ci": [
+        27.87,
+        76.88
+      ],
+      "r2": 0.4023,
+      "r2_ci": [
+        -0.3052,
+        0.6675
+      ],
+      "n_test": 42
+    },
+    {
+      "model": "Model C (hour climatology)",
+      "mae": 77.72,
+      "mae_ci": [
+        63.56,
+        101.55
+      ],
+      "rmse": 84.25,
+      "rmse_ci": [
+        66.61,
+        109.57
+      ],
+      "r2": -0.6327,
+      "r2_ci": [
+        -2.4695,
+        -0.182
+      ],
+      "n_test": 42
+    },
+    {
+      "model": "Persistence (lag-1h)",
+      "mae": 21.09,
+      "mae_ci": [
+        14.16,
+        28.73
+      ],
+      "rmse": 30.52,
+      "rmse_ci": [
+        19.48,
+        36.72
+      ],
+      "r2": 0.7858,
+      "r2_ci": [
+        0.4975,
+        0.9066
+      ],
+      "n_test": 42
+    }
+  ],
+  "top_features_model_b": [
+    {
+      "feature": "epa_pm25_lag1",
+      "importance": 627
+    },
+    {
+      "feature": "cams_pm25_lag1",
+      "importance": 535
+    },
+    {
+      "feature": "cams_pm25",
+      "importance": 459
+    },
+    {
+      "feature": "hour",
+      "importance": 444
+    },
+    {
+      "feature": "epa_pm25_lag3",
+      "importance": 413
+    },
+    {
+      "feature": "cams_pm10",
+      "importance": 413
+    },
+    {
+      "feature": "cams_aqi",
+      "importance": 241
+    },
+    {
+      "feature": "weekday",
+      "importance": 127
+    }
+  ]
+}

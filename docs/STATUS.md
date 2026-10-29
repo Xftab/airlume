@@ -1,10 +1,10 @@
 # Status
 
-_Last updated: 29 October 2026, 09:00 PKT_
+_Last updated: 29 October 2026, 10:55 PKT_
 
 ## Where we are
 
-**Latest — 29 Oct 2026.** Final sprint: submission 28 Nov 2026 (4 weeks). Week 2 items 9, 10, 11 completed ahead of schedule. ERA5 + EPD feature table built (657 rows). Model A baselines: LightGBM MAE 13.9 beats persistence 14.5. Neural variant: LSTM overfits (MAE 18.1), GRU ties LightGBM (MAE 14.1) — valid negative result, tree-based wins. Materials draft at v2 with full model results. Remaining: Models B and C, Benchmark v1, insight modules, deploy, report.
+**Latest — 29 Oct 2026.** All three R&D models complete. Model A (daily, ERA5+EPD): LightGBM MAE 13.9 beats persistence and neural variants. Models B and C (hourly, CAMS correction): 209 paired hours show CAMS underestimates by 48 ug/m3; LightGBM correction MAE 37.3 (54% better than raw CAMS) but persistence MAE 21.1 wins — valid negative result. Materials draft at v3. Item 10 fully done. Remaining: Benchmark v1, insight modules, deploy, report.
 
 - **Collector architecture changed to hybrid.** The cloud EPA fetch has been silently failing from GitHub Actions since 25 Oct 11:00Z — the runs ran, reported success, and committed only the CAMS rows. From the laptop the portal responds normally (all 11 stations fresh at 20:00 PKT 28 Oct), so the laptop now owns the EPA fetch and GitHub Actions keeps CAMS. The laptop runs `collect_push.bat` hourly via Windows Task Scheduler (registered by `schedule.bat`); it writes to `data/archive/`, commits that folder only, pulls with autostash, and pushes. The two sides write to different archive files so there is no CSV merge conflict. The 25–28 Oct station-row gap is not recoverable (the portal only exposes current readings); city-level is partially recoverable from the portal's own 7-day trend.
 - **W1 at scale: 99-outlier is explained.** The five largest at-scale errors (max 99 points) are all 22–23 Oct smog peaks where the portal saturates at AQI 500 for PM2.5 > 350 and PM10 > 540, while our extrapolated top band computes 401–404. This is the top-band caveat recorded on 16 Oct — November smog has already arrived; the band needs refitting rather than extrapolating. One CO-dominant row (LHR-GT 16 Oct 15:00) is from the NEQS-anchored CO placeholder, flagged.
