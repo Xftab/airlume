@@ -88,8 +88,15 @@ def test_nothing_stored_is_said_plainly():
 
 
 def test_routing_reaches_the_forecast_branch():
-    """answer() itself must dispatch on view, not only the helper."""
-    text = answer(_q(), _store(), Registry.load())
+    """answer() itself must dispatch on view, not only the helper.
+
+    `now=NOW` is passed for the same reason every other test in this file pins
+    the date: the fixture forecasts are anchored to 16 Oct, so against the wall
+    clock every forecast hour is in the past and the branch returns "no forecast
+    hours remain ahead" instead of a forecast. The test then fails for a reason
+    that has nothing to do with dispatch.
+    """
+    text = answer(_q(), _store(), Registry.load(), now=NOW)
     assert "forecasts" in text and "Worst right now" not in text
 
 

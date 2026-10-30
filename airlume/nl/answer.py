@@ -9,6 +9,7 @@ from __future__ import annotations
 import pandas as pd
 
 from airlume.aqi import band_for
+from airlume.insights.graded_response import response_for_aqi
 from airlume.nl.resolve import ResolvedQuery
 from airlume.pipeline.registry import Registry
 from airlume.pipeline.store import Store
@@ -18,6 +19,36 @@ _METRIC_NAME = {"aqi": "AQI", "pm25": "PM2.5 (ug/m3)", "pm10": "PM10 (ug/m3)"}
 
 def _fmt(v: float, metric: str) -> str:
     return f"{v:.0f}" if metric == "aqi" else f"{v:.1f}"
+
+
+def _advice(q: ResolvedQuery, aqi: float | None, where: str | None = None) -> str:
+    """The published advisory for a current AQI reading, or "" when none applies.
+
+    Added 30 Oct 2026. The classmate questions showed about one in five asks what
+    to *do* at the current level -- mask, walk, children outside -- and prompt v3
+    refused every one of them. Prompt v4 accepts them as the ordinary
+    current-reading form and the guidance is attached here rather than by the
+    model: the wording comes from `insights.graded_response`, which carries the
+    Punjab Smog Policy 2023 and WHO bands verbatim, so the sentence is still
+    written by code from a number (design rule 2).
+
+    Deliberately narrow:
+
+    * Only on a current reading. An advisory about a window that has already
+      closed would be telling someone what they should have done.
+    * Only for AQI; a raw PM2.5 figure has no band to advise on.
+    * Never on a forecast. `_forecast_answer` keeps "a prediction, never advice",
+      which is the older rule and still the right one.
+    * `where` names which reading the advice belongs to, because a city-wide
+      answer quotes its worst station and the advice follows that station rather
+      than the city as a whole.
+    """
+    if q.aggregation != "latest" or q.metric != "aqi" or aqi is None or pd.isna(aqi):
+        return ""
+    r = response_for_aqi(int(round(float(aqi))))
+    if r is None:
+        return ""
+    return f" Advice for {where}: {r.outdoor_activity}" if where else f" Advice: {r.outdoor_activity}"
 
 
 _FC_SOURCES = (("punjab_epa_forecast", "EPA Punjab"), ("open_meteo_cams_forecast", "CAMS model"))
@@ -95,10 +126,21 @@ def _forecast_answer(q: ResolvedQuery, store: Store, reg: Registry,
     return lead + " ".join(parts)
 
 
-def answer(q: ResolvedQuery, store: Store, reg: Registry) -> str:
+def answer(q: ResolvedQuery, store: Store, reg: Registry,
+           now: pd.Timestamp | None = None) -> str:
+    """`now` overrides the clock, and exists so a test can be deterministic.
+
+    Added 30 Oct 2026. `_forecast_answer` already took `now`, but `answer` did
+    not pass one through, so the single test that checked the dispatch had to
+    run against the wall clock while every other test in that file pinned the
+    date. Its fixture forecasts are anchored to 16 Oct, so the test passed when
+    it was written and has failed every day since those hours fell into the
+    past -- a red suite that says nothing about the code. Production callers
+    leave this None and get the real clock.
+    """
     city = reg.city(q.city_id)
     if q.view == "forecast":
-        return _forecast_answer(q, store, reg)
+        return _forecast_answer(q, store, reg, now)
     if q.city_id != "PB-LHE" or q.view == "city_overview" or q.compare_city_id:
         cf = store.latest_city_values().dropna(subset=[q.metric])
         if cf.empty:
@@ -122,7 +164,8 @@ def answer(q: ResolvedQuery, store: Store, reg: Registry) -> str:
         word = "cleanest" if q.aggregation == "min" else "worst"
         return (f"{names[r.city_id]} has the {word} air right now "
                 f"({_METRIC_NAME[q.metric]} {_fmt(float(r[q.metric]), q.metric)}, "
-                f"{band_for(int(r.aqi)).label.lower()}).{own}")
+                f"{band_for(int(r.aqi)).label.lower()}).{own}"
+                + _advice(q, r.aqi, names[r.city_id]))
 
     stations = reg.stations_in(q.city_id)
     ids = [q.station_id] if q.station_id else [s.station_id for s in stations]
@@ -166,11 +209,13 @@ def answer(q: ResolvedQuery, store: Store, reg: Registry) -> str:
         v = float(df[col].iloc[0])
         tail = f" ({band_for(int(v)).label.lower()})" if q.metric == "aqi" else ""
         when = "right now" if q.aggregation == "latest" else f"{q.aggregation}, {window}"
-        return f"{name_of[q.station_id]}: {_METRIC_NAME[q.metric]} {_fmt(v, q.metric)}{tail}, {when}."
+        return (f"{name_of[q.station_id]}: {_METRIC_NAME[q.metric]} {_fmt(v, q.metric)}{tail}, {when}."
+                + _advice(q, v, name_of[q.station_id]))
     worst = df.sort_values(col, ascending=False).iloc[0]
     best = df.sort_values(col).iloc[0]
     when = "right now" if q.aggregation == "latest" else f"({q.aggregation}, {window})"
     missing = len(ids) - len(df)
     miss = f" {missing} station(s) have no data." if missing else ""
     return (f"Worst {when}: {name_of[worst.station_id]} at {_fmt(float(worst[col]), q.metric)}; "
-            f"cleanest: {name_of[best.station_id]} at {_fmt(float(best[col]), q.metric)}.{miss}")
+            f"cleanest: {name_of[best.station_id]} at {_fmt(float(best[col]), q.metric)}.{miss}"
+            + _advice(q, worst[col], name_of[worst.station_id]))

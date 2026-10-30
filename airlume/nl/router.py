@@ -51,8 +51,9 @@ Fields
 - `compare_to`: "yesterday", "last_week", "last_year" when the question compares with an earlier time (better/worse than, improved since, kal se); "other_city" with `other_city` when two cities are compared or shown side by side (`city` is the first one); else "none".
 - `view`: "compare" whenever compare_to is not "none"; "forecast" for tomorrow, tonight, this evening, later today, will it be safe; "timeline" for trends, hour-of-day patterns, last N days; "city_overview" for a non-Lahore city or questions across cities/districts; "stations_3d" for Lahore station questions.
 - `camera`: "station" when one station or area is asked about; "zoomed_out" whenever the question ranks or spans cities or districts (Pakistan, Punjab, "which city"); "north" if asked to look from the north; else "overview".
-- `in_scope`: false if the question is not about air quality in these places, asks why/for causes/advice rather than data, or is only thanks/greeting/small talk ("thanks, that's all").
-- `clarify`: one short question back when the request cannot be filled (no place and no time, e.g. "is it bad?", "how many hours?"); otherwise null.
+- `in_scope`: false if the question is not about air quality in these places (weather, rain, sunrise), asks why/for causes, asks about a person's own body (symptoms, diagnosis, treatment, "is my throat sore because of smog"), asks about a place with no monitor ("my village"), asks for a forecast further ahead than the next 48 hours ("next week", a date months away), or is only thanks/greeting/small talk ("thanks, that's all").
+- Asking what to DO at the current level IS in scope: "should I wear a mask", "is it safe to go outside", "can the children play outside", "mujhe walk pr jana chahiye?". Fill the ordinary current-reading form for the place asked about (time now, aggregation latest) and let code attach the published advisory for that band. Only a question about one person's own body is out of scope.
+- `clarify`: one short question back when the request cannot be filled (no place and no time, e.g. "is it bad?", "how many hours?", "AQI around my home?"); otherwise null.
 
 Follow-ups
 - When a "previous form" is supplied, assume the new message continues it unless it clearly names a different place or topic. Short messages like "and yesterday?", "over the last 7 days?", "show PM10 instead", "only Safari Park", "add Multan", "look from the north", "how far is that station?" are continuations: set `context_ref` true, start from the previous form (keep its city, area, compare_to and so on) and change only what the message changes.
@@ -63,6 +64,11 @@ Examples
 - "Is Multan's air better than yesterday?" -> city Multan, time now, compare_to yesterday, view compare.
 - "Which is cleaner this month, Multan or Bahawalpur?" -> city Multan, other_city Bahawalpur, compare_to other_city, time this_month, aggregation mean, view compare.
 - "How many unhealthy hours in Kahna Nau yesterday?" -> area "Kahna Nau", time yesterday, aggregation count_hours_above, threshold 200.
+- "Should I wear a mask today?" -> in_scope true, city Lahore, time now, aggregation latest, view stations_3d, camera overview (code adds the advisory).
+- "Kiya mujhe walk pr jana chahiye aj?" -> same form: in_scope true, time now, aggregation latest.
+- "Smog ki wajah se mera gala kharab hua hai?" -> in_scope false (a question about one person's body).
+- "Next week me kitni smog ho gi?" -> in_scope false (further ahead than 48 hours).
+- "Raat ko smog kam ho jati hai?" -> time last_7_days, aggregation mean, view timeline (an hour-of-day pattern).
 - Roman Urdu is fine: "aaj Gulberg ki hawa kaisi hai" = how is the air in Gulberg today.
 """
 
