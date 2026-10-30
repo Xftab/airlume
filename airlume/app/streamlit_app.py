@@ -32,6 +32,13 @@ from airlume.nl.resolve import ResolveError, resolve  # noqa: E402
 from airlume.nl.schema import ViewIntent  # noqa: E402
 from airlume.forecast.skill import SOURCE_LABELS, by_horizon, scorecard  # noqa: E402
 from airlume.forecast.window import describe, lowest_window  # noqa: E402
+from airlume.insights.graded_response import full_advisory, response_for_band  # noqa: E402
+from airlume.insights.priority import score_all_stations  # noqa: E402
+from airlume.insights.scenario import (  # noqa: E402
+    LAHORE_ZONES,
+    SmogGunAssumptions,
+    calculate_coverage,
+)
 from airlume.pipeline import archive, quality  # noqa: E402
 from airlume.pipeline.fake import fake_city_hourly, fake_readings  # noqa: E402
 from airlume.pipeline.registry import Registry  # noqa: E402
@@ -339,6 +346,176 @@ with right:
         stale = sf[sf["stale"]]["name"].tolist()
         if stale:
             st.caption("No recent data: " + ", ".join(stale))
+
+# ---------------------------------------------------------------- priority and response
+st.divider()
+st.subheader("Priority and response")
+st.caption(
+    "Which stations deserve attention first, what the current band means for the people "
+    "living around it, and the arithmetic behind one commonly proposed intervention. Every "
+    "number and every sentence below is computed by code from the stored readings; none of "
+    "it is written by the language model (design rule 2).")
+
+SEVERITY_COLOUR = {
+    "Critical": "#8B3A62", "High": "#E0736A", "Elevated": "#E8A33D",
+    "Moderate": "#C7D66D", "Low": "#7FB069", "Unknown": "#4A5563",
+}
+
+tab_pri, tab_resp, tab_scn = st.tabs(
+    ["Station priority", "Health response", "Scenario calculator"])
+
+with tab_pri:
+    PRI_WINDOWS = {"Last 24 hours": 1, "Last 7 days": 7, "Last 30 days": 30}
+    pri_span = st.radio("Window", list(PRI_WINDOWS), index=1, horizontal=True, key="pri_span")
+    pri_end = datetime.now(timezone.utc)
+    pri_start = pri_end - timedelta(days=PRI_WINDOWS[pri_span])
+    all_scores = score_all_stations(store, reg, "PB-LHE", pri_start, pri_end)
+    scored = [p for p in all_scores if p.total_hours_present > 0]
+    if not scored:
+        st.caption(
+            f"No hourly readings stored for the {pri_span.lower()}, so no station can be "
+            "scored. The archive grows by one round an hour.")
+    else:
+        st.success(scored[0].sentence())
+        rows = pd.DataFrame([{
+            "station": p.entity_name,
+            "score": p.score,
+            "severity": p.severity_label,
+            "streak_h": p.longest_bad_run_hours,
+            "trend_per_day": None if p.trend_aqi_per_day is None else round(p.trend_aqi_per_day, 1),
+            "hours": p.total_hours_present,
+            "confidence": p.data_confidence,
+            "colour": SEVERITY_COLOUR.get(p.severity_label, "#4A5563"),
+        } for p in scored])
+        pc1, pc2 = st.columns([1.6, 1])
+        with pc1:
+            st.altair_chart(
+                alt.Chart(rows).mark_bar().encode(
+                    y=alt.Y("station:N", sort="-x", title=None),
+                    x=alt.X("score:Q", title="priority score", scale=alt.Scale(domain=[0, 100])),
+                    color=alt.Color("colour:N", scale=None, legend=None),
+                    tooltip=[
+                        alt.Tooltip("station:N"),
+                        alt.Tooltip("score:Q", title="score", format=".0f"),
+                        alt.Tooltip("severity:N"),
+                        alt.Tooltip("streak_h:Q", title="worst streak (h)"),
+                        alt.Tooltip("trend_per_day:Q", title="trend (AQI/day)", format="+.1f"),
+                    ],
+                ).properties(height=max(220, 28 * len(rows))), width="stretch")
+        with pc2:
+            show = rows.drop(columns=["colour"]).rename(columns={
+                "streak_h": "worst streak (h)", "trend_per_day": "trend (AQI/day)",
+                "hours": "hours present", "confidence": "data confidence"})
+            show["data confidence"] = (show["data confidence"] * 100).round(0).astype(int).astype(str) + "%"
+            st.dataframe(show, hide_index=True, width="stretch")
+        provisional = [p.entity_name for p in scored if p.data_confidence < 0.5]
+        if provisional:
+            st.warning(
+                "Scored on fewer than half the expected hours, so these are provisional: "
+                + ", ".join(provisional))
+        silent = [p.entity_name for p in all_scores if p.total_hours_present == 0]
+        if silent:
+            st.caption("No readings at all in this window: " + ", ".join(silent))
+        st.caption(
+            "Score 0-100 = 50% band severity (share of hours, weighted by how bad each band is) "
+            "+ 30% persistence (longest unbroken run at AQI 151 or above; 48 h scores full marks) "
+            "+ 20% trend (slope of AQI across the window; +20 a day scores full marks). "
+            "Labels: Critical 70+, High 50-69, Elevated 30-49, Moderate 15-29, Low below 15. "
+            "**A ranking of the hours actually measured, not a verdict on any neighbourhood** - "
+            "a station that reported little scores low because it has less evidence against it, "
+            "which is why the data-confidence column sits beside the score.")
+
+with tab_resp:
+    resp_frame = station_frame("PB-LHE").dropna(subset=["aqi"])
+    if resp_frame.empty:
+        st.caption("No station is reporting a current AQI, so no advisory can be shown.")
+    else:
+        picked = pd.DataFrame()
+        if resolved is not None and resolved.station_id:
+            picked = resp_frame[resp_frame["station_id"] == resolved.station_id]
+        if picked.empty:
+            picked = resp_frame.nlargest(1, "aqi")
+            pick_note = "Showing the worst-reporting station in Lahore right now."
+        else:
+            pick_note = "Showing the station your question resolved to."
+        cur_aqi = int(picked["aqi"].iloc[0])
+        cur_name = str(picked["name"].iloc[0])
+        adv = full_advisory(cur_aqi, cur_name)
+        st.caption(pick_note)
+        rc1, rc2 = st.columns([1, 2.4])
+        with rc1:
+            # No raw HTML here: the band colour is carried by the map and the
+            # ranked bars, and plan 5.2 keeps unsafe_allow_html out of the app.
+            st.metric(cur_name, f"AQI {cur_aqi}", adv["band"], delta_color="off")
+        with rc2:
+            st.markdown(f"**Health advisory.** {adv['health_advisory']}")
+            st.markdown(f"**Sensitive groups.** {adv['vulnerable_groups']}")
+            st.markdown(f"**Outdoor activity.** {adv['outdoor_activity']}")
+            st.markdown(f"**Schools.** {adv['school_guidance']}")
+            st.markdown(f"**Government action.** {adv['government_action']}")
+        with st.expander("The whole graded-response table (all seven bands)"):
+            table = pd.DataFrame([{
+                "band": b.label,
+                "AQI": f"{b.lo}-{b.hi}",
+                "health advisory": r.health_advisory,
+                "sensitive groups": r.vulnerable_groups,
+                "outdoor activity": r.outdoor_activity,
+                "schools": r.school_guidance,
+                "government action": r.government_action,
+            } for b in PUNJAB_BANDS if (r := response_for_band(b.label)) is not None])
+            st.dataframe(table, hide_index=True, width="stretch")
+        st.caption(
+            "Compiled from the Punjab Smog Policy 2023, the National Environmental Quality "
+            "Standards, the WHO Air Quality Guidelines 2021 and the Lahore Smog Commission "
+            "recommendations 2023-2024. **General public-health guidance tied to a band, not "
+            "medical advice**, and not an instruction from any authority. The government-action "
+            "column records what those documents recommend at each level; it is not a claim "
+            "about what is being done.")
+
+with tab_scn:
+    st.caption(
+        "How many anti-smog guns it would take to cover an area, under assumptions you set. "
+        "**This is arithmetic about coverage, not a prediction that the air would improve.** "
+        "Published work on anti-smog guns in Delhi generally finds limited local effect "
+        "(Gupta et al. 2022). Airlume does not model the effect and does not claim one.")
+    zone_names = list(LAHORE_ZONES)
+    sc1, sc2 = st.columns(2)
+    with sc1:
+        zone = st.selectbox("Area", zone_names + ["Custom area"],
+                            index=zone_names.index("Gulberg"), key="scn_zone")
+    with sc2:
+        if zone == "Custom area":
+            area_sqkm = st.number_input("Area (sq km)", min_value=0.1, max_value=5000.0,
+                                        value=10.0, step=0.5, key="scn_area")
+            area_label = "the selected area"
+        else:
+            area_sqkm = LAHORE_ZONES[zone]
+            area_label = zone
+            st.metric("Area", f"{area_sqkm:,.1f} sq km")
+    with st.expander("Assumptions - change these; the defaults are placeholders"):
+        a1, a2, a3 = st.columns(3)
+        radius = a1.number_input("Spray radius (m)", 5.0, 500.0, 50.0, 5.0, key="scn_radius")
+        overlap = a2.slider("Usable area after overlap", 0.1, 1.0, 0.7, 0.05, key="scn_overlap")
+        cost = a3.number_input("Cost per unit (PKR)", 0.0, 1e9, 2_500_000.0, 100_000.0, key="scn_cost")
+        a4, a5 = st.columns(2)
+        water = a4.number_input("Water (litres per hour per unit)", 0.0, 10_000.0, 100.0, 10.0, key="scn_water")
+        op_hours = a5.number_input("Operating hours per day", 0.0, 24.0, 8.0, 1.0, key="scn_hours")
+    assumptions = SmogGunAssumptions(
+        spray_radius_m=radius, overlap_factor=overlap, cost_per_unit_pkr=cost,
+        water_litres_per_hour=water, operating_hours_per_day=op_hours)
+    scn = calculate_coverage(area_label, float(area_sqkm), assumptions)
+    m1, m2, m3 = st.columns(3)
+    m1.metric("Units needed", f"{scn.guns_needed:,}")
+    m2.metric("Estimated cost", f"PKR {scn.total_cost_pkr / 1e6:,.0f} M")
+    m3.metric("Water per day", f"{scn.daily_water_litres / 1000:,.0f} m3")
+    st.info(scn.sentence())
+    st.caption(
+        f"Each unit is taken to cover pi x {radius:.0f} m squared x {overlap:.0%} usable = "
+        f"{assumptions.effective_area_per_gun_sqm:,.0f} sq m, and the area is divided by that. "
+        "Cost is a placeholder from Lahore WASA procurement 2023; radius and water use are "
+        "manufacturer figures; zone areas are approximate, from Lahore Development Authority "
+        "zoning. Change any assumption above and the arithmetic follows it. "
+        "**No effectiveness is modelled or implied.**")
 
 # ---------------------------------------------------------------- history
 st.divider()

@@ -185,6 +185,19 @@ def _composite_score(band_shares: list[BandShare],
     return score, label
 
 
+def _metric_column(series: pd.DataFrame) -> pd.Series:
+    """The AQI column, whatever the caller named it.
+
+    Store.station_series() labels the metric column "value"; a frame built by
+    hand usually calls it "aqi". Accept either, so a store-backed score is not
+    silently computed over an empty series.
+    """
+    for col in ("aqi", "value"):
+        if col in series.columns:
+            return series[col]
+    return pd.Series(dtype=float)
+
+
 def score_station(
     station_id: str,
     station_name: str,
@@ -192,16 +205,17 @@ def score_station(
     start: datetime,
     end: datetime,
 ) -> PriorityScore:
-    """Score one station from its readings DataFrame (must have ts, aqi columns)."""
+    """Score one station from its readings DataFrame (needs ts and aqi/value columns)."""
     expected = max(int((end - start).total_seconds() // 3600), 1)
     present = len(series)
     confidence = min(present / expected, 1.0)
 
-    band_shares = _band_distribution(series["aqi"] if "aqi" in series.columns else pd.Series(dtype=float))
-    bad_run = _longest_bad_run(series["aqi"] if "aqi" in series.columns else pd.Series(dtype=float))
+    aqi_col = _metric_column(series)
+    band_shares = _band_distribution(aqi_col)
+    bad_run = _longest_bad_run(aqi_col)
     trend = _trend_slope(
         series["ts"] if "ts" in series.columns else pd.Series(dtype="datetime64[ns]"),
-        series["aqi"] if "aqi" in series.columns else pd.Series(dtype=float),
+        aqi_col,
     )
 
     score, label = _composite_score(band_shares, bad_run, trend, present)
