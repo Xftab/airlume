@@ -18,33 +18,37 @@ published on 13 Oct and pinned in our tests is reproduced exactly.
 
 ## Confirmed at scale (24 October 2026)
 
-Re-running `scripts\w1_check.py` against the full archive --- **2206 station-hours over 210
-consecutive hours**, up from the 304 rows and 30 hours the table was fitted on --- the latest-hour
-`pk_portal` AQI still reproduces the portal's published value almost exactly:
+Re-running against the full archive --- **2217 station-hours over 211
+hours**, up from the 304 rows and 30 hours the table was fitted on --- the latest-hour
+`pk_portal` AQI still reproduces the portal's published value almost exactly.
 
-| Averaging window | Mean abs error | Median | Max | n |
-|---|---|---|---|---|
-| **1 hour (latest reading)** | **1.7** | **0.0** | 99 | 2206 |
-| 8-hour trailing mean | 45.1 | — | — | 2206 |
-| 24-hour trailing mean | 54.7 | — | — | 2206 |
+### At-scale table with 95% bootstrap CIs (28 Oct 2026)
 
-The latest-hour window still wins by a wide margin. The dominant-pollutant mix has broadened to
+Method: moving-block bootstrap, 6-hour blocks, 5000 resamples.
+
+| Subset           | MAE [95% CI]      | Median | Max [95% CI]       | n    |
+|------------------|--------------------|--------|--------------------|------|
+| **All rows**     | **3.74 [2.01, 5.78]** | **0.0** | 1323 [220, 1323] | 2217 |
+| Portal AQI < 500 | 0.31              | 0.0    | 79                 | 2126 |
+| Portal AQI = 500 | 83.93             | 63.0   | 1323               | 91   |
+
+Below the portal's 500 cap the formula is essentially exact (MAE 0.31). **All significant error
+is top-band saturation**: 91 readings where the portal displays 500 and the linear extrapolation
+of the top breakpoint band continues beyond it. The dominant-pollutant mix has broadened to
 **PM2.5 71%, PM10 24%, O₃ 4%, NO₂ 1%** (against 93% PM2.5 on the first 30 hours) as the archive came
 to span more of the day and more weather, so the 16 Oct fit is not an artefact of a short,
 PM2.5-dominated sample.
 
-**The 99-point outlier is top-band saturation (closed 28 Oct 2026).** Re-run against the archive on
-GitHub, the five largest errors are all **22--23 October smog peaks where the portal saturates at
-AQI 500** --- PM2.5 above 350 ug/m3 and PM10 above 540 --- while the extrapolated top band computes
-401--404. Four of the five are PM-dominated; one row at `LHR-GT 2026-10-16 15:00` is marked
-CO-dominant by the portal and our CO band is a NEQS-anchored placeholder, so the 96-point error
-there is from the placeholder rather than the data. This exercises the caveat recorded on 16 Oct
-("PM2.5 above 350 and PM10 above 550 are extrapolated"): November smog has already arrived, so the
-top band now needs **refitting**, not extrapolating. The open work is a top-band refit once more
-above-350 rows accumulate, and a proper CO band if CO ever dominates again.
+**Top-band saturation (updated 28 Oct 2026).** The 91 portal-500 rows are all from the 16--28 Oct
+smog period. The worst case (error 1323) is LHR-SHD 2026-10-18T05:00Z with PM10 = 1985 µg/m³ ---
+likely a sensor spike --- where the PM10 top band (550.1--650 → AQI 401--500) extrapolates to
+AQI ~1823. The top 12 errors are all driven by PM10 > 650 µg/m³ at Multan Road, Shahdara,
+Safari Park, and Kahna Nau during nighttime smog peaks. This makes the top-band refit (Week 2)
+urgent. Options: (1) cap computed AQI at 500 to match portal; (2) refit with a nonlinear curve;
+(3) let the neural variant learn the saturation directly.
 
-**One open item: no confidence interval on the at-scale error yet.** A moving-block bootstrap over
-hours (as used for the CAMS validation) is the next step.
+**Confidence interval is now closed.** The CI on the overall MAE (2.01 to 5.78) is wide because
+the bootstrap sometimes draws a sample heavy on portal-500 rows and sometimes misses them.
 
 ## The table
 

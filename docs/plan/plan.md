@@ -3,7 +3,7 @@ title: "Airlume: Complete Project Plan"
 subtitle: "A Conversational 3D Digital Twin of Air Quality in Pakistan's Monitored Cities --- Problem, Product, Resources and Phased Build Plan"
 author:
   - "Aftab Ahmad, Kiran Saif and Tehreem Fatima"
-date: "13 October 2026 (revision 4, updated 28 October 2026: four-week sprint to 28 November)"
+date: "13 October 2026 (revision 5, updated 29 October 2026: R&D confirmed, sprint conditionals removed)"
 ---
 
 # Part A --- The Project
@@ -778,19 +778,19 @@ The project was planned over ten weeks (13 October 2026 to 21 December 2026). On
 
 | Week | Dates | Focus | Deliverable |
 |:--|:--|:--|:--|
-| **1** | 28 Oct -- 3 Nov | Data recovery and foundation | Hybrid collector live from the laptop (28 Oct, done); supervisor meeting and R&D decision; GitHub fine-grained token and Groq key rotated; EPA permission email sent; final CAMS validation run (~29 Oct, two weeks of data available); W1 bootstrap CI; classmate question sheets handed to three classmates |
-| **2** | 4 Nov -- 10 Nov | Models and benchmark build | ERA5 + EPD daily feature table; Model A baselines (persistence + LightGBM) for Phase 4.2; second-annotator pass on benchmark v0; classmate questions collected; **IF R&D approved**: Model A neural variant on daily features; Materials-and-Methods draft (07) placeholders filled |
-| **3** | 11 Nov -- 17 Nov | Freeze and insights | Benchmark v1 frozen; one scored run with 95% CIs; results written up; W1 top-band refit as above-350 rows accumulate; security pass 2 (S1--S15); Streamlit Cloud deploy from the public repo; **IF R&D approved**: priority score, graded response, scenario calculator |
+| **1** | 28 Oct -- 3 Nov | Data recovery and foundation | Hybrid collector live from the laptop (28 Oct, done); R&D confirmed (28 Oct, done); CAMS validation final run (29 Oct, done); W1 bootstrap CI (29 Oct, done); Materials draft v1 (29 Oct, done); GitHub fine-grained token and Groq key rotated; EPA permission email sent; classmate question sheets handed to three classmates |
+| **2** | 4 Nov -- 10 Nov | Models and benchmark build | ERA5 + EPD daily feature table; Model A baselines (persistence + LightGBM) for Phase 4.2; second-annotator pass on benchmark v0; classmate questions collected; Model A neural variant on daily features; Materials-and-Methods draft (07) placeholders filled |
+| **3** | 11 Nov -- 17 Nov | Freeze and insights | Benchmark v1 frozen; one scored run with 95% CIs; results written up; W1 top-band refit as above-350 rows accumulate; security pass 2 (S1--S15); Streamlit Cloud deploy from the public repo; priority score, graded response, scenario calculator |
 | **4** | 18 Nov -- 24 Nov | Report and demo | Final report (plan.md is the engineering spine, proposal.md the research framing, HISTORY.md the decision log); weaknesses section with W1--W15 verdicts and R&D results; demo slides; screenshot capture; demo rehearsal |
 | **Submit** | 25 Nov -- 28 Nov | Polish and submit | Final pass; submission; viva prep |
 
-**Critical weeks:** week 1 (final CAMS run and supervisor decision gate every later choice), week 3 (freezing the benchmark protects the honesty of every reported number), and week 4 (the report either reads as one argument or it does not).
+**Critical weeks:** week 1 (final CAMS run and foundation), week 3 (freezing the benchmark protects the honesty of every reported number), and week 4 (the report either reads as one argument or it does not).
 
-**R&D extension is a conditional branch, not an additional load.** If the supervisor confirms the R&D framing, week 2 and week 3 pick up Materials-and-Methods, the neural variant and the three insight modules. If the supervisor does not, those slots fall to extra benchmark coverage, documentation polish and additional CAMS-vs-ground analysis; the base plan still completes.
+**R&D extension confirmed (28 Oct 2026).** The neural variant, Materials-and-Methods draft, priority score, graded response and scenario calculator are firm deliverables in weeks 2--3, not conditional on further approval.
 
 **Scope cuts, in this order if behind:** (1) non-Punjab cities (keep the 36 Punjab EPA districts), (2) shareable answer cards, (3) replay-the-worst-day mode, (4) split-screen view, (5) voice input, (6) local-model comparison (keep only if a hour is free), (7) satellite layer, (8) Roman-Urdu test set expansion beyond what is already in v0. **Never cut:** the 3D map, time animation, the language layer, the evaluation, the show-the-query toggle, clarifying questions, station placement, **or any of the fully-solvable weakness fixes W1--W6, W10, W13.** The follow-ups and lowest-AQI window are already shipped and stay.
 
-**Honest capacity note.** The sprint is tight. Four weeks allows the final CAMS run, Benchmark v1 with CIs, one trained forecast model (plus a neural variant conditional on R&D approval), the public deploy and the report. It does not allow a second training round if the first forecast model underperforms --- a negative result is reported honestly rather than iterated. The laptop-dependent collector means EPA data gaps during weekends away or extended laptop-off hours; those gaps are shown in the app rather than filled silently. **Validity fixes come before every feature:** a polished demo with an unsound number fails a viva; a plain demo with sound numbers passes it.
+**Honest capacity note.** The sprint is tight. Four weeks allows the final CAMS run, Benchmark v1 with CIs, one trained forecast model with a neural variant, the R&D insight modules (priority score, graded response, scenario calculator), the public deploy and the report. It does not allow a second training round if the first forecast model underperforms --- a negative result is reported honestly rather than iterated. The laptop-dependent collector means EPA data gaps during weekends away or extended laptop-off hours; those gaps are shown in the app rather than filled silently. **Validity fixes come before every feature:** a polished demo with an unsound number fails a viva; a plain demo with sound numbers passes it.
 
 ## Risk register
 

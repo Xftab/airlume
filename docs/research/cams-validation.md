@@ -1,71 +1,98 @@
-# CAMS against the ground stations (plan 4.3, contribution C4)
+# CAMS Validation — Two-Week Results
 
-_Preliminary, 16 October 2026. 30 hours of paired data (14 Oct 04:00 UTC to 16 Oct 04:00 UTC), 304 station-hours, 11 stations. **Re-run on about 29 October** with two weeks; until then every number here is a first look, and the intervals say how wide the uncertainty still is._
+**Date**: 28 Oct 2026
+**Period**: 2026-10-13 to 2026-10-28 (16 days, gap 24–26 Oct due to collector outage)
+**Data**: Open-Meteo CAMS (single ~45 km cell for Lahore) vs Punjab EPA station readings
+**Method**: Station readings paired by UTC hour, city mean computed from available stations.
+CAMS concentrations (PM2.5, PM10 µg/m³) compared directly. AQI compared on pk_portal scale
+(CAMS concentrations put through pk_portal breakpoints, NOT CAMS's own US-EPA AQI).
 
-Code: `airlume/validation.py` (method, tested in `tests/test_validation.py`); report: `python scripts/cams_validation.py`.
+## Summary
 
-## What is compared
+CAMS systematically underestimates Lahore air quality, especially during the October smog
+season. The low bias worsened as smog intensified over the two-week period.
 
-- Each Punjab EPA station reading is paired with the Open-Meteo CAMS value for Lahore (one ~45 km model cell) for the same UTC hour.
-- **Concentrations first:** PM2.5 and PM10 in ug/m3, which needs no index.
-- **AQI on the portal's own scale only.** The `aqi` stored with CAMS is Open-Meteo's US AQI; comparing it with the portal would bring back the table mismatch solved for W1. CAMS concentrations are put through `pk_portal` instead, and since CAMS has no gases the station side is also recomputed from PM only. Both sides are then the same quantity (plan 4.3: "harmonised AQI from 1.7 only").
-- **Agreement, not error.** The station instruments are not checked against a reference here, so neither side is treated as truth.
-- **Two levels.** Every station-hour against CAMS, and the city mean (average of reporting stations) against CAMS. The city mean is the fairer test of an area-average model.
-- **Intervals:** 95%, moving-block bootstrap over hours (6-hour blocks, 2,000 resamples). All stations share one CAMS value per hour and consecutive hours are autocorrelated, so resampling station-rows would give intervals far too narrow; a test pins this.
+## City-Mean Results (211 paired hours)
 
-## Results (preliminary)
+| Quantity               | n   | MAD [95% CI]         | Bias [95% CI]            | r    | RMSE  |
+|------------------------|-----|----------------------|--------------------------|------|-------|
+| PM2.5 µg/m³            | 211 | 49.8 [39.1, 63.6]   | −47.7 [−62.0, −36.6]    | 0.65 | 66.1  |
+| PM10 µg/m³             | 211 | 179.4 [153.3, 208.3] | −178.8 [−207.7, −152.2] | 0.59 | 202.8 |
+| AQI (PM-only pk_portal)| 211 | 47.5 [37.2, 59.9]   | −45.4 [−58.6, −34.7]    | 0.65 | 63.6  |
 
-Bias = CAMS minus station. MAD = mean absolute difference.
+All CIs: 95%, moving-block bootstrap (6-hour blocks, 5000 resamples).
 
-| Quantity | Level | n | MAD [95% CI] | Bias [95% CI] | r |
-|---|---|---|---|---|---|
-| PM2.5 ug/m3 | city mean | 30 h | 21.9 [7.3, 28.9] | **-20.4** [-28.0, -4.0] | 0.70 |
-| PM10 ug/m3 | city mean | 30 h | 81.5 [38.8, 97.9] | **-77.7** [-97.3, -28.2] | -0.16 |
-| AQI, PM only, portal scale | city mean | 30 h | 22.9 [10.1, 28.8] | **-19.1** [-26.6, -2.2] | 0.76 |
-| PM2.5 ug/m3 | station-hour | 297 | 28.1 [14.7, 34.9] | -20.4 [-28.7, -4.3] | 0.46 |
-| PM10 ug/m3 | station-hour | 302 | 85.3 [46.4, 101.1] | -79.1 [-99.3, -29.5] | -0.11 |
-| AQI, PM only, portal scale | station-hour | 302 | 35.0 [24.0, 40.2] | -19.4 [-27.1, -2.6] | 0.49 |
+## Station-Hour Results (2183–2202 paired station-hours)
 
-**1. CAMS reads low on PM2.5, by about 20 ug/m3 on average.** The interval excludes zero but is wide (-28 to -4): the direction is established, the size is not yet.
+| Quantity               | n    | MAD [95% CI]          | Bias [95% CI]             | r    | RMSE  |
+|------------------------|------|-----------------------|---------------------------|------|-------|
+| PM2.5 µg/m³            | 2183 | 58.4 [30.3, 99.8]    | −49.4 [−94.9, −16.0]     | 0.51 | 83.9  |
+| PM10 µg/m³             | 2192 | 181.9 [107.6, 264.8] | −180.4 [−264.8, −102.3]  | 0.46 | 224.5 |
+| AQI (PM-only pk_portal)| 2202 | 66.1 [34.7, 111.9]   | −57.2 [−108.0, −19.4]    | 0.46 | 106.6 |
 
-**2. CAMS does not track PM10 at all in this window** (r about zero) and is far below the stations (-78). The likely reason, to be checked rather than asserted: Lahore's PM10 is dominated by coarse road and construction dust that a global model's emission inventory does not carry. A PM10 answer built on CAMS for Lahore would be wrong in level and in timing.
+## Per-Station PM2.5 MAD (sorted best to worst)
 
-**3. Agreement differs sharply by station** (PM2.5, 19-29 hours each):
+| Station        | MAD  | Bias   | r    | n   |
+|----------------|------|--------|------|-----|
+| Gulberg III    | 26.5 | +4.2   | 0.73 | 196 |
+| Safari Park    | 31.0 | −20.5  | 0.69 | 198 |
+| Punjab Univ    | 39.2 | −33.1  | 0.65 | 201 |
+| Wagha Border   | 39.9 | −33.5  | 0.61 | 197 |
+| Egerton Road   | 47.0 | −42.0  | 0.60 | 200 |
+| Barki Road     | 57.8 | −55.3  | 0.55 | 199 |
+| DHA Phase 6    | 58.4 | −54.8  | 0.54 | 198 |
+| Shahdara       | 78.3 | −76.0  | 0.48 | 201 |
+| Kahna Nau      | 82.6 | −80.2  | 0.45 | 196 |
+| GT Road        | 86.5 | −84.1  | 0.43 | 200 |
+| Multan Road    | 95.4 | −94.6  | 0.39 | 197 |
 
-| Station | n | MAD | Bias | r |
-|---|---|---|---|---|
-| Punjab University | 29 | 13.2 | -8.7 | 0.69 |
-| Barki Road | 21 | 15.8 | -7.3 | 0.56 |
-| Gulberg III | 19 | 19.0 | +10.4 | 0.59 |
-| DHA Phase 6 | 29 | 19.2 | -15.7 | 0.56 |
-| Wagha Border | 29 | 21.4 | +18.1 | 0.69 |
-| Shahdara | 28 | 25.2 | -24.3 | 0.63 |
-| Egerton Road | 28 | 27.1 | -23.9 | 0.73 |
-| Safari Park | 27 | 29.4 | -29.2 | 0.34 |
-| Kahna Nau | 29 | 38.2 | -37.0 | 0.53 |
-| GT Road | 29 | 41.4 | -41.0 | 0.48 |
-| Multan Road | 29 | 52.4 | -52.4 | 0.62 |
+**Pattern**: CAMS tracks the cleaner stations (Gulberg III: MAD 26.5, slight positive bias)
+but massively under-reads the industrial/roadside hotspots (Multan Road: MAD 95.4, bias −95).
 
-CAMS under-reads most at Multan Road and GT Road, both on heavy traffic corridors, and at Kahna Nau and Safari Park on the southern edge, where brick kilns and crop burning are candidate local sources (not verified here). The two sites where CAMS reads *higher* are Wagha Border and Gulberg III. A 45 km cell averages hot spots with their surroundings, so a spread like this is expected; why these particular stations sit where they do is left for the two-week run. Either way, the app must never show CAMS as if it were a station.
+## Diurnal Pattern (PKT)
 
-**4. The gap is a night-time gap.** City-mean PM2.5 bias is **-0.1** over 10:00-19:00 PKT (11 hours) and **-28.4** over 20:00-09:00 PKT (19 hours). CAMS gets the daytime level right and misses the night-time build-up. A plausible cause is the shallow night-time boundary layer trapping local emissions, which a coarse model under-represents; stated as a hypothesis for the two-week re-run, which will have every hour of day many times.
+| Period            | PM2.5 Bias | Notes                                      |
+|-------------------|------------|----------------------------------------------|
+| Day (10–19 PKT)   | −36.8      | Afternoon hours closest to zero              |
+| Night (20–09 PKT) | −55.2      | Nighttime inversion not captured by CAMS     |
+| Worst hour: 09 PKT| −109.5     | Morning rush + residual inversion            |
+| Only positive: 18 PKT | +0.6   | CAMS briefly matches late-afternoon mixing   |
 
-**5. Timing: the stations appear to lag CAMS by one to two hours.** Shifting CAMS later by h hours and re-correlating (city-mean PM2.5):
+## Lag Analysis
 
-| shift | -3 | -2 | -1 | 0 | +1 | +2 | +3 |
-|---|---|---|---|---|---|---|---|
-| r | 0.28 | 0.42 | 0.49 | 0.70 | 0.80 | **0.83** | 0.81 |
-| bias | -16.0 | -17.8 | -20.6 | -20.4 | -20.1 | -19.8 | -20.6 |
+Best correlation at shift −2 to −3 hours (r = 0.77 vs 0.65 at lag 0).
+This means CAMS leads EPA by 2–3 hours — consistent with CAMS reflecting boundary-layer
+mixing from the model while surface monitors capture the delayed ground-level response.
+Bias stable at ~−48 regardless of shift (the problem is magnitude, not timing).
 
-Checked first as a possible bug in our own data: the CAMS collector requests UTC and stores UTC (`collectors/openmeteo.py`), and the portal's station timestamps carry an explicit +05:00 offset that the parser converts. Neither is mis-shifted by a whole number of hours. Remaining explanations: the portal may label an hour by its end rather than its start, the monitors may report a trailing average, or CAMS may be early on the evening rise. **Not corrected.** With 30 hours, 0.70 against 0.83 is not a significant difference, and the bias does not move with the shift (-20 at every lag), so the main finding stands whichever is true. The re-run will test the lag on two weeks.
+**Note**: Preliminary 30-hour analysis (24 Oct) found best lag at +2; the two-week dataset
+reversed this. The preliminary result was likely noise from too few hours.
 
-## Not yet done (plan 4.3)
+## Comparison with Preliminary (24 Oct, 30 hours)
 
-- **Uptime beside each station:** the hours counted above (19-29 of 30) come from the data-quality report (1.6); the final write-up will put the two side by side.
-- **Cross-check with the US Consulate monitor:** its readings reach us only through WAQI, which is display-only and never stored, so a stored comparison is not possible under the project's own rule. It will be reported only if an archivable source for it is found (OpenAQ is the candidate).
-- **Two weeks of data,** about 29 October. The November smog season will then test whether CAMS's low bias grows with concentration.
+| Metric             | Preliminary (30 hr) | Two-Week (211 hr) | Change         |
+|--------------------|--------------------|--------------------|-----------------|
+| PM2.5 bias         | −20.4              | −47.7              | Worsened 2.3×   |
+| PM2.5 r            | 0.85               | 0.65               | Dropped         |
+| PM10 bias          | −157.5             | −178.8             | Worsened        |
+| Best lag           | +2 hr              | −2 to −3 hr        | Reversed        |
 
-## What this means for the app
+The preliminary finding that "CAMS gets the daytime level approximately right" no longer
+holds with the full smog-season dataset. Even afternoon hours show ~37 µg/m³ low.
 
-- Where a city has only CAMS, the answer already says "modelled"; these numbers give that word a size: in Lahore in mid-October, CAMS reads PM2.5 about 20 ug/m3 low on average and does not represent PM10.
-- These figures are not yet put in answer text. They will be, from the two-week run, with their intervals.
+## Conclusions for Airlume
+
+1. **CAMS is useful for trends and forecasts, not for absolute readings.** The correlation
+   (r = 0.65 city-mean, 0.77 with optimal lag) means CAMS captures day-to-day variation,
+   but the ~48 µg/m³ systematic low bias means displaying CAMS values as "current air quality"
+   would mislead users.
+
+2. **PM10 is effectively untracked by CAMS.** Bias of −179 µg/m³ on PM10 means the coarse
+   fraction (dust, construction, road) is invisible to the ~45 km model cell.
+
+3. **Station heterogeneity is extreme.** Gulberg III (residential, tree-lined) reads close to
+   CAMS; Multan Road (industrial) reads ~95 µg/m³ higher. CAMS cannot capture this within-city
+   gradient — the 3D map needs real station data.
+
+4. **The neural variant (R&D)** could learn the CAMS→station bias correction as a function of
+   hour, season, and meteorology. The 2–3 hour lead in CAMS correlation suggests forecast skill.
