@@ -151,6 +151,19 @@ def md_escape(text: str) -> str:
     return "".join("\\" + c if c in "\\`*_{}[]()#+-.!|<>" else c for c in str(text))
 
 
+def map_key(name: str) -> str:
+    """Element key for a deck, carrying the recentre counter.
+
+    Streamlit keeps a deck's camera across reruns because the element keeps its
+    identity, which is what lets you pan the map and then ask a question without
+    losing your place. The cost is that `initial_view_state` is only honoured on
+    the first mount, so once you have panned off Lahore nothing brings you back.
+    Changing the key remounts the chart, which is the only way to send the view
+    home again. The "Recentre map" button bumps the counter.
+    """
+    return f"{name}_{st.session_state.get('map_nonce', 0)}"
+
+
 # ---------------------------------------------------------------- sidebar
 with st.sidebar:
     st.subheader("Ask")
@@ -166,6 +179,11 @@ with st.sidebar:
     if st.button("Start over", help="Forget the previous questions; the next one is read on its own."):
         for k in ("previous_form", "thread", "last_question"):
             st.session_state.pop(k, None)
+        st.rerun()
+    if st.button("Recentre map", help="Snap the map back to Lahore. Your panning and zooming "
+                                      "are kept until you press this, so a question never "
+                                      "throws away the view you set up by hand."):
+        st.session_state["map_nonce"] = st.session_state.get("map_nonce", 0) + 1
         st.rerun()
     thread_box = st.empty()  # filled at the end of the script, once the answer exists
     st.divider()
@@ -305,14 +323,30 @@ with left:
         pass
     elif national:
         cf = city_frame()
-        st.pydeck_chart(deck_city_overview(cf), width="stretch", height=560)
+        st.pydeck_chart(deck_city_overview(cf), width="stretch", height=560, key=map_key("city"))
     else:
         sf = station_frame(city_id)
         target = None
         if resolved and resolved.station_id:
             s_ = reg.station(resolved.station_id)
             target = (s_.lat, s_.lon)
-        st.pydeck_chart(deck_stations_3d(sf, cam, target, wind=show_wind), width="stretch", height=560)
+        # An empty map is ambiguous: it looks the same whether the air is clean,
+        # the collector stopped, or the app is holding a stale cache. Say which.
+        if int(sf["aqi"].notna().sum()) == 0:
+            if sf["ts"].notna().any():
+                newest = pd.to_datetime(sf["ts"].max())
+                age_h = (datetime.now(timezone.utc) - newest.to_pydatetime()).total_seconds() / 3600
+                st.warning(
+                    f"No columns are drawn because every station's newest stored reading is "
+                    f"{age_h:.0f} hours old (last round {newest.tz_convert(KARACHI):%d %b %H:%M} "
+                    "PKT), past the 3-hour freshness cut-off. A stale value is never drawn as "
+                    "though it were live. The columns and the ranked bars return on the next "
+                    "successful collection round; the app rebuilds its database hourly, so a "
+                    "round collected in the last few minutes may need a restart to appear.")
+            else:
+                st.warning("No columns are drawn because no station readings are stored yet.")
+        st.pydeck_chart(deck_stations_3d(sf, cam, target, wind=show_wind), width="stretch",
+                        height=560, key=map_key("stations"))
         if sf["ts"].notna().any():
             latest_ts = pd.to_datetime(sf["ts"].max()).tz_convert(KARACHI)
             st.caption(f"Data as of {latest_ts:%d %b %Y, %H:%M} PKT · Source: Environmental Protection Agency, Punjab · station coordinates as published by the EPA")
@@ -784,7 +818,7 @@ with tab_cov:
             initial_view_state=cam_mod.view_state("top"), tooltip={"text": "{label}"},
             map_provider=None if not SETTINGS.carto_api_key else "carto", map_style=None if not SETTINGS.carto_api_key else "dark",
         )
-        st.pydeck_chart(deck, width="stretch", height=480)
+        st.pydeck_chart(deck, width="stretch", height=480, key=map_key("coverage"))
     with c2:
         st.metric("Mean distance to nearest monitor", f"{stats['mean_km_urban']:.1f} km", help="Across the built-up area, about 18 km around the centre")
         st.metric("Share of the city more than 5 km from a monitor", f"{stats['share_beyond_5km']:.0%}")
