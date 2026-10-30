@@ -1,0 +1,3074 @@
+{
+ "model": "openai/gpt-oss-20b",
+ "runs": 1,
+ "date": "2026-10-30",
+ "n": 90,
+ "pass_rate": 0.9,
+ "pass_ci95": [
+  0.8333333333333334,
+  0.9555555555555556
+ ],
+ "consistency": 1.0,
+ "per_field": {
+  "aggregation": {
+   "acc": 0.9,
+   "n": 40,
+   "ci95": [
+    0.8,
+    0.975
+   ]
+  },
+  "area": {
+   "acc": 0.9615384615384616,
+   "n": 26,
+   "ci95": [
+    0.8846153846153846,
+    1.0
+   ]
+  },
+  "camera": {
+   "acc": 1.0,
+   "n": 5,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "city": {
+   "acc": 1.0,
+   "n": 69,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "clarify": {
+   "acc": 1.0,
+   "n": 6,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "clarify_or_other_city": {
+   "acc": 1.0,
+   "n": 1,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "compare_to": {
+   "acc": 1.0,
+   "n": 19,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "date": {
+   "acc": 1.0,
+   "n": 1,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "in_scope": {
+   "acc": 1.0,
+   "n": 9,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "metric": {
+   "acc": 1.0,
+   "n": 11,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "other_city": {
+   "acc": 1.0,
+   "n": 7,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "threshold": {
+   "acc": 1.0,
+   "n": 9,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "time": {
+   "acc": 0.9772727272727273,
+   "n": 44,
+   "ci95": [
+    0.9318181818181818,
+    1.0
+   ]
+  },
+  "view": {
+   "acc": 0.8913043478260869,
+   "n": 46,
+   "ci95": [
+    0.8043478260869565,
+    0.9782608695652174
+   ]
+  }
+ },
+ "per_class": {
+  "ambiguous": {
+   "pass": 1.0,
+   "n": 6
+  },
+  "best_time": {
+   "pass": 0.8,
+   "n": 5
+  },
+  "compare_place": {
+   "pass": 0.8888888888888888,
+   "n": 9
+  },
+  "compare_time": {
+   "pass": 0.8888888888888888,
+   "n": 9
+  },
+  "follow_up": {
+   "pass": 0.85,
+   "n": 20
+  },
+  "forecast": {
+   "pass": 0.8,
+   "n": 5
+  },
+  "how_much": {
+   "pass": 1.0,
+   "n": 9
+  },
+  "out_of_scope": {
+   "pass": 1.0,
+   "n": 7
+  },
+  "threshold_count": {
+   "pass": 1.0,
+   "n": 7
+  },
+  "where_now": {
+   "pass": 0.8461538461538461,
+   "n": 13
+  }
+ },
+ "roman_urdu_pass": 0.8,
+ "items": [
+  {
+   "id": "q001",
+   "class": "where_now",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "metric": true,
+    "city": true,
+    "aggregation": true,
+    "view": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q002",
+   "class": "where_now",
+   "lang": "en",
+   "pass": false,
+   "fields": {
+    "metric": true,
+    "city": true,
+    "aggregation": false,
+    "view": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "min",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q003",
+   "class": "where_now",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "metric": true,
+    "city": true,
+    "aggregation": true,
+    "view": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "pm25",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q004",
+   "class": "where_now",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "view": true,
+    "aggregation": true,
+    "time": true,
+    "camera": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Pakistan",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q005",
+   "class": "where_now",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "view": true,
+    "aggregation": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "min",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q006",
+   "class": "where_now",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "time": true,
+    "camera": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Model Town",
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q007",
+   "class": "where_now",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Wagha Border",
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q008",
+   "class": "where_now",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "aggregation": true,
+    "time": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Faisalabad",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q009",
+   "class": "where_now",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "metric": true,
+    "city": true,
+    "area": true,
+    "aggregation": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "pm10",
+    "city": "Lahore",
+    "area": "Shahdara",
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q010",
+   "class": "where_now",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "aggregation": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q011",
+   "class": "how_much",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "metric": true,
+    "city": true,
+    "area": true,
+    "aggregation": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Gulberg",
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q012",
+   "class": "how_much",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "metric": true,
+    "city": true,
+    "aggregation": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "yesterday",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q013",
+   "class": "how_much",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Multan Road",
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "max",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q014",
+   "class": "how_much",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "metric": true,
+    "city": true,
+    "aggregation": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "pm25",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "this_month",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q015",
+   "class": "how_much",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Punjab University",
+    "time": {
+     "label": "last_30_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "min",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q016",
+   "class": "how_much",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "time": true,
+    "aggregation": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "DHA",
+    "time": {
+     "label": "yesterday",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q017",
+   "class": "how_much",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "aggregation": true,
+    "time": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Rawalpindi",
+    "area": null,
+    "time": {
+     "label": "last_month",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q018",
+   "class": "how_much",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "time": true,
+    "date": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "custom_date",
+     "date": "2026-10-12",
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q019",
+   "class": "compare_time",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "compare_to": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "yesterday",
+    "other_city": null,
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q020",
+   "class": "compare_time",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "time": true,
+    "compare_to": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "last_week",
+    "other_city": null,
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q021",
+   "class": "compare_time",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "compare_to": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "last_year",
+    "other_city": null,
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q022",
+   "class": "compare_time",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "time": true,
+    "compare_to": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Shahdara",
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "yesterday",
+    "other_city": null,
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q023",
+   "class": "compare_time",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "compare_to": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Kahna Nau",
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "last_week",
+    "other_city": null,
+    "view": "compare",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q024",
+   "class": "compare_time",
+   "lang": "en",
+   "pass": false,
+   "fields": {
+    "city": true,
+    "time": false,
+    "compare_to": true,
+    "view": false
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "custom_range",
+     "date": null,
+     "start": "2023-10-01",
+     "end": "2023-10-31"
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q025",
+   "class": "compare_time",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "compare_to": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Multan",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "yesterday",
+    "other_city": null,
+    "view": "compare",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q026",
+   "class": "compare_time",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "metric": true,
+    "city": true,
+    "compare_to": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "pm25",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "same_day_last_year",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "last_year",
+    "other_city": null,
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q027",
+   "class": "compare_place",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "compare_to": true,
+    "other_city": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "other_city",
+    "other_city": "Faisalabad",
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q028",
+   "class": "compare_place",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "compare_to": true,
+    "other_city": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Karachi",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "other_city",
+    "other_city": "Lahore",
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q029",
+   "class": "compare_place",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "compare_to": true,
+    "other_city": true,
+    "time": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Gujranwala",
+    "area": null,
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "other_city",
+    "other_city": "Sialkot",
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q030",
+   "class": "compare_place",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "compare_to": true,
+    "other_city": true,
+    "time": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Islamabad",
+    "area": null,
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "other_city",
+    "other_city": "Peshawar",
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q031",
+   "class": "compare_place",
+   "lang": "en",
+   "pass": false,
+   "fields": {
+    "city": true,
+    "area": false,
+    "aggregation": true,
+    "view": false
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q032",
+   "class": "compare_place",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "view": true,
+    "time": true,
+    "camera": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Punjab",
+    "area": null,
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q033",
+   "class": "compare_place",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "compare_to": true,
+    "other_city": true,
+    "time": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Multan",
+    "area": null,
+    "time": {
+     "label": "this_month",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "other_city",
+    "other_city": "Bahawalpur",
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q034",
+   "class": "compare_place",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "compare_to": true,
+    "other_city": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "other_city",
+    "other_city": "Quetta",
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q035",
+   "class": "threshold_count",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "threshold": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Shahdara",
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "count_hours_above",
+    "threshold": 300,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q036",
+   "class": "threshold_count",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "aggregation": true,
+    "threshold": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "yesterday",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "count_hours_above",
+    "threshold": 150,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q037",
+   "class": "threshold_count",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "threshold": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "GT Road",
+    "time": {
+     "label": "this_month",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "count_hours_above",
+    "threshold": 200,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q038",
+   "class": "threshold_count",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "metric": true,
+    "city": true,
+    "aggregation": true,
+    "threshold": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "pm25",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "last_30_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "count_hours_above",
+    "threshold": 100,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q039",
+   "class": "threshold_count",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "threshold": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Egerton Road",
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "count_hours_above",
+    "threshold": 400,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q040",
+   "class": "threshold_count",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "threshold": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Kahna Nau",
+    "time": {
+     "label": "yesterday",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "count_hours_above",
+    "threshold": 200,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q041",
+   "class": "best_time",
+   "lang": "en",
+   "pass": false,
+   "fields": {
+    "city": true,
+    "aggregation": false,
+    "time": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q042",
+   "class": "best_time",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "aggregation": true,
+    "time": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "yesterday",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "max",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q043",
+   "class": "best_time",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "time": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q044",
+   "class": "best_time",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "time": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Safari Park",
+    "time": {
+     "label": "yesterday",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q045",
+   "class": "best_time",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "time": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Barki Road",
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "min",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q046",
+   "class": "forecast",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "custom_date",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "forecast",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q047",
+   "class": "forecast",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "forecast",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q048",
+   "class": "forecast",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "custom_range",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "forecast",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q049",
+   "class": "forecast",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "view": true,
+    "compare_to": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "forecast",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q050",
+   "class": "ambiguous",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "clarify": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": "Could you specify a city or station and a time period?",
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q051",
+   "class": "ambiguous",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "clarify": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": "Could you specify the location and time you are interested in?",
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q052",
+   "class": "ambiguous",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "clarify": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": "Please specify the city, area, and time period for which you want the number of hours.",
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q053",
+   "class": "ambiguous",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "clarify": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": "Which places are you comparing?",
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "compare",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q054",
+   "class": "ambiguous",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "clarify": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": "Which city or area would you like to see?",
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q055",
+   "class": "out_of_scope",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "in_scope": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q056",
+   "class": "out_of_scope",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "in_scope": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q057",
+   "class": "out_of_scope",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "in_scope": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q058",
+   "class": "out_of_scope",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "in_scope": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q059",
+   "class": "out_of_scope",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "in_scope": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "q060",
+   "class": "out_of_scope",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "in_scope": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "u001",
+   "class": "where_now",
+   "lang": "ur-Latn",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Gulberg",
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "u002",
+   "class": "where_now",
+   "lang": "ur-Latn",
+   "pass": false,
+   "fields": {
+    "city": true,
+    "aggregation": false,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "max",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "u003",
+   "class": "compare_time",
+   "lang": "ur-Latn",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "compare_to": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "yesterday",
+    "other_city": null,
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "u004",
+   "class": "how_much",
+   "lang": "ur-Latn",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Shahdara",
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "u005",
+   "class": "compare_place",
+   "lang": "ur-Latn",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "compare_to": true,
+    "other_city": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "other_city",
+    "other_city": "Faisalabad",
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "u006",
+   "class": "threshold_count",
+   "lang": "ur-Latn",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "threshold": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Shahdara",
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "count_hours_above",
+    "threshold": 300,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "u007",
+   "class": "forecast",
+   "lang": "ur-Latn",
+   "pass": false,
+   "fields": {
+    "city": true,
+    "view": false
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": "Could you specify the city or area you are interested in?",
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "u008",
+   "class": "where_now",
+   "lang": "ur-Latn",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Model Town",
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "u009",
+   "class": "out_of_scope",
+   "lang": "ur-Latn",
+   "pass": true,
+   "fields": {
+    "in_scope": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "u010",
+   "class": "ambiguous",
+   "lang": "ur-Latn",
+   "pass": true,
+   "fields": {
+    "clarify": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": "Could you specify the location and time you are referring to?",
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c001",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": false,
+   "fields": {
+    "city": true,
+    "time": true,
+    "aggregation": false,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "yesterday",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c002",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Shahdara",
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c003",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "metric": true,
+    "city": true,
+    "aggregation": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "pm25",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "last_month",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c004",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "aggregation": true,
+    "threshold": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Shahdara",
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "count_hours_above",
+    "threshold": 200,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c005",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "metric": true,
+    "city": true,
+    "compare_to": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "pm10",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "yesterday",
+    "other_city": null,
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c006",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": false,
+   "fields": {
+    "city": true,
+    "view": false
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "max",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c007",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": false,
+   "fields": {
+    "city": true,
+    "area": true,
+    "time": true,
+    "view": false
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Multan Road",
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c008",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "clarify_or_other_city": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "other_city",
+    "other_city": "Multan",
+    "view": "compare",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c009",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Model Town",
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "stations_3d",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c010",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "aggregation": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Karachi",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c011",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "aggregation": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": "Could you specify a city or station and a time period?",
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "station",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c012",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "custom_date",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c013",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "time": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Safari Park",
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "mean",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c014",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "view": true,
+    "aggregation": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "max",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c015",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "aggregation": true,
+    "threshold": true,
+    "time": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "last_7_days",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "count_hours_above",
+    "threshold": 150,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "timeline",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c016",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "view": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": "Which city or area would you like the forecast for?",
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "custom_range",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "forecast",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c017",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "city": true,
+    "area": true,
+    "compare_to": true,
+    "camera": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": "Gulberg",
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "yesterday",
+    "other_city": null,
+    "view": "compare",
+    "camera": "north",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c018",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "in_scope": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "latest",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "overview",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c019",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "in_scope": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": false,
+    "clarify": "Could you specify what you would like to know about air quality?",
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "today",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "max",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  },
+  {
+   "id": "c020",
+   "class": "follow_up",
+   "lang": "en",
+   "pass": true,
+   "fields": {
+    "view": true,
+    "camera": true
+   },
+   "consistent": true,
+   "form": {
+    "in_scope": true,
+    "clarify": null,
+    "metric": "aqi",
+    "city": "Lahore",
+    "area": null,
+    "time": {
+     "label": "now",
+     "date": null,
+     "start": null,
+     "end": null
+    },
+    "aggregation": "max",
+    "threshold": null,
+    "compare_to": "none",
+    "other_city": null,
+    "view": "city_overview",
+    "camera": "zoomed_out",
+    "context_ref": false
+   }
+  }
+ ]
+}

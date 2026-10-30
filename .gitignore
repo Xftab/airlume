@@ -27,5 +27,12 @@ data/cache/
 *.egg-info/
 _update/
 
-# evaluation outputs
-data/eval/
+# Evaluation outputs. The e1_*.json scorecards ARE tracked: they are results,
+# not build artefacts. Each costs a day of the Groq free-tier budget to produce,
+# the hosted model can change under the same name, and a scorecard for a prompt
+# version that has since been replaced cannot be regenerated at all -- the
+# 15 Oct prompt-v3 baseline is the example. HISTORY.md and the research notes
+# cite these files by path, so they have to exist in the repo. Anything else
+# dropped in this folder is scratch and stays ignored.
+data/eval/*
+!data/eval/e1_*.json
