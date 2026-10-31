@@ -3,7 +3,7 @@ title: "Airlume: Complete Project Plan"
 subtitle: "A Conversational 3D Digital Twin of Air Quality in Pakistan's Monitored Cities --- Problem, Product, Resources and Phased Build Plan"
 author:
   - "Aftab Ahmad, Kiran Saif and Tehreem Fatima"
-date: "13 October 2026 (revision 5, updated 29 October 2026: R&D confirmed, sprint conditionals removed)"
+date: "13 October 2026 (revision 6, updated 31 October 2026: coverage measured, key rotation, insight modules wired and benchmark prompt v4)"
 ---
 
 # Part A --- The Project
@@ -474,6 +474,14 @@ on:
 **Exit: met 16 Oct** (confirmed at scale 24 Oct: mean absolute error 1.7 on 2206 station-hours over 210 hours), with the top PM2.5 band to be confirmed on winter data and one 99-point outlier still to trace.
 
 **Exit criterion for Phase 1:** 48-hour soak passes with no missed runs; EPD backfill extracted and spot-checked; data-quality report generated; AQI harmonisation tested.
+
+### 1.8 Collection coverage and secret hygiene (added 31 October 2026)
+
+**Measured coverage of the Punjab EPA station archive (31 Oct 2026).** 14 Oct 04:00 to 31 Oct 09:00 UTC: 2395 of 4554 expected station-hours (52.6 percent); 229 of 414 hours have any data. Two causes: the 24 Oct to 28 Oct outage (110 empty hours, permanent, the portal exposes current readings only) and the laptop collector not running 28 to 30 Oct (Windows battery defaults, fixed 30 Oct in `schedule.bat`). In the stable window 15 Oct 06:00 to 24 Oct 02:00 UTC (212 hours), 8.0 percent of station-hours are missing, by station 4.2 to 9.9 percent (Gulberg III highest, not an outlier). The earlier 4.5 percent figure belongs to the 210-hour W1 sample only. Missing values are shown as missing, never filled (design rule 6).
+
+**Secrets.** On 30 Oct a screenshot exposed the Groq key; it was revoked and verified dead, then a replacement exposed in another screenshot was also revoked. `scripts/check_secrets.py --live` now tests that a key authenticates without printing it. Procedure from now on: the key is moved from clipboard to `.env` by a one-line command and is never shown or committed. The Actions-only GitHub token used by cron-job.org remains to be rotated (optional, expires 13 Jan 2027).
+
+**Exit:** coverage figures in the report come from the archive, with window and cause stated; no key outside `.env`.
 
 ## Phase 2 --- The 3D Digital Twin (Weeks 3--4: 27 Oct -- 9 Nov)
 
