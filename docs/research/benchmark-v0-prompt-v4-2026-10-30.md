@@ -91,6 +91,47 @@ is 8 of 9.
 Recommendation: print every per-field figure as `n/N` or append the n, and in
 v1 ensure each field is carried by enough items to be worth reporting at all.
 
+## Per-field accuracy with n and Wilson intervals (added 1 Nov 2026)
+
+Every figure is shown as correct/n, percentage and a 95% Wilson score interval. The scorecards store a bootstrap interval, which collapses to zero width on a perfect score (a bootstrap of 5 correct out of 5 can only ever resample 5 correct), so `[100, 100]` there says nothing about certainty. Wilson does not collapse: 5 of 5 has a lower bound of 57%, which is the honest statement of how little five items can show. Source: the two 30 Oct scorecards, prompt v4, 90 items, one run each.
+
+| Field | n | gpt-oss-120b | gpt-oss-20b |
+|---|---:|---|---|
+| `city` | 69 | 69/69 (100%) [95, 100] | 69/69 (100%) [95, 100] |
+| `view` | 46 | 43/46 (93%) [82, 98] | 41/46 (89%) [77, 95] |
+| `time` | 44 | 43/44 (98%) [88, 100] | 43/44 (98%) [88, 100] |
+| `aggregation` | 40 | 38/40 (95%) [83, 99] | 36/40 (90%) [77, 96] |
+| `area` | 26 | 24/26 (92%) [76, 98] | 25/26 (96%) [81, 99] |
+| `compare_to` | 19 | 18/19 (95%) [75, 99] | 19/19 (100%) [83, 100] |
+| `metric` | 11 | 11/11 (100%) [74, 100] | 11/11 (100%) [74, 100] |
+| `in_scope` | 9 | 8/9 (89%) [56, 98] | 9/9 (100%) [70, 100] |
+| `threshold` | 9 | 9/9 (100%) [70, 100] | 9/9 (100%) [70, 100] |
+| `other_city` | 7 | 7/7 (100%) [65, 100] | 7/7 (100%) [65, 100] |
+| `clarify` | 6 | 6/6 (100%) [61, 100] | 6/6 (100%) [61, 100] |
+| `camera` | 5 | 5/5 (100%) [57, 100] | 5/5 (100%) [57, 100] |
+| `clarify_or_other_city` | 1 | 0/1 (0%) [0, 79] | 1/1 (100%) [21, 100] |
+| `date` | 1 | 1/1 (100%) [21, 100] | 1/1 (100%) [21, 100] |
+
+Fields with n under 10 (`camera`, `clarify`, `other_city`, `threshold`, `in_scope`, `date`, `clarify_or_other_city`) should be reported as counts only, with no percentage headline.
+
+### Per-class pass rate
+
+| Class | n | gpt-oss-120b | gpt-oss-20b |
+|---|---:|---|---|
+| `follow_up` | 20 | 16/20 (80%) [58, 92] | 17/20 (85%) [64, 95] |
+| `where_now` | 13 | 11/13 (85%) [58, 96] | 11/13 (85%) [58, 96] |
+| `compare_place` | 9 | 8/9 (89%) [56, 98] | 8/9 (89%) [56, 98] |
+| `compare_time` | 9 | 7/9 (78%) [45, 94] | 8/9 (89%) [56, 98] |
+| `how_much` | 9 | 9/9 (100%) [70, 100] | 9/9 (100%) [70, 100] |
+| `out_of_scope` | 7 | 7/7 (100%) [65, 100] | 7/7 (100%) [65, 100] |
+| `threshold_count` | 7 | 7/7 (100%) [65, 100] | 7/7 (100%) [65, 100] |
+| `ambiguous` | 6 | 6/6 (100%) [61, 100] | 6/6 (100%) [61, 100] |
+| `best_time` | 5 | 5/5 (100%) [57, 100] | 4/5 (80%) [38, 96] |
+| `forecast` | 5 | 5/5 (100%) [57, 100] | 4/5 (80%) [38, 96] |
+
+The overall 90.0% rests on 90 items (81 correct, Wilson [82, 95]). Every class has n of 20 or fewer, so no single class figure supports a claim by itself; follow_up (16/20 and 17/20) is the only class large enough to point at, and even its interval runs from about 58% to 92%.
+
+
 ## Roman Urdu rests on ten items
 
 120b 9/10, 20b 8/10. The two models are one item apart, which distinguishes
@@ -103,5 +144,5 @@ than as a single percentage over ten items.
 
 1. Nothing blocks v1. v4 is in, and it costs nothing on v0.
 2. Treat follow-up handling as the known weak point; do not claim it is solved.
-3. Add the n to every per-field figure before any of this reaches the report.
+3. ~~Add the n to every per-field figure before any of this reaches the report.~~ Done 1 Nov: see the table above (n and Wilson intervals for all fields and classes).
 4. Consider having the resolver say when a requested range falls outside the archive.
