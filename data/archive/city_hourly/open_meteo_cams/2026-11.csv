@@ -1,0 +1,2 @@
+city_id,ts,pm25,pm10,aqi,n_stations,source
+PB-LHE,2026-11-01T00:00:00Z,141.6,155.5,181,,open_meteo_cams
