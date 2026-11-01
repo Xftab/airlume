@@ -38,3 +38,4 @@ data/eval/*
 !data/eval/e1_*.json
 !data/eval/e5_*.json
 !data/eval/e6_*.json
+!data/eval/benchmark_v1_*.json
