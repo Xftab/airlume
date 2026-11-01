@@ -2,6 +2,9 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 1 November 2026
+- **Out-of-archive date ranges are now reported, not hidden (weakness found on q024, 30 Oct).** `resolve.window_coverage` compares a question's window with the first and last hourly row held (`Store.archive_bounds`) and `answer()` acts on it: no overlap gives one sentence saying what the archive covers ("No data: ... falls outside the hourly archive, which covers 14 Oct 2026 ... to ..."); a window that starts before the archive gives the answer plus a note that it covers only the later part; a comparison window outside the archive adds a note. A window that merely ends after the newest hour is not flagged, because "last 7 days" and "this month" always end at the clock. Skipped for forecasts and "latest". The model is not involved and no figure is invented, so design rules 2 and 6 are unchanged. 12 new tests (7 pure, 5 with a store). Not yet covered: a non-Lahore or city-overview question about a past window still answers with the current city value regardless of the window; recorded as a known gap.
+
 ## 31 October 2026
 - **Punjab EPA coverage recomputed from the archive.** Whole archive 14 Oct 04:00 UTC to 31 Oct 09:00 UTC: 2395 of 4554 expected station-hours (52.6 percent); 229 of 414 hours have any data. Causes: the 24 Oct to 28 Oct outage (110 empty hours, permanent) and the laptop task not running 28 to 30 Oct (fixed 30 Oct). In the stable window 15 Oct 06:00 to 24 Oct 02:00 UTC (212 hours), 8.0 percent of station-hours are missing; by station 4.2 to 9.9 percent, Gulberg III highest (9.9) but not an outlier.
 - **Earlier figures corrected.** The 4.5 percent missing figure belongs to the 210-hour W1 sample only and must not be quoted for data availability. A 42 percent coverage figure noted earlier did not reproduce and was not used.

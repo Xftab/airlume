@@ -159,6 +159,60 @@ def resolve(intent: ViewIntent, registry: Registry, now: datetime | None = None)
     )
 
 
+@dataclass(frozen=True)
+class Coverage:
+    """How a requested window sits against the hourly archive.
+
+    kind is "inside" (nothing to say), "partial" (the archive starts after the
+    window does, so the answer covers only the later part) or "outside" (no
+    overlap at all, so any figure would be invented or from another window).
+    """
+
+    kind: str
+    message: str  # "" when kind == "inside"
+
+
+def _fmt_local(ts: datetime) -> str:
+    return ts.astimezone(KARACHI).strftime("%d %b %Y %H:%M")
+
+
+def window_coverage(start: datetime, end: datetime, lo: datetime | None,
+                    hi: datetime | None, what: str = "that window") -> Coverage:
+    """Compare [start, end) with an archive whose first and last hourly rows are lo and hi.
+
+    Added 1 Nov 2026 (known gap: q024-type questions with hallucinated 2023 dates
+    were answered as though the archive reached them). Pure function; the store
+    supplies lo and hi through `Store.archive_bounds()`.
+
+    Rules, chosen so the note is true and never noisy:
+
+    * No bounds (empty store) -> "inside", so the existing "no data" wording stays.
+    * The archive covers [lo, hi + 1 h). No overlap -> "outside".
+    * "partial" is flagged only when the window starts before the archive does.
+      A window that ends after the last row is ordinary ("this month", "last 7
+      days" all end at the clock, a few hours ahead of the newest hour), so the
+      end side is not reported unless the whole window lies beyond the archive.
+    """
+    if lo is None or hi is None:
+        return Coverage("inside", "")
+    last = hi + timedelta(hours=1)
+    span = f"{_fmt_local(lo)} to {_fmt_local(hi)} (Asia/Karachi)"
+    asked = f"{_fmt_local(start)} to {_fmt_local(end)}"
+    if end <= lo or start >= last:
+        return Coverage(
+            "outside",
+            f"No data: {what} ({asked}) falls outside the hourly archive, which covers {span}. "
+            "Nothing before collection began, or after the newest hour, is stored here.",
+        )
+    if start < lo:
+        return Coverage(
+            "partial",
+            f"Note: the hourly archive only starts at {_fmt_local(lo)} (Asia/Karachi), so this "
+            f"covers the part of {what} from then on, not all of it.",
+        )
+    return Coverage("inside", "")
+
+
 def fuzzy(name: str, candidates: list[str], cutoff: float = 0.6) -> str | None:
     m = get_close_matches(name.lower(), [c.lower() for c in candidates], n=1, cutoff=cutoff)
     if not m:

@@ -397,6 +397,21 @@ class Store:
             [city_id, start, end],
         ).df()
 
+    def archive_bounds(self) -> tuple[pd.Timestamp | None, pd.Timestamp | None]:
+        """First and last hourly timestamp held, across station and city rows (UTC).
+
+        (None, None) for an empty store. Used by `resolve.window_coverage` to say so
+        when a question asks about a period the archive does not reach.
+        """
+        r = self.con.execute(
+            "SELECT min(ts) AS lo, max(ts) AS hi FROM "
+            "(SELECT ts FROM readings UNION ALL SELECT ts FROM city_hourly)"
+        ).df()
+        lo, hi = r["lo"].iloc[0], r["hi"].iloc[0]
+        if pd.isna(lo) or pd.isna(hi):
+            return None, None
+        return pd.Timestamp(lo).tz_convert("UTC"), pd.Timestamp(hi).tz_convert("UTC")
+
     def counts(self) -> dict[str, int]:
         r = self.con.execute("SELECT count(*) FROM readings").fetchone()[0]
         c = self.con.execute("SELECT count(*) FROM city_hourly").fetchone()[0]

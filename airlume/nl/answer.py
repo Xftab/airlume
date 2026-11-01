@@ -10,7 +10,7 @@ import pandas as pd
 
 from airlume.aqi import band_for
 from airlume.insights.graded_response import response_for_aqi
-from airlume.nl.resolve import ResolvedQuery
+from airlume.nl.resolve import ResolvedQuery, window_coverage
 from airlume.pipeline.registry import Registry
 from airlume.pipeline.store import Store
 
@@ -128,6 +128,38 @@ def _forecast_answer(q: ResolvedQuery, store: Store, reg: Registry,
 
 def answer(q: ResolvedQuery, store: Store, reg: Registry,
            now: pd.Timestamp | None = None) -> str:
+    """Answer one resolved question, after checking the window against the archive.
+
+    Added 1 Nov 2026. A question about a period the hourly archive does not reach
+    (the q024 type: a hallucinated 2023 date) used to fall through to "No data for
+    that place and time", or worse, to a city-level figure for another window. Now:
+
+    * no overlap at all -> one sentence saying what the archive covers, nothing else;
+    * window starts before the archive -> the answer, plus a note that it covers
+      only the later part;
+    * a comparison window outside the archive -> a note after the answer.
+
+    Skipped for forecasts and for "latest" (the window is then the last three hours,
+    and the existing no-recent-data wording already covers a stale store).
+    """
+    if q.view == "forecast" or q.aggregation == "latest":
+        return _answer_body(q, store, reg, now)
+    lo, hi = store.archive_bounds()
+    cov = window_coverage(q.start, q.end, lo, hi)
+    if cov.kind == "outside":
+        return cov.message
+    text = _answer_body(q, store, reg, now)
+    if cov.kind == "partial":
+        text += " " + cov.message
+    if q.compare_start is not None and q.compare_end is not None and not q.compare_city_id:
+        ccov = window_coverage(q.compare_start, q.compare_end, lo, hi, "the comparison window")
+        if ccov.kind != "inside":
+            text += " " + ccov.message
+    return text
+
+
+def _answer_body(q: ResolvedQuery, store: Store, reg: Registry,
+                 now: pd.Timestamp | None = None) -> str:
     """`now` overrides the clock, and exists so a test can be deterministic.
 
     Added 30 Oct 2026. `_forecast_answer` already took `now`, but `answer` did
