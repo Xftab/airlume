@@ -126,6 +126,108 @@ def _forecast_answer(q: ResolvedQuery, store: Store, reg: Registry,
     return lead + " ".join(parts)
 
 
+def _city_window_value(store: Store, reg: Registry, city_id: str, start, end, metric: str,
+                       aggregation: str, threshold: int | None):
+    """One city's aggregate over [start, end) from the stored city-level hourly series.
+
+    Returns (value, n_hours) or None when the city has no rows in the window. Rows
+    from the city's primary source are preferred; if it has none, whatever rows exist.
+    """
+    ser = store.city_series(city_id, start, end, metric)
+    if ser.empty:
+        return None
+    primary = reg.city(city_id).primary_source
+    pri = ser[ser["source"] == primary]
+    ser = pri if not pri.empty else ser
+    vals = ser["value"].dropna()
+    if vals.empty:
+        return None
+    if aggregation == "count_hours_above":
+        return float((vals > threshold).sum()), int(len(vals))
+    func = {"mean": "mean", "latest": "mean", "max": "max", "min": "min"}[aggregation]
+    return float(getattr(vals, func)()), int(len(vals))
+
+
+def _city_window_answer(q: ResolvedQuery, store: Store, reg: Registry) -> str:
+    """City-level answer over a window, for questions that are not about "right now".
+
+    Added 1 Nov 2026. Before this, any non-Lahore or city-overview question went to
+    `latest_city_values`, so "how was Faisalabad in October?" was answered with
+    today's number and the window was silently ignored. Here the window is honoured,
+    the sentence says which window and how many hours it rests on, and a city with
+    no rows in it is named rather than skipped.
+    """
+    from zoneinfo import ZoneInfo
+
+    tz = ZoneInfo("Asia/Karachi")
+    window = f"{q.start.astimezone(tz):%d %b %H:%M} to {q.end.astimezone(tz):%d %b %H:%M}"
+    names = {c.city_id: c.name for c in reg.cities}
+    metric_name = _METRIC_NAME[q.metric]
+
+    def val(cid, start=q.start, end=q.end):
+        return _city_window_value(store, reg, cid, start, end, q.metric, q.aggregation, q.threshold)
+
+    def show(v: float) -> str:
+        return f"{v:.0f}" if q.aggregation == "count_hours_above" else _fmt(v, q.metric)
+
+    if q.aggregation == "count_hours_above":
+        what = f"hours with {metric_name} above {q.threshold}"
+    else:
+        what = f"{q.aggregation} {metric_name}"
+
+    def band(v: float) -> str:
+        if q.metric != "aqi" or q.aggregation == "count_hours_above":
+            return ""
+        b = band_for(int(round(v)))
+        return f" ({b.label.lower()})" if b else ""
+
+    if q.compare_city_id:
+        a, b = val(q.city_id), val(q.compare_city_id)
+        if a is None or b is None:
+            missing = [names[c] for c, r in ((q.city_id, a), (q.compare_city_id, b)) if r is None]
+            return f"No city data for {' and '.join(missing)} in {window}."
+        (va, na), (vb, nb) = a, b
+        if q.aggregation == "min":
+            worse = names[q.compare_city_id] if vb <= va else names[q.city_id]
+            tail = f"{worse} is cleaner."
+        else:
+            worse = names[q.city_id] if va >= vb else names[q.compare_city_id]
+            tail = f"{worse} is worse."
+        return (f"{names[q.city_id]}: {what} {show(va)} over {na} h · "
+                f"{names[q.compare_city_id]}: {show(vb)} over {nb} h ({window}). {tail}")
+
+    if q.view == "city_overview" and not q.compare_start:
+        res = {c.city_id: val(c.city_id) for c in reg.cities}
+        res = {k: v for k, v in res.items() if v is not None}
+        if not res:
+            return f"No city data in {window}."
+        order = sorted(res.items(), key=lambda kv: kv[1][0], reverse=(q.aggregation != "min"))
+        top_id, (tv, tn) = order[0]
+        word = "cleanest" if q.aggregation == "min" else "worst"
+        own = ""
+        if q.city_id in res and q.city_id != top_id:
+            own = f" {names[q.city_id]}: {show(res[q.city_id][0])}."
+        bl = band(tv).replace(" (", ", ").rstrip(")")
+        return (f"{names[top_id]} had the {word} air over {window} ({what} {show(tv)}{bl}; "
+                f"{tn} h of data; {len(res)} cities have data).{own}")
+
+    r = val(q.city_id)
+    if r is None:
+        return f"No {names[q.city_id]} city data in {window}."
+    v, n = r
+    text = f"{names[q.city_id]}: {what} {show(v)}{band(v)} over {n} h of data ({window})."
+    if q.compare_start is not None and q.compare_end is not None:
+        prev = val(q.city_id, q.compare_start, q.compare_end)
+        if prev is None:
+            text += " No data for the comparison window."
+        else:
+            pv, pn = prev
+            word = "worse" if v > pv else "better" if v < pv else "the same"
+            diff = f" by {abs(v - pv):.0f}" if word != "the same" else ""
+            text += f" Comparison window: {show(pv)} over {pn} h, so {word}{diff}."
+    return text
+
+
 def answer(q: ResolvedQuery, store: Store, reg: Registry,
            now: pd.Timestamp | None = None) -> str:
     """Answer one resolved question, after checking the window against the archive.
@@ -174,6 +276,8 @@ def _answer_body(q: ResolvedQuery, store: Store, reg: Registry,
     if q.view == "forecast":
         return _forecast_answer(q, store, reg, now)
     if q.city_id != "PB-LHE" or q.view == "city_overview" or q.compare_city_id:
+        if q.aggregation != "latest":
+            return _city_window_answer(q, store, reg)
         cf = store.latest_city_values().dropna(subset=[q.metric])
         if cf.empty:
             return "No city data is available yet."
