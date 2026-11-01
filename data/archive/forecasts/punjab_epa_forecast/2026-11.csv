@@ -1,0 +1,9 @@
+city_id,issued_at,target_ts,aqi,source
+PB-LHE,2026-11-01T04:00:00Z,2026-11-01T05:00:00Z,402,punjab_epa_forecast
+PB-LHE,2026-11-01T04:00:00Z,2026-11-01T06:00:00Z,350,punjab_epa_forecast
+PB-LHE,2026-11-01T04:00:00Z,2026-11-01T07:00:00Z,331,punjab_epa_forecast
+PB-LHE,2026-11-01T04:00:00Z,2026-11-01T08:00:00Z,254,punjab_epa_forecast
+PB-LHE,2026-11-01T04:00:00Z,2026-11-01T09:00:00Z,245,punjab_epa_forecast
+PB-LHE,2026-11-01T04:00:00Z,2026-11-01T10:00:00Z,215,punjab_epa_forecast
+PB-LHE,2026-11-01T04:00:00Z,2026-11-01T11:00:00Z,217,punjab_epa_forecast
+PB-LHE,2026-11-01T04:00:00Z,2026-11-01T12:00:00Z,227,punjab_epa_forecast
