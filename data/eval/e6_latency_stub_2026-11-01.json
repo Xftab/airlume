@@ -1,0 +1,1151 @@
+{
+  "date": "2026-11-01",
+  "router": "stub",
+  "model": "stub",
+  "data": "archive",
+  "store_build_s": 0.856,
+  "questions": 132,
+  "kinds": {
+    "answered": 95,
+    "resolve_error": 1,
+    "out_of_scope": 36
+  },
+  "answered": {
+    "route": {
+      "n": 95,
+      "median_s": 0.0004,
+      "median_ci95_s": [
+        0.0003,
+        0.0008
+      ],
+      "p95_s": 0.0011,
+      "p95_is_max": false,
+      "max_s": 0.0017
+    },
+    "resolve": {
+      "n": 95,
+      "median_s": 0.0,
+      "median_ci95_s": [
+        0.0,
+        0.0
+      ],
+      "p95_s": 0.0001,
+      "p95_is_max": false,
+      "max_s": 0.0002
+    },
+    "answer": {
+      "n": 95,
+      "median_s": 0.0125,
+      "median_ci95_s": [
+        0.0093,
+        0.0197
+      ],
+      "p95_s": 0.0232,
+      "p95_is_max": false,
+      "max_s": 0.137
+    },
+    "total": {
+      "n": 95,
+      "median_s": 0.0135,
+      "median_ci95_s": [
+        0.0096,
+        0.0207
+      ],
+      "p95_s": 0.0241,
+      "p95_is_max": false,
+      "max_s": 0.1372
+    }
+  },
+  "all_routes": {
+    "n": 132,
+    "median_s": 0.0003,
+    "median_ci95_s": [
+      0.0003,
+      0.0004
+    ],
+    "p95_s": 0.0011,
+    "p95_is_max": false,
+    "max_s": 0.0017
+  },
+  "note": "route is the model round trip in model mode and a keyword match in stub mode; browser rendering and frames per second are not measured here.",
+  "rows": [
+    {
+      "id": "q001",
+      "route_s": 0.0017041000010067364,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 5.090000013296958e-05,
+      "answer_s": 0.010688399999708054,
+      "total_s": 0.01244340000084776
+    },
+    {
+      "id": "q002",
+      "route_s": 0.00023410000176227186,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.6999998226528987e-05,
+      "answer_s": 0.009278900000936119,
+      "total_s": 0.00954000000092492
+    },
+    {
+      "id": "q003",
+      "route_s": 0.0002627000012580538,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.2199999875738285e-05,
+      "answer_s": 0.009838399999352987,
+      "total_s": 0.010123300000486779
+    },
+    {
+      "id": "q004",
+      "route_s": 0.0003617999991547549,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.099999983329326e-05,
+      "answer_s": 0.047437500001251465,
+      "total_s": 0.04782030000023951
+    },
+    {
+      "id": "q005",
+      "route_s": 0.0004822999999305466,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.8399999791872688e-05,
+      "answer_s": 0.009644499999922118,
+      "total_s": 0.010155199999644537
+    },
+    {
+      "id": "q006",
+      "route_s": 0.0002886000002035871,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 0.00013079999916953966,
+      "answer_s": 0.006060300000171992,
+      "total_s": 0.006479699999545119
+    },
+    {
+      "id": "q007",
+      "route_s": 0.0003752000011445489,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 0.00017489999845565762,
+      "answer_s": 0.005525399999896763,
+      "total_s": 0.006075499999496969
+    },
+    {
+      "id": "q008",
+      "route_s": 0.0002127999996446306,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 1.9299999621580355e-05,
+      "answer_s": 0.008507200000167359,
+      "total_s": 0.00873929999943357
+    },
+    {
+      "id": "q009",
+      "route_s": 0.0003844999991997611,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 0.00011939999967580661,
+      "answer_s": 0.006237800000235438,
+      "total_s": 0.006741699999111006
+    },
+    {
+      "id": "q010",
+      "route_s": 0.0004478999999264488,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.879999919969123e-05,
+      "answer_s": 0.00904149999951187,
+      "total_s": 0.00951819999863801
+    },
+    {
+      "id": "q011",
+      "route_s": 0.00040189999890571926,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 0.00016570000116189476,
+      "answer_s": 0.006081399998947745,
+      "total_s": 0.006648999999015359
+    },
+    {
+      "id": "q012",
+      "route_s": 0.0003333000004204223,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 3.459999970800709e-05,
+      "answer_s": 0.008639499999844702,
+      "total_s": 0.009007399999973131
+    },
+    {
+      "id": "q013",
+      "route_s": 0.00022340000032272656,
+      "source": "stub",
+      "kind": "resolve_error",
+      "resolve_s": 1.2700000297627412e-05
+    },
+    {
+      "id": "q014",
+      "route_s": 0.00021440000091388356,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.519999907235615e-05,
+      "answer_s": 0.011330100000122911,
+      "total_s": 0.011569700000109151
+    },
+    {
+      "id": "q015",
+      "route_s": 0.00045839999984309543,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 0.00011409999933675863,
+      "answer_s": 0.005842200000188313,
+      "total_s": 0.0064146999993681675
+    },
+    {
+      "id": "q016",
+      "route_s": 0.00010629999997036066,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q017",
+      "route_s": 0.00019500000053085387,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.9799999538226984e-05,
+      "answer_s": 0.13700749999952677,
+      "total_s": 0.13723229999959585
+    },
+    {
+      "id": "q018",
+      "route_s": 0.00021379999998316634,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.2500000341096893e-05,
+      "answer_s": 0.009013299999423907,
+      "total_s": 0.00924959999974817
+    },
+    {
+      "id": "q019",
+      "route_s": 0.00011669999912555795,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.8899999961140566e-05,
+      "answer_s": 0.00809070000104839,
+      "total_s": 0.008236300000135088
+    },
+    {
+      "id": "q020",
+      "route_s": 0.00029969999923196156,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 3.300000025774352e-05,
+      "answer_s": 0.008889500000805128,
+      "total_s": 0.009222200000294833
+    },
+    {
+      "id": "q021",
+      "route_s": 0.0001319999992119847,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q022",
+      "route_s": 8.299999899463728e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q023",
+      "route_s": 0.0002696999999898253,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 9.339999996882398e-05,
+      "answer_s": 0.0056643000007170485,
+      "total_s": 0.006027400000675698
+    },
+    {
+      "id": "q024",
+      "route_s": 0.00021180000112508424,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.069999936793465e-05,
+      "answer_s": 0.008367500000531436,
+      "total_s": 0.008600000001024455
+    },
+    {
+      "id": "q025",
+      "route_s": 0.0001466999983676942,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 3.240000114601571e-05,
+      "answer_s": 0.009037599998919177,
+      "total_s": 0.009216699998432887
+    },
+    {
+      "id": "q026",
+      "route_s": 0.00011930000073334668,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 3.0100000003585592e-05,
+      "answer_s": 0.009494500000073458,
+      "total_s": 0.00964390000081039
+    },
+    {
+      "id": "q027",
+      "route_s": 0.00037320000046747737,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 3.2899999496294186e-05,
+      "answer_s": 0.008542499999748543,
+      "total_s": 0.008948599999712314
+    },
+    {
+      "id": "q028",
+      "route_s": 0.0002994999995280523,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.570000106061343e-05,
+      "answer_s": 0.009570399999574875,
+      "total_s": 0.00989560000016354
+    },
+    {
+      "id": "q029",
+      "route_s": 0.00023230000078910962,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.2700000045006163e-05,
+      "answer_s": 0.008707299999514362,
+      "total_s": 0.008962300000348478
+    },
+    {
+      "id": "q030",
+      "route_s": 0.00020039999981236178,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.6199999410891905e-05,
+      "answer_s": 0.007759699999951408,
+      "total_s": 0.007986299999174662
+    },
+    {
+      "id": "q031",
+      "route_s": 0.00011520000043674372,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q032",
+      "route_s": 0.00030650000007881317,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.4500001018168405e-05,
+      "answer_s": 0.008266200000434765,
+      "total_s": 0.008597200001531746
+    },
+    {
+      "id": "q033",
+      "route_s": 0.0002359000009164447,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.4599999960628338e-05,
+      "answer_s": 0.007863899998483248,
+      "total_s": 0.008124399999360321
+    },
+    {
+      "id": "q034",
+      "route_s": 0.00019210000027669594,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.300000051036477e-05,
+      "answer_s": 0.008277999999336316,
+      "total_s": 0.008493100000123377
+    },
+    {
+      "id": "q035",
+      "route_s": 0.00032980000105453655,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 9.890000001178123e-05,
+      "answer_s": 0.005770099998699152,
+      "total_s": 0.00619879999976547
+    },
+    {
+      "id": "q036",
+      "route_s": 0.00022429999989981297,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.5800000003073364e-05,
+      "answer_s": 0.04302390000157175,
+      "total_s": 0.04327400000147463
+    },
+    {
+      "id": "q037",
+      "route_s": 0.00024819999998726416,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q038",
+      "route_s": 0.0008663999997224892,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 5.839999903400894e-05,
+      "answer_s": 0.012538900000436115,
+      "total_s": 0.013463699999192613
+    },
+    {
+      "id": "q039",
+      "route_s": 0.00022220000028028153,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q040",
+      "route_s": 0.0008177999989129603,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 0.00023289999990083743,
+      "answer_s": 0.010915200000454206,
+      "total_s": 0.011965899999268004
+    },
+    {
+      "id": "q041",
+      "route_s": 0.0002699999986361945,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.5800000003073364e-05,
+      "answer_s": 0.008586400001149741,
+      "total_s": 0.008882199999789009
+    },
+    {
+      "id": "q042",
+      "route_s": 0.00020740000036312267,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.2199999875738285e-05,
+      "answer_s": 0.008241699999416596,
+      "total_s": 0.008471299999655457
+    },
+    {
+      "id": "q043",
+      "route_s": 0.0003280000000813743,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 3.239999932702631e-05,
+      "answer_s": 0.008382500000152504,
+      "total_s": 0.008742899999560905
+    },
+    {
+      "id": "q044",
+      "route_s": 0.0003344000015204074,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 9.729999874252826e-05,
+      "answer_s": 0.005470899999636458,
+      "total_s": 0.005902599999899394
+    },
+    {
+      "id": "q045",
+      "route_s": 0.0003098999986832496,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 0.00012100000094505958,
+      "answer_s": 0.005185899999560206,
+      "total_s": 0.005616799999188515
+    },
+    {
+      "id": "q046",
+      "route_s": 0.00027179999960935675,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.080000012938399e-05,
+      "answer_s": 0.008188100000552367,
+      "total_s": 0.008480700000291108
+    },
+    {
+      "id": "q047",
+      "route_s": 0.00012799999967683107,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q048",
+      "route_s": 0.00031210000088321976,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.010000025620684e-05,
+      "answer_s": 0.009859100000539911,
+      "total_s": 0.010191300001679338
+    },
+    {
+      "id": "q049",
+      "route_s": 0.00021329999981389847,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.2300000637187622e-05,
+      "answer_s": 0.008640299998660339,
+      "total_s": 0.008875899999111425
+    },
+    {
+      "id": "q050",
+      "route_s": 0.00011479999920993578,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q051",
+      "route_s": 8.370000068680383e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q052",
+      "route_s": 7.550000009359792e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q053",
+      "route_s": 7.189999996626284e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q054",
+      "route_s": 7.77000004745787e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q055",
+      "route_s": 9.310000132245477e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q056",
+      "route_s": 8.930000149121042e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q057",
+      "route_s": 0.000356399999873247,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.6100000468431972e-05,
+      "answer_s": 0.009263800000553601,
+      "total_s": 0.00964630000089528
+    },
+    {
+      "id": "q058",
+      "route_s": 0.00012889999925391749,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q059",
+      "route_s": 0.00016830000095069408,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.0899999071843922e-05,
+      "answer_s": 0.008204199999454431,
+      "total_s": 0.00839339999947697
+    },
+    {
+      "id": "q060",
+      "route_s": 0.00010169999950448982,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "u001",
+      "route_s": 7.960000039020088e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "u002",
+      "route_s": 0.00018360000103712082,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 1.939999856404029e-05,
+      "answer_s": 0.008188000001609907,
+      "total_s": 0.008391000001211069
+    },
+    {
+      "id": "u003",
+      "route_s": 0.0001083999995898921,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "u004",
+      "route_s": 0.00021349999951780774,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 9.020000106829684e-05,
+      "answer_s": 0.006290899998930399,
+      "total_s": 0.006594599999516504
+    },
+    {
+      "id": "u005",
+      "route_s": 0.00022050000006856862,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.2199999875738285e-05,
+      "answer_s": 0.008365699999558274,
+      "total_s": 0.00860839999950258
+    },
+    {
+      "id": "u006",
+      "route_s": 0.00033209999855898786,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 9.190000128000975e-05,
+      "answer_s": 0.005760399999417132,
+      "total_s": 0.006184399999256129
+    },
+    {
+      "id": "u007",
+      "route_s": 0.00010260000090056565,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "u008",
+      "route_s": 8.320000051753595e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "u009",
+      "route_s": 0.00015440000061062165,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 1.9099999917671084e-05,
+      "answer_s": 0.007951199999297387,
+      "total_s": 0.00812469999982568
+    },
+    {
+      "id": "u010",
+      "route_s": 0.00010160000056202989,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c001",
+      "route_s": 6.98000003467314e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c002",
+      "route_s": 8.04999999672873e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c003",
+      "route_s": 0.0001556999995955266,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 1.9499999325489625e-05,
+      "answer_s": 0.008019800001420663,
+      "total_s": 0.008195000000341679
+    },
+    {
+      "id": "c004",
+      "route_s": 0.00029129999893484637,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 1.8700000509852543e-05,
+      "answer_s": 0.009127499999522115,
+      "total_s": 0.009437499998966814
+    },
+    {
+      "id": "c005",
+      "route_s": 0.00014069999997445848,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c006",
+      "route_s": 7.850000110920519e-05,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c007",
+      "route_s": 0.00030949999927543104,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 2.099999983329326e-05,
+      "answer_s": 0.007922900000266964,
+      "total_s": 0.008253399999375688
+    },
+    {
+      "id": "c008",
+      "route_s": 0.0004090000002179295,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 1.9799999790848233e-05,
+      "answer_s": 0.014723100000992417,
+      "total_s": 0.015151900001001195
+    },
+    {
+      "id": "c009",
+      "route_s": 0.0008213000000978354,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.209999860904645e-05,
+      "answer_s": 0.01836610000100336,
+      "total_s": 0.019229499999710242
+    },
+    {
+      "id": "c010",
+      "route_s": 0.0007549999991169898,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.690000059781596e-05,
+      "answer_s": 0.02072319999933825,
+      "total_s": 0.021525099999053054
+    },
+    {
+      "id": "c011",
+      "route_s": 0.0011360999997123145,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 0.0002306000005773967,
+      "answer_s": 0.013879899999665213,
+      "total_s": 0.015246599999954924
+    },
+    {
+      "id": "c012",
+      "route_s": 0.0010395000008429633,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.489999992074445e-05,
+      "answer_s": 0.021275699999023345,
+      "total_s": 0.022360099999787053
+    },
+    {
+      "id": "c013",
+      "route_s": 0.0012998000001971377,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.7399998948094435e-05,
+      "answer_s": 0.02151190000040515,
+      "total_s": 0.02285909999955038
+    },
+    {
+      "id": "c014",
+      "route_s": 0.0003056999994441867,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c015",
+      "route_s": 0.0009890999990602722,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.670000089390669e-05,
+      "answer_s": 0.020345999999335618,
+      "total_s": 0.021381799999289797
+    },
+    {
+      "id": "c016",
+      "route_s": 0.0010758999997051433,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.489999992074445e-05,
+      "answer_s": 0.020176500000161468,
+      "total_s": 0.021297299999787356
+    },
+    {
+      "id": "c017",
+      "route_s": 0.0003357999994477723,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c018",
+      "route_s": 0.0007848999994166661,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.55999997939216e-05,
+      "answer_s": 0.019940600001064013,
+      "total_s": 0.0207711000002746
+    },
+    {
+      "id": "c019",
+      "route_s": 0.0002860000004147878,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c020",
+      "route_s": 0.00020899999981338624,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c021",
+      "route_s": 0.0005067999991297256,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.819999958272092e-05,
+      "answer_s": 0.019846400000460562,
+      "total_s": 0.02040139999917301
+    },
+    {
+      "id": "c022",
+      "route_s": 0.0003925000000890577,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 0.00010250000013911631,
+      "answer_s": 0.013450499998725718,
+      "total_s": 0.013945499998953892
+    },
+    {
+      "id": "c023",
+      "route_s": 0.0005148999989614822,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.4400001570465975e-05,
+      "answer_s": 0.01961209999899438,
+      "total_s": 0.02017139999952633
+    },
+    {
+      "id": "c024",
+      "route_s": 0.0009585000007064082,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.499999886320438e-05,
+      "answer_s": 0.02266559999952733,
+      "total_s": 0.023669099999096943
+    },
+    {
+      "id": "c025",
+      "route_s": 0.0008949000002758112,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.5200000386103056e-05,
+      "answer_s": 0.020051800000146613,
+      "total_s": 0.020991900000808528
+    },
+    {
+      "id": "c026",
+      "route_s": 0.00031659999876865186,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c027",
+      "route_s": 0.0008756999995966908,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.5500000851461664e-05,
+      "answer_s": 0.020373899998958223,
+      "total_s": 0.021295099999406375
+    },
+    {
+      "id": "c028",
+      "route_s": 0.0010576000004220987,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.669999907491729e-05,
+      "answer_s": 0.02052180000100634,
+      "total_s": 0.021626100000503357
+    },
+    {
+      "id": "c029",
+      "route_s": 0.0010104000011779135,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.569999873638153e-05,
+      "answer_s": 0.020049599999765633,
+      "total_s": 0.021105699999679928
+    },
+    {
+      "id": "c030",
+      "route_s": 0.00029629999880853575,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c031",
+      "route_s": 0.0008183999998436775,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.489999992074445e-05,
+      "answer_s": 0.019865000000208966,
+      "total_s": 0.020728299999973387
+    },
+    {
+      "id": "c032",
+      "route_s": 0.0005197000009502517,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.6499999371008016e-05,
+      "answer_s": 0.021026500000516535,
+      "total_s": 0.021592700000837795
+    },
+    {
+      "id": "c033",
+      "route_s": 0.0010171999983867863,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.7500001528533176e-05,
+      "answer_s": 0.02231949999986682,
+      "total_s": 0.02338419999978214
+    },
+    {
+      "id": "c034",
+      "route_s": 0.0009943000004568603,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 5.1799999710056e-05,
+      "answer_s": 0.021050900000773254,
+      "total_s": 0.02209700000094017
+    },
+    {
+      "id": "c035",
+      "route_s": 0.0003250999998272164,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c036",
+      "route_s": 0.00023129999863158446,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c037",
+      "route_s": 0.0002330999996047467,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c038",
+      "route_s": 0.0008507000002282439,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.7399998948094435e-05,
+      "answer_s": 0.02199540000037814,
+      "total_s": 0.02289349999955448
+    },
+    {
+      "id": "c039",
+      "route_s": 0.0009145999993052101,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 5.060000148660038e-05,
+      "answer_s": 0.021093599998494028,
+      "total_s": 0.02205879999928584
+    },
+    {
+      "id": "c040",
+      "route_s": 0.0005208999991737073,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 6.880000000819564e-05,
+      "answer_s": 0.023611100001289742,
+      "total_s": 0.024200800000471645
+    },
+    {
+      "id": "c041",
+      "route_s": 0.001065500000549946,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.839999928663019e-05,
+      "answer_s": 0.022343399999954272,
+      "total_s": 0.023457299999790848
+    },
+    {
+      "id": "c042",
+      "route_s": 0.0008068999995884951,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 0.00010650000149325933,
+      "answer_s": 0.014481700000033015,
+      "total_s": 0.01539510000111477
+    },
+    {
+      "id": "c043",
+      "route_s": 0.0009276000000681961,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.6299999667098746e-05,
+      "answer_s": 0.022746999999071704,
+      "total_s": 0.023720899998807
+    },
+    {
+      "id": "c044",
+      "route_s": 0.00033199999961652793,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c045",
+      "route_s": 0.0008270999987871619,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.509999962465372e-05,
+      "answer_s": 0.01955890000135696,
+      "total_s": 0.020431099999768776
+    },
+    {
+      "id": "c046",
+      "route_s": 0.0008328000003530178,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.579999949783087e-05,
+      "answer_s": 0.021653400001014234,
+      "total_s": 0.022532000000865082
+    },
+    {
+      "id": "c047",
+      "route_s": 0.0008902999998099403,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.530000114755239e-05,
+      "answer_s": 0.02319050000005518,
+      "total_s": 0.024126100001012674
+    },
+    {
+      "id": "c048",
+      "route_s": 0.0008921999997255625,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.620000072463881e-05,
+      "answer_s": 0.019734399998924346,
+      "total_s": 0.020672799999374547
+    },
+    {
+      "id": "c049",
+      "route_s": 0.0009724999999889405,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.569999873638153e-05,
+      "answer_s": 0.022447000001193373,
+      "total_s": 0.023465199999918696
+    },
+    {
+      "id": "c050",
+      "route_s": 0.00035680000110005494,
+      "source": "stub",
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c051",
+      "route_s": 0.0008834000000206288,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.4099999286117963e-05,
+      "answer_s": 0.02060220000021218,
+      "total_s": 0.021529699999518925
+    },
+    {
+      "id": "c052",
+      "route_s": 0.0009892999987641815,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 7.670000013604295e-05,
+      "answer_s": 0.01964350000162085,
+      "total_s": 0.020709500000521075
+    },
+    {
+      "id": "c053",
+      "route_s": 0.0012810999996872852,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.73000000056345e-05,
+      "answer_s": 0.02255929999955697,
+      "total_s": 0.02388769999924989
+    },
+    {
+      "id": "c054",
+      "route_s": 0.0010464999995747348,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.580000131682027e-05,
+      "answer_s": 0.02008639999985462,
+      "total_s": 0.021178700000746176
+    },
+    {
+      "id": "c055",
+      "route_s": 0.0008856000004016096,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.369999987829942e-05,
+      "answer_s": 0.021718500000133645,
+      "total_s": 0.022647800000413554
+    },
+    {
+      "id": "c056",
+      "route_s": 0.0012284000004001427,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 0.00020029999905091245,
+      "answer_s": 0.02035240000077465,
+      "total_s": 0.021781100000225706
+    },
+    {
+      "id": "c057",
+      "route_s": 0.0010205999988102121,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.5900000259280205e-05,
+      "answer_s": 0.022047500000553555,
+      "total_s": 0.023113999999623047
+    },
+    {
+      "id": "c058",
+      "route_s": 0.0009895000002870802,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.540000009001233e-05,
+      "answer_s": 0.019802499999059364,
+      "total_s": 0.020837399999436457
+    },
+    {
+      "id": "c059",
+      "route_s": 0.0012850000002799788,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.740000076708384e-05,
+      "answer_s": 0.02374240000062855,
+      "total_s": 0.025074800001675612
+    },
+    {
+      "id": "c060",
+      "route_s": 0.0010148999990633456,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.450000051292591e-05,
+      "answer_s": 0.021590399999695364,
+      "total_s": 0.022649799999271636
+    },
+    {
+      "id": "c061",
+      "route_s": 0.001089900000806665,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.4499998693936504e-05,
+      "answer_s": 0.019799000001512468,
+      "total_s": 0.02093340000101307
+    },
+    {
+      "id": "c062",
+      "route_s": 0.00109359999987646,
+      "source": "stub",
+      "kind": "answered",
+      "resolve_s": 4.2499999835854396e-05,
+      "answer_s": 0.02222740000070189,
+      "total_s": 0.023363500000414206
+    }
+  ]
+}

@@ -1,0 +1,357 @@
+{
+  "date": "2026-11-01",
+  "router": "model",
+  "model": "openai/gpt-oss-20b",
+  "data": "archive",
+  "store_build_s": 0.589,
+  "questions": 30,
+  "kinds": {
+    "answered": 19,
+    "out_of_scope": 8,
+    "resolve_error": 3
+  },
+  "answered": {
+    "route": {
+      "n": 19,
+      "median_s": 1.047,
+      "median_ci95_s": [
+        0.9396,
+        1.2357
+      ],
+      "p95_s": 1.5434,
+      "p95_is_max": true,
+      "max_s": 1.5525
+    },
+    "resolve": {
+      "n": 19,
+      "median_s": 0.0001,
+      "median_ci95_s": [
+        0.0001,
+        0.0003
+      ],
+      "p95_s": 0.0004,
+      "p95_is_max": true,
+      "max_s": 0.0004
+    },
+    "answer": {
+      "n": 19,
+      "median_s": 0.0181,
+      "median_ci95_s": [
+        0.0142,
+        0.0233
+      ],
+      "p95_s": 0.2071,
+      "p95_is_max": true,
+      "max_s": 0.2103
+    },
+    "total": {
+      "n": 19,
+      "median_s": 1.0673,
+      "median_ci95_s": [
+        0.956,
+        1.3381
+      ],
+      "p95_s": 1.5624,
+      "p95_is_max": true,
+      "max_s": 1.5759
+    }
+  },
+  "all_routes": {
+    "n": 30,
+    "median_s": 1.1304,
+    "median_ci95_s": [
+      1.0254,
+      1.2647
+    ],
+    "p95_s": 1.5525,
+    "p95_is_max": false,
+    "max_s": 2.0499
+  },
+  "routes_without_rate_limit_wait": {
+    "n": 30,
+    "median_s": 1.1304,
+    "median_ci95_s": [
+      1.0254,
+      1.2647
+    ],
+    "p95_s": 1.5525,
+    "p95_is_max": false,
+    "max_s": 2.0499
+  },
+  "calls_that_waited": 0,
+  "route_errors": [],
+  "pace_s": 18.0,
+  "note": "route is the model round trip in model mode and a keyword match in stub mode; browser rendering and frames per second are not measured here.",
+  "rows": [
+    {
+      "id": "q034",
+      "route_s": 0.9395514000007097,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 0.00010309999925084412,
+      "answer_s": 0.019881300000633928,
+      "total_s": 0.9595358000005945
+    },
+    {
+      "id": "c054",
+      "route_s": 2.0498764999993,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c013",
+      "route_s": 1.046999300000607,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 8.150000030582305e-05,
+      "answer_s": 0.02021219999915047,
+      "total_s": 1.0672930000000633
+    },
+    {
+      "id": "c021",
+      "route_s": 1.025384299999132,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q015",
+      "route_s": 1.043858299999556,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 0.00043550000009418,
+      "answer_s": 0.013637000000016997,
+      "total_s": 1.0579307999996672
+    },
+    {
+      "id": "c005",
+      "route_s": 0.7253775999997742,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 7.089999962772708e-05,
+      "answer_s": 0.015648200000214274,
+      "total_s": 0.7410966999996162
+    },
+    {
+      "id": "c017",
+      "route_s": 0.8080483000012464,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "resolve_error",
+      "resolve_s": 6.789999861211982e-05
+    },
+    {
+      "id": "q006",
+      "route_s": 1.0674017000001186,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 0.0004098999997950159,
+      "answer_s": 0.013337700000192854,
+      "total_s": 1.0811493000001065
+    },
+    {
+      "id": "c016",
+      "route_s": 0.8233244000002742,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "resolve_error",
+      "resolve_s": 0.00029429999995045364
+    },
+    {
+      "id": "q011",
+      "route_s": 0.8432525000007445,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 0.0002502999996067956,
+      "answer_s": 0.01213620000089577,
+      "total_s": 0.855639000001247
+    },
+    {
+      "id": "q046",
+      "route_s": 1.235668400000577,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 9.569999929226469e-05,
+      "answer_s": 0.2071198000012373,
+      "total_s": 1.4428839000011067
+    },
+    {
+      "id": "u002",
+      "route_s": 0.9402157999993506,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 6.53000006423099e-05,
+      "answer_s": 0.015708799999629264,
+      "total_s": 0.9559898999996221
+    },
+    {
+      "id": "u003",
+      "route_s": 1.5434370000002673,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 0.00013620000027003698,
+      "answer_s": 0.018796300000758492,
+      "total_s": 1.5623695000012958
+    },
+    {
+      "id": "q017",
+      "route_s": 1.1277425999996922,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 8.940000043367036e-05,
+      "answer_s": 0.21030069999869738,
+      "total_s": 1.3381326999988232
+    },
+    {
+      "id": "q022",
+      "route_s": 0.9379214000000502,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 0.00032190000092668924,
+      "answer_s": 0.010821500000020023,
+      "total_s": 0.9490648000009969
+    },
+    {
+      "id": "q036",
+      "route_s": 0.8661878999992041,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 9.630000022298191e-05,
+      "answer_s": 0.014166900000418536,
+      "total_s": 0.8804510999998456
+    },
+    {
+      "id": "q039",
+      "route_s": 1.3021007999996073,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 0.00032660000033502,
+      "answer_s": 0.01100129999940691,
+      "total_s": 1.3134286999993492
+    },
+    {
+      "id": "q005",
+      "route_s": 0.7282164999996894,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 7.660000119358301e-05,
+      "answer_s": 0.17267839999840362,
+      "total_s": 0.9009714999992866
+    },
+    {
+      "id": "q044",
+      "route_s": 1.38580759999968,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 0.00026809999872057233,
+      "answer_s": 0.018117500001608278,
+      "total_s": 1.4041932000000088
+    },
+    {
+      "id": "q042",
+      "route_s": 1.027340099999492,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 6.489999941550195e-05,
+      "answer_s": 0.02511170000070706,
+      "total_s": 1.0525166999996145
+    },
+    {
+      "id": "q057",
+      "route_s": 1.2712138000006235,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q032",
+      "route_s": 1.4100791000000754,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "resolve_error",
+      "resolve_s": 0.0019350999991729623
+    },
+    {
+      "id": "u010",
+      "route_s": 1.1480492999999115,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c018",
+      "route_s": 1.5524749999985943,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 9.830000090005342e-05,
+      "answer_s": 0.02328990000023623,
+      "total_s": 1.5758631999997306
+    },
+    {
+      "id": "c042",
+      "route_s": 1.3307736000006116,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 0.0002655000007507624,
+      "answer_s": 0.015671799999836367,
+      "total_s": 1.3467109000011988
+    },
+    {
+      "id": "q053",
+      "route_s": 1.3483857000010175,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "q041",
+      "route_s": 1.1392088000011427,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "answered",
+      "resolve_s": 0.00010469999870110769,
+      "answer_s": 0.025939700000890298,
+      "total_s": 1.165253200000734
+    },
+    {
+      "id": "c045",
+      "route_s": 1.227348600001278,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c059",
+      "route_s": 1.548197699999946,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "out_of_scope"
+    },
+    {
+      "id": "c037",
+      "route_s": 1.1329676000004838,
+      "source": "openai/gpt-oss-20b",
+      "rate_limit_waits": 0,
+      "kind": "out_of_scope"
+    }
+  ]
+}

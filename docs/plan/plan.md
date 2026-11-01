@@ -678,7 +678,7 @@ ollama pull qwen3:8b
 | E2 | Forecast | MAE vs persistence; correct AQI band rate; by station and hour | Beat baseline (reported either way) |
 | E3 | CAMS vs ground | MAE, bias, correlation per station | None --- a measurement |
 | E4 | Users | 8--10 people, 3 tasks each: success rate, time, and "how precise do you think this map is?" | Tests C3 directly |
-| E5 | Parallel speed-up (CC425) | Speed-up vs workers; scaling limit analysed | None --- a measurement |
+| E5 | Parallel speed-up (CC425) | Speed-up vs workers; scaling limit analysed | None --- a measurement. Done 1 Nov: 4.0x at 12 workers (3.4x at 8), serial fraction about 0.19, results identical; download-bound in practice |
 | E6 | Performance | Frames per second, time to first answer | 30 fps, under 4 s |
 | E7 | Local vs cloud model (added) | E1 rerun on the offline Ollama model; accuracy as a share of the best cloud model, and seconds per answer | None --- a measurement |
 | E8 | Conversation (added) | Clarification precision and recall; per-turn accuracy on follow-up dialogues | 80% clarification recall |

@@ -1,0 +1,130 @@
+{
+  "date": "2026-11-01",
+  "machine": {
+    "python": "3.13.3",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "cpu_logical": 12,
+    "plugged_in": true,
+    "cpu_physical": 10,
+    "ram_gb": 8.1
+  },
+  "files": 300,
+  "pdf_mb": 72.6,
+  "seed": 1101,
+  "repeats": 3,
+  "mp_chunksize": 4,
+  "async": {
+    "concurrency": 8,
+    "simulated_net_latency_ms": 100.0,
+    "note": "downloads come from a local server with a fixed delay: a model of latency, not a measurement of the EPD server"
+  },
+  "politeness_floor_s_for_these_files": 600.0,
+  "politeness_floor_s_for_all_1990": 3980.0,
+  "politeness_note": "the real back-fill waits 2 s between requests, so downloading cannot take less than 2 s per file whatever the design; computed, not measured",
+  "parser_errors_in_baseline": 0,
+  "sequential_s_per_file": 0.182,
+  "rows": [
+    {
+      "design": "seq",
+      "workers": 1,
+      "median_s": 54.56,
+      "min_s": 39.43,
+      "max_s": 54.89,
+      "repeats": 3,
+      "speedup": 1.0,
+      "efficiency": 1.0,
+      "peak_rss_mb": 372.4,
+      "result_mismatches_vs_seq": 0
+    },
+    {
+      "design": "mp",
+      "workers": 1,
+      "median_s": 52.97,
+      "min_s": 35.88,
+      "max_s": 85.89,
+      "repeats": 3,
+      "speedup": 1.03,
+      "efficiency": 1.03,
+      "peak_rss_mb": 494.9,
+      "result_mismatches_vs_seq": 0
+    },
+    {
+      "design": "mp",
+      "workers": 2,
+      "median_s": 32.09,
+      "min_s": 18.63,
+      "max_s": 39.1,
+      "repeats": 3,
+      "speedup": 1.7,
+      "efficiency": 0.85,
+      "karp_flatt_serial_fraction": 0.176,
+      "peak_rss_mb": 628.3,
+      "result_mismatches_vs_seq": 0
+    },
+    {
+      "design": "mp",
+      "workers": 4,
+      "median_s": 21.5,
+      "min_s": 13.24,
+      "max_s": 21.94,
+      "repeats": 3,
+      "speedup": 2.54,
+      "efficiency": 0.63,
+      "karp_flatt_serial_fraction": 0.192,
+      "peak_rss_mb": 934.5,
+      "result_mismatches_vs_seq": 0
+    },
+    {
+      "design": "mp",
+      "workers": 8,
+      "median_s": 16.17,
+      "min_s": 9.4,
+      "max_s": 16.24,
+      "repeats": 3,
+      "speedup": 3.37,
+      "efficiency": 0.42,
+      "karp_flatt_serial_fraction": 0.196,
+      "peak_rss_mb": 1368.7,
+      "result_mismatches_vs_seq": 0
+    },
+    {
+      "design": "mp",
+      "workers": 12,
+      "median_s": 13.83,
+      "min_s": 13.25,
+      "max_s": 14.78,
+      "repeats": 3,
+      "speedup": 3.95,
+      "efficiency": 0.33,
+      "karp_flatt_serial_fraction": 0.186,
+      "peak_rss_mb": 2080.0,
+      "result_mismatches_vs_seq": 0
+    },
+    {
+      "design": "async",
+      "workers": 4,
+      "median_s": 23.08,
+      "min_s": 18.73,
+      "max_s": 24.06,
+      "repeats": 3,
+      "speedup": 2.36,
+      "efficiency": 0.59,
+      "karp_flatt_serial_fraction": 0.231,
+      "peak_rss_mb": 965.4,
+      "result_mismatches_vs_seq": 0
+    },
+    {
+      "design": "async",
+      "workers": 8,
+      "median_s": 16.29,
+      "min_s": 9.97,
+      "max_s": 16.61,
+      "repeats": 3,
+      "speedup": 3.35,
+      "efficiency": 0.42,
+      "karp_flatt_serial_fraction": 0.198,
+      "peak_rss_mb": 1443.6,
+      "result_mismatches_vs_seq": 0
+    }
+  ]
+}

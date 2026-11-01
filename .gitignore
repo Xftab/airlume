@@ -36,3 +36,5 @@ _update/
 # dropped in this folder is scratch and stays ignored.
 data/eval/*
 !data/eval/e1_*.json
+!data/eval/e5_*.json
+!data/eval/e6_*.json
