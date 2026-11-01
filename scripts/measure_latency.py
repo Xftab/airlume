@@ -17,6 +17,15 @@ What it does and does not measure:
 * With --router model the router cache is bypassed, so every call is a real,
   uncached round trip. This spends Groq budget: one call per question, so --n caps
   it (default 30). Nothing is printed that could contain the key.
+* The free Groq tier allows about 8,000 tokens a minute and one call here costs about
+  2,200, so calls sent back to back hit the limit and the router sleeps and retries
+  (airlume/nl/router.py, _post). The first real run (1 Nov) showed exactly that: calls
+  that went straight through took 1 to 4 s, calls that waited took 15 to 18 s, and the
+  median of the mixture (16 s) described the rate limit, not the model. So in model
+  mode the script now waits --pace seconds between calls (default 18, outside the timed
+  region), counts the rate-limit waits it still sees, and reports the calls with no
+  wait separately. Quote the no-wait figure as the response time a single user sees,
+  and the share of calls that waited as the cost of the free tier.
 * Out-of-scope and clarify answers skip resolve and answer, as in the app, so
   they are reported in their own row and not mixed into the answered figures.
 
@@ -24,12 +33,13 @@ Reported per stage: n, median with a 95 percent bootstrap interval, 95th percent
 and maximum. With fewer than 20 timings the 95th percentile is the maximum, and the
 output says so.
 
-Result is written to data/eval/e6_latency_<router>_<date>.json.
+Result is written to data/eval/e6_latency_<router>_<date>[_pace<N>].json.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import logging
 import random
 import statistics
 import sys
@@ -49,6 +59,18 @@ from airlume.pipeline.store import Store  # noqa: E402
 
 BENCH = ROOT / "airlume" / "eval" / "benchmark"
 OUT = ROOT / "data" / "eval"
+
+
+class _WaitCounter(logging.Handler):
+    """Counts the router's 'rate limited; waiting' warnings so a timing can be flagged."""
+
+    def __init__(self) -> None:
+        super().__init__(level=logging.WARNING)
+        self.n = 0
+
+    def emit(self, record: logging.LogRecord) -> None:
+        if "rate limited" in record.getMessage():
+            self.n += 1
 
 
 def load_questions() -> list[dict]:
@@ -96,6 +118,8 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--router", choices=("stub", "model"), default="stub")
     ap.add_argument("--model", default=router.PRIMARY_MODEL)
     ap.add_argument("--n", type=int, default=30, help="questions to send to the model (model mode only)")
+    ap.add_argument("--pace", type=float, default=18.0,
+                    help="seconds to wait between model calls, untimed (model mode only)")
     ap.add_argument("--fake", action="store_true", help="self-test on synthetic data; not a result")
     a = ap.parse_args(argv)
 
@@ -107,9 +131,14 @@ def main(argv: list[str]) -> int:
         qs = qs[: a.n]
     print(f"{len(qs)} questions, router={a.router}, data={mode}, store build {build_s:.2f}s")
 
+    counter = _WaitCounter()
+    logging.getLogger("airlume.router").addHandler(counter)
     rows = []
-    for q in qs:
+    for k, q in enumerate(qs):
         text = q["question"]
+        if a.router == "model" and k:
+            time.sleep(a.pace)  # keep under the tokens-per-minute cap; not part of the timing
+        waits_before = counter.n
         t0 = time.perf_counter()
         try:
             if a.router == "stub":
@@ -120,10 +149,12 @@ def main(argv: list[str]) -> int:
                 intent, source = res.intent, res.model
         except Exception as e:  # a failed model call is a result, not a crash
             rows.append({"id": q["id"], "kind": "route_error", "error": type(e).__name__,
-                         "route_s": time.perf_counter() - t0})
+                         "route_s": time.perf_counter() - t0,
+                         "rate_limit_waits": counter.n - waits_before})
             continue
         t1 = time.perf_counter()
-        row = {"id": q["id"], "route_s": t1 - t0, "source": source}
+        row = {"id": q["id"], "route_s": t1 - t0, "source": source,
+               "rate_limit_waits": counter.n - waits_before}
         if not intent.in_scope:
             row["kind"] = "out_of_scope"
         elif intent.clarify:
@@ -157,6 +188,11 @@ def main(argv: list[str]) -> int:
             "total": summarise([r["total_s"] for r in ans]),
         },
         "all_routes": summarise([r["route_s"] for r in rows]),
+        "routes_without_rate_limit_wait": summarise(
+            [r["route_s"] for r in rows if not r.get("rate_limit_waits")]),
+        "calls_that_waited": sum(1 for r in rows if r.get("rate_limit_waits")),
+        "route_errors": [{"id": r["id"], "error": r["error"]} for r in rows if r["kind"] == "route_error"],
+        "pace_s": a.pace if a.router == "model" else 0,
         "note": "route is the model round trip in model mode and a keyword match in stub mode; "
                 "browser rendering and frames per second are not measured here.",
         "rows": rows,
@@ -166,7 +202,8 @@ def main(argv: list[str]) -> int:
         print("(self-test: nothing written)")
         return 0
     OUT.mkdir(parents=True, exist_ok=True)
-    p = OUT / f"e6_latency_{a.router}_{report['date']}.json"
+    tag = f"_pace{int(a.pace)}" if a.router == "model" else ""  # keeps the 1 Nov unpaced run intact
+    p = OUT / f"e6_latency_{a.router}_{report['date']}{tag}.json"
     p.write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(f"written {p}")
     return 0
