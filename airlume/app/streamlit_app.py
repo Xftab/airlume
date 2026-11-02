@@ -244,14 +244,16 @@ if intent is not None:
             st.caption(f"model: {result.model}{' (cached)' if result.cached else ''} · {result.latency_s:.1f}s")
             st.json(intent.model_dump(), expanded=True)
     if not intent.in_scope:
-        st.info("I can only answer about air quality in Pakistan's monitored cities.")
+        st.info("I can only answer about air quality in Pakistan's monitored cities. "
+                "Try, for example: \"Which Lahore station is worst right now?\" or "
+                "\"What is the AQI forecast for Lahore?\"")
     elif intent.clarify:
         st.warning(md_escape(intent.clarify))
     else:
         try:
             resolved = resolve(intent, reg)
         except ResolveError as e:
-            st.warning(str(e))
+            st.warning(md_escape(str(e)))
 
 if resolved is not None:
     text = answer(resolved, store, reg)

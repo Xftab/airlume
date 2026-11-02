@@ -13,8 +13,8 @@ from difflib import get_close_matches
 from zoneinfo import ZoneInfo
 
 from airlume.config import TZ
-from airlume.nl.schema import ViewIntent
-from airlume.pipeline.registry import Registry
+from airlume.nl.schema import TimeSpec, ViewIntent
+from airlume.pipeline.registry import KNOWN_AREAS, Registry
 
 KARACHI = ZoneInfo(TZ)
 
@@ -78,11 +78,11 @@ def resolve_time(intent: ViewIntent, now: datetime | None = None) -> tuple[datet
         return _day_bounds(d)
     if t.label == "custom_date":
         if not t.date:
-            raise ResolveError("custom_date without a date")
+            raise ResolveError("I could not tell which day you mean. Try 'today', 'yesterday' or a date such as 3 Nov.")
         return _day_bounds(date.fromisoformat(t.date))
     if t.label == "custom_range":
         if not (t.start and t.end):
-            raise ResolveError("custom_range without start/end")
+            raise ResolveError("I could not tell which dates you mean. Try 'last 7 days' or a range such as 1 Nov to 5 Nov.")
         s, _ = _day_bounds(date.fromisoformat(t.start))
         _, e = _day_bounds(date.fromisoformat(t.end))
         if e <= s:
@@ -105,6 +105,22 @@ def _shift(start: datetime, end: datetime, compare_to: str) -> tuple[datetime, d
     return start - d, end - d
 
 
+def _area_help(registry: Registry, city) -> str:
+    """The reply when an area is neither a station nor a known neighbourhood.
+
+    Added 2 Nov 2026. A run of the 62 classmate questions showed "no station matching
+    'Sabzazar' in Lahore" reaching the user as the whole answer. The message now says
+    what to try, from the registry itself, so it cannot suggest a station that does not exist.
+    """
+    names = [s.name for s in registry.stations_in(city.city_id)]
+    if not names:
+        return (f"I have no station-level readings for {city.name}. "
+                "Ask about the city as a whole instead.")
+    areas = [a.title() for a in list(KNOWN_AREAS)[:2]] if city.name.lower() == "lahore" else []
+    tail = f" or an area such as {' or '.join(areas)}" if areas else ""
+    return f"I don't know that area in {city.name}. Try a station name ({', '.join(names[:4])}){tail}."
+
+
 def resolve(intent: ViewIntent, registry: Registry, now: datetime | None = None) -> ResolvedQuery:
     if not intent.in_scope:
         raise ResolveError("question is out of scope")
@@ -114,16 +130,22 @@ def resolve(intent: ViewIntent, registry: Registry, now: datetime | None = None)
     notes: list[str] = []
     city = registry.match_city(intent.city)
     if city is None:
-        raise ResolveError(f"unknown city '{intent.city}'")
+        raise ResolveError(f"I don't have data for '{intent.city}'. Try a monitored city such as Lahore, Faisalabad or Multan.")
 
     station_id: str | None = None
     if intent.area:
         hit = registry.match_station(intent.area, city.city_id)
         if hit is None:
-            raise ResolveError(f"no station matching '{intent.area}' in {city.name}")
+            raise ResolveError(_area_help(registry, city))
         station_id, note = hit
         if note:
             notes.append(note)
+
+    if intent.view == "forecast" and intent.time.label == "custom_date" and not intent.time.date:
+        # "Will it be smog tomorrow?" arrives as custom_date with no date. A forecast answer
+        # always reads the coming hours of the latest issue, so say that instead of failing.
+        intent = intent.model_copy(update={"time": TimeSpec(label="now")})
+        notes.append("No date was given, so this is the latest forecast for the coming hours.")
 
     start, end = resolve_time(intent, now)
     if intent.compare_to in {"yesterday", "last_week", "last_year"} and intent.time.label == "now":
@@ -138,7 +160,7 @@ def resolve(intent: ViewIntent, registry: Registry, now: datetime | None = None)
     elif intent.compare_to == "other_city":
         other = registry.match_city(intent.other_city or "")
         if other is None:
-            raise ResolveError(f"unknown city '{intent.other_city}'")
+            raise ResolveError(f"I don't have data for '{intent.other_city}'. Try a monitored city such as Lahore, Faisalabad or Multan.")
         compare_city_id = other.city_id
         cstart, cend = start, end
 

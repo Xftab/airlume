@@ -179,8 +179,13 @@ class Registry:
         # 3. known neighbourhood -> nearest station
         key = a
         if key not in KNOWN_AREAS:
-            km = get_close_matches(key, list(KNOWN_AREAS), n=1, cutoff=0.75)
-            key = km[0] if km else ""
+            # "bahria" -> "bahria town": a whole-word prefix of exactly one known area.
+            pre = [k for k in KNOWN_AREAS if len(a) >= 4 and (k.startswith(a + " ") or a.startswith(k + " "))]
+            if len(pre) == 1:
+                key = pre[0]
+            else:
+                km = get_close_matches(key, list(KNOWN_AREAS), n=1, cutoff=0.75)
+                key = km[0] if km else ""
         if key:
             lat, lon = KNOWN_AREAS[key]
             best = min(stations, key=lambda s: haversine_km(lat, lon, s.lat, s.lon))
