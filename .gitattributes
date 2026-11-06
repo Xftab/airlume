@@ -2,3 +2,9 @@
 *.sh text eol=lf
 *.bat text eol=crlf
 *.pdf binary
+# 6 Nov 2026. The archive CSVs are append-mostly and written on two machines (the
+# laptop and GitHub Actions). With git's default merge, a conflicting hunk from the
+# other side was thrown away by `pull --rebase -X theirs` / `-X ours`, which deleted
+# 7,215 committed rows between 24 Oct and 6 Nov. The built-in union driver keeps the
+# lines of both sides; archive.load_all and archive.export drop duplicate keys.
+data/archive/**/*.csv merge=union

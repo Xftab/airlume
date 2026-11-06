@@ -96,3 +96,19 @@ holds with the full smog-season dataset. Even afternoon hours show ~37 µg/m³ l
 
 4. **The neural variant (R&D)** could learn the CAMS→station bias correction as a function of
    hour, season, and meteorology. The 2–3 hour lead in CAMS correlation suggests forecast skill.
+
+## Re-run, 6 Nov 2026 (313 hours, restored archive)
+
+Run on the archive after the 7,215 restored rows (`archive-merge-loss-2026-11-06.md`): 3,294 station-hours over 313 hours, 14 Oct 04:00 to 6 Nov 12:00 UTC. `python scripts/cams_validation.py`, 6-hour block bootstrap. AQI is PM-only on the portal's current table on both sides.
+
+| City mean | n | MAD [95% CI] | Bias, CAMS minus station [95% CI] | r |
+|---|---:|---|---|---:|
+| PM2.5 ug/m3 | 313 | 61.1 [48.5, 75.5] | -57.7 [-73.2, -44.0] | 0.68 |
+| PM10 ug/m3 | 313 | 192.9 [168.4, 219.8] | -191.7 [-219.1, -166.6] | 0.65 |
+| AQI, PM only | 313 | 69.3 [55.9, 85.0] | -65.4 [-82.0, -50.8] | 0.69 |
+
+- **Per station, PM2.5 MAD** ranges from 27.8 (Gulberg III, bias +7.1) to 102.5 (Multan Road, bias -101.2). The order is unchanged from 29 Oct.
+- **By time of day**, city-mean PM2.5 bias is -52.3 in daytime (10:00 to 19:00 PKT, 147 h) and -62.1 overnight (166 h).
+- **Lag:** correlation with CAMS shifted by +2 h is 0.80 (0.68 at 0 h). The sign of the best lag has flipped between runs (+1 to 2 h on 16 Oct, -2 to -3 h on 29 Oct, +2 h now), so no timing offset is claimed.
+- **Trend:** the PM2.5 bias has grown as the season has deepened: -20 (30 h, mid Oct), -48 (211 h, to 29 Oct), -58 (313 h, to 6 Nov). CAMS tracks the ups and downs (r 0.68) but misses more of the level as smog intensifies. This is consistent with local sources (crop burning, traffic, industry) that a 45 km model cell under-resolves.
+- **What changes for the report:** quote these figures as the C4 result with their window. The conclusions above stand: trend yes, absolute level no, PM10 not tracked.

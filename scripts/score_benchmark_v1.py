@@ -12,6 +12,10 @@ enforces so the number means something:
 * Refuses any file whose name contains DRAFT unless --allow-draft, and then prints a
   banner on every output line group: a draft written by a model is not gold, and a
   model scored against labels written by a model is not a result.
+* Refuses a file whose LABEL CELLS are identical to any *DRAFT* sheet beside it, whatever
+  it has been renamed to. The name check alone is not enough: on 4 Nov 2026 a copy of the
+  model's draft sat in the gold slot under a human's name and would have been scored.
+  The comparison ignores row order and the question text, so only the labels matter.
 * Scores ONCE per (gold file contents, model): the scorecard name carries a hash of the
   gold file, and an existing scorecard is not overwritten unless --again. Tuning the
   prompt against the benchmark and re-scoring is how a test set stops being a test set.
@@ -53,6 +57,54 @@ from airlume.nl.schema import ViewIntent  # noqa: E402
 from check_annotation import check_row  # noqa: E402
 
 OUT = ROOT / "data" / "eval"
+
+
+def label_cells(path: Path) -> tuple[dict[str, dict[str, str]], set[str]] | None:
+    """Every label cell in a sheet, keyed by question id.
+
+    Labels are the columns from in_scope onwards; id and question text are not
+    labels. Returns None for a file that is not an annotation sheet.
+    """
+    try:
+        rows = list(csv.DictReader(path.open(encoding="utf-8-sig", newline="")))
+    except (OSError, UnicodeDecodeError, csv.Error):
+        return None
+    if not rows:
+        return None
+    cols = list(rows[0].keys())
+    if "in_scope" not in cols or "id" not in cols:
+        return None
+    labels = cols[cols.index("in_scope"):]
+    cells = {(r.get("id") or ""): {c: (r.get(c) or "").strip() for c in labels} for r in rows}
+    return cells, set(labels)
+
+
+def same_labels(a, b) -> bool:
+    """True when two sheets carry the same label in every shared cell.
+
+    Row order and question wording are ignored, so a reordered or lightly edited
+    copy of a draft is still recognised as that draft.
+    """
+    if a is None or b is None:
+        return False
+    (rows_a, labels_a), (rows_b, labels_b) = a, b
+    shared = labels_a & labels_b
+    if not shared or set(rows_a) != set(rows_b):
+        return False
+    return all(rows_a[i][c] == rows_b[i][c] for i in rows_a for c in shared)
+
+
+def draft_twin(gold: Path):
+    """The *DRAFT* sheet beside gold whose labels are identical to it, if any."""
+    mine = label_cells(gold)
+    if mine is None:
+        return None
+    for other in sorted(gold.parent.glob("*.csv")):
+        if other.resolve() == gold.resolve() or "draft" not in other.name.lower():
+            continue
+        if same_labels(mine, label_cells(other)):
+            return other
+    return None
 Z = 1.959964
 
 
@@ -119,6 +171,14 @@ def main(argv: list[str]) -> int:
     if draft and not a.allow_draft:
         sys.exit(f"{gp.name} is a DRAFT. A draft written by a model is not gold; use the human-annotated "
                  "file, or pass --allow-draft for a dry run (nothing is a result).")
+    twin = None if draft else draft_twin(gp)
+    if twin is not None and not a.allow_draft:
+        sys.exit(f"{gp.name} has exactly the same labels as {twin.name}: it is that draft under "
+                 "another name, so scoring it would be a model graded against a model's labels. "
+                 "Annotate the sheet by hand first, or pass --allow-draft for a dry run "
+                 "(nothing is a result).")
+    if twin is not None:
+        draft = True
     raw = gp.read_bytes()
     gold_hash = hashlib.sha256(raw).hexdigest()[:10]
     rows = list(csv.DictReader(gp.open(encoding="utf-8-sig", newline="")))

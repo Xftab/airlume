@@ -1,6 +1,6 @@
 # E4 user study plan (draft, 1 November 2026)
 
-Status: DRAFT for Aftab and Dr Rimsha Anam to approve. Items in [square brackets] are not decided yet.
+Status: GO from 4 Nov 2026. Aftab states no supervisor approval is needed, so sessions are being booked now. Items in [square brackets] are not decided yet.
 
 ## Question the study answers
 
@@ -69,9 +69,9 @@ On the laptop with `run.bat` (public deploy is not done yet): [confirm the study
 
 ## Schedule
 
-- By 3 Nov: Aftab and supervisor approve this plan; book sessions.
-- 4 to 8 Nov: sessions, two or three a day.
-- 9 to 10 Nov: tidy the sheet, compute the figures, write the results section.
+- Dates NOT set. The original window of 4 to 8 Nov passed; a window of 6 to 10 Nov was proposed and then postponed by Aftab on 4 Nov.
+- When booked: invite participants two days ahead, then sessions over about five days, two or three a day, then two days to tidy the sheet, compute the figures and write the results section.
+- Latest sensible finish: before the Week 3 benchmark freeze and the Week 4 report, so the results section has somewhere to go. Do not run the benchmark freeze or a model benchmark on a session day: the study uses up to about 150 model questions from the same Groq daily budget.
 Needs: one quiet room, the laptop on mains power (the collector task is sensitive to battery mode), a phone timer, printed SUS form.
 
 ## Limits to state in the report
@@ -80,6 +80,6 @@ Small convenience sample. Observer present, which inflates success a little. One
 
 ## Open items
 
-- [Supervisor approval of consent wording and sample.]
-- [Whether the university needs a formal ethics sign-off for a non-clinical usability study of this size.]
+- [Consent wording and sample: no supervisor approval sought, as Aftab states none is needed. Say so in the report.]
+- [Formal ethics sign-off: none sought, per Aftab. State this plainly in the limits section of the report.]
 - [Who observes: one of the team, with a second person timing if possible.]

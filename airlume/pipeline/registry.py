@@ -35,6 +35,8 @@ KNOWN_AREAS: dict[str, tuple[float, float]] = {
     "faisal town": (31.4780, 74.2970),
     "iqbal town": (31.5070, 74.2910),
     "samanabad": (31.5390, 74.2900),
+    "sabzazar": (31.5209, 74.2701),
+    "sabzazar scheme": (31.5209, 74.2701),
     "anarkali": (31.5670, 74.3100),
     "walled city": (31.5830, 74.3100),
     "ravi road": (31.6000, 74.2900),

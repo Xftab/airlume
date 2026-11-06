@@ -3,7 +3,7 @@ title: "Airlume: Complete Project Plan"
 subtitle: "A Conversational 3D Digital Twin of Air Quality in Pakistan's Monitored Cities --- Problem, Product, Resources and Phased Build Plan"
 author:
   - "Aftab Ahmad, Kiran Saif and Tehreem Fatima"
-date: "13 October 2026 (revision 6, updated 1 November 2026: out-of-archive windows reported; 31 October 2026: coverage measured, key rotation, insight modules wired and benchmark prompt v4)"
+date: "13 October 2026 (revision 6, updated 6 November 2026: archive merge loss found and repaired, portal AQI table change of 3 November, forecast checked against the same-hour-yesterday baseline; 4 November 2026: Punjab EPA permission; 1 November 2026: out-of-archive windows reported; 31 October 2026: coverage measured, key rotation, insight modules wired and benchmark prompt v4)"
 ---
 
 # Part A --- The Project
@@ -473,6 +473,8 @@ on:
 
 **Exit: met 16 Oct** (confirmed at scale 24 Oct: mean absolute error 1.7 on 2206 station-hours over 210 hours), with the top PM2.5 band to be confirmed on winter data and one 99-point outlier still to trace.
 
+**Update 6 Nov 2026: the portal changed its own table on 3 Nov** (`docs/research/w1-portal-table-change-2026-11-06.md`). Between 05:00 and 07:00 UTC on 3 Nov two things changed at once, with no notice found. (a) The PM2.5 breakpoint at AQI 150 moved from 70 to 75 µg/m³: 1,494 of 1,496 distinguishing hours before match the old table and 102 of 102 after match the new one. (b) Until then every reading above the 301--400 band (PM2.5 over 350, PM10 over 550) was published as 500, in all 130 such hours; this is the "99-point outlier". Since then the 401--500 band is used, and 22 of 22 PM10 hours between 550 and 650 match it exactly. O₃ 195.1--260 and NO₂ 130.1--180 (both for 151--200) were fitted from 5 and 13 gas-dominant hours, in-sample. `aqi.py` now holds both tables: `pk_portal` is the current one, `pk_portal_v1` the October one with its saturation, and `portal_scale_at(ts)` picks the one in force. **Re-scored on 3,293 station-hours over 22 days: 99.1% exact, MAE 0.16 [0.05, 0.31]** (day-block bootstrap), replacing the 3.74 figure, which mixed the saturation into the error. 12 of the 14 hours still off by more than 10 points are CO-dominant (0.6% of hours), where the portal's CO bands are unknown. PM2.5 above 350 has not yet occurred under the new table. `scripts/w1_rescore.py` is re-run weekly to catch the next change.
+
 **Exit criterion for Phase 1:** 48-hour soak passes with no missed runs; EPD backfill extracted and spot-checked; data-quality report generated; AQI harmonisation tested.
 
 ### 1.8 Collection coverage and secret hygiene (added 31 October 2026)
@@ -482,6 +484,8 @@ on:
 **Secrets.** On 30 Oct a screenshot exposed the Groq key; it was revoked and verified dead, then a replacement exposed in another screenshot was also revoked. `scripts/check_secrets.py --live` now tests that a key authenticates without printing it. Procedure from now on: the key is moved from clipboard to `.env` by a one-line command and is never shown or committed. The Actions-only GitHub token used by cron-job.org was regenerated on 31 Oct and verified (test run 204); it now expires 30 Nov 2026, so it must be regenerated again by 27 Nov.
 
 **Out-of-archive windows (added 1 November 2026).** A question whose time window lies outside the hourly archive is answered with a sentence stating what the archive covers, not with a generic no-data message; a window that starts before the archive is answered and flagged as partial. Implemented in `resolve.window_coverage` and `Store.archive_bounds`; the model never sees or writes the message. Resolves the q024 finding (benchmark v0, 30 Oct). City-level questions (other cities, city overview, two-city comparison) about a past window are likewise answered from the stored city-level hourly series for that window, with the window and the hours of data stated, instead of from the current value.
+
+**Archive merge loss found and repaired (6 Nov 2026)** (`docs/research/archive-merge-loss-2026-11-06.md`). Both collectors fetch every source and so write the same month files. The laptop's `git pull --rebase -X theirs` (and the cloud's `-X ours`) threw away the other side's conflicting rows, deleting **7,215 committed rows** between 24 Oct and 6 Nov: 5,520 CAMS forecast rows, 1,052 city-hour rows, 272 EPA forecast rows and **371 station rows**. Every row is still in git history. Fix: `.gitattributes` gives `data/archive/**/*.csv` git's union merge, and `archive.load_all` drops duplicate keys. `scripts/recover_archive_rows.py` restores the lost rows. **The 110-hour station gap is really 76 hours** (25 Oct 12:00 to 28 Oct 15:00 UTC): the cloud had collected 24 Oct 02:00 to 25 Oct 11:00, and the laptop's first push on 28 Oct deleted it. After the restore: 3,294 station rows, 313 of 561 hours, 53.4% of station-hours. **Night gaps:** since 30 Oct the laptop collected on 4 to 13 hours a day. `schedule.bat` adds `-WakeToRun`; the reliable fix is mains power with sleep set to Never. The Lahore city series is complete (690 of 690 hours), and from 6 Nov it also carries the portal's city-level PM2.5 and PM10 from the page's 7-day snapshot, back-filled a week on every round. The 17 Oct 03:00 hour is present.
 
 **Exit:** coverage figures in the report come from the archive, with window and cause stated; no key outside `.env`.
 
@@ -627,6 +631,7 @@ ollama pull qwen3:8b
 - LightGBM on lagged readings, hour of day, day of week and weather. Trained on history, tested on the most recent weeks only.
 - **Add CAMS's own 5-day forecast as an input feature.** The model then learns to correct CAMS's local bias for each station rather than predicting from scratch --- a standard technique (model output statistics) and the most realistic route to beating persistence. *(Reduces W7.)*
 - Expect the honest outcome to be "comparable to baseline" at 24 hours, and report it either way.
+- **Result 6 Nov 2026** (`docs/research/forecast-seasonal-baseline-2026-11-06.md`; 252 test origins, split fixed on 1 Nov). Against persistence, per-band ridge is +0.22 [+0.05, +0.34] and per-band LightGBM +0.15 [+0.01, +0.26] over 1--24 h. **But "same hour yesterday" is +0.34, and beyond 3 hours no model beats it** (skill against yesterday: LightGBM +0.49 at 1--3 h, -0.01 at 4--8 h, -0.41 at 9--16 h, -0.61 [-1.54, -0.08] at 17--24 h). The test period is heavier smog than training (mean AQI 301 against 175). A one-weight-per-horizon blend of the last value and the same hour yesterday, fitted on training rows only, is the best overall (MAE 62.6 against 66.9 for yesterday and 100.6 for persistence; +0.06 [-0.02, +0.13] against yesterday); it is exploratory. Report skill against both baselines from now on. Whether the app shows its own forecast is not decided.
 
 ### 4.3 CAMS-vs-ground validation (C4)
 
@@ -634,7 +639,7 @@ ollama pull qwen3:8b
 - Report MAE, signed bias, correlation, per station and by hour of day. Published whatever it shows.
 - **Framed as agreement, not error:** station instruments are uncalibrated and sometimes offline, so C4 measures how far model and stations agree, not how wrong CAMS is. Report each station's uptime, and cross-check against the US Consulate monitor where available. *(Handles W9.)*
 - Comparisons use harmonised AQI from 1.7 only.
-- **Built 16 Oct; preliminary run on 30 hours** (`airlume/validation.py`, `scripts/cams_validation.py`, `docs/research/cams-validation.md`). Concentrations are compared directly; AQI only on the portal's own scale, PM-only on both sides because CAMS has no gases; 95% intervals from a block bootstrap over hours. First results: CAMS reads PM2.5 **about 20 ug/m3 low** for the city mean (CI -28 to -4, r 0.70), almost entirely at night (bias -0.1 over 10:00--19:00 PKT, -28 overnight); it **does not track PM10** (bias -78, r -0.16), consistent with coarse local dust missing from the model; per-station bias ranges from -52 (Multan Road) to +18 (Wagha). Correlation peaks with CAMS shifted 1--2 hours later (0.83 against 0.70); our timestamps were checked and are not the cause; not corrected, since the difference is not significant on 30 hours and the bias does not move with the shift. **Final run on two weeks, about 29 October.** The US Consulate cross-check needs an archivable source (WAQI is display-only).
+- **Built 16 Oct; preliminary run on 30 hours** (`airlume/validation.py`, `scripts/cams_validation.py`, `docs/research/cams-validation.md`). Concentrations are compared directly; AQI only on the portal's own scale, PM-only on both sides because CAMS has no gases; 95% intervals from a block bootstrap over hours. First results: CAMS reads PM2.5 **about 20 ug/m3 low** for the city mean (CI -28 to -4, r 0.70), almost entirely at night (bias -0.1 over 10:00--19:00 PKT, -28 overnight); it **does not track PM10** (bias -78, r -0.16), consistent with coarse local dust missing from the model; per-station bias ranges from -52 (Multan Road) to +18 (Wagha). Correlation peaks with CAMS shifted 1--2 hours later (0.83 against 0.70); our timestamps were checked and are not the cause; not corrected, since the difference is not significant on 30 hours and the bias does not move with the shift. **Final run on two weeks, about 29 October.** The US Consulate cross-check needs an archivable source (WAQI is display-only). **Re-run 6 Nov 2026 on 313 hours** (restored archive): city-mean PM2.5 MAD 61.1 [48.5, 75.5], bias -57.7 [-73.2, -44.0], r 0.68; PM10 bias -191.7; per-station PM2.5 MAD 27.8 (Gulberg III) to 102.5 (Multan Road). The bias has grown with the season (-20, -48, -58). The sign of the best lag has changed between runs, so no timing offset is claimed.
 
 ### 4.4 City-level comparison across Pakistan (core)
 
@@ -807,7 +812,7 @@ The project was planned over ten weeks (13 October 2026 to 21 December 2026). On
 | ID | Risk | Likelihood | Impact | Mitigation |
 |:----|:----------------------------|:-----------|:---------|:---------------------------------------------|
 | R1 | EPA has no usable endpoint | Medium | High | Find it in DevTools in week 1; fall back to polite page scraping; EPD PDF history independent of it |
-| R2 | EPA never replies or refuses | High | Medium | Built to work without permission; release derived statistics only; respect any refusal and switch ground truth to EPD PDFs or OpenAQ |
+| R2 | EPA never replies or refuses | High | Medium | Built to work without permission; release derived statistics only; respect any refusal and switch ground truth to EPD PDFs or OpenAQ. **Update 4 Nov: permission to use the data was granted, with no additional data; raw redistribution still to be confirmed.** |
 | R3 | WAQI data leaks into analysis | Low | High | Separate module that writes nothing to disk |
 | R4 | Collector stops silently | Medium | Medium | Heartbeat commits, minute-17 schedule, freshness label, failure emails |
 | R5 | Free LLM limits too tight | Medium | Low | Router across 5 models, caching, short prompts, unlimited local model |
@@ -822,6 +827,8 @@ The project was planned over ten weeks (13 October 2026 to 21 December 2026). On
 | R14 | Shared cards circulate as if official | Medium | Medium | Attribution and "not an official source" baked into every image |
 | R16 | Ten-month gap (Dec 2025 -- Oct 2026) in official history before our own collection starts | Medium | Medium | State the gap on every timeline; optionally fill city level from CAMS, clearly labelled modelled; never fill station level |
 | R15 | Leaked API key or abused question box burns the free quota or exposes the site | Medium | High | Secret scanning from day one; keys only in environment; rate limits and daily cap; read-only app with no write path; security checklist (Part E) must pass before going public |
+| R17 | Two collectors writing the same archive files overwrite each other's rows (added 6 Nov) | Happened | High | Union merge for archive CSVs, de-duplication on load, `scripts/recover_archive_rows.py` to detect and restore; 7,215 rows restored 6 Nov |
+| R18 | The portal changes its AQI formula without notice (added 6 Nov) | Happened | Medium | Dated tables in `aqi.py`; weekly `scripts/w1_rescore.py` shows a change as a drop in exact matches |
 
 ## Known weaknesses and mitigations
 
@@ -831,7 +838,7 @@ A self-review identified fifteen weaknesses. They fall into three kinds: **solva
 
 | ID | Weakness | Fix | Phase | Resolved by | Exit check |
 |:----|:-------------------------|:-------------------------------------|:------|:----------|:---------------------------|
-| W1 | Station AQI compared with CAMS concentration --- different units and formulas | **Solved 16 Oct.** The portal uses its own NEQS-anchored table with gases in µg/m³, recovered from 304 stored rows: 99.7% exact, 100% within one point (US 2012 table: 6% exact). Default scale in `aqi.py`. **Confirmed at scale 24 Oct** (2206 station-hours / 210 h: MAE 1.7, median 0.0) | 0.2, 1.7 | Week 1 (planned week 3) | **Met**; top PM2.5 band to be confirmed on November data; one 99-point outlier still to trace |
+| W1 | Station AQI compared with CAMS concentration --- different units and formulas | **Solved 16 Oct.** The portal uses its own NEQS-anchored table with gases in µg/m³, recovered from 304 stored rows: 99.7% exact, 100% within one point (US 2012 table: 6% exact). Default scale in `aqi.py`. **Confirmed at scale 24 Oct** (2206 station-hours / 210 h: MAE 1.7, median 0.0) | 0.2, 1.7 | Week 1 (planned week 3) | **Met**; top PM2.5 band to be confirmed on November data. **6 Nov:** the 99-point outliers were the portal saturating at 500 until 3 Nov, when it changed its table; with dated tables 99.1% exact, MAE 0.16 [0.05, 0.31] on 3,293 station-hours; CO-dominant hours (0.6%) not reproduced |
 | W2 | Benchmark written by the same person who built the system | Classmates write half the questions blind; second annotator on 20 items; report kappa | 3.2 | Week 5 | Kappa reported; benchmark frozen |
 | W3 | Contribution mistaken for "just structured output" | Frame as scoring the visual answer; cite VayuBuddy's stated gap | 7.1 | Week 10 | Framing used in report and viva slides |
 | W4 | 60 questions is a small sample | Bootstrap 95% confidence intervals; no claims inside the noise | 5 (E1) | Week 9 | Every accuracy figure carries an interval |
@@ -844,7 +851,7 @@ A self-review identified fifteen weaknesses. They fall into three kinds: **solva
 
 | ID | Weakness | Reduction | Phase | Resolved by | What remains |
 |:----|:-------------------------|:-------------------------------------|:------|:----------|:---------------------------|
-| W7 | Forecast may not beat the baseline | CAMS forecast as an input feature (bias correction) | 4.2 | Week 8 | It may still only match the baseline --- reported either way |
+| W7 | Forecast may not beat the baseline | CAMS forecast as an input feature (bias correction) | 4.2 | Week 8 | It may still only match the baseline --- reported either way. **6 Nov:** beats persistence (+0.15 to +0.22 over 1--24 h) but not "same hour yesterday" beyond 3 h; reported against both |
 | W8 | Station placement ignores pollution sources | Add roads and industrial land as a second criterion | 4.5 | Week 8 | Still a heuristic, not a siting study |
 | W12 | English-only questions | 20-question Roman-Urdu test set | 3.2 | Week 5 | Urdu script not supported |
 | W11 | A website may not reach the public | Name real target users; share cards bridge to WhatsApp if built | 7.1 | Week 10 | Public demand not measured |
@@ -855,7 +862,7 @@ A self-review identified fifteen weaknesses. They fall into three kinds: **solva
 | ID | Weakness | Why it cannot be fixed | How it is handled | When |
 |:----|:-------------------------|:------------------------------|:-----------------------------------|:----------|
 | W9 | Station readings may be inaccurate | Only the EPA can calibrate its instruments | C4 framed as agreement; uptime reported; US Consulate cross-check | Week 8 |
-| W15 | No licence for EPA data | Only the EPA can grant permission | Permission email; build without reply; publish derived statistics only | Week 1, then ongoing |
+| W15 | No licence for EPA data | Only the EPA can grant permission | Permission email; build without reply; publish derived statistics only. **Update 4 Nov: permission to use the data granted via the supervisor, no additional data; scope for publishing raw readings to be confirmed from the reply.** | Week 1, then ongoing |
 
 ### Resolution schedule
 

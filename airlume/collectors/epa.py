@@ -376,9 +376,89 @@ def fetch_home_html(session: requests.Session | None = None, timeout: int = 30) 
 # Lahore page extras: 7-day hourly city trend and the 24-hour forecast
 # --------------------------------------------------------------------------
 
+def _find_key(node, key: str):
+    """First value stored under `key` anywhere in a (Livewire-wrapped) snapshot."""
+    node = _unwrap(node)
+    if isinstance(node, dict):
+        if key in node:
+            return _unwrap(node[key])
+        for v in node.values():
+            hit = _find_key(v, key)
+            if hit is not None:
+                return hit
+    elif isinstance(node, list):
+        for v in node:
+            hit = _find_key(v, key)
+            if hit is not None:
+                return hit
+    return None
+
+
+def _hour_records(node, out: list[dict]) -> list[dict]:
+    node = _unwrap(node)
+    if isinstance(node, dict):
+        if "datetime" in node and "aqi" in node:
+            out.append(node)
+        else:
+            for v in node.values():
+                _hour_records(v, out)
+    elif isinstance(node, list):
+        for v in node:
+            _hour_records(v, out)
+    return out
+
+
+def parse_lahore_trend_snapshot(html: str) -> pd.DataFrame:
+    """The 7-day trend as the snapshot holds it: city-level PM2.5 and PM10 as well as AQI.
+
+    Found 6 Nov 2026. `historicalData.organized_data` ("Lahore District") carries, for
+    every hour of the last 7 days, the AQI the trend widget draws **and** the city-level
+    pm25, pm10, no2, so2, co, o3 and weather, plus `station_count`. On the saved page of
+    14 Oct its AQI matched the rendered spans in 154 of 154 hours. The spans carry only
+    the AQI, so until now the city series was stored with pm25 and pm10 blank.
+    Because every fetch repeats the last 7 days, this fills the city-level concentration
+    series even for hours the laptop was asleep. Same page, no extra request.
+    Returns an empty frame if the field is absent (the caller falls back to the spans).
+    """
+    soup = BeautifulSoup(html, "lxml")
+    for el in soup.find_all(attrs={_SNAPSHOT_ATTR: True}):
+        raw = el.get(_SNAPSHOT_ATTR) or ""
+        if "organized_data" not in raw:
+            continue
+        try:
+            snap = json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+        od = _find_key(snap.get("data", snap), "organized_data")
+        if od is None:
+            continue
+        rows = []
+        for rec in _hour_records(od, []):
+            aqi = _f(rec.get("aqi"))
+            ts_raw = _unwrap(rec.get("datetime"))
+            ts = pd.to_datetime(ts_raw, utc=True, errors="coerce") if ts_raw else pd.NaT
+            if aqi is None or pd.isna(ts):
+                continue
+            n = _f(rec.get("station_count"))
+            rows.append({
+                "city_id": "PB-LHE", "ts": ts.to_pydatetime(),
+                "pm25": _f(rec.get("pm25")), "pm10": _f(rec.get("pm10")),
+                "aqi": int(aqi), "n_stations": int(n) if n is not None else None,
+                "source": "punjab_epa",
+            })
+        if rows:
+            return pd.DataFrame(rows).drop_duplicates(subset=["city_id", "ts"], keep="last")
+    return pd.DataFrame()
+
+
 def parse_lahore_trend(html: str) -> pd.DataFrame:
-    """The 'AQI Trends (Last 7 Days)' widget embeds one <span data-date data-hour data-aqi> per hour.
+    """The 'AQI Trends (Last 7 Days)' widget, preferring the snapshot (which adds PM2.5 and PM10).
+
+    Fallback: the widget embeds one <span data-date data-hour data-aqi> per hour.
     Returns city_hourly rows for Lahore (city_id PB-LHE). Empty hours (future) are skipped."""
+    snap = parse_lahore_trend_snapshot(html)
+    if not snap.empty:
+        return snap
     soup = BeautifulSoup(html, "lxml")
     sec = soup.find(id="historical-aqi-graph-section") or soup
     rows = []

@@ -95,4 +95,7 @@ def load_all(table: str) -> pd.DataFrame:
         if tcol == "date":
             d[tcol] = d[tcol].dt.date
         frames.append(d)
-    return pd.concat(frames, ignore_index=True)
+    out = pd.concat(frames, ignore_index=True)
+    # A union merge (.gitattributes) can leave the same key twice, for example a CAMS
+    # hour revised on one machine and appended on the other. Keep the later line.
+    return out.drop_duplicates(subset=KEYS[table], keep="last").reset_index(drop=True)

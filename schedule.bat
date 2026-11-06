@@ -19,13 +19,23 @@ rem conditions and adds StartWhenAvailable, so a round missed while the laptop
 rem slept runs on wake instead of being skipped. Every missed hour is lost for
 rem good: the portal only serves the current reading, never history.
 
+rem 6 Nov 2026. Measured from the archive: since 30 Oct the laptop collected on only
+rem 4 to 13 hours a day, with gaps of 8 to 16 hours every night while it slept.
+rem -WakeToRun (step 2) asks Windows to wake the laptop for each round. It only
+rem works if wake timers are allowed and the laptop is asleep, not shut down or
+rem hibernated, and on a Modern Standby laptop it is not guaranteed. The reliable
+rem fix is to leave the laptop plugged in with sleep set to Never on mains power:
+rem     powercfg /change standby-timeout-ac 0
+rem The city-level Lahore series is not affected: every round re-reads the portal's
+rem 7-day trend, so one round in the morning fills the night at city level.
+
 rem 1. Create (or replace) the hourly task.
 schtasks /Create /SC HOURLY /MO 1 /TN "Airlume hourly collect" /TR "\"%~dp0collect_push.bat\"" /F
 if errorlevel 1 (echo Could not create the task. & exit /b 1)
 
 rem 2. Clear the power conditions schtasks just set. Without this the task is
 rem    registered and enabled but refuses to start whenever you are unplugged.
-powershell -NoProfile -Command "$s = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew; Set-ScheduledTask -TaskName 'Airlume hourly collect' -Settings $s"
+powershell -NoProfile -Command "$s = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -WakeToRun -MultipleInstances IgnoreNew; Set-ScheduledTask -TaskName 'Airlume hourly collect' -Settings $s"
 if errorlevel 1 (
   echo.
   echo Task created, but the power conditions could not be cleared.

@@ -21,12 +21,28 @@ Two things live here and must stay separate:
    persistent +8 bias came from.
 
    **What the data has and has not shown**, so nothing is claimed beyond it:
-   PM2.5 up to 350 and PM10 up to 550 are confirmed. PM2.5 above 350 (the 401-500
-   band) has not been observed and is extrapolated; Lahore's winter smog will test
-   it from November. O3 is confirmed to 195 and NO2 to 80 with a single point
-   above; above those the gas sub-index is refused rather than guessed. SO2 and
-   CO have never been the dominant pollutant in our data, so their bands are
-   NEQS-anchored placeholders that cannot affect any reported value so far.
+   PM2.5 up to 350 and PM10 up to 650 are confirmed (6 Nov 2026, 3,293
+   station-hours). PM2.5 above 350 on the current table has not been observed and
+   is extrapolated. O3 is confirmed to 260 and NO2 to 180; above those the gas
+   sub-index is refused rather than guessed. SO2 and CO bands are NEQS-anchored
+   placeholders: CO was the portal's dominant pollutant in 21 hours (0.6%) and
+   none is reproduced (the portal puts about 10 mg/m3 at AQI 200, twice our
+   placeholder), so those hours read low by 2 to 96 points.
+
+   **The portal changed its table on 3 Nov 2026, between 05:00 and 07:00 UTC**
+   (found 6 Nov from the archive; `docs/research/w1-top-band-2026-11-06.md`). Two
+   things changed at once, and no official notice of either has been found:
+   (a) the PM2.5 breakpoint between "Moderate" and "Unhealthy for sensitive
+   groups" moved from 70 to 75 ug/m3 (35.1-75.0 -> 101-150, 75.1-150.0 -> 151-200):
+   1,494 of 1,496 PM2.5-dominant readings before match the old table exactly and
+   102 of 102 after (in the range where the tables differ) match the new one;
+   (b) the top of the scale. Before, any reading above the 301-400 band (PM2.5 over
+   350, PM10 over 550) was published as 500: all 130 such readings. After, the
+   401-500 band is used: 22 of 22 PM10 readings between 550 and 650 match the
+   NEQS-style band below exactly. PM2.5 above 350 has not yet occurred under the
+   new table, so its top band is still extrapolated.
+   `pk_portal` is the table in force now; `pk_portal_v1` is the earlier one, with
+   its saturation; `portal_scale_at(ts)` says which applied to a given hour.
 
 2. **Category labels** - Punjab EPA uses its own 7-band labelling, which is
    shifted one band from the US names.  We display Punjab labels by default
@@ -40,28 +56,51 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from typing import Literal
 
-Scale = Literal["pk_portal", "us_2012", "us_2024"]
+Scale = Literal["pk_portal", "pk_portal_v1", "us_2012", "us_2024"]
 DEFAULT_SCALE: Scale = "pk_portal"
+
+# First hour published on the current portal table (see the module docstring).
+# The change lies between 05:00 and 07:00 UTC on 3 Nov 2026; 06:00 is consistent
+# with every stored reading on either side.
+PK_PORTAL_V2_FROM = datetime(2026, 11, 3, 6, tzinfo=timezone.utc)
+
+
+def portal_scale_at(ts) -> Scale:
+    """The portal table in force at `ts` (a tz-aware datetime or pandas Timestamp)."""
+    return "pk_portal" if ts >= PK_PORTAL_V2_FROM else "pk_portal_v1"
 
 # --- The portal's own table (fitted 16 Oct 2026; units as the portal shows them:
 # ug/m3 for everything except CO in mg/m3). (conc_lo, conc_hi, aqi_lo, aqi_hi). -----
 _PK = {
-    "pm25": [(0.0, 15.0, 0, 50), (15.1, 35.0, 51, 100), (35.1, 70.0, 101, 150),
-             (70.1, 150.0, 151, 200), (150.1, 250.0, 201, 300), (250.1, 350.0, 301, 400),
+    # Current table (from 3 Nov 2026 06:00 UTC). The 150 breakpoint is 75 ug/m3.
+    "pm25": [(0.0, 15.0, 0, 50), (15.1, 35.0, 51, 100), (35.1, 75.0, 101, 150),
+             (75.1, 150.0, 151, 200), (150.1, 250.0, 201, 300), (250.1, 350.0, 301, 400),
              (350.1, 500.0, 401, 500)],          # last band extrapolated, not yet observed
     "pm10": [(0.0, 75.0, 0, 50), (75.1, 150.0, 51, 100), (150.1, 250.0, 101, 150),
              (250.1, 350.0, 151, 200), (350.1, 450.0, 201, 300), (450.1, 550.0, 301, 400),
              (550.1, 650.0, 401, 500)],          # last band extrapolated
-    "o3": [(0.0, 65.0, 0, 50), (65.1, 130.0, 51, 100), (130.1, 195.0, 101, 150)],
-    "no2": [(0.0, 40.0, 0, 50), (40.1, 80.0, 51, 100), (80.1, 130.0, 101, 150)],  # last band: one point
+    # O3 195.1-260 and NO2 130.1-180 added 6 Nov 2026 from the archive: 5 of 5 and
+    # 13 of 13 gas-dominant readings in those ranges reproduced exactly.
+    "o3": [(0.0, 65.0, 0, 50), (65.1, 130.0, 51, 100), (130.1, 195.0, 101, 150),
+           (195.1, 260.0, 151, 200)],
+    "no2": [(0.0, 40.0, 0, 50), (40.1, 80.0, 51, 100), (80.1, 130.0, 101, 150),
+            (130.1, 180.0, 151, 200)],
     "so2": [(0.0, 80.0, 0, 50), (80.1, 120.0, 51, 100)],   # placeholder: never dominant yet
     "co": [(0.0, 5.0, 0, 50), (5.1, 10.0, 51, 100)],       # placeholder: never dominant yet
 }
 # Pollutants whose table is only partly known: above the last fitted band the
 # sub-index is refused (None) instead of extrapolated, so a guess never sets the AQI.
 _PK_REFUSE_ABOVE = {"o3", "no2", "so2", "co"}
+
+# The table in use until 3 Nov 2026 (fitted 16 Oct). Same as `_PK` except the PM2.5
+# 150 breakpoint (70 ug/m3), and the portal published 500 for anything above 400.
+_PK_V1 = {**_PK, "pm25": [(0.0, 15.0, 0, 50), (15.1, 35.0, 51, 100), (35.1, 70.0, 101, 150),
+                          (70.1, 150.0, 151, 200), (150.1, 250.0, 201, 300), (250.1, 350.0, 301, 400),
+                          (350.1, 500.0, 401, 500)]}
+_PK_V1_SATURATES_ABOVE = 400
 
 # (conc_lo, conc_hi, aqi_lo, aqi_hi)
 _PM25_2012 = [
@@ -145,9 +184,16 @@ def _interp(table: list[tuple[float, float, int, int]], c: float) -> int | None:
     return None
 
 
-def _sub_index_pk(pollutant: str, conc: float) -> int | None:
+def _sub_index_pk(pollutant: str, conc: float, scale: Scale = "pk_portal") -> int | None:
     """Sub-index on the portal's own table, in the units the portal shows."""
-    table = _PK[pollutant]
+    if scale == "pk_portal_v1":
+        v = _sub_index_pk_table(_PK_V1, pollutant, conc)
+        return 500 if v is not None and v > _PK_V1_SATURATES_ABOVE else v
+    return _sub_index_pk_table(_PK, pollutant, conc)
+
+
+def _sub_index_pk_table(tables: dict, pollutant: str, conc: float) -> int | None:
+    table = tables[pollutant]
     c = round(float(conc), 1)
     for lo, hi, ilo, ihi in table:
         if lo <= c <= hi:
@@ -171,8 +217,8 @@ def sub_index(pollutant: str, conc: float | None, scale: Scale = DEFAULT_SCALE) 
     """
     if _missing(conc) or conc < 0:
         return None
-    if scale == "pk_portal":
-        return _sub_index_pk(pollutant, conc)
+    if scale in ("pk_portal", "pk_portal_v1"):
+        return _sub_index_pk(pollutant, conc, scale)
     table = BREAKPOINTS[pollutant][scale]
     # Truncate like the EPA does (PM2.5 and CO to 0.1, the rest to integer).
     c = round(conc, 1) if pollutant in ("pm25", "co") else float(int(conc))
@@ -203,7 +249,7 @@ def aqi_from_concentrations(
     are used as given -- the portal bands gases in ug/m3. On the US scales they
     are converted to ppb/ppm here, and O3 above 200 ppb falls back to the 1-hour table.
     """
-    if scale == "pk_portal":
+    if scale in ("pk_portal", "pk_portal_v1"):
         candidates = [(p, sub_index(p, v, scale)) for p, v in
                       (("pm25", pm25), ("pm10", pm10), ("o3", o3),
                        ("no2", no2), ("so2", so2), ("co", co))]

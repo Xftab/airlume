@@ -371,11 +371,20 @@ class Store:
         for t in ("readings", "city_hourly", "epd_daily", "forecasts"):
             self.con.execute(f"DELETE FROM {t} WHERE source = ?", [source])
 
+    def _scalar(self, sql: str) -> int:
+        """Run a one-value query and drain the result.
+
+        `fetchone()` leaves the result open; DuckDB 2.0 then refuses the next
+        `register()` on the same connection (ResourceInUseException). `fetchall()`
+        drains it, which works on 1.5.x and 2.0 alike.
+        """
+        return int(self.con.execute(sql).fetchall()[0][0])
+
     def real_counts(self) -> dict[str, int]:
-        r = self.con.execute("SELECT count(*) FROM readings WHERE source <> 'fake'").fetchone()[0]
-        c = self.con.execute("SELECT count(*) FROM city_hourly WHERE source <> 'fake'").fetchone()[0]
-        e = self.con.execute("SELECT count(*) FROM epd_daily").fetchone()[0]
-        return {"readings": int(r), "city_hourly": int(c), "epd_daily": int(e)}
+        r = self._scalar("SELECT count(*) FROM readings WHERE source <> 'fake'")
+        c = self._scalar("SELECT count(*) FROM city_hourly WHERE source <> 'fake'")
+        e = self._scalar("SELECT count(*) FROM epd_daily")
+        return {"readings": r, "city_hourly": c, "epd_daily": e}
 
     def epd_daily_series(self, city: str, start: datetime, end: datetime,
                          comparable_only: bool = True) -> pd.DataFrame:
@@ -413,7 +422,7 @@ class Store:
         return pd.Timestamp(lo).tz_convert("UTC"), pd.Timestamp(hi).tz_convert("UTC")
 
     def counts(self) -> dict[str, int]:
-        r = self.con.execute("SELECT count(*) FROM readings").fetchone()[0]
-        c = self.con.execute("SELECT count(*) FROM city_hourly").fetchone()[0]
-        e = self.con.execute("SELECT count(*) FROM epd_daily").fetchone()[0]
-        return {"readings": int(r), "city_hourly": int(c), "epd_daily": int(e)}
+        r = self._scalar("SELECT count(*) FROM readings")
+        c = self._scalar("SELECT count(*) FROM city_hourly")
+        e = self._scalar("SELECT count(*) FROM epd_daily")
+        return {"readings": r, "city_hourly": c, "epd_daily": e}

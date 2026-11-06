@@ -1,8 +1,31 @@
 # Status
 
-_Last updated: 2 November 2026_
+_Last updated: 6 November 2026_
 
 ## Where we are
+
+**Latest — 6 Nov 2026.** Data and accuracy audit (memos in `docs/research/`, dated 6 Nov).
+- **(1) Archive data loss.** 7,215 committed rows had been deleted by the two collectors' git merges. The cause is fixed (union merge in `.gitattributes`), and `scripts/recover_archive_rows.py` restores the rows. The 110-hour station gap is really 76 hours.
+- **(2) The portal changed its AQI table on 3 Nov**: PM2.5 breakpoint 70 to 75, and it no longer caps at 500. `aqi.py` now holds both tables, dated. W1 is now 99.1% exact, MAE 0.16 [0.05, 0.31] on 3,293 station-hours.
+- **(3) Forecast:** it beats persistence but not "same hour yesterday" beyond 3 h; both baselines are reported from now on.
+- **(4) CAMS validation re-run** on 313 hours: PM2.5 bias -57.7 [-73.2, -44.0].
+- **(5) City-level PM2.5 and PM10** are now read from the page's 7-day snapshot.
+- **(6)** DuckDB 2.0 bug fixed.
+
+247 tests pass. Closed: `run.bat` (never broken), the 17 Oct hour (present), the superseded sample (removed 5 Nov).
+
+**Next (Aftab, in this order):**
+1. `test.bat`, expect 247 passed.
+2. `git rm scripts\merge_stash_rows.py`, then `save`.
+3. Run the restore script, then `save` again.
+4. Re-run `schedule` (adds wake-to-run) and consider `powercfg /change standby-timeout-ac 0`.
+5. Still open from 4 Nov: the five benchmark decisions, the EPA reply wording, and E4 dates.
+
+**Blockers:** none new.
+
+**Latest — 4 Nov 2026 (evening).** Benchmark validity review: the gold labels are the model's draft byte for byte (same md5), so W2 is not met and no v1 figure may be scored against them; four of twelve form fields are used by none of the 62 questions; both existing question sets are development data. Memo with the corrective plan at `docs/benchmark/validity-review-2026-11-04.md` — five decisions wait on Aftab. `score_benchmark_v1.py` hardened to compare label contents, not file names. Report working draft 1 at `docs/report/report-draft-2026-11-04.md` (chapters 3, 5, 7 substantially complete). **Next:** (1) read the memo and settle the five decisions; (2) run `test.bat`; (3) paste the EPA reply; (4) set E4 dates.
+
+**Earlier on 4 Nov 2026.** Punjab EPA permission to use the data received through the supervisor, with no additional data (the 110-hour gap stays permanently; station coordinates were already official from the portal snapshot of 15 Oct, so nothing is owed there); wording and date still to be pasted in. Sabzazar added to `KNOWN_AREAS` (nearest station Punjab University, 4.6 km), to be checked by `test.bat`. Item 5 closed. Whether the permission covers publishing the raw hourly archive is open. Second annotation: the 1 Nov sample of 20 (`second-annotator-sheet-2026-11-01.csv`, labels blank) is the one to send; a conflicting 4 Nov sample (commit 11ffd92) is superseded and should be removed. Annotator not yet confirmed. E4 sessions not booked. Plan PDF rebuilt (40 pages), clearing that gap. E4 sessions postponed by Aftab; no dates set. **Next:** (1) paste the EPA reply into HISTORY and say whether it allows publishing the raw archive; (2) message Kiran or Tehreem about the second annotation; (3) set E4 dates (before the Week 3 freeze, not on a benchmark day); (4) run `K:\airlume\test.bat`, restore `run.bat`, decide on freezing v1 (2 Nov list).
 
 **Latest — 2 Nov 2026.** Forecast fit re-run (per-band skill +0.22 to +0.26 against persistence; the 17-24 h band includes zero; nothing beyond 24 h is stored, so days 2 to 4 cannot be scored). The 62 classmate questions were run through the real pipeline: about 33 of 62 look right, 27 are clear problems in seven groups (see HISTORY, 2 Nov). Code-only fixes made for resolver errors, place names and the refusal message; the router-stage fixes wait for the decision on freezing benchmark v1. **Next:** (1) run `K:\airlume\test.bat` and confirm 228 pass; (2) restore `run.bat` (`git checkout 9832c2c -- run.bat`) and run `save`; (3) decide: freeze v1 first, or treat the 62 as a development set; (4) supply a coordinate for Sabzazar; (5) still open: EPA permission email (Item 5), second annotation of the 20 questions, 8 to 10 study participants for 4 to 8 Nov; (6) `docs/plan/plan.md` and the PDFs were not updated or rebuilt this session. **Blockers:** none new.
 
