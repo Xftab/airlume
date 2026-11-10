@@ -2,6 +2,8 @@
 
 **Status: working draft, 4 November 2026.** Written early, against the outline in `09-report-outline.md`, so that results land in finished prose as they arrive rather than in a rush in Week 4. Every number here is traced to a file named beside it. Anything not yet measured is marked `[PENDING]` and must not be filled with an estimate. Format, template, page limit and citation style: `[get from UMT FYP guidelines or Dr Rimsha Anam]`.
 
+**Revised 6 November 2026** with the results of the 6 Nov audit (`docs/research/*-2026-11-06.md`): restored archive and coverage (3.1, 5.1), the portal's table change and the new W1 figure (3.3, 5.2), CAMS on 313 hours (5.3), the forecast against the same-hour-yesterday baseline (5.4, RQ1), the prompt v5 schema freeze (3.4, 3.5), and verified Chapter 2 citations (`docs/report/citation-check-2026-11-06.md`).
+
 Three chapters are substantially complete (3 Materials and Methods, 5 Results, 7 Weaknesses). Chapters 1, 2, 4, 6, 8 and 9 are drafted to the point the evidence allows. The abstract is written last, by rule.
 
 ---
@@ -82,11 +84,16 @@ Structure:
 1. **Conversational interfaces to environmental data.** VayuBuddy (2024) and VayuChat (2025) establish the line of work; Punjab's own EcoBot (2025) is the local deployment. VayuBuddy explicitly names the evaluation of *visual* answers as future work, which is the gap C1 addresses.
 2. **Air-quality visualisation and the interpolation question.** `[Fill from the proposal's survey; the specific claim needed is that commercial maps interpolate without disclosing distance-to-sensor.]`
 3. **Reanalysis and model-versus-ground validation.** CAMS and its known coarse resolution over South Asia; the absence of a published local error estimate for Lahore, which C4 supplies.
-4. **Forecasting with limited ground data.** Shwartz-Ziv and Armon (2022) on tree ensembles versus deep models on small tabular data — directly relevant to the finding in 5.4.
-5. **Monitoring-network siting.** The 2022 ISPRS Lahore study, the comparison point for C7.
-6. **Intervention evidence.** Gupta et al. (2022) on anti-smog guns. `[Verify before citing; the scenario calculator makes no effect claim, so this is background only.]`
+4. **Forecasting with limited ground data.** Shwartz-Ziv and Armon (2022), *Information Fusion* 81, on tree ensembles versus deep models on tabular data, which is directly relevant to the finding in 5.4.
+5. **Monitoring-network siting.** Rahman, Usama, Tahir and Uppal (2022), "Data driven framework for analysis of air quality landscape for the city of Lahore", ISPRS Archives XLVIII-4/W5-2022, 167–173. It analyses 4 reference-grade stations and 9 low-cost sensors and proposes a location-recommendation method for new stations. It is the comparison point for C7.
+6. **Intervention evidence.** "Gupta et al. (2022)" could not be found and is dropped. Replacement, as background only: Patra, Sahbaz and Ganesan (CEEW, 18 November 2025), who find the evidence for anti-smog guns limited and their road coverage about 2% in Delhi. The scenario calculator makes no effect claim.
 
-**Statistical methods cited in place:** Wilson (1927) score intervals, Newcombe (1998) for a difference of proportions, Landis and Koch (1977) for kappa bands, Brooke (1996) for the System Usability Scale, Karp and Flatt (1990) for the serial-fraction estimate. `[Confirm each reference's details.]`
+**Statistical methods cited in place** (details verified 6 Nov, `citation-check-2026-11-06.md`):
+- Wilson (1927), *JASA* 22, 209–212, for score intervals;
+- Newcombe (1998), *Statistics in Medicine* 17(8), 873–890, for a difference of proportions;
+- Landis and Koch (1977), *Biometrics* 33(1), 159–174, for kappa bands;
+- Brooke (1996), in *Usability Evaluation in Industry*, 189–194, for the System Usability Scale;
+- Karp and Flatt (1990), *Communications of the ACM* 33(5), 539–543, for the serial-fraction estimate.
 
 ---
 
@@ -106,13 +113,15 @@ Lahore is the deep case: eleven official monitoring stations, a dense population
 | OpenStreetMap (Geofabrik) | Water, aerodrome, military, roads, industrial land | — | vector | ODbL |
 | WAQI | Live AQI | live | — | **Display only; never stored or analysed** |
 
-**Coverage, measured rather than assumed.** Over the whole hourly archive (14 Oct 04:00Z to 31 Oct 09:00Z) the system holds **2,395 of 4,554 possible station-hours, 52.6%**, with 229 of 414 hours carrying any data at all. Over the stable window 15 Oct 06:00Z to 24 Oct 02:00Z, **8.0% of station-hours are missing**, ranging by station from 4.2% to 9.9% (Gulberg III highest, and not an outlier).
+**Coverage, measured rather than assumed.** Over the whole hourly archive (14 Oct 04:00Z to 6 Nov 12:00Z, after the restore described below) the system holds **3,294 of 6,171 possible station-hours, 53.4%**, with 313 of 561 hours carrying any data at all. Over the stable window 15 Oct 06:00Z to 24 Oct 02:00Z, **8.0% of station-hours are missing**, ranging by station from 4.2% to 9.9% (Gulberg III highest, and not an outlier). Over the hours the collector actually ran, station uptime is 92% to 100%. The **Lahore city-level series is complete**: 690 of 690 hours from 8 Oct, because every round re-reads the portal's 7-day trend.
 
 The gap between those two figures is the point. A single headline coverage number would be misleading: most of the loss comes from two identifiable incidents, not from steady attrition.
 
-**Two known gaps, both permanent or explained.**
-- **24 Oct 02:00Z to 28 Oct 16:00Z, 110 hours.** On 25 October the GitHub Actions runner stopped being able to reach the Punjab EPA portal, apparently a geographic block. Collection moved to the laptop on 28 October. These station rows cannot be recovered; the EPA has confirmed it will supply no additional data. City-level values are partially recoverable from the portal's rolling 7-day trend.
-- **One hour, 2026-10-17T03:00:00Z,** missing from the local archive. Present on GitHub; a local copy exists in a stash backup and is not yet merged.
+**Known gaps, and one that turned out to be data loss.**
+- **25 Oct 12:00Z to 28 Oct 15:00Z, 76 hours.** On 25 October the GitHub Actions runner stopped being able to reach the Punjab EPA portal, apparently a geographic block on datacentre addresses. Collection moved to the laptop on 28 October. These station rows cannot be recovered; the EPA has confirmed it will supply no additional data. The gap was first recorded as 110 hours from 24 Oct 02:00Z. The cloud had in fact collected the first 34 of those hours, and they were deleted by the merge fault below and restored.
+- **Night gaps from 30 Oct.** The laptop collects only while awake: 4 to 13 hours a day, with gaps of 8 to 16 hours each night. City-level values are unaffected (7-day trend).
+- **7,215 committed rows deleted by git merges, found and restored on 6 November.** Both collectors fetched every source and so wrote the same month files. Each side's `git pull --rebase -X theirs` / `-X ours` threw away the other side's conflicting rows: 5,520 CAMS forecast rows, 1,052 city-hours, 272 EPA forecast rows and 371 station rows. Every row was still in git history and was restored by `scripts/recover_archive_rows.py`. The cause was fixed with git's union merge for the archive files. This is reported because a data-of-record claim is only as good as the process that keeps it (`docs/research/archive-merge-loss-2026-11-06.md`).
+- The hour 2026-10-17T03:00:00Z, once thought missing, is present in every table.
 
 An earlier figure of 4.5% missing circulated internally; it was the 210-hour W1 sample only, not the archive. A "42%" figure also noted earlier did not reproduce. The measured value is 52.6%, and the discrepancies are recorded here because the report should show how a number was arrived at, not only its final value.
 
@@ -130,16 +139,23 @@ The first serious validity problem found in this project was that the portal's A
 
 Recovered from 304 stored rows on 16 October: **the portal uses its own NEQS-anchored table, with gases in µg/m³** — 99.7% of rows reproduced exactly and 100% within one point, against 6% exact for the US 2012 table. This became the default scale in `airlume/aqi.py`.
 
-Confirmed at scale on 24 October over 2,206 station-hours (MAE 1.7, median 0.0), and with a moving-block bootstrap on 29 October:
+Confirmed at scale on 24 October over 2,206 station-hours (MAE 1.7, median 0.0); the latest-hour window was adopted against 8-hour (MAE 45.1) and 24-hour (54.7) means.
 
-| Window | MAE | 95% CI |
-|---|---|---|
-| 1 hour (adopted) | **3.74** | [2.01, 5.78] |
-| 1 hour, rows below the portal's 500 cap | **0.31** | — |
-| 8 hour | 45.1 | — |
-| 24 hour | 54.7 | — |
+**The portal changed its table on 3 November 2026, between 05:00 and 07:00 UTC** (found 6 November from the archive; no notice found). Two things changed together:
 
-The residual error is **almost entirely top-band saturation**: the portal caps its display at 500, so 91 rows at exactly 500 represent unknown true values above it. Below the cap the reproduction is essentially exact. The one 99-point outlier investigated on 28 October has the same explanation.
+- the PM2.5 breakpoint at AQI 150 moved from 70 to 75 µg/m³ (1,494 of 1,496 distinguishing hours before match the old table, and 102 of 102 after match the new one);
+- until the change, the portal published 500 for every reading above the 301–400 band (PM2.5 over 350, PM10 over 550), in all 130 such hours. Since then the 401–500 band is used (22 of 22 PM10 hours between 550 and 650 match exactly).
+
+The earlier "top-band saturation" residual and the 99-point outlier are this behaviour, not a fault in the recovered table. Two gas bands were added from the archive, in-sample: O₃ 195.1–260 and NO₂ 130.1–180 (151–200). `aqi.py` holds both tables with the date of the change.
+
+| Comparison (day-block bootstrap, 2,000 resamples) | n | Exact | MAE [95% CI] |
+|---|---:|---:|---|
+| **Table in force at each hour, all hours** | 3,293 | **99.1%** | **0.16 [0.05, 0.31]** |
+| Before 3 Nov 06:00 | 2,987 | 99.1% | 0.16 [0.05, 0.33] |
+| From 3 Nov 06:00 | 306 | 99.7% | 0.10 [0.00, 0.39] |
+| October table applied after the change | 306 | 64.1% | 3.94 [1.96, 6.75] |
+
+12 of the 14 hours still off by more than 10 points are CO-dominant (21 CO-dominant hours, 0.6% of the total), where the portal's CO bands are unknown. PM2.5 above 350 has not yet occurred under the new table, so that band is still extrapolated. Source: `scripts/w1_rescore.py`, `data/eval/w1_rescore_2026-11-06.json`.
 
 ### 3.4 The language layer
 
@@ -152,6 +168,13 @@ Design features that follow from the four rules:
 - **Coverage notes.** A question about an unmonitored place names the nearest station and its distance rather than estimating.
 - **Window-aware city answers** (1 November). City-level answers used to quote the current value whatever window was asked; they now aggregate the stored hourly series for the requested window and state the window and the hours of data behind it.
 - **Out-of-archive windows** (1 November). A window the archive does not reach now produces a sentence saying what the archive covers, rather than "No data for that place and time". This came directly from a benchmark failure (q024) where the model returned a 2023 date range from its training era.
+- **Prompt v5 and the schema freeze** (6 November), from the 2 November run of the 62 classmate questions:
+  - `city` is null when no city is named, so "is the air clean in Lahore?" is answered for Lahore, not with a national headline;
+  - right-now questions separate *how is it* (`latest`: the city figure, the spread across stations, and the advisory for the city level) from *where is it worst or cleanest* (`max`/`min`);
+  - a new `hour_of_day` aggregation answers "is smog lower at night?" from the gap-free city series;
+  - a clarify always wins over a refusal, so "AQI around my home?" gets "which area are you in?";
+  - "when will it improve" is routed to the forecast.
+  The form shape is now frozen until submission.
 
 Prompt v4 (30 October) made guidance questions in scope and the forecast horizon and hour-of-day rules explicit.
 
@@ -172,7 +195,7 @@ Prompt v4 (30 October) made guidance questions in scope and the forecast horizon
 
 **Test set.** A fresh collection, in two clearly labelled strata: **Stratum A, naturalistic** (unsteered classmate questions, carrying the headline claim) and **Stratum B, schema coverage** (constructed after the schema freeze to exercise the four unused fields, reported separately). `[Collection pending the schema freeze; see Chapter 7, W2.]`
 
-**Annotation.** Two annotators who have not seen any model draft fill the form independently from annotator guide v2. Disagreements are adjudicated against the written guide, with the governing rule recorded for each. Where the guide is silent, that is a guide gap: the guide is amended and both annotators re-decide.
+**Annotation.** Two annotators who have not seen any model draft fill the form independently from annotator guide v3 (6 Nov, matching prompt v5). Disagreements are adjudicated against the written guide, with the governing rule recorded for each. Where the guide is silent, that is a guide gap: the guide is amended and both annotators re-decide.
 
 **Statistics.** Wilson score intervals for proportions, because they stay honest at 0% and 100% where a bootstrap collapses to zero width. Newcombe intervals for a difference of proportions. Moving-block bootstrap for time series. Cohen's kappa for inter-annotator agreement, reported with its n and without leaning on the adjective. Splits are time-based, never random. Every per-field figure is printed as correct/n, and **any field with n below about 10 is reported as a count with no percentage headline.**
 
@@ -225,27 +248,29 @@ Engineering detail stays in `docs/plan/plan.md`; this chapter is short by design
 
 ### 5.1 Data quality and coverage
 
-As Chapter 3.1: 52.6% of station-hours over the whole archive, 8.0% missing in the stable window, by station 4.2% to 9.9%, one permanent 110-hour gap. `[Figure: hourly coverage by station.]`
+As Chapter 3.1: 53.4% of station-hours over the whole archive (to 6 Nov), 8.0% missing in the stable window, by station 4.2% to 9.9%. One permanent 76-hour gap, plus night gaps from 30 Oct. The city-level series is complete. 7,215 rows lost to merge conflicts were restored. `[Figure: hourly coverage by station.]`
 
 ### 5.2 AQI harmonisation (W1)
 
-As Chapter 3.3. The headline: **MAE 3.74 [2.01, 5.78] over 2,217 rows; 0.31 below the portal's 500 cap.** The window comparison (1 h 1.7, 8 h 45.1, 24 h 54.7, on the 210-hour sample) establishes that the portal reports a 1-hour window.
+As Chapter 3.3. The headline: **with the table in force at each hour, 99.1% of 3,293 station-hours reproduced exactly, MAE 0.16 [0.05, 0.31]**. The portal changed its table on 3 November, and the earlier 3.74 figure mixed its old saturation at 500 into the error. The window comparison (1 h 1.7, 8 h 45.1, 24 h 54.7, on the 210-hour sample) establishes that the portal reports a 1-hour window. Residual: CO-dominant hours (0.6%).
 
 ### 5.3 CAMS against ground stations (RQ2, C4)
 
-211 paired hours, 13–28 October 2026. All intervals are moving-block bootstrap (6-hour blocks, 5,000 resamples).
+313 paired hours, 14 October to 6 November 2026 (restored archive). Intervals are a moving-block bootstrap with 6-hour blocks. The 29 October run on 211 hours is kept below for comparison.
 
-| Quantity | n | MAD [95% CI] | Bias [95% CI] | r |
-|---|---:|---|---|---:|
-| PM2.5 µg/m³ | 211 | 49.8 [39.1, 63.6] | −47.7 [−62.0, −36.6] | 0.65 |
-| PM10 µg/m³ | 211 | 179.4 [153.3, 208.3] | −178.8 [−207.7, −152.2] | 0.59 |
-| AQI (PM-only, portal scale) | 211 | 47.5 [37.2, 59.9] | −45.4 [−58.6, −34.7] | 0.65 |
+| Quantity | n | MAD [95% CI] | Bias [95% CI] | r | 29 Oct (211 h): bias, r |
+|---|---:|---|---|---:|---|
+| PM2.5 µg/m³ | 313 | 61.1 [48.5, 75.5] | −57.7 [−73.2, −44.0] | 0.68 | −47.7, 0.65 |
+| PM10 µg/m³ | 313 | 192.9 [168.4, 219.8] | −191.7 [−219.1, −166.6] | 0.65 | −178.8, 0.59 |
+| AQI (PM-only, portal scale) | 313 | 69.3 [55.9, 85.0] | −65.4 [−82.0, −50.8] | 0.69 | −45.4, 0.65 |
+
+The bias has grown as the season has deepened (−20 on 30 hours, −48 on 211, −58 on 313). CAMS follows the ups and downs but misses more of the level as smog intensifies, which is consistent with local sources that a 0.4° (about 40 km) cell under-resolves.
 
 **Three findings.**
 
-1. **CAMS is useful for trend, not for level.** r = 0.65 city-mean, rising to **0.77 at a lag of −2 to −3 hours** — CAMS leads the surface monitors, consistent with the model capturing boundary-layer mixing before the ground responds. But the bias is stable at about −48 µg/m³ regardless of shift: the problem is magnitude, not timing. Displaying a CAMS value as "current air quality" would mislead.
+1. **CAMS is useful for trend, not for level.** r = 0.68 city-mean (313 h). The correlation rises when CAMS is shifted by two hours, but the sign of the best shift has changed between runs (+2 h on 16 Oct, −2 to −3 h on 29 Oct, +2 h on 6 Nov), so no timing offset is claimed. The bias does not move with the shift: the problem is magnitude, not timing. Displaying a CAMS value as "current air quality" would mislead.
 2. **PM10 is effectively untracked.** A bias of −179 µg/m³ means the coarse fraction — dust, construction, road — is invisible to a 45 km cell.
-3. **Within-city variation is extreme and CAMS cannot see it.** Per-station PM2.5 MAD runs from **Gulberg III 26.5 (bias +4.2, r 0.73)** to **Multan Road 95.4 (bias −94.6, r 0.39)**. CAMS tracks the clean residential station well and under-reads the roadside and industrial sites badly. This is the quantitative case for a station-level 3D map rather than a modelled surface.
+3. **Within-city variation is extreme and CAMS cannot see it.** Per-station PM2.5 MAD runs from **Gulberg III 27.8 (bias +7.1)** to **Multan Road 102.5 (bias −101.2)** on 313 hours (29 Oct: 26.5 to 95.4). CAMS tracks the clean residential station well and under-reads the roadside and industrial sites badly. This is the quantitative case for a station-level 3D map rather than a modelled surface.
 
 **Honest notes.** A preliminary 30-hour analysis on 24 October found a bias of −20.4, r 0.85, and a best lag of **+2** hours. The two-week dataset reversed the lag and more than doubled the bias. The preliminary result was noise from too few hours, and it is reported here because it shows how misleading a 30-hour window was. Framing throughout is **agreement, not error**: the station instruments are uncalibrated and sometimes offline, so this measures how far model and stations agree (W9).
 
@@ -255,106 +280,39 @@ As Chapter 3.3. The headline: **MAE 3.74 [2.01, 5.78] over 2,217 rows; 0.31 belo
 
 **Hourly CAMS correction (Models B, C), 42 test hours.** Model B MAE 37.3 against raw CAMS 80.4 — a **54% reduction** in CAMS error — but hourly persistence scores 21.1 and beats both. A learned correction fixes CAMS without being useful as a forecast.
 
-**Hourly 1–24 h Lahore AQI (Phase 4.2), re-run 2 November.** 584 hourly values, 412 training and 146 test origins, split at 2026-10-27T00:00Z. Skill against persistence, block bootstrap over origins:
+**Hourly 1–24 h Lahore AQI (Phase 4.2), re-run 6 November** on the restored archive (`data/eval/forecast_fit_2026-11-06.json`, `forecast_baseline_check_2026-11-06.json`). 690 hourly values; 412 training and **252 test origins**; split at 2026-10-27T00:00Z, fixed on 1 November. Block bootstrap over origins.
 
-| Band | Persistence MAE | Ridge (per band) | LightGBM (per band) | Relayed CAMS | Relayed EPA |
+Skill against **persistence**:
+
+| Band | Persistence MAE | Ridge (per band) | LightGBM (per band) | Same hour yesterday | Relayed CAMS |
 |---|---:|---|---|---|---|
-| 1–3 h | 42.7 | +0.16 [+0.14, +0.21] | +0.23 [+0.09, +0.32] | −2.04 [−2.58, −0.76] | −0.30 [−0.42, −0.10] |
-| 4–8 h | 99.6 | +0.27 [+0.11, +0.37] | +0.31 [+0.21, +0.39] | −0.37 [−0.66, +0.24] | +0.04 [−0.02, +0.23] |
-| 9–16 h | 128.0 | +0.35 [+0.20, +0.45] | +0.26 [+0.15, +0.39] | +0.03 [−0.29, +0.35] | — |
-| 17–24 h | 96.5 | +0.15 [−0.01, +0.37] | +0.10 [−0.11, +0.42] | −0.08 [−0.79, +0.51] | — |
-| **All 1–24 h** | **100.4** | **+0.26 [+0.12, +0.37]** | **+0.22 [+0.07, +0.36]** | −0.20 [−0.58, +0.28] | −0.04 [−0.10, +0.14] |
+| 1–3 h | 43.6 | +0.14 [+0.06, +0.20] | +0.24 [+0.17, +0.29] | −0.51 | −1.96 [−2.60, −1.50] |
+| 4–8 h | 101.3 | +0.29 [+0.12, +0.38] | +0.35 [+0.25, +0.41] | +0.35 | −0.29 [−0.59, −0.12] |
+| 9–16 h | 130.0 | +0.34 [+0.16, +0.46] | +0.28 [+0.15, +0.36] | +0.49 | −0.04 [−0.30, +0.12] |
+| 17–24 h | 92.7 | +0.02 [−0.27, +0.23] | −0.18 [−0.55, +0.11] | +0.26 | −0.50 [−0.97, −0.10] |
+| **All 1–24 h** | **100.6** | **+0.22 [+0.05, +0.34]** | **+0.15 [+0.01, +0.26]** | **+0.34** | −0.34 [−0.63, −0.11] |
 
-**The answer to RQ1, stated carefully.** A simple learned model trained on the local archive beats persistence over 1–24 hours, with an interval that excludes zero. **The relayed forecasts do not** — the official EPA forecast and the relayed CAMS forecast both score at or below persistence, and CAMS is dramatically worse at 1–3 hours. Four qualifications, all of which belong beside the result:
+The relayed EPA forecast (1–8 h only) is +0.07 overall.
 
-- **The 17–24 h band includes zero** for both models. Skill is real at short and medium range and unproven at a day out.
-- **The single-model variants lose at 1–3 hours**; only the per-band fit wins there, and **the per-band choice was made after seeing the data, so it is post hoc.**
-- **The test period is far heavier smog than training** (mean AQI 273 against 175; range 100–486 against 67–419). How far the skill transfers to a normal period is untested.
-- **Nothing beyond 24 hours exists in the archive** — the longest stored horizon is 24 h for CAMS and 8 h for EPA — so days two to four cannot be scored at all, and the product scope stays at 48 hours maximum.
+Skill against **the same hour yesterday** (seasonal naive), on the same rows:
 
-### 5.5 The language layer (RQ3, C1, C2)
+| Band | Yesterday MAE | LightGBM (per band) | Ridge (per band) | Blend (training-fitted) |
+|---|---:|---|---|---|
+| 1–3 h | 65.6 | **+0.49 [+0.25, +0.64]** | +0.43 [+0.16, +0.59] | +0.40 [+0.13, +0.56] |
+| 4–8 h | 65.8 | −0.01 [−0.41, +0.25] | −0.10 [−0.52, +0.15] | +0.05 [−0.10, +0.17] |
+| 9–16 h | 66.8 | −0.41 [−1.03, +0.03] | −0.28 [−0.81, +0.08] | +0.01 [−0.06, +0.08] |
+| 17–24 h | 68.2 | −0.61 [−1.54, −0.08] | −0.34 [−0.99, +0.04] | −0.00 [−0.06, +0.05] |
+| All 1–24 h | 66.9 | −0.27 [−0.80, +0.07] | −0.17 [−0.58, +0.12] | **+0.06 [−0.02, +0.13]** |
 
-**Benchmark v0, 90 items, prompt v4, 30 October — a development result.**
+**The answer to RQ1, stated carefully.** The learned models beat persistence over 1–24 hours with intervals that exclude zero, and the relayed forecasts do not: CAMS is worse than persistence at every band. **But persistence is the weak baseline in a smog season with a strong daily cycle.** The same hour yesterday beats persistence by a third. Beyond three hours, no learned model beats it. The models win only at 1–3 hours, where they are about half as wrong as yesterday. The 2 November result already showed yesterday (+0.28) level with the best model (+0.26), and it should have been reported beside it. A one-weight-per-horizon blend of the last value and yesterday is the best overall (MAE 62.6). Its weights were fitted on training rows only, but it was added after seeing the result, so it is exploratory.
 
-| Run | Prompt | Pass | 95% CI | Consistency |
-|---|---|---|---|---|
-| gpt-oss-120b, 15 Oct | v3 | 88.9% | [82, 96] | 100% |
-| gpt-oss-120b, 30 Oct | v4 | **90.0%** | [83.3, 95.6] | 100% |
-| gpt-oss-20b, 30 Oct | v4 | **90.0%** | [83.3, 95.6] | 100% |
+Five qualifications, all of which belong beside the result:
 
-**v4 is safe:** no item that passed under v3 fails under v4, and one that failed now passes. The 1.1-point rise *is* that single item, and the intervals overlap almost entirely, so the honest statement is "no measurable change", not "v4 improved the router".
-
-**The two models are indistinguishable and fail differently.** Both land on exactly 90.0%. 120b fails four follow-ups; 20b fails three plus one `best_time` and one `forecast`. **Five times the parameters buys nothing measurable here** — the second time in this project that the larger or deeper model did not win (see 5.4).
-
-**`follow_up` is the weakest class:** 16/20 on 120b, 17/20 on 20b, and nearly half of all failures. Multi-turn context is the thing to improve if anything is.
-
-Two failures worth naming rather than burying:
-- **q002, "Which station has the cleanest air at the moment?"** Both models answer `aggregation: min`; the gold is `latest`. The prompt says so in capitals. When an explicit capitalised instruction fails on both models, the convention is probably fighting the semantics: "cleanest" is a superlative and `min` is the obvious word. The gold is still right — `min` means a minimum over a window and `now` has no window — but the distinction is subtle and belongs in the report rather than in a failure list.
-- **q024, "Was October worse than September in Lahore?"** The model returned a range in **2023**, from its training era. The resolver checked the date was well-formed but not that it fell inside the archive, so it resolved to a valid empty window and the user saw "No data for that place and time". No invented value was ever shown, so rule 3 held — but the message hid the cause. Fixed on 1 November (3.4).
-
-**Per-field accuracy** is reported as correct/n with Wilson intervals in Appendix `[ref]`. The reporting trap is worth stating once: of fourteen fields, one is carried by a single item. A `0%` in such a cell is one item decided one way, not a quality difference. `city` 69/69, `view` 43/46, `time` 43/44, `aggregation` 38/40 on 120b are the only figures with enough items to carry a claim.
-
-**Roman Urdu in v0 rests on ten items** (9/10 and 8/10). That distinguishes nothing, and it is 14% of v0 against the 60% that real users wrote.
-
-**What real users ask (the classmate set, 62 questions, 30 October).** This is a result in its own right, independent of any labelling:
-
-| Bucket | n | Share |
-|---|---:|---:|
-| In scope | 40 | 65% |
-| — of which answerable only because of the graded-response module | 12 | 19% |
-| Out: weather (rain, sunrise) | 8 | 13% |
-| Out: causes, or effect of an intervention | 6 | 10% |
-| Out: medical effects | 3 | 5% |
-| Out: beyond the forecast horizon | 2 | 3% |
-| Out: unmonitored place, general knowledge, indoor air | 3 | 5% |
-| **Out of scope, total** | **22** | **35%** |
-
-Three findings follow.
-
-1. **v0 under-represents refusal by about three and a half times** (10% against 35%). The single most common thing a first-time user asks is something the system is designed not to answer, and the development benchmark barely tested that path.
-2. **v0 badly under-weights Roman Urdu** (14% against 60%). The project claims the two languages as equal first-class inputs; the users it was built for wrote Roman Urdu more often than English. v0's share was set by the team's own writing habits.
-3. **The graded-response module was independently validated.** Nineteen per cent of questions are health-advice questions, and every one is answerable only because of a module specified on 29 October, *before* these questions were collected. One maps exactly onto its `vulnerable_groups` field. It is the difference between 46% and 65% in-scope coverage.
-
-The largest out-of-scope bucket is weather. People approach an air-quality app as a weather app. The project holds ERA5 history, so the data exists, but answering weather questions stays out of scope: **the refusal is correct and the fix is wording, not features.** A refusal that says what Airlume *can* answer instead of only what it cannot would improve roughly a third of first questions.
-
-**Benchmark v1. `[PENDING]`** Gold labels, pass rate by language with Wilson intervals, the English-minus-Roman-Urdu gap with a Newcombe interval, the scope decision alone, and inter-annotator kappa. Blocked on the schema freeze and the fresh collection (3.5). **The report must not present any figure scored against the 4 November draft labels.**
-
-### 5.6 Performance (E5, E6)
-
-**Response time (E6, 1 November, gpt-oss-20b, 30 questions).** Model round trip **median 1.13 s [1.03, 1.26]**, p95 1.55 s, max 2.05 s. Resolve is 0.0001 s and answer 0.018 s — **the rest of the pipeline is about 20 ms**, so essentially all latency is the model call. Store build 0.589 s.
-
-The practical bound is not compute. On the free tier, above roughly three questions a minute the system waits about 15 s per question. **Rate limiting, not hardware, sets the ceiling.**
-
-**Parallel extraction (E5, CC425, 1 November).** 300 PDFs, 72.6 MB, 3 repeats, on an i7-1355U with 8 GB RAM, 10 physical / 12 logical cores, on mains power.
-
-| Design | Workers | Median s | Speed-up | Efficiency | Serial fraction | Peak RSS |
-|---|---:|---:|---:|---:|---:|---:|
-| sequential | 1 | 54.6 | 1.00 | 1.00 | — | 372 MB |
-| multiprocess | 2 | 32.1 | 1.70 | 0.85 | 0.176 | 628 MB |
-| multiprocess | 4 | 21.5 | 2.54 | 0.63 | 0.192 | 935 MB |
-| multiprocess | 8 | 16.2 | 3.37 | 0.42 | 0.196 | 1,369 MB |
-| multiprocess | 12 | 13.8 | 3.95 | 0.33 | 0.186 | 2,080 MB |
-| async | 8 | — | 3.35 | — | 0.231 | — |
-
-**Results are byte-identical across every configuration** (zero mismatches against sequential), which is the property that matters for a data pipeline. The Karp–Flatt serial fraction sits at **about 0.19** and is stable as workers increase, so the ceiling is Amdahl's, not contention. Efficiency falls below half at eight workers and memory roughly doubles from four to twelve.
-
-**And the result that matters practically:** the real back-fill waits 2 s between requests out of politeness, so downloading 1,990 files cannot take less than **3,980 s** whatever the parallel design. Parsing is 0.182 s per file sequentially. **The task is download-bound by two orders of magnitude, and the parallel speed-up, while real, is irrelevant to the wall-clock time of the actual job.** The honest engineering conclusion is to report the measured speed-up and then say it does not help here. `[Note: the async figures use a local server with a fixed 100 ms delay — a model of latency, not a measurement of the EPD server.]`
-
-**Map frames per second: `[PENDING — measure by hand.]`**
-
-### 5.7 User study (E4) — `[PENDING]`
-
-Plan at `docs/study/user-study-plan-2026-11-01.md`: 8–10 participants, none of them team members, at least four habitual Roman Urdu writers; three task-shaped goals; System Usability Scale; two open questions. Task success as correct/n with Wilson intervals, time as median and range, SUS with a bootstrap interval. Ground truth is read from the store before each session so a stale map cannot make a correct answer look wrong.
-
-**Not started as of 4 November.** No supervisor approval is being sought and no formal ethics sign-off was obtained; the report states this plainly in Chapter 8 and in the limitations. The planned window of 4–8 November has passed and no dates are set.
-
-### 5.8 Insights (RQ4, C7)
-
-`[Priority-score examples with their data-confidence flags; the graded-response menu; one scenario-calculator example with its assumptions stated; the station-placement output with coverage gained per proposed site.]`
-
-Population coverage and placement use the WorldPop 1 km grid and OpenStreetMap land use, excluding water, aerodrome and military cells and scoring proximity to roads and industrial land.
-
----
+- **Two baselines, not one.** Skill is reported against both from now on; the stronger, yesterday, is the bar from 4 h on.
+- **The per-band models and the blend are post hoc.** The single-model variants lose at 1–3 hours, so the per-band fit was added after seeing the data; the blend likewise.
+- **The test period is far heavier smog than training** (mean AQI 301 against 175; range up to 500 against 419), which is the likely reason the 17–24 h band goes negative.
+- **The archive is about four weeks long**, so every hourly result is a short-window result.
+- **Nothing beyond 24 hours exists in the archive** (CAMS 24 h, EPA 8 h), so days two to four cannot be scored, and the product scope stays at 48 hours.
 
 ## 6. Discussion
 
@@ -362,7 +320,7 @@ Six points, each tied to a result above.
 
 **1. The larger model did not win, twice.** LightGBM matched or beat the LSTM and GRU on daily forecasting (5.4); `gpt-oss-120b` and `gpt-oss-20b` scored identically on the language benchmark (5.5). At this data size and task difficulty, capacity is not the binding constraint. This is consistent with Shwartz-Ziv and Armon (2022) on small tabular data, and it is worth stating once as a theme rather than twice as a surprise.
 
-**2. Learned local correction beats relayed official forecasts — within a narrow window.** Over 1–24 hours the per-band models show positive skill with intervals excluding zero, while both the relayed CAMS and the official EPA forecast score at or below persistence (5.4). The caveats are load-bearing: post hoc band choice, a heavy-smog test period, and no skill at all demonstrated beyond 16 hours.
+**2. The baseline decides the verdict.** Against persistence the learned models show positive skill over 1–24 hours, and the relayed CAMS and EPA forecasts do not (5.4). Against "the same hour yesterday" the models win only at 1–3 hours. In a season with a strong daily cycle, the honest yardstick is the stronger simple baseline, not the conventional one. The caveats are load-bearing: post hoc band choice, a heavy-smog test period, and no skill at all demonstrated beyond 16 hours.
 
 **3. A global reanalysis is a trend instrument, not a measurement.** CAMS correlates with ground truth and even leads it by two to three hours, but sits about 48 µg/m³ low on PM2.5 and 179 low on PM10, and is blind to the within-city gradient (5.3). This is the empirical justification for the whole design choice of showing only measured station values on the map.
 
@@ -380,13 +338,13 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 
 | | Weakness | Mitigation | Evidence | Verdict |
 |---|---|---|---|---|
-| W1 | Station AQI vs CAMS concentration: different units and formulas | Recover the portal's own scale | 5.2: MAE 3.74 [2.01, 5.78]; 0.31 below the cap | **Met.** Residual is top-band saturation; top PM2.5 band still to confirm on November data |
+| W1 | Station AQI vs CAMS concentration: different units and formulas | Recover the portal's own scale | 5.2: 99.1% exact, MAE 0.16 [0.05, 0.31] on 3,293 station-hours, with the portal's 3 Nov table change dated | **Met.** Residual is CO-dominant hours (0.6%); PM2.5 top band still extrapolated under the new table |
 | W2 | Benchmark written by the system's builder | Classmates write blind; second annotator; kappa | 62 blind questions collected; **but the gold labels were a model draft accepted unchanged** | **NOT MET as of 4 Nov.** See `validity-review-2026-11-04.md`. Corrective plan in 3.5; verdict cannot be Met until independent annotation is complete |
 | W3 | Contribution mistaken for "just structured output" | Frame as scoring the *visual* answer | 1.4 framing; C1 wording | **Met in framing**; relies on the report and viva being consistent |
 | W4 | Small samples | Intervals on every figure; no claims inside the noise | Wilson and bootstrap intervals throughout Chapter 5 | **Met** |
 | W5 | No single correct camera | Score camera by level and direction category | v0 camera n = 5; classmate set n = 1 | **Partially met.** The rubric exists; the evidence base is too thin to report a camera accuracy |
 | W6 | LLM answers vary between runs | Temperature 0; repeated runs; report consistency | 100% consistency on both models, v0 | **Met for v0**; to be repeated on the test set |
-| W7 | Forecast may not beat the baseline | CAMS forecast as an input feature | 5.4: learned per-band models +0.22 to +0.26; relayed forecasts do not beat persistence | **Reduced, honestly.** Skill is real at 1–16 h, unproven at 17–24 h, post hoc, and from a heavy-smog test period |
+| W7 | Forecast may not beat the baseline | CAMS forecast as an input feature | 5.4: against persistence +0.15 to +0.22 over 1–24 h; against the same hour yesterday, wins only at 1–3 h | **Partly met.** Beats persistence; matches but does not beat the seasonal baseline beyond 3 h; post hoc; heavy-smog test period |
 | W8 | Placement ignores pollution sources | Add roads and industrial land | 5.8 | **Reduced.** Still a heuristic, not a siting study |
 | W9 | Station readings may be inaccurate | Frame C4 as agreement; report uptime | 5.3 framed as agreement; coverage in 5.1 | **Handled.** US Consulate cross-check `[pending]` |
 | W10 | 3D columns distort height comparison | 2D ranked bar beside every 3D view | Chapter 4 | **Met** |
@@ -424,9 +382,9 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 
 ## 9. Conclusion and future work
 
-**RQ1 — can a learned forecaster beat persistence, CAMS and the EPA forecast?** Yes over 1–16 hours, with intervals excluding zero, and no over 17–24 hours. The relayed official forecasts do not beat persistence at any horizon tested. The qualifications in 5.4 — post hoc band selection, a heavy-smog test period, a four-week archive — are part of the answer, not footnotes to it.
+**RQ1 — can a learned forecaster beat persistence, CAMS and the EPA forecast?** It beats persistence and both relayed forecasts. It does not beat "the same hour yesterday" beyond three hours, and that is the stronger baseline in smog season. The relayed CAMS forecast is worse than persistence at every horizon. The qualifications in 5.4 — post hoc band selection, a heavy-smog test period, a four-week archive — are part of the answer, not footnotes to it.
 
-**RQ2 — how well does CAMS match ground stations?** Well in trend (r 0.65, rising to 0.77 at a 2–3 hour lead), poorly in level (PM2.5 bias −47.7, PM10 −178.8), and not at all in within-city structure (per-station MAD 26.5 to 95.4). This is the first such quantification published for Lahore.
+**RQ2 — how well does CAMS match ground stations?** Well in trend (r 0.68), poorly in level (PM2.5 bias −57.7 [−73.2, −44.0], PM10 −191.7, both growing with the season), and not at all in within-city structure (per-station PM2.5 MAD 27.8 to 102.5), on 313 hours. This is the first such quantification published for Lahore.
 
 **RQ3 — can a conversational interface answer air-quality questions reliably?** `[PENDING a valid test set.]` The development benchmark reaches 90.0% [83.3, 95.6] on 90 items with 100% run-to-run consistency, and the collected evidence on what real users ask is reported in 5.5. The honest position on 4 November is that **reliability has not yet been measured on held-out data**, and the report says so.
 
@@ -440,7 +398,7 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 
 **References.** 26 verified references from the proposal, plus the additions in Chapter 2, each verified before use.
 
-**Appendices.** A: annotator guide v2. B: benchmark questions and gold labels. C: per-field accuracy tables with n and Wilson intervals. D: evaluation scorecards (`data/eval/*.json`). E: test list. F: prompt v4. G: security audit, 29 October. H: E4 materials (plan, recording sheet, SUS sheet). I: the benchmark validity review of 4 November.
+**Appendices.** A: annotator guide v3. B: benchmark questions and gold labels. C: per-field accuracy tables with n and Wilson intervals. D: evaluation scorecards (`data/eval/*.json`). E: test list. F: prompt v5 (and v4, under which v0 was scored). G: security audit, 29 October. H: E4 materials (plan, recording sheet, SUS sheet). I: the benchmark validity review of 4 November.
 
 ### Evidence ledger
 
@@ -450,7 +408,9 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 | AQI harmonisation | `scripts/w1_check.py`; `docs/research/w1-harmonisation.md` |
 | CAMS validation | `scripts/cams_validation.py`; `docs/research/cams-validation.md` |
 | Daily and hourly models | `scripts/model_a_*.py`, `scripts/model_bc.py` |
-| Hourly 1–24 h forecaster | `data/eval/forecast_fit_2026-11-02.json` |
+| Hourly 1–24 h forecaster | `data/eval/forecast_fit_2026-11-06.json`, `forecast_baseline_check_2026-11-06.json` (2 Nov run superseded) |
+| AQI table change, W1 re-score | `data/eval/w1_rescore_2026-11-06.json`; `docs/research/w1-portal-table-change-2026-11-06.md` |
+| Archive merge loss and restore | `scripts/recover_archive_rows.py`; `docs/research/archive-merge-loss-2026-11-06.md` |
 | Language layer v0 | `data/eval/e1_*_2026-10-30.json`; `docs/research/benchmark-v0-prompt-v4-2026-10-30.md` |
 | What users ask | `docs/research/classmate-questions-2026-10-30.md` |
 | Benchmark validity | `docs/benchmark/validity-review-2026-11-04.md` |
@@ -461,10 +421,10 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 
 ### What must happen before this draft becomes a report
 
-1. **Schema freeze**, then the fresh question collection and independent annotation (3.5). Until then W2 is not met and 5.5 has no headline.
+1. **Schema freeze: done 6 Nov (prompt v5).** Then the fresh question collection and independent annotation (3.5; `docs/benchmark/v1-packet-2026-11-06.md`). Until then W2 is not met and 5.5 has no headline.
 2. **E4 sessions**, scheduled and run (5.7).
 3. **Frames per second**, measured by hand (5.6).
 4. **The EPA reply pasted in**, and the raw-redistribution question settled (3.1, 8).
 5. **Figures and screenshots** captured.
-6. **Chapter 2 citations** verified one by one.
+6. **Chapter 2 citations**: verified 6 Nov (`citation-check-2026-11-06.md`). Remaining: TVCG volume and page numbers for refs 3 to 5, from the publisher.
 7. **Contribution statement** agreed with the team.

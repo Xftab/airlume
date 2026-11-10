@@ -1,4 +1,4 @@
-"""
+r"""
 Model A baselines: persistence and LightGBM on daily feature table.
 RUN NOW in Command Prompt:
     K:

@@ -229,7 +229,7 @@ if question:
             intent = intent.model_validate(merged)
         st.session_state["last_question"] = question
         st.session_state["last_result"] = result
-        if intent.in_scope and not intent.clarify:
+        if intent.response_kind() == "answer":
             st.session_state["previous_form"] = intent.model_dump()
         st.session_state["last_intent"] = intent.model_dump()
     else:
@@ -243,12 +243,13 @@ if intent is not None:
             st.subheader("View-intent form")
             st.caption(f"model: {result.model}{' (cached)' if result.cached else ''} · {result.latency_s:.1f}s")
             st.json(intent.model_dump(), expanded=True)
-    if not intent.in_scope:
+    # A clarify wins over in_scope false (6 Nov 2026, prompt v5): asking is never harmful.
+    if intent.response_kind() == "clarify":
+        st.warning(md_escape(intent.clarify))
+    elif intent.response_kind() == "refuse":
         st.info("I can only answer about air quality in Pakistan's monitored cities. "
                 "Try, for example: \"Which Lahore station is worst right now?\" or "
                 "\"What is the AQI forecast for Lahore?\"")
-    elif intent.clarify:
-        st.warning(md_escape(intent.clarify))
     else:
         try:
             resolved = resolve(intent, reg)

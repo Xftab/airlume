@@ -14,3 +14,5 @@ Each item carries the fields that **matter for its class** in `expected`. Scorin
 - The `author` column records who wrote each item (`author` = project team, `classmate` = written blind). Target: half the English items from classmates before the freeze.
 
 Status: **draft v0 (14 Oct 2026), not yet frozen.** Classmate items and a second annotator (kappa on 20 items) are pending.
+
+**6 Nov 2026.** Schema and prompt frozen at v5 (`docs/benchmark/v1-packet-2026-11-06.md`). This set (v0) and the 62 classmate questions of 30 Oct are **development data**; v0's figure stands as recorded under prompt v4 and is not re-scored under v5. Benchmark v1 is a fresh naturalistic set (Part A, to be collected) plus `partB-constructed-2026-11-06.jsonl` (30 constructed schema-coverage questions, labels by humans only, reported separately). Annotator guide version 3.

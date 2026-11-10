@@ -30,7 +30,7 @@ Lenovo ThinkBook 14 G6 IRL (21KG): i7-1355U (10 cores, 12 threads), 8 GB DDR5 (o
 - `collectors/waqi_display.py` may be imported only by the app (`tests/test_waqi_isolation.py` enforces it).
 - Answer text is produced by `nl/answer.py` from numbers, never by the model.
 - Research findings go in `docs/research/`; the plan's Appendix D summarises them.
-- Run `python -m pytest` before every sync; 247 tests as of 6 Nov.
+- Run `python -m pytest` before every sync; 258 tests as of 6 Nov.
 - Data of record is the CSV archive in `data/archive/` (committed, append-only). DuckDB is a git-ignored cache rebuilt by `scripts/rebuild_db.py`.
 - The archive CSVs merge with git's union driver (`.gitattributes`, 6 Nov): both collectors write the same files, and the old `-X theirs` merge deleted 7,215 rows. Check for loss with `python scripts/recover_archive_rows.py` (report only; `--write` restores).
 - The portal changed its AQI table on 3 Nov 2026. Use `aqi.portal_scale_at(ts)` when comparing with a past portal AQI; `pk_portal` is the current table.

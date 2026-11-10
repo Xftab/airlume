@@ -8,7 +8,8 @@ BENCH = Path(__file__).resolve().parents[1] / "airlume" / "eval" / "benchmark" /
 
 def test_where_now():
     v = route("Where is the air worst in Lahore right now?")
-    assert v.city == "Lahore" and v.view == "stations_3d" and v.aggregation == "latest"
+    # Prompt v5: a ranking "right now" is max (worst) or min (cleanest); code ranks the latest values.
+    assert v.city == "Lahore" and v.view == "stations_3d" and v.aggregation == "max"
 
 
 def test_threshold():

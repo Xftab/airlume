@@ -6,7 +6,8 @@ from airlume.nl.schema import JSON_SCHEMA, TimeSpec, ViewIntent
 
 def test_defaults():
     v = ViewIntent()
-    assert v.city == "Lahore" and v.metric == "aqi" and v.time.label == "now"
+    # Prompt v5 (6 Nov 2026): city is null when not named; code uses Lahore.
+    assert v.city is None and v.city_or_default == "Lahore" and v.metric == "aqi" and v.time.label == "now"
 
 
 def test_rejects_injection_characters():

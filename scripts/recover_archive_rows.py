@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import argparse
 import io
-import subprocess
+import subprocess  # nosec B404: runs the local git with a fixed argument list
 import sys
 from pathlib import Path
 
@@ -37,7 +37,7 @@ from airlume.pipeline import archive  # noqa: E402
 
 
 def git(*args: str) -> str:
-    return subprocess.run(["git", "-C", str(ROOT), *args], check=True,
+    return subprocess.run(["git", "-C", str(ROOT), *args], check=True,  # nosec B603 B607: no shell, fixed args
                           capture_output=True, text=True, encoding="utf-8").stdout
 
 

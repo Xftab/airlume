@@ -34,6 +34,9 @@ class ResolvedQuery:
     view: str
     camera: str
     notes: tuple[str, ...]  # e.g. "nearest station to Model Town is Kahna Nau"
+    # Added 6 Nov 2026 (prompt v5). Defaults keep older constructions valid.
+    time_label: str = ""     # the form's time.label, e.g. "now"
+    city_named: bool = True  # False when the form left city null (code used Lahore)
 
 
 class ResolveError(ValueError):
@@ -122,15 +125,21 @@ def _area_help(registry: Registry, city) -> str:
 
 
 def resolve(intent: ViewIntent, registry: Registry, now: datetime | None = None) -> ResolvedQuery:
-    if not intent.in_scope:
-        raise ResolveError("question is out of scope")
-    if intent.clarify:
+    kind = intent.response_kind()
+    if kind == "clarify":
         raise ResolveError(f"clarify: {intent.clarify}")
+    if kind == "refuse":
+        raise ResolveError("question is out of scope")
 
     notes: list[str] = []
-    city = registry.match_city(intent.city)
+    city = registry.match_city(intent.city_or_default)
     if city is None:
         raise ResolveError(f"I don't have data for '{intent.city}'. Try a monitored city such as Lahore, Faisalabad or Multan.")
+
+    if intent.aggregation == "hour_of_day" and intent.time.label in ("now", "today", "yesterday"):
+        # A time-of-day pattern needs several days; one day or three hours shows nothing.
+        intent = intent.model_copy(update={"time": TimeSpec(label="last_7_days")})
+        notes.append("A time-of-day pattern needs several days, so this uses the last 7 days.")
 
     station_id: str | None = None
     if intent.area:
@@ -178,6 +187,8 @@ def resolve(intent: ViewIntent, registry: Registry, now: datetime | None = None)
         view=intent.view,
         camera=intent.camera,
         notes=tuple(notes),
+        time_label=intent.time.label,
+        city_named=intent.city is not None,
     )
 
 

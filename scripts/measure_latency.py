@@ -155,9 +155,10 @@ def main(argv: list[str]) -> int:
         t1 = time.perf_counter()
         row = {"id": q["id"], "route_s": t1 - t0, "source": source,
                "rate_limit_waits": counter.n - waits_before}
-        if not intent.in_scope:
+        kind = intent.response_kind()  # a clarify wins over in_scope false (6 Nov 2026)
+        if kind == "refuse":
             row["kind"] = "out_of_scope"
-        elif intent.clarify:
+        elif kind == "clarify":
             row["kind"] = "clarify"
         else:
             try:

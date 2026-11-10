@@ -80,8 +80,9 @@ def parse_one(path_str: str) -> tuple[str, str, int, str, str | None]:
     p = Path(path_str)
     try:
         style, rows, avg, avg_date = parse_report(p)
+        # A content fingerprint to compare designs, not a security use (bandit B324).
         sig = hashlib.sha1(repr((style, [sorted(r.__dict__.items()) for r in rows], avg,
-                                 str(avg_date))).encode()).hexdigest()
+                                 str(avg_date))).encode(), usedforsecurity=False).hexdigest()
         return p.name, style, len(rows), sig, None
     except Exception as e:  # a bulletin the parser cannot read is a result, identical in every design
         return p.name, "error", 0, "", type(e).__name__

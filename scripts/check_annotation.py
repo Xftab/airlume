@@ -23,7 +23,7 @@ ALLOWED = {
     "time_label": {"now", "today", "yesterday", "last_7_days", "last_30_days",
                    "this_month", "last_month", "same_day_last_year",
                    "custom_date", "custom_range", ""},
-    "aggregation": {"latest", "mean", "max", "min", "count_hours_above", ""},
+    "aggregation": {"latest", "mean", "max", "min", "count_hours_above", "hour_of_day", ""},  # hour_of_day: guide v3
     "compare_to": {"none", "yesterday", "last_week", "last_year", "other_city", ""},
     "view": {"stations_3d", "city_overview", "compare", "timeline", "forecast", ""},
     "camera": {"overview", "station", "north", "zoomed_out", ""},

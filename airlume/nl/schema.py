@@ -12,7 +12,8 @@ from typing import Literal
 from pydantic import BaseModel, Field, field_validator
 
 Metric = Literal["aqi", "pm25", "pm10"]
-Aggregation = Literal["latest", "mean", "max", "min", "count_hours_above"]
+# "hour_of_day" added 6 Nov 2026 (prompt v5): "is smog lower at night?", "morning or evening?".
+Aggregation = Literal["latest", "mean", "max", "min", "count_hours_above", "hour_of_day"]
 View = Literal["city_overview", "stations_3d", "compare", "timeline", "forecast"]
 Camera = Literal["overview", "station", "north", "zoomed_out"]
 CompareTo = Literal["none", "yesterday", "last_week", "last_year", "other_city"]
@@ -62,7 +63,11 @@ class ViewIntent(BaseModel):
         None, description="A short question back to the user when the request is ambiguous."
     )
     metric: Metric = "aqi"
-    city: str = Field("Lahore", description="City name as in the registry.")
+    # Nullable from 6 Nov 2026 (prompt v5). With a "Lahore" default, code could not tell
+    # "is the air clean in Lahore?" (a named city) from "which city is worst?" (none named),
+    # and answered the first with a national headline. None means "not named"; code uses
+    # Lahore wherever a single city is needed (`city_or_default`).
+    city: str | None = Field(None, description="City name as in the registry; null when no city is named.")
     area: str | None = Field(
         None, description="Station or neighbourhood name in the city, e.g. 'Gulberg III'."
     )
@@ -90,6 +95,25 @@ class ViewIntent(BaseModel):
         if any(ch in v for ch in ";'\"`\\"):
             raise ValueError("name contains forbidden characters")
         return v
+
+    @property
+    def city_or_default(self) -> str:
+        return self.city or "Lahore"
+
+    def response_kind(self) -> str:
+        """"clarify", "refuse" or "answer". One rule for the app, the resolver and the scripts.
+
+        Changed 6 Nov 2026: a clarify wins over in_scope false. The 2 Nov run of the 62
+        classmate questions showed the model setting in_scope false *and* writing a sensible
+        question back for "when will the smog go low?" and "AQI around my home?"; the app
+        showed the refusal and threw the question away. Asking is never harmful; refusing a
+        question the model itself thought answerable is.
+        """
+        if self.clarify:
+            return "clarify"
+        if not self.in_scope:
+            return "refuse"
+        return "answer"
 
     def model_post_init(self, __context: object) -> None:
         if self.aggregation == "count_hours_above" and self.threshold is None:

@@ -36,39 +36,49 @@ SMALL_MODEL = "openai/gpt-oss-20b"
 CACHE_DIR = ROOT / "data" / "cache" / "router"
 LOG_PATH = ROOT / "data" / "cache" / "router_calls.jsonl"
 
+# Prompt v5, 6 Nov 2026 (groups 2 to 7 of the 2 Nov classmate run; schema freeze for
+# benchmark v1). v4 was 30 Oct. The prompt text is part of the cache key, so a change
+# here never serves a form cached under an older prompt.
+PROMPT_VERSION = "v5"
+
 SYSTEM_PROMPT = """You convert a question about air quality in Pakistan into a JSON form. Return ONLY the JSON object. Never write code, SQL or prose. Fill every field; use null where nothing applies.
 
 Places
 - Lahore has stations: GT Road, Shahdara, Multan Road, Barki Road, Kahna Nau, Gulberg III, DHA Phase 6, Egerton Road, Punjab University, Wagha Border, Safari Park.
 - Other cities (city level only): Okara, Nankana Sahib, Muzaffargarh, Rajanpur, Chiniot, Jhang, Vehari, Khanewal, Sahiwal, Faisalabad, Gujranwala, Pakpattan, Multan, Sheikhupura, Attock, Dera Ghazi Khan, Kot Addu, Bahawalpur, Rahim Yar Khan, Kasur, Rawalpindi, Bhakkar, Sargodha, Narowal, Hafizabad, Murree, Khushab, Gujrat, Jhelum, Sialkot, Wazirabad, Mandi Bahauddin, Chakwal, Mianwali, Talagang, Islamabad, Karachi, Peshawar, Quetta.
-- `city`: the city asked about; default "Lahore" when none is named. `area`: the station OR neighbourhood named inside the city (e.g. "Wagha Border", "DHA", "Model Town"); null when the question is about the whole city or ranks places. Code maps neighbourhoods to the nearest station: write the neighbourhood as the user said it ("Model Town"), never replace it with a station name.
+- `city`: the city named in the question; null when no city is named (code then uses Lahore). `area`: the station OR neighbourhood named inside the city (e.g. "Wagha Border", "DHA", "Model Town"); null when the question is about the whole city or ranks places. Code maps neighbourhoods to the nearest station: write the neighbourhood as the user said it ("Model Town"), never replace it with a station name.
 
 Fields
 - `metric`: "aqi" unless PM2.5 ("pm25") or PM10 ("pm10") is named.
 - `time.label`: "now" (current, right now, at the moment, abhi), "today", "yesterday", "last_7_days" (last/this week, past week), "last_30_days", "this_month", "last_month", "same_day_last_year", "custom_date" (+date) or "custom_range" (+start,end). Nothing else is allowed. "Best time of day" questions use "last_7_days".
-- `aggregation`: ALWAYS "latest" when time.label is "now" or the question is about this moment/this morning, even for "where is it worst/cleanest" (code ranks the latest values; "max"/"min" are for a past window only). Over a past window use "mean" (how bad was it), "max" (worst/peak), "min" (cleanest/best). "count_hours_above" with `threshold` for "how many hours above X" or "how often was it <band>".
+- `aggregation`: for this moment (time.label "now"): "latest" when the question asks HOW the air is or what to do ("how is the air", "is it safe", "should I wear a mask"); "max" when it asks WHERE it is worst ("where is smog most", "kaha zyada", "high alert areas"); "min" when it asks where it is cleanest. Code ranks the latest values for max and min. Over a past window use "mean" (how bad was it), "max" (worst/peak), "min" (cleanest/best). "count_hours_above" with `threshold` for "how many hours above X" or "how often was it <band>". "hour_of_day" for time-of-day patterns ("is smog lower at night", "morning or evening", "kis time zyada", "best time to go out") with time.label "last_7_days".
 - AQI bands (Punjab): Satisfactory >50, Moderate >100, Unhealthy for sensitive >150, Unhealthy >200, Very unhealthy >300, Hazardous >400. "hours unhealthy" means threshold 200; "hazardous" 400.
 - `compare_to`: "yesterday", "last_week", "last_year" when the question compares with an earlier time (better/worse than, improved since, kal se); "other_city" with `other_city` when two cities are compared or shown side by side (`city` is the first one); else "none".
-- `view`: "compare" whenever compare_to is not "none"; "forecast" for tomorrow, tonight, this evening, later today, will it be safe; "timeline" for trends, hour-of-day patterns, last N days; "city_overview" for a non-Lahore city or questions across cities/districts; "stations_3d" for Lahore station questions.
+- `view`: "compare" whenever compare_to is not "none"; "forecast" for tomorrow, tonight, this evening, later today, will it be safe, and WHEN it will improve ("when will the smog go down", "when will the air get better today", "kab saaf hogi") with time.label "now" and in_scope true; "timeline" for trends, hour-of-day patterns, last N days; "city_overview" for a non-Lahore city or questions across cities/districts; "stations_3d" for Lahore station questions.
 - `camera`: "station" when one station or area is asked about; "zoomed_out" whenever the question ranks or spans cities or districts (Pakistan, Punjab, "which city"); "north" if asked to look from the north; else "overview".
-- `in_scope`: false if the question is not about air quality in these places (weather, rain, sunrise), asks why/for causes, asks about a person's own body (symptoms, diagnosis, treatment, "is my throat sore because of smog"), asks about a place with no monitor ("my village"), asks for a forecast further ahead than the next 48 hours ("next week", a date months away), or is only thanks/greeting/small talk ("thanks, that's all").
+- `in_scope`: false if the question is not about air quality in these places (weather, rain, sunrise), asks why/for causes, asks about a person's own body (symptoms, diagnosis, treatment, "is my throat sore because of smog"), asks for a forecast further ahead than the next 48 hours ("next week", a date months away), or is only thanks/greeting/small talk ("thanks, that's all").
 - Asking what to DO at the current level IS in scope: "should I wear a mask", "is it safe to go outside", "can the children play outside", "mujhe walk pr jana chahiye?". Fill the ordinary current-reading form for the place asked about (time now, aggregation latest) and let code attach the published advisory for that band. Only a question about one person's own body is out of scope.
-- `clarify`: one short question back when the request cannot be filled (no place and no time, e.g. "is it bad?", "how many hours?", "AQI around my home?"); otherwise null.
+- `clarify`: one short question back when the request cannot be filled; otherwise null. A clarify always goes with in_scope true. Use it for: the user's own location ("my location", "near me", "around my home", "my area") -> "Which area or neighbourhood are you in? I will use the nearest station."; a village or town with no monitor ("my village") -> "Which district is your village in? I can give the district reading."; "kal" when the tense does not say whether it is yesterday or tomorrow -> "Do you mean yesterday or tomorrow?"; a question with neither place nor time nor any ranking ("is it bad?", "how many hours?").
+- Never clarify a ranking: "high alert areas", "where is smog most" -> Lahore stations, time now, aggregation max; "smog free cities", "which cities are clean" -> city null, view city_overview, aggregation min, camera zoomed_out.
 
 Follow-ups
 - When a "previous form" is supplied, assume the new message continues it unless it clearly names a different place or topic. Short messages like "and yesterday?", "over the last 7 days?", "show PM10 instead", "only Safari Park", "add Multan", "look from the north", "how far is that station?" are continuations: set `context_ref` true, start from the previous form (keep its city, area, compare_to and so on) and change only what the message changes.
 
 Examples
-- "What's the AQI at Wagha Border?" -> city Lahore, area "Wagha Border", time now, aggregation latest, view stations_3d, camera station.
-- "Which district in Punjab is cleanest today?" -> city Lahore, area null, time today, aggregation min, view city_overview, camera overview.
+- "What's the AQI at Wagha Border?" -> city null, area "Wagha Border", time now, aggregation latest, view stations_3d, camera station.
+- "Which district in Punjab is cleanest today?" -> city null, area null, time today, aggregation min, view city_overview, camera zoomed_out.
+- "Is the air clean in Lahore?" -> city Lahore, time now, aggregation latest, view city_overview, camera overview.
+- "Kaha pr smog zyada hai?" -> city null, time now, aggregation max, view stations_3d, camera overview.
 - "Is Multan's air better than yesterday?" -> city Multan, time now, compare_to yesterday, view compare.
 - "Which is cleaner this month, Multan or Bahawalpur?" -> city Multan, other_city Bahawalpur, compare_to other_city, time this_month, aggregation mean, view compare.
 - "How many unhealthy hours in Kahna Nau yesterday?" -> area "Kahna Nau", time yesterday, aggregation count_hours_above, threshold 200.
-- "Should I wear a mask today?" -> in_scope true, city Lahore, time now, aggregation latest, view stations_3d, camera overview (code adds the advisory).
+- "Should I wear a mask today?" -> in_scope true, city null, time now, aggregation latest, view stations_3d, camera overview (code adds the advisory).
 - "Kiya mujhe walk pr jana chahiye aj?" -> same form: in_scope true, time now, aggregation latest.
 - "Smog ki wajah se mera gala kharab hua hai?" -> in_scope false (a question about one person's body).
 - "Next week me kitni smog ho gi?" -> in_scope false (further ahead than 48 hours).
-- "Raat ko smog kam ho jati hai?" -> time last_7_days, aggregation mean, view timeline (an hour-of-day pattern).
+- "Raat ko smog kam ho jati hai?" -> time last_7_days, aggregation hour_of_day, view timeline.
+- "When will the smog go low?" -> in_scope true, time now, view forecast, clarify null.
+- "What is the AQI around my home?" -> in_scope true, clarify "Which area or neighbourhood are you in? I will use the nearest station."
 - Roman Urdu is fine: "aaj Gulberg ki hawa kaisi hai" = how is the air in Gulberg today.
 """
 
@@ -83,7 +93,8 @@ class RouteResult:
 
 
 def _cache_key(question: str, model: str, previous: dict | None) -> str:
-    h = hashlib.sha256(f"{__version__}|{model}|{question}|{json.dumps(previous, sort_keys=True)}".encode()).hexdigest()
+    p = hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest()[:12]
+    h = hashlib.sha256(f"{__version__}|{p}|{model}|{question}|{json.dumps(previous, sort_keys=True)}".encode()).hexdigest()
     return h[:32]
 
 

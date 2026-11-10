@@ -12,14 +12,24 @@ _Last updated: 6 November 2026_
 - **(5) City-level PM2.5 and PM10** are now read from the page's 7-day snapshot.
 - **(6)** DuckDB 2.0 bug fixed.
 
-247 tests pass. Closed: `run.bat` (never broken), the 17 Oct hour (present), the superseded sample (removed 5 Nov).
+Later the same day:
+- **(7)** schema and prompt frozen at **v5** (groups 2 to 7 implemented);
+- **(8)** benchmark v1 packet: Part B (30 constructed questions), annotator guide v3, draft messages to Kiran and Tehreem;
+- **(9)** report draft revised with today's numbers; Chapter 2 citations checked ("Gupta et al. 2022" not found, replaced);
+- **(10)** security: Pillow's 39 vulnerabilities closed (Streamlit 1.66.1 and Pillow 13.0.0), no secrets in history;
+- **(11)** raw-archive publishing options: ask the EPA, and do not deploy until answered.
+
+258 tests pass. Closed: `run.bat` (never broken), the 17 Oct hour (present), the superseded sample (removed 5 Nov).
 
 **Next (Aftab, in this order):**
-1. `test.bat`, expect 247 passed.
-2. `git rm scripts\merge_stash_rows.py`, then `save`.
-3. Run the restore script, then `save` again.
-4. Re-run `schedule` (adds wake-to-run) and consider `powercfg /change standby-timeout-ac 0`.
-5. Still open from 4 Nov: the five benchmark decisions, the EPA reply wording, and E4 dates.
+1. `.venv\Scripts\python -m pip install -r requirements.txt` (Streamlit 1.66.1, Pillow 13.0.0).
+2. `test.bat`; expect 258 passed.
+3. `git rm scripts\merge_stash_rows.py`, then `save`. This puts the union merge on GitHub before any restored rows.
+4. `.venv\Scripts\python scripts\recover_archive_rows.py --write`, then `save` again.
+5. Re-run `schedule` (adds wake-to-run); `powercfg /change standby-timeout-ac 0`.
+6. Send Kiran and Tehreem the messages in `docs/benchmark/v1-packet-2026-11-06.md`; hand the collection sheet to 4 or 5 new classmates.
+7. Ask Dr Rimsha to forward the one-line redistribution question (`docs/research/archive-publishing-options-2026-11-06.md`); do not deploy publicly until it is answered.
+8. Paste the EPA reply wording; set the E4 dates.
 
 **Blockers:** none new.
 

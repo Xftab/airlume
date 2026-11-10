@@ -547,6 +547,16 @@ pmtiles extract https://build.protomaps.com/<latest>.pmtiles lahore.pmtiles \
 ### 3.1 Schema
 
 - Implement the view-intent schema in Pydantic. Keep it flat; every field required, optional fields as null-unions --- the shape that works unchanged on Groq strict mode and Gemini.
+- **Schema and prompt frozen at v5 (6 Nov 2026)**, from groups 2 to 7 of the 2 Nov classmate run (`docs/benchmark/v1-packet-2026-11-06.md`).
+  - `city` is null when no city is named.
+  - For right now, `latest` means *how is it*, and `max`/`min` mean *where is it worst or cleanest*.
+  - New aggregation `hour_of_day`.
+  - A clarify always wins over in_scope false (`ViewIntent.response_kind()`).
+  - "When will it improve" is a forecast question.
+  - Own location and villages get a clarify; a ranking never needs one; "kal" with an unclear tense is asked about.
+  - The prompt text is part of the router's cache key.
+  - Code: a "how is the air" question gets the city figure, the station spread and the advice for the city level; a named city in a city overview is answered for itself first.
+  - 11 new tests. No further change to the form before submission.
 
 ### 3.2 Benchmark --- built and frozen before the model is wired in
 
@@ -559,6 +569,13 @@ pmtiles extract https://build.protomaps.com/<latest>.pmtiles lahore.pmtiles \
 - **Second annotator:** another person independently writes gold forms for 20 questions; report agreement (Cohen's kappa per field) and resolve disagreements by discussion. *(Fixes W2.)*
 - **Camera scored in categories**, not exact numbers: level (city / district / station) and rough direction (N, NE, E ...). *(Fixes W5.)*
 - **Freeze the test set in week 5. Never tune on it.**
+- **Benchmark v1 replanned 6 Nov 2026** (`docs/benchmark/v1-packet-2026-11-06.md`; review of 4 Nov):
+  - v0 and the 62 classmate questions are development data;
+  - v1 = a fresh naturalistic Part A (60 to 100 questions from new classmates, the same sheet) plus Part B (30 constructed questions covering `metric`, `threshold`, `compare_to` and `other_city`; questions written by Claude, labels by humans only; reported separately, never pooled);
+  - Kiran annotates everything, and Tehreem the in-scope rows and Part B, for kappa;
+  - Aftab adjudicates by rule;
+  - scored once, around 16 Nov.
+  Annotator guide version 3.
 - **Materials ready (14 Oct):** `docs/benchmark/classmate-questions.md` (printable sheet, 20 questions per classmate, blind to the schema, with Roman-Urdu and out-of-scope minimums) and `docs/benchmark/annotator-guide.md` (field table and ten agreed conventions for the second annotator; kappa per field).
 - **Status (14 Oct):** benchmark v0 (90 items) is a *development* set --- the router prompt was revised after reading its failures, so its scores are optimistic. The frozen v1 set (classmate items, second annotator) is what the report's headline number comes from; the prompt is not touched after the freeze.
 
@@ -740,6 +757,13 @@ Airlume is a public, read-only site with one user input: the question box. That 
 - **Logs:** never log the raw key, the full environment, or visitor IP addresses beyond what rate limiting needs (hashed, short retention).
 
 **Exit:** the security checklist in Part E passes with zero open items; `gitleaks` and `pip-audit` report clean.
+
+**Check 6 Nov 2026** (`docs/security/audit-2026-11-06.md`):
+- no key pattern anywhere in the 737-commit history;
+- `bandit`: 0 high or medium;
+- `pip-audit` clean after Streamlit 1.66.1 and Pillow 13.0.0 (39 Pillow vulnerabilities closed; Streamlit 1.65 had capped Pillow below 13).
+
+**Raw archive and a public repository:** ask the EPA one precise question, and do not deploy until it is answered. If the answer is "use only", remove the two cron lines and make the repository private (`docs/research/archive-publishing-options-2026-11-06.md`).
 
 **Exit criterion for Phase 6:** public URL works on a phone; 72 hours of unattended operation; security hardening complete. (Share cards, if built.)
 

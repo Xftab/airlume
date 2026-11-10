@@ -82,10 +82,11 @@ def main(argv: list[str]) -> int:
             print(q["id"], row["outcome"])
             continue
         row["form"] = short_form(intent.model_dump())
-        if not intent.in_scope:
+        kind = intent.response_kind()  # a clarify wins over in_scope false (6 Nov 2026)
+        if kind == "refuse":
             row["outcome"] = "out_of_scope"
             row["answer"] = "I can only answer about air quality in Pakistan's monitored cities."
-        elif intent.clarify:
+        elif kind == "clarify":
             row["outcome"] = "clarify"
             row["answer"] = intent.clarify
         else:

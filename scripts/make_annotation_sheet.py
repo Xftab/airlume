@@ -25,13 +25,13 @@ FORM_COLUMNS = [
     "in_scope",      # yes / no            (default yes)
     "clarify",       # short question back (default blank)
     "metric",        # aqi / pm25 / pm10   (default aqi)
-    "city",          # registry city name  (default Lahore)
+    "city",          # registry city name; blank when none is named (guide v3)
     "area",          # station or neighbourhood as written (default blank)
     "time_label",    # now / today / yesterday / last_7_days / ... (default now)
     "time_date",     # YYYY-MM-DD when time_label is custom_date
     "time_start",    # YYYY-MM-DD when time_label is custom_range
     "time_end",      # YYYY-MM-DD when time_label is custom_range
-    "aggregation",   # latest / mean / max / min / count_hours_above (default latest)
+    "aggregation",   # latest / mean / max / min / count_hours_above / hour_of_day (default latest)
     "threshold",     # 0-500, required when aggregation is count_hours_above
     "compare_to",    # none / yesterday / last_week / last_year / other_city
     "other_city",    # required when compare_to is other_city

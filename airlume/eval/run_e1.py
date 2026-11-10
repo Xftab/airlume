@@ -37,6 +37,10 @@ def norm(v):
 
 def field_matches(field: str, expected, intent: ViewIntent) -> bool:
     d = intent.model_dump()
+    # Prompt v5 (6 Nov 2026) leaves `city` null when no city is named; code then uses
+    # Lahore. The gold labels write the default out, so null scores as "Lahore".
+    if d.get("city") is None:
+        d["city"] = "Lahore"
     if field == "clarify":
         return bool(d.get("clarify")) if expected is True else norm(d.get("clarify")) == norm(expected)
     if field == "in_scope":

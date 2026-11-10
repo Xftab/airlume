@@ -16,6 +16,28 @@ Newest first. Each entry records what was decided and why.
   - The superseded 4 Nov sample was removed in commit `9b2db4a` (5 Nov).
   - The 17 Oct 03:00 UTC hour is present in every archive table, so the missing-hour gap is closed, and the 0-byte `scripts/merge_stash_rows.py` can be removed.
   - The 4 Nov changes (Sabzazar, hardened scoring guard) pass: the merged laptop state ran 228 of 228 before today's changes and 247 of 247 after.
+- **Schema and prompt frozen at v5 (6 Nov); groups 2 to 7 of the 2 Nov run implemented.** The validity review's recommended answers to decisions 1, 2 and 4 were taken, because Aftab asked for the work to be done rather than for more questions; any can be reverted. Decision 3 (Kiran and Tehreem) is Aftab's to ask; the messages are drafted.
+  - `schema.py`: `city` nullable (None = not named; `city_or_default`); aggregation `hour_of_day`; `response_kind()` (a clarify wins over in_scope false).
+  - `resolve.py`: clarify before refusal; `time_label` and `city_named` in `ResolvedQuery`; `hour_of_day` widens one hour or day to 7 days with a note.
+  - `answer.py`:
+    - right-now `max`/`min` rank the latest values;
+    - a `latest` question with no place gets the city figure, the station spread and the city-level advice (group 2);
+    - a named city in a city overview is answered for itself first (group 3);
+    - the hour-of-day profile comes from the gap-free city series, or the station series for an area, with thin hours flagged (group 5).
+  - Prompt v5 in `router.py` (groups 4, 6, 7 and "kal"). The prompt text is in the cache key, so a v4 form is never served under v5.
+  - The app, `measure_latency.py` and `run_classmate_questions.py` use `response_kind()`.
+  - Stub router: v5 conventions; Roman Urdu air words ("aj hawa kesi han" was refused offline); own-place clarifies.
+  - `run_e1.py` scores a null city as Lahore. v0 is not re-scored under v5; its gold uses the v4 "latest" convention for right-now rankings.
+  - New `tests/test_prompt_v5.py` (11).
+- **Benchmark v1 packet (6 Nov).** `docs/benchmark/v1-packet-2026-11-06.md`: what is frozen, the Part A collection, Part B, who annotates what, files to give and never to give, the draft messages, the scoring steps and the timetable to 16 Nov. Part B: `partB-constructed-2026-11-06.jsonl` (30 questions: 19 English and 11 Roman Urdu; `compare_to` 15, `metric` 12, `other_city` 8, `threshold` 7), written by Claude as questions only, plus a blank shuffled sheet. Annotator guide raised to **version 3**: conventions 1, 8, 9 and 13 changed; 14 to 16 new. `check_annotation.py` accepts `hour_of_day`.
+- **Report draft revised with the 6 Nov results, and Chapter 2 citations checked (6 Nov).** `docs/report/report-draft-2026-11-04.md` sections 3.1, 3.3, 3.4, 5.1 to 5.4, 6, 7 (W1, W7) and 9 (RQ1, RQ2) now carry today's numbers. `docs/report/citation-check-2026-11-06.md`:
+  - all 26 proposal references were found; corrections to Chat2VIS (journal DOI and title spelling) and TechJuice (author);
+  - TVCG volume and page numbers for refs 3 to 5 are still to confirm;
+  - the ISPRS Lahore study is identified (Rahman, Usama, Tahir and Uppal 2022);
+  - **"Gupta et al. (2022)" on anti-smog guns does not exist as cited** and is replaced by the CEEW analysis of 18 Nov 2025;
+  - the statistical references are confirmed.
+- **Security check (6 Nov).** No key pattern in the 737-commit history. `bandit`: 0 high or medium after two fixes. **Pillow 12.3.0's 39 known vulnerabilities, open since 29 Oct, are closed.** Streamlit 1.65.0 capped Pillow below 13, so they could not be fixed before; it is now Streamlit 1.66.1 and Pillow 13.0.0 pinned, and `pip-audit` is clean. 258 tests pass and the app runs under `AppTest`. `docs/security/audit-2026-11-06.md`.
+- **Raw archive in a public repository (6 Nov).** Options memo: `docs/research/archive-publishing-options-2026-11-06.md`. Recommended: ask the EPA one precise question through the supervisor now (drafted), and do not deploy publicly until it is answered. If the answer is "use only", remove the two cron lines from `collect.yml` (the free private-repository allowance of 2,000 Actions minutes a month is smaller than the current three runs an hour), then make the repository private. Not decided; Aftab's call.
 - **Found unsaved on the laptop, not on GitHub (6 Nov):** the 4 Nov HISTORY, STATUS, SOURCES, plan and study-plan edits, `docs/report/report-draft-2026-11-04.md`, `docs/benchmark/validity-review-2026-11-04.md`, the Sabzazar and scoring-guard code, and Kiran's blank 62-question sheet. Today's `save` commits them with today's work.
 
 ## 4 November 2026

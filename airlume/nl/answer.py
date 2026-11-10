@@ -43,7 +43,8 @@ def _advice(q: ResolvedQuery, aqi: float | None, where: str | None = None) -> st
       answer quotes its worst station and the advice follows that station rather
       than the city as a whole.
     """
-    if q.aggregation != "latest" or q.metric != "aqi" or aqi is None or pd.isna(aqi):
+    current = q.aggregation == "latest" or (q.time_label == "now" and q.aggregation in ("max", "min"))
+    if not current or q.metric != "aqi" or aqi is None or pd.isna(aqi):
         return ""
     r = response_for_aqi(int(round(float(aqi))))
     if r is None:
@@ -228,6 +229,77 @@ def _city_window_answer(q: ResolvedQuery, store: Store, reg: Registry) -> str:
     return text
 
 
+def _rank_now(q: ResolvedQuery) -> bool:
+    """A "where is it worst / cleanest right now?" question (prompt v5: max or min with time now)."""
+    return q.time_label == "now" and q.aggregation in ("max", "min")
+
+
+def _latest_city_value(store: Store, reg: Registry, q: ResolvedQuery) -> tuple[float, pd.Timestamp] | None:
+    """The city's own latest figure (portal city AQI for Lahore) within the question's window.
+
+    Prefers the city's primary source; falls back to whatever rows exist (test data).
+    """
+    ser = store.city_series(q.city_id, q.start - pd.Timedelta(hours=3), q.end, q.metric)
+    if ser.empty:
+        return None
+    primary = reg.city(q.city_id).primary_source
+    pri = ser[ser["source"] == primary]
+    ser = (pri if not pri.empty else ser).dropna(subset=["value"])
+    if ser.empty:
+        return None
+    last = ser.sort_values("ts").iloc[-1]
+    return float(last["value"]), pd.Timestamp(last["ts"])
+
+
+_DAY_PARTS = (("night (00-06)", 0, 6), ("morning (06-12)", 6, 12),
+              ("afternoon (12-18)", 12, 18), ("evening (18-24)", 18, 24))
+
+
+def _hour_of_day_answer(q: ResolvedQuery, store: Store, reg: Registry) -> str:
+    """Average by hour of the day (Asia/Karachi) over the window: "is smog lower at night?".
+
+    Added 6 Nov 2026 (prompt v5, group 5 of the 2 Nov classmate run): these questions
+    were answered with a weekly worst/cleanest station ranking. For a whole city the
+    city-level series is used, because it has no night gaps; the station series has
+    them (the laptop collector sleeps), and a profile built from it would leave the
+    night out. Every number is computed here; the sentence says how many hours it
+    rests on and which hours are thin.
+    """
+    from zoneinfo import ZoneInfo
+
+    tz = ZoneInfo("Asia/Karachi")
+    city = reg.city(q.city_id)
+    if q.station_id:
+        ser = store.station_series([q.station_id], q.start, q.end, q.metric)
+        where = {s.station_id: s.name for s in reg.stations_in(q.city_id)}.get(q.station_id, q.station_id)
+    else:
+        ser = store.city_series(q.city_id, q.start, q.end, q.metric)
+        pri = ser[ser["source"] == city.primary_source] if not ser.empty else ser
+        ser = pri if not pri.empty else ser
+        where = f"{city.name} (city level)"
+    ser = ser.dropna(subset=["value"]) if not ser.empty else ser
+    if ser.empty:
+        return f"No hourly {_METRIC_NAME[q.metric]} data for {where} in that window."
+    local = pd.to_datetime(ser["ts"], utc=True).dt.tz_convert(tz)
+    by_hour = ser.groupby(local.dt.hour)["value"].agg(["mean", "size"])
+    lo_h, hi_h = int(by_hour["mean"].idxmin()), int(by_hour["mean"].idxmax())
+    parts = []
+    for label, a, b in _DAY_PARTS:
+        sel = by_hour.loc[[h for h in by_hour.index if a <= h < b]]
+        if not sel.empty:
+            mean = float((sel["mean"] * sel["size"]).sum() / sel["size"].sum())
+            parts.append(f"{label} {_fmt(mean, q.metric)}")
+    thin = int((by_hour["size"] < 3).sum()) + (24 - len(by_hour))
+    window = f"{q.start.astimezone(tz):%d %b} to {q.end.astimezone(tz):%d %b}"
+    text = (f"{where}, average {_METRIC_NAME[q.metric]} by time of day, {window} ({len(ser)} h of data, Asia/Karachi): "
+            f"lowest around {lo_h:02d}:00 ({_fmt(float(by_hour.loc[lo_h, 'mean']), q.metric)}), "
+            f"highest around {hi_h:02d}:00 ({_fmt(float(by_hour.loc[hi_h, 'mean']), q.metric)}). "
+            + "; ".join(parts) + ".")
+    if thin:
+        text += f" {thin} of the 24 hours have fewer than 3 days of data, so treat those as rough."
+    return text
+
+
 def answer(q: ResolvedQuery, store: Store, reg: Registry,
            now: pd.Timestamp | None = None) -> str:
     """Answer one resolved question, after checking the window against the archive.
@@ -275,8 +347,10 @@ def _answer_body(q: ResolvedQuery, store: Store, reg: Registry,
     city = reg.city(q.city_id)
     if q.view == "forecast":
         return _forecast_answer(q, store, reg, now)
+    if q.aggregation == "hour_of_day":
+        return _hour_of_day_answer(q, store, reg)
     if q.city_id != "PB-LHE" or q.view == "city_overview" or q.compare_city_id:
-        if q.aggregation != "latest":
+        if q.aggregation != "latest" and not _rank_now(q):
             return _city_window_answer(q, store, reg)
         cf = store.latest_city_values().dropna(subset=[q.metric])
         if cf.empty:
@@ -291,11 +365,21 @@ def _answer_body(q: ResolvedQuery, store: Store, reg: Registry,
             worse = city.name if va >= vb else names[q.compare_city_id]
             return (f"{city.name}: {_METRIC_NAME[q.metric]} {_fmt(va, q.metric)} · "
                     f"{names[q.compare_city_id]}: {_fmt(vb, q.metric)}. {worse} is worse right now.")
+        row = cf[cf.city_id == q.city_id]
+        if q.city_named and q.aggregation == "latest" and not row.empty:
+            # "Is the air clean in Lahore?" names one city: answer for it first (6 Nov 2026,
+            # group 3 of the 2 Nov run, which got "Gujranwala has the worst air" instead).
+            v = float(row[q.metric].iloc[0])
+            worst = cf.sort_values(q.metric, ascending=False).iloc[0]
+            tail = f" ({band_for(int(round(v))).label.lower()})" if q.metric == "aqi" else ""
+            ctx = ("" if worst.city_id == q.city_id else
+                   f" Worst monitored city right now: {names[worst.city_id]} at {_fmt(float(worst[q.metric]), q.metric)}.")
+            return (f"{city.name} right now: {_METRIC_NAME[q.metric]} {_fmt(v, q.metric)}{tail}.{ctx}"
+                    + _advice(q, v if q.metric == "aqi" else None))
         if q.aggregation == "min":
             r = cf.sort_values(q.metric).iloc[0]
         else:
             r = cf.sort_values(q.metric, ascending=False).iloc[0]
-        row = cf[cf.city_id == q.city_id]
         own = f" {city.name} is at {_fmt(float(row[q.metric].iloc[0]), q.metric)}." if not row.empty else ""
         word = "cleanest" if q.aggregation == "min" else "worst"
         return (f"{names[r.city_id]} has the {word} air right now "
@@ -306,7 +390,8 @@ def _answer_body(q: ResolvedQuery, store: Store, reg: Registry,
     stations = reg.stations_in(q.city_id)
     ids = [q.station_id] if q.station_id else [s.station_id for s in stations]
     name_of = {s.station_id: s.name for s in stations}
-    df = store.aggregate(ids, q.start, q.end, q.metric, q.aggregation, q.threshold)
+    agg = "latest" if _rank_now(q) else q.aggregation  # "worst right now" ranks the latest values
+    df = store.aggregate(ids, q.start, q.end, q.metric, agg, q.threshold)
     if df.empty and q.metric == "aqi" and not q.station_id:
         # Station-level rows start when our own collection started; the city-level hourly
         # series (from the portal's 7-day trend) reaches further back. Use it, and say so.
@@ -337,21 +422,42 @@ def _answer_body(q: ResolvedQuery, store: Store, reg: Registry,
         return (f"Hours with {_METRIC_NAME[q.metric]} above {q.threshold} ({window}): "
                 + "; ".join(parts) + ".")
 
-    col = q.metric if q.aggregation == "latest" else "value"
+    col = q.metric if agg == "latest" else "value"
     df = df.dropna(subset=[col])
     if df.empty:
         return "No recent data for that place."
     if q.station_id:
         v = float(df[col].iloc[0])
         tail = f" ({band_for(int(v)).label.lower()})" if q.metric == "aqi" else ""
-        when = "right now" if q.aggregation == "latest" else f"{q.aggregation}, {window}"
+        when = "right now" if agg == "latest" else f"{q.aggregation}, {window}"
         return (f"{name_of[q.station_id]}: {_METRIC_NAME[q.metric]} {_fmt(v, q.metric)}{tail}, {when}."
                 + _advice(q, v, name_of[q.station_id]))
     worst = df.sort_values(col, ascending=False).iloc[0]
     best = df.sort_values(col).iloc[0]
-    when = "right now" if q.aggregation == "latest" else f"({q.aggregation}, {window})"
     missing = len(ids) - len(df)
     miss = f" {missing} station(s) have no data." if missing else ""
+    if q.aggregation == "latest":
+        # "How is the air?" / "should I go out?" with no place: the city's own level first,
+        # then the spread, and the advice for the city level (6 Nov 2026, group 2 of the
+        # 2 Nov run: ten such questions got only "Worst right now" and the worst station's
+        # advice). A ranking question now arrives as max or min and is answered below.
+        cv = _latest_city_value(store, reg, q)
+        spread = (f"Across {len(df)} stations it ranges from {_fmt(float(best[col]), q.metric)} at "
+                  f"{name_of[best.station_id]} to {_fmt(float(worst[col]), q.metric)} at {name_of[worst.station_id]}.{miss}")
+        if cv is not None:
+            v, ts = cv
+            from zoneinfo import ZoneInfo
+            at = ts.tz_convert(ZoneInfo("Asia/Karachi")).strftime("%H:%M")
+            tail = f" ({band_for(int(round(v))).label.lower()})" if q.metric == "aqi" else ""
+            return (f"{city.name} right now: {_METRIC_NAME[q.metric]} {_fmt(v, q.metric)}{tail}, the city figure for {at}. "
+                    + spread + _advice(q, v if q.metric == "aqi" else None, f"{city.name} as a whole"))
+        return ("Right now: " + spread[0].lower() + spread[1:]
+                + _advice(q, worst[col], name_of[worst.station_id]))
+    when = "right now" if agg == "latest" else f"({q.aggregation}, {window})"
+    if q.aggregation == "min":
+        return (f"Cleanest {when}: {name_of[best.station_id]} at {_fmt(float(best[col]), q.metric)}; "
+                f"worst: {name_of[worst.station_id]} at {_fmt(float(worst[col]), q.metric)}.{miss}"
+                + _advice(q, best[col], name_of[best.station_id]))
     return (f"Worst {when}: {name_of[worst.station_id]} at {_fmt(float(worst[col]), q.metric)}; "
             f"cleanest: {name_of[best.station_id]} at {_fmt(float(best[col]), q.metric)}.{miss}"
             + _advice(q, worst[col], name_of[worst.station_id]))

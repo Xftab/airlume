@@ -36,7 +36,9 @@ def route(question: str, previous: dict | None = None) -> ViewIntent:
     if not q:
         return ViewIntent(in_scope=False)
 
-    air_words = ("air", "aqi", "smog", "pollut", "pm", "breath", "worst", "clean", "best", "unhealthy")
+    # Roman Urdu air words added 6 Nov 2026 ("aj hawa kesi han" was refused offline).
+    air_words = ("air", "aqi", "smog", "pollut", "pm", "breath", "worst", "clean", "best", "unhealthy",
+                 "hawa", "fiza", "aaludgi", "saaf", "saf ")
     names_city = any(re.search(rf"\b{re.escape(c)}\b", q) for c in _CITIES)
     if previous and not names_city and (_FOLLOW_UP.search(q) or len(q.split()) <= 3):
         # Short follow-up ("and yesterday?"): keep the previous form, change what the words change.
@@ -58,11 +60,17 @@ def route(question: str, previous: dict | None = None) -> ViewIntent:
         form["context_ref"] = False
         return ViewIntent.model_validate(form)
     if not any(w in q for w in air_words) and not names_city:
-        return ViewIntent(in_scope=False, clarify="I can only answer about air quality in monitored cities.")
+        return ViewIntent(in_scope=False)
+
+    # Prompt v5 rules, offline: the user's own place is asked about, never refused or guessed.
+    if re.search(r"\b(my village|mera gaon|hamara gaon|my town)\b", q):
+        return ViewIntent(clarify="Which district is your village in? I can give the district reading.")
+    if re.search(r"\b(my (home|house|location|area)|near me|mere ghar|mera ghar|meri location|mera ilaqa)\b", q):
+        return ViewIntent(clarify="Which area or neighbourhood are you in? I will use the nearest station.")
 
     metric = "pm25" if re.search(r"pm\s*2\.?5", q) else "pm10" if re.search(r"pm\s*10", q) else "aqi"
 
-    city = "Lahore"
+    city = None  # prompt v5: null when no city is named; code uses Lahore
     for c in _CITIES:
         if re.search(rf"\b{re.escape(c)}\b", q):
             city = c.title() if c != "dg khan" else "Dera Ghazi Khan"
@@ -99,9 +107,12 @@ def route(question: str, previous: dict | None = None) -> ViewIntent:
         aggregation, threshold = "count_hours_above", int(m.group(1))
     elif "average" in q or "mean" in q:
         aggregation = "mean"
-    elif "worst" in q and time.label != "now":
-        aggregation = "max"
-    elif ("best" in q or "cleanest" in q or "lowest" in q) and time.label != "now":
+    elif re.search(r"\b(night|raat|morning|subah|evening|shaam|time of day|kis time|which hour)\b", q):
+        aggregation = "hour_of_day"
+        time = TimeSpec(label="last_7_days")
+    elif "worst" in q or "zyada" in q or "highest" in q:
+        aggregation = "max"   # prompt v5: a ranking "right now" is max/min too; code ranks latest values
+    elif "best" in q or "cleanest" in q or "lowest" in q:
         aggregation = "min"
 
     compare_to = "none"
@@ -117,9 +128,9 @@ def route(question: str, previous: dict | None = None) -> ViewIntent:
 
     if compare_to != "none":
         view = "compare"
-    elif city != "Lahore" or "pakistan" in q or "which city" in q or "all cities" in q:
+    elif (city not in (None, "Lahore")) or "pakistan" in q or "which city" in q or "all cities" in q:
         view = "city_overview"
-    elif time.label in {"last_7_days", "last_30_days", "last_month", "this_month"}:
+    elif time.label in {"last_7_days", "last_30_days", "last_month", "this_month"} or aggregation == "hour_of_day":
         view = "timeline"
     else:
         view = "stations_3d"
