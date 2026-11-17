@@ -313,4 +313,4 @@ def coverage_layer(cov: pd.DataFrame) -> pdk.Layer:
 def recommendation_layer(rec: dict) -> pdk.Layer:
     d = pd.DataFrame([{"lat": rec["lat"], "lon": rec["lon"], "label": f"Suggested new station: cuts mean distance by {rec['gain_km']:.2f} km"}])
     return pdk.Layer("ScatterplotLayer", data=d, get_position=["lon", "lat"], get_radius=700,
-                     get_fill_color=[232, 238, 244, 230], stroked=True, get_line_color=[91, 200, 214], line_width_min_pixels=3, pickable=True)
+                     get_fill_color=[27, 26, 23, 235], stroked=True, get_line_color=[194, 83, 27], line_width_min_pixels=3, pickable=True)

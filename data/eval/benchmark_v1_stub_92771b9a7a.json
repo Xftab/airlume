@@ -1,0 +1,548 @@
+{
+ "date": "2026-11-17",
+ "model": "stub",
+ "gold_file": "partB-gold-2026-11-17.csv",
+ "gold_hash": "92771b9a7a",
+ "draft_labels_not_gold": false,
+ "n": 30,
+ "overall": {
+  "n": 30,
+  "pass": 9,
+  "rate": 0.3,
+  "wilson95": [
+   0.1666,
+   0.4788
+  ]
+ },
+ "by_language": {
+  "en": {
+   "n": 19,
+   "pass": 7,
+   "rate": 0.3684,
+   "wilson95": [
+    0.1915,
+    0.5896
+   ]
+  },
+  "ur-Latn": {
+   "n": 11,
+   "pass": 2,
+   "rate": 0.1818,
+   "wilson95": [
+    0.0514,
+    0.477
+   ]
+  }
+ },
+ "scope_decision": {
+  "n": 30,
+  "pass": 29,
+  "rate": 0.9667,
+  "wilson95": [
+   0.8333,
+   0.9941
+  ]
+ },
+ "per_field": {
+  "aggregation": {
+   "n": 22,
+   "correct": 8,
+   "acc": 0.3636,
+   "wilson95": [
+    0.1973,
+    0.5705
+   ]
+  },
+  "area": {
+   "n": 15,
+   "correct": 14,
+   "acc": 0.9333,
+   "wilson95": [
+    0.7018,
+    0.9881
+   ]
+  },
+  "camera": {
+   "n": 2,
+   "correct": 0,
+   "acc": 0.0,
+   "wilson95": [
+    0.0,
+    0.6576
+   ]
+  },
+  "city": {
+   "n": 13,
+   "correct": 13,
+   "acc": 1.0,
+   "wilson95": [
+    0.7719,
+    1.0
+   ]
+  },
+  "compare_to": {
+   "n": 14,
+   "correct": 10,
+   "acc": 0.7143,
+   "wilson95": [
+    0.4535,
+    0.8828
+   ]
+  },
+  "in_scope": {
+   "n": 30,
+   "correct": 29,
+   "acc": 0.9667,
+   "wilson95": [
+    0.8333,
+    0.9941
+   ]
+  },
+  "metric": {
+   "n": 12,
+   "correct": 12,
+   "acc": 1.0,
+   "wilson95": [
+    0.7575,
+    1.0
+   ]
+  },
+  "other_city": {
+   "n": 8,
+   "correct": 8,
+   "acc": 1.0,
+   "wilson95": [
+    0.6756,
+    1.0
+   ]
+  },
+  "threshold": {
+   "n": 7,
+   "correct": 2,
+   "acc": 0.2857,
+   "wilson95": [
+    0.0822,
+    0.6411
+   ]
+  },
+  "time": {
+   "n": 27,
+   "correct": 14,
+   "acc": 0.5185,
+   "wilson95": [
+    0.3399,
+    0.6926
+   ]
+  },
+  "view": {
+   "n": 17,
+   "correct": 10,
+   "acc": 0.5882,
+   "wilson95": [
+    0.3601,
+    0.7839
+   ]
+  }
+ },
+ "language_gap": {
+  "en_minus_ur_latn": 0.1866,
+  "newcombe95": [
+   -0.1575,
+   0.4434
+  ]
+ },
+ "failures": [
+  {
+   "id": "b017",
+   "lang": "en",
+   "question": "Compare Lahore and Multan over the last 7 days.",
+   "expected": {
+    "in_scope": true,
+    "city": "Lahore",
+    "time": "last_7_days",
+    "aggregation": "mean",
+    "compare_to": "other_city",
+    "other_city": "Multan",
+    "view": "compare"
+   },
+   "got": {
+    "city": "Lahore",
+    "time": {
+     "label": "last_7_days"
+    },
+    "compare_to": "other_city",
+    "other_city": "Multan",
+    "view": "compare"
+   }
+  },
+  {
+   "id": "b019",
+   "lang": "ur-Latn",
+   "question": "Rawalpindi aur Islamabad mein abhi kis ki hawa saaf hai?",
+   "expected": {
+    "in_scope": true,
+    "city": "Rawalpindi",
+    "time": "now",
+    "aggregation": "min",
+    "compare_to": "other_city",
+    "other_city": "Islamabad",
+    "view": "compare"
+   },
+   "got": {
+    "city": "Islamabad",
+    "compare_to": "other_city",
+    "other_city": "Rawalpindi",
+    "view": "compare"
+   }
+  },
+  {
+   "id": "b018",
+   "lang": "en",
+   "question": "Was Sialkot's air worse than Lahore's yesterday?",
+   "expected": {
+    "in_scope": true,
+    "city": "Sialkot",
+    "time": "yesterday",
+    "aggregation": "mean",
+    "compare_to": "other_city",
+    "other_city": "Lahore",
+    "view": "compare"
+   },
+   "got": {
+    "city": "Lahore",
+    "compare_to": "other_city",
+    "other_city": "Sialkot",
+    "view": "compare"
+   }
+  },
+  {
+   "id": "b028",
+   "lang": "en",
+   "question": "Is Lahore's PM2.5 higher than Faisalabad's this week?",
+   "expected": {
+    "in_scope": true,
+    "metric": "pm25",
+    "city": "Lahore",
+    "time": "last_7_days",
+    "aggregation": "mean",
+    "compare_to": "other_city",
+    "other_city": "Faisalabad",
+    "view": "compare"
+   },
+   "got": {
+    "metric": "pm25",
+    "city": "Lahore",
+    "compare_to": "other_city",
+    "other_city": "Faisalabad",
+    "view": "compare"
+   }
+  },
+  {
+   "id": "b030",
+   "lang": "ur-Latn",
+   "question": "aaj Lahore ka PM2.5 kal ke muqable mein kitna hai?",
+   "expected": {
+    "in_scope": true,
+    "metric": "pm25",
+    "city": "Lahore",
+    "time": "today",
+    "compare_to": "yesterday",
+    "view": "compare"
+   },
+   "got": {
+    "metric": "pm25",
+    "city": "Lahore"
+   }
+  },
+  {
+   "id": "b029",
+   "lang": "en",
+   "question": "Look at Gulberg III from the north and show PM10.",
+   "expected": {
+    "in_scope": true,
+    "metric": "pm10",
+    "area": "Gulberg III",
+    "camera": "north"
+   },
+   "got": {
+    "metric": "pm10",
+    "area": "gulberg",
+    "camera": "station"
+   }
+  },
+  {
+   "id": "b026",
+   "lang": "en",
+   "question": "What was the peak PM10 at GT Road yesterday?",
+   "expected": {
+    "in_scope": true,
+    "metric": "pm10",
+    "area": "GT Road",
+    "time": "yesterday",
+    "aggregation": "max"
+   },
+   "got": {
+    "metric": "pm10",
+    "area": "gt road",
+    "time": {
+     "label": "yesterday"
+    },
+    "camera": "station"
+   }
+  },
+  {
+   "id": "b012",
+   "lang": "en",
+   "question": "Is Punjab University worse this week than last week?",
+   "expected": {
+    "in_scope": true,
+    "area": "Punjab University",
+    "time": "last_7_days",
+    "aggregation": "mean",
+    "compare_to": "last_week",
+    "view": "compare"
+   },
+   "got": {
+    "in_scope": false
+   }
+  },
+  {
+   "id": "b008",
+   "lang": "en",
+   "question": "How often was Lahore above 200 yesterday?",
+   "expected": {
+    "in_scope": true,
+    "city": "Lahore",
+    "time": "yesterday",
+    "aggregation": "count_hours_above",
+    "threshold": 200
+   },
+   "got": {
+    "city": "Lahore",
+    "time": {
+     "label": "yesterday"
+    }
+   }
+  },
+  {
+   "id": "b009",
+   "lang": "ur-Latn",
+   "question": "kal Kahna Nau mein kitne ghante AQI 150 se upar raha?",
+   "expected": {
+    "in_scope": true,
+    "area": "Kahna Nau",
+    "time": "yesterday",
+    "aggregation": "count_hours_above",
+    "threshold": 150
+   },
+   "got": {
+    "area": "kahna nau",
+    "camera": "station"
+   }
+  },
+  {
+   "id": "b027",
+   "lang": "ur-Latn",
+   "question": "pichle 30 din mein Multan Road pe kitni dafa AQI 400 se upar gaya?",
+   "expected": {
+    "in_scope": true,
+    "area": "Multan Road",
+    "time": "last_30_days",
+    "aggregation": "count_hours_above",
+    "threshold": 400
+   },
+   "got": {
+    "city": "Multan",
+    "area": "multan road",
+    "view": "city_overview",
+    "camera": "station"
+   }
+  },
+  {
+   "id": "b022",
+   "lang": "en",
+   "question": "How many hours did Faisalabad spend above 250 this month compared with last month?",
+   "expected": {
+    "in_scope": true,
+    "city": "Faisalabad",
+    "time": "this_month",
+    "aggregation": "count_hours_above",
+    "view": "compare",
+    "threshold": 250
+   },
+   "got": {
+    "city": "Faisalabad",
+    "time": {
+     "label": "last_month"
+    },
+    "aggregation": "count_hours_above",
+    "threshold": 250,
+    "view": "city_overview",
+    "camera": "zoomed_out"
+   }
+  },
+  {
+   "id": "b010",
+   "lang": "ur-Latn",
+   "question": "is mahine Safari Park pe kitne ghante hawa unhealthy rahi?",
+   "expected": {
+    "in_scope": true,
+    "area": "Safari Park",
+    "time": "this_month",
+    "aggregation": "count_hours_above",
+    "threshold": 200
+   },
+   "got": {
+    "area": "safari park",
+    "camera": "station"
+   }
+  },
+  {
+   "id": "b005",
+   "lang": "ur-Latn",
+   "question": "pichle hafte DHA ka PM2.5 average kya tha?",
+   "expected": {
+    "in_scope": true,
+    "metric": "pm25",
+    "area": "DHA",
+    "time": "last_7_days",
+    "aggregation": "mean"
+   },
+   "got": {
+    "metric": "pm25",
+    "area": "dha",
+    "aggregation": "mean",
+    "camera": "station"
+   }
+  },
+  {
+   "id": "b024",
+   "lang": "en",
+   "question": "Show the PM2.5 trend at Shahdara over the last 30 days.",
+   "expected": {
+    "in_scope": true,
+    "metric": "pm25",
+    "area": "Shahdara",
+    "time": "last_30_days",
+    "view": "timeline"
+   },
+   "got": {
+    "metric": "pm25",
+    "area": "shahdara",
+    "camera": "station"
+   }
+  },
+  {
+   "id": "b020",
+   "lang": "ur-Latn",
+   "question": "is mahine Bahawalpur aur Multan mein se kahan smog zyada raha?",
+   "expected": {
+    "in_scope": true,
+    "city": "Bahawalpur",
+    "time": "this_month",
+    "aggregation": "mean",
+    "compare_to": "other_city",
+    "other_city": "Multan",
+    "view": "compare"
+   },
+   "got": {
+    "city": "Multan",
+    "aggregation": "max",
+    "compare_to": "other_city",
+    "other_city": "Bahawalpur",
+    "view": "compare"
+   }
+  },
+  {
+   "id": "b007",
+   "lang": "en",
+   "question": "How many hours of hazardous air did Egerton Road have this month?",
+   "expected": {
+    "in_scope": true,
+    "area": "Egerton Road",
+    "time": "this_month",
+    "aggregation": "count_hours_above",
+    "threshold": 400
+   },
+   "got": {
+    "area": "egerton road",
+    "time": {
+     "label": "this_month"
+    },
+    "view": "timeline",
+    "camera": "station"
+   }
+  },
+  {
+   "id": "b016",
+   "lang": "en",
+   "question": "Which is cleaner right now, Faisalabad or Gujranwala?",
+   "expected": {
+    "in_scope": true,
+    "city": "Faisalabad",
+    "time": "now",
+    "aggregation": "min",
+    "compare_to": "other_city",
+    "other_city": "Gujranwala",
+    "view": "compare"
+   },
+   "got": {
+    "city": "Faisalabad",
+    "compare_to": "other_city",
+    "other_city": "Gujranwala",
+    "view": "compare"
+   }
+  },
+  {
+   "id": "b025",
+   "lang": "en",
+   "question": "Which district was cleanest last month?",
+   "expected": {
+    "in_scope": true,
+    "time": "last_month",
+    "aggregation": "min",
+    "view": "city_overview",
+    "camera": "zoomed_out"
+   },
+   "got": {
+    "time": {
+     "label": "last_month"
+    },
+    "aggregation": "min",
+    "view": "timeline"
+   }
+  },
+  {
+   "id": "b014",
+   "lang": "ur-Latn",
+   "question": "kya aaj GT Road ki hawa kal se behtar hai?",
+   "expected": {
+    "in_scope": true,
+    "area": "GT Road",
+    "time": "today",
+    "compare_to": "yesterday",
+    "view": "compare"
+   },
+   "got": {
+    "area": "gt road",
+    "camera": "station"
+   }
+  },
+  {
+   "id": "b015",
+   "lang": "ur-Latn",
+   "question": "is hafte Lahore ki hawa pichle hafte se kharab hai?",
+   "expected": {
+    "in_scope": true,
+    "city": "Lahore",
+    "time": "last_7_days",
+    "aggregation": "mean",
+    "compare_to": "last_week",
+    "view": "compare"
+   },
+   "got": {
+    "city": "Lahore"
+   }
+  }
+ ]
+}

@@ -3,7 +3,7 @@
 - `station_columns`: Lahore stations as 3D columns; height and colour = AQI.
 - `city_dots`: every monitored city as a scaled, coloured disc.
 No map-tile key is needed: with CARTO_API_KEY empty the deck is rendered on a
-plain dark background (`map_provider=None`).
+plain background (`map_provider=None`); the app's CSS supplies the cream ground.
 """
 
 from __future__ import annotations
@@ -15,7 +15,7 @@ import pydeck as pdk
 
 from airlume.aqi import band_for, hex_to_rgb
 
-MISSING_RGB = [90, 100, 112]
+MISSING_RGB = [138, 130, 114]  # warm grey: no data, never a band colour
 
 
 def _colour(aqi: float | None) -> list[int]:
@@ -66,7 +66,7 @@ def city_dots(df: pd.DataFrame, value_col: str = "aqi") -> pdk.Layer:
         pickable=True,
         opacity=0.85,
         stroked=True,
-        get_line_color=[20, 26, 34],
+        get_line_color=[27, 26, 23],
         line_width_min_pixels=1,
     )
 
@@ -129,7 +129,7 @@ def wind_arrows(df: pd.DataFrame, km_per_ms: float = 1.1, min_km: float = 0.6) -
         data=d,
         get_source_position=["lon", "lat"],
         get_target_position=["end_lon", "end_lat"],
-        get_color=[142, 202, 230],
+        get_color=[27, 26, 23, 200],
         get_width=3,
         width_min_pixels=2,
         pickable=False,
@@ -151,7 +151,11 @@ def labels(df: pd.DataFrame, text_col: str = "name", size: int = 13) -> pdk.Laye
         get_position=["lon", "lat"],
         get_text=text_col,
         get_size=size,
-        get_color=[232, 238, 244],
+        get_color=[27, 26, 23],
         get_alignment_baseline="bottom",
         get_pixel_offset=[0, -8],
+        # cream halo keeps ink labels readable over dark columns (needs the SDF font atlas)
+        outline_width=3,
+        outline_color=[241, 231, 211, 255],
+        font_settings={"sdf": True},
     )

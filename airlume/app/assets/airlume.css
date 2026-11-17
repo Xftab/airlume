@@ -1,0 +1,276 @@
+/* Airlume neumorphism: cream surface, ink-black text, burnt-orange accent.
+ *
+ * One static stylesheet, read from disk by the app and passed to st.html(Path).
+ * No user text, model text or data value is ever interpolated into it, and
+ * st.html sanitises the markup and ignores JavaScript. It does not use
+ * unsafe_allow_html (tests/test_security.py still allows exactly one use, the header).
+ *
+ * Colour rules
+ *  - Raised  = a control or card you can act on or read as a unit.
+ *  - Inset   = a place where you type, or a window onto the data (the maps).
+ *  - Burnt orange #C2531B (3.8:1 on cream) is for fills, rings, large numbers and
+ *    icons. Text in orange uses the deeper #A8420F (5.0:1). Body text is ink.
+ *  - AQI band colours are data and are never recoloured here.
+ */
+
+:root {
+  --cream: #F1E7D3;
+  --cream-deep: #E9DDC4;
+  --hi: #FBF5E9;          /* light edge, top-left */
+  --lo: #CDBE9F;          /* dark edge, bottom-right */
+  --ink: #1B1A17;
+  --ink-soft: #5A5448;    /* 6.1:1 on cream: captions, help text */
+  --burnt: #C2531B;
+  --burnt-deep: #A8420F;
+  --radius: 20px;
+  --radius-sm: 14px;
+
+  --raised: 7px 7px 16px var(--lo), -7px -7px 16px var(--hi);
+  --raised-sm: 4px 4px 9px var(--lo), -4px -4px 9px var(--hi);
+  --inset: inset 5px 5px 10px var(--lo), inset -5px -5px 10px var(--hi);
+  --inset-sm: inset 3px 3px 6px var(--lo), inset -3px -3px 6px var(--hi);
+  --ring: 0 0 0 3px var(--cream), 0 0 0 5px var(--burnt);
+}
+
+/* ------------------------------------------------------------------ page */
+[data-testid="stApp"],
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"] {
+  background: var(--cream);
+  color: var(--ink);
+}
+[data-testid="stHeader"] { background: transparent; }
+[data-testid="stMainBlockContainer"] { padding-top: 3.2rem; }
+
+h1, h2, h3 { color: var(--ink); letter-spacing: -0.01em; }
+h1 { font-weight: 800; }
+h2, h3 { font-weight: 700; }
+
+[data-testid="stCaptionContainer"],
+[data-testid="stCaptionContainer"] p {
+  color: var(--ink-soft);
+  opacity: 1;               /* Streamlit fades captions; on cream that drops below 4.5:1 */
+}
+
+hr, [data-testid="stDivider"] { border-color: transparent; }
+hr {
+  height: 6px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--cream);
+  box-shadow: var(--inset-sm);
+}
+
+a { color: var(--burnt-deep); }
+
+/* --------------------------------------------------------------- sidebar */
+[data-testid="stSidebar"] {
+  background: var(--cream);
+  border: 0;
+  box-shadow: 10px 0 22px -6px var(--lo);
+}
+[data-testid="stSidebar"] [data-testid="stSidebarContent"] { background: transparent; }
+
+/* ------------------------------------------------------------ text fields */
+[data-testid="stTextInputRootElement"],
+[data-testid="stNumberInputContainer"] {
+  background: var(--cream);
+  border: 1px solid rgba(27, 26, 23, 0.28);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--inset);
+}
+[data-testid="stTextInputRootElement"] input,
+[data-testid="stNumberInputContainer"] input {
+  background: transparent;
+  color: var(--ink);
+}
+[data-testid="stTextInputRootElement"] input::placeholder { color: var(--ink-soft); opacity: 1; }
+[data-testid="stTextInputRootElement"]:focus-within,
+[data-testid="stNumberInputContainer"]:focus-within {
+  border-color: var(--burnt);
+  box-shadow: var(--inset), 0 0 0 3px rgba(194, 83, 27, 0.35);
+}
+
+/* Selectbox: the visible control is the group that holds the combobox input. */
+[data-testid="stSelectbox"] [role="group"] {
+  background: var(--cream);
+  border: 1px solid rgba(27, 26, 23, 0.28);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--inset);
+}
+[data-testid="stSelectbox"] input { color: var(--ink); background: transparent; }
+[data-testid="stSelectbox"] [role="group"]:focus-within {
+  border-color: var(--burnt);
+  box-shadow: var(--inset), 0 0 0 3px rgba(194, 83, 27, 0.35);
+}
+
+/* ---------------------------------------------------------------- buttons */
+[data-testid^="stBaseButton-secondary"] {
+  background: var(--cream);
+  color: var(--ink);
+  border: 1px solid rgba(27, 26, 23, 0.28);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--raised-sm);
+  font-weight: 600;
+  transition: box-shadow 0.12s ease, color 0.12s ease;
+}
+[data-testid^="stBaseButton-secondary"]:hover {
+  color: var(--burnt-deep);
+  border-color: var(--burnt);
+}
+[data-testid^="stBaseButton-secondary"]:active {
+  box-shadow: var(--inset-sm);
+  color: var(--burnt-deep);
+}
+[data-testid^="stBaseButton-secondary"]:focus-visible,
+[data-testid^="stBaseButton-secondary"]:focus {
+  outline: none;
+  box-shadow: var(--raised-sm), var(--ring);
+}
+
+/* ---------------------------------------------------- toggles and radios */
+[data-testid="stCheckbox"] label:has(input[role="switch"]) > div:first-of-type {
+  background: var(--cream);
+  border: 1px solid rgba(27, 26, 23, 0.45);
+  box-shadow: var(--inset-sm);
+}
+[data-testid="stCheckbox"] label:has(input[role="switch"]:checked) > div:first-of-type {
+  background: var(--burnt);
+  box-shadow: inset 3px 3px 6px rgba(27, 26, 23, 0.35);
+}
+[data-testid="stRadioGroup"] { gap: 0.6rem; }
+[data-testid="stRadioOption"] {
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.9rem;
+  box-shadow: var(--raised-sm);
+}
+[data-testid="stRadioOption"]:has(input:checked) {
+  box-shadow: var(--inset-sm);
+  color: var(--burnt-deep);
+  font-weight: 700;
+}
+[data-testid="stRadioOption"]:has(input:focus-visible) { box-shadow: var(--raised-sm), var(--ring); }
+
+/* ----------------------------------------------------------------- tabs */
+[data-testid="stTabs"] [role="tablist"] {
+  gap: 0.6rem;
+  border: 0;
+  padding: 0.35rem 0.1rem 0.9rem;
+}
+[data-testid="stTab"] {
+  background: var(--cream);
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 1rem;
+  box-shadow: var(--raised-sm);
+  border: 0;
+}
+[data-testid="stTab"][aria-selected="true"] {
+  box-shadow: var(--inset-sm);
+  color: var(--burnt-deep);
+  font-weight: 700;
+}
+[data-testid="stTab"]:focus-visible { outline: none; box-shadow: var(--raised-sm), var(--ring); }
+/* Streamlit draws its own underline and track under the tab strip; the inset
+   state replaces both. */
+[data-testid="stTabs"] [role="tablist"] > div:not([data-testid="stTab"]) { display: none; }
+
+/* --------------------------------------------------------------- metrics */
+[data-testid="stMetric"] {
+  background: var(--cream);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  box-shadow: var(--raised);
+}
+[data-testid="stMetricLabel"] { color: var(--ink-soft); }
+[data-testid="stMetricValue"] { color: var(--burnt); font-weight: 800; }   /* large text: 3.8:1 is enough */
+/* The delta chip is Streamlit's green/red; here it carries a band name or a share, not good or bad. */
+[data-testid="stMetricDelta"],
+[data-testid="stMetricDelta"] * { background: transparent; color: var(--ink) !important; }
+[data-testid="stMetricDelta"] { box-shadow: var(--inset-sm); border-radius: 999px; padding: 2px 10px; }
+
+/* ---------------------------------------------------------------- alerts
+ * Not green / amber / blue any more, so the kind is carried by the edge bar and
+ * the surface: answer = raised with an orange bar; warning = pressed in with an
+ * orange bar; info = raised with an ink bar. */
+[data-testid="stAlert"] {
+  background: var(--cream);
+  color: var(--ink);
+  border: 0;
+  border-radius: var(--radius);
+  box-shadow: var(--raised);
+  border-left: 7px solid var(--ink);
+}
+[data-testid="stAlert"] [data-testid="stAlertContainer"],
+[data-testid="stAlert"] [data-testid^="stAlertContent"] { background: transparent; color: var(--ink); }
+[data-testid="stAlert"] p, [data-testid="stAlert"] li { color: var(--ink); }
+[data-testid="stAlert"]:has([data-testid="stAlertContentSuccess"]) { border-left-color: var(--burnt); }
+[data-testid="stAlert"]:has([data-testid="stAlertContentWarning"]) {
+  border-left-color: var(--burnt);
+  background: #F3DFC3;
+  box-shadow: var(--inset);
+}
+[data-testid="stAlert"]:has([data-testid="stAlertContentError"]) {
+  border-left-color: var(--ink);
+  background: #EBD3C4;
+  box-shadow: var(--inset);
+}
+[data-testid="stAlert"]:has([data-testid="stAlertContentInfo"]) { border-left-color: var(--ink-soft); }
+
+/* --------------------------------------------------------------- expander */
+[data-testid="stExpander"] details {
+  background: var(--cream);
+  border: 0;
+  border-radius: var(--radius);
+  box-shadow: var(--raised-sm);
+}
+[data-testid="stExpander"] details[open] { box-shadow: var(--inset-sm); }
+[data-testid="stExpander"] summary { color: var(--ink); font-weight: 600; }
+
+/* -------------------------------------------------------- tables, charts */
+[data-testid="stDataFrame"] {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--inset-sm);
+  padding: 4px;
+}
+[data-testid="stVegaLiteChart"] {
+  background: var(--cream);
+  border-radius: var(--radius);
+  box-shadow: var(--raised-sm);
+  padding: 0.7rem 0.6rem 0.2rem;
+  margin: 4px 14px 16px 4px;   /* room for the shadow, which the parent would clip */
+}
+
+/* ------------------------------------------------------------------ maps
+ * The map is a window onto the city, so it is pressed in. The canvas is
+ * transparent when no basemap key is set, so this colour is the ground. */
+[data-testid="stDeckGlJsonChart"] {
+  background: var(--cream-deep);
+  border-radius: var(--radius);
+  box-shadow: var(--inset);
+  overflow: hidden;
+  padding: 0;
+}
+[data-testid="stDeckGlJsonChartZoomButton"] {
+  background: var(--cream);
+  color: var(--ink);
+  border-radius: 12px;
+  box-shadow: var(--raised-sm);
+}
+
+/* ---------------------------------------------------------------- sliders */
+[data-testid="stSlider"] [data-testid="stSliderThumbValue"] { color: var(--burnt-deep); }
+
+/* --------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+
+/* ------------------------------------------------------------ phone width */
+@media (max-width: 640px) {
+  :root { --raised: 5px 5px 11px var(--lo), -5px -5px 11px var(--hi); }
+  [data-testid="stMainBlockContainer"] { padding-left: 1rem; padding-right: 1rem; }
+  [data-testid="stMetric"] { padding: 0.8rem 0.9rem; }
+}

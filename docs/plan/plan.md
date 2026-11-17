@@ -152,6 +152,22 @@ Every resource was checked on **12 October 2026** against official documentation
 
 **Important change:** pydeck's default basemap is a keyless CARTO URL. CARTO blocked keyless raster tiles on 25 September 2026 and describes keyless vector tiles as working "for now". Request the free key in Phase 0.
 
+### Interface design: neumorphism in cream, ink black and burnt orange (10 Nov 2026)
+
+The interface uses a neumorphic ("soft UI") style: one cream surface, raised cards for what is read or pressed, pressed-in (inset) fields for where you type, and the maps set into inset frames as windows onto the city.
+
+| Role | Colour | Used for |
+|:--|:--|:--|
+| Surface | Cream `#F1E7D3` | page, cards, sidebar |
+| Text | Ink black `#1B1A17` | all body text and headings; captions use `#5A5448` (6.1:1) |
+| Accent | Burnt orange `#C2531B` | large metric numbers, toggle fill, focus ring, answer-card edge |
+| Accent, text | Deep burnt orange `#A8420F` | small orange text such as the active tab (5.0:1) |
+
+- **Where it lives.** Colours and radii are Streamlit's own theme in `.streamlit/config.toml`. The soft shadows are one static stylesheet, `airlume/app/assets/airlume.css`, read from the repository and passed to `st.html(Path(...))`, which sanitises it and ignores JavaScript. It is **not** an `unsafe_allow_html` use: the header remains the only one, and `tests/test_security.py` still enforces that. No user text, model text or data value is ever placed in the stylesheet.
+- **Data colours are not theme colours.** The seven AQI band colours on the columns and bars are unchanged; light bands (Satisfactory is 1.3:1 on cream) get a thin ink edge so they stay readable. Stations with no recent reading stay a warm grey and are never filled with a band colour. The alert kinds are no longer green, amber and blue: the answer carries a burnt-orange edge, a warning is pressed in with an orange edge, an information note has a grey edge.
+- **Contrast.** Burnt orange `#C2531B` on cream is 3.8:1, enough for large text and graphics but not for small text, so it is never used for body text. Soft shadows are low contrast by nature, so inputs also carry a thin ink outline and every control a visible orange focus ring. `tests/test_theme.py` pins the contrast ratios and checks the stylesheet fetches nothing.
+- **Limits, stated.** Colours on a projector wash out faster than on a laptop screen; check the demo room first. The CARTO light basemap was not checked in the build environment (no network route to the tile host); with no key the maps sit on the cream ground. Neumorphism is a visual style, not an accessibility feature.
+
 ## Hosting and automation
 
 | Service | Free | Use in Airlume | Watch out for |
@@ -495,7 +511,7 @@ on:
 
 ### 2.1 Basemap
 
-- CARTO dark basemap with the free key. Fallback: Protomaps PMTiles extract of Lahore. Second fallback: no basemap, OSM district polygons only.
+- CARTO basemap with the free key (`light` style since 10 Nov 2026, to sit on the cream interface; `dark` before). Fallback: Protomaps PMTiles extract of Lahore. Second fallback: no basemap, OSM district polygons only.
 
 ```bash
 pmtiles extract https://build.protomaps.com/<latest>.pmtiles lahore.pmtiles \
@@ -576,6 +592,7 @@ pmtiles extract https://build.protomaps.com/<latest>.pmtiles lahore.pmtiles \
   - Aftab adjudicates by rule;
   - scored once, around 16 Nov.
   Annotator guide version 3.
+  - **Update 17 Nov 2026:** Part B annotated (Kiran's first sheet unusable, redo accepted; Tehreem's accepted) and adjudicated by rule; the proposed gold is `partB-gold-2026-11-17-PROPOSED.csv`, frozen on Aftab's approval. New convention 17 ("this week" is `last_7_days`); known schema limit: `compare_to` cannot say `last_month`. Part A is not yet collected, so the scoring date moves from 16 Nov to when Part A is labelled (18 Nov at the earliest). Memo `docs/benchmark/partB-adjudication-2026-11-17.md`.
 - **Materials ready (14 Oct):** `docs/benchmark/classmate-questions.md` (printable sheet, 20 questions per classmate, blind to the schema, with Roman-Urdu and out-of-scope minimums) and `docs/benchmark/annotator-guide.md` (field table and ten agreed conventions for the second annotator; kappa per field).
 - **Status (14 Oct):** benchmark v0 (90 items) is a *development* set --- the router prompt was revised after reading its failures, so its scores are optimistic. The frozen v1 set (classmate items, second annotator) is what the report's headline number comes from; the prompt is not touched after the freeze.
 
@@ -747,7 +764,7 @@ Airlume is a public, read-only site with one user input: the question box. That 
 
 - **Secrets:** every key lives in `.env` locally and in the host's secrets store when deployed; never in code, never in `data/`, never in a commit. A startup check refuses to run if a key is missing from the environment or found in a file.
 - **Input handling:** the question is treated as untrusted text. It is passed to the model as data inside a fixed system prompt; the model's only output is the typed form; the form is validated by Pydantic; SQL is built by code with parameters only. No user text is ever interpolated into a query, a shell command or HTML.
-- **Output handling:** the answer sentence and every station name are rendered as text, never as HTML. `unsafe_allow_html` is banned in the codebase (enforced by a test that greps for it).
+- **Output handling:** the answer sentence and every station name are rendered as text, never as HTML. `unsafe_allow_html` is banned in the codebase apart from the one hardcoded header (enforced by a test that greps for it). The interface stylesheet is a static file passed to `st.html`, which sanitises it and ignores JavaScript; no user text is ever put in it.
 - **Rate limiting:** per-visitor limit on the question box (for example 20 questions per 10 minutes) and a global daily cap sized to the free model quota, with cached answers served without a model call. This protects the free-tier budget, which is the asset an attacker would actually burn.
 - **No accounts, no admin routes:** the public site has no login and no write path. Collection runs separately on GitHub Actions. If an operator page is ever added, it is protected by authentication and is not reachable from the public app.
 - **Security headers and settings:** debug mode off; no stack traces to visitors; Content-Security-Policy, X-Content-Type-Options, X-Frame-Options and Referrer-Policy set wherever the host allows (a FastAPI layer adds them if Streamlit alone cannot).

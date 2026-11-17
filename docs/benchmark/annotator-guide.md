@@ -65,3 +65,11 @@ Run `scripts\check_annotation.py` on your sheet before handing it over. It catch
 - Agreement is computed per field (exact match after the conventions above). It is reported as raw agreement and Cohen's kappa, with the number of disagreements resolved by adjudication. `scripts\annotator_agreement.py <sheet-a> <sheet-b>` produces both and the disagreement list.
 - The adjudicated forms become the gold set. The test set is then frozen, scored once and never tuned on.
 - Kappa is unstable on small samples, so report the number with the count beside it. Where both annotators used a single value for every row, kappa is undefined and raw agreement is reported instead.
+
+## Adjudication addendum (17 November 2026)
+
+Added after annotation, by Aftab as adjudicator. The conventions above (version 3) are unchanged; this one fills a gap that two annotators handled differently.
+
+17. **"This week"** has no value of its own in the time table. Write `last_7_days`. It is the nearest legal value and the form cannot express a calendar week.
+
+Known schema limit, not a convention: `compare_to` cannot say `last_month`. A question that compares this month with last month is labelled with `compare_to` blank and `view` compare, and the row's `notes` says so. It is scored as a known limit, not as an annotator disagreement.

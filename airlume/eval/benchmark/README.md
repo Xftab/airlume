@@ -16,3 +16,5 @@ Each item carries the fields that **matter for its class** in `expected`. Scorin
 Status: **draft v0 (14 Oct 2026), not yet frozen.** Classmate items and a second annotator (kappa on 20 items) are pending.
 
 **6 Nov 2026.** Schema and prompt frozen at v5 (`docs/benchmark/v1-packet-2026-11-06.md`). This set (v0) and the 62 classmate questions of 30 Oct are **development data**; v0's figure stands as recorded under prompt v4 and is not re-scored under v5. Benchmark v1 is a fresh naturalistic set (Part A, to be collected) plus `partB-constructed-2026-11-06.jsonl` (30 constructed schema-coverage questions, labels by humans only, reported separately). Annotator guide version 3.
+
+**17 Nov 2026.** Part B annotated by Kiran (redo; the 14 Nov first attempt was unusable) and Tehreem, adjudicated by rule. `partB-gold-2026-11-17-PROPOSED.csv` awaits Aftab's approval and is then renamed to `partB-gold-2026-11-17.csv` and frozen. Sheets as received are in `as-received/`. Memo: `docs/benchmark/partB-adjudication-2026-11-17.md`. Annotator guide gains an addendum (convention 17).

@@ -1,0 +1,22 @@
+﻿id,field,she_wrote,now
+b028,metric, PM2.5,pm25
+b030,metric,PM2.5,pm25
+b029,metric,PM10,pm10
+b026,metric,PM10,pm10
+b021,metric,PM2.5,pm25
+b023,metric,PM10,pm10
+b005,metric,PM2.5,pm25
+b003,metric,PM2.5,pm25
+b004,metric,PM10,pm10
+b024,metric,PM2.5,pm25
+b024,time_label,last_ 30_days,last_30_days
+b001,metric,PM2.5,pm25
+b020,time_label,this _month,this_month
+b007,time_label,this_ month,this_month
+b016,question," Which is clearner right now,Faislabad or Gujrawala?","Which is cleaner right now, Faisalabad or Gujranwala?"
+b002,question,Show me PM10 levels at Multan Road than yesterday?,Show me PM10 levels at Multan Road right now.
+b002,metric,PM10,pm10
+b002,aggregation,lastest,latest
+b011,question, Is the air at Wagha Border better than yesterday?,Is the air at Wagha Border better than yesterday?
+b014,question,Kya aj GT Road ki hawa kal se behter hai?,kya aaj GT Road ki hawa kal se behtar hai?
+b015,question,is hafty Lahore ki hawa pichle hafte se kharab hai ?,is hafte Lahore ki hawa pichle hafte se kharab hai?

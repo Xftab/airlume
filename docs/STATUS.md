@@ -1,8 +1,28 @@
 # Status
 
-_Last updated: 6 November 2026_
+_Last updated: 17 November 2026_
 
 ## Where we are
+
+**Latest — 17 Nov 2026.** Part B annotation is in. Tehreem's sheet was usable; Kiran's first was not (301 problems, every row) and his redo is. Agreement on 30 questions: 42 differing cells, `compare_to` the weakest (57%), mostly Kiran filling it for plain time windows; 8 are spelling. A proposed gold sheet (`airlume/eval/benchmark/partB-gold-2026-11-17-PROPOSED.csv`) passes the checker and waits for Aftab. New convention 17 ("this week" is `last_7_days`); `compare_to` cannot say `last_month` (known schema limit, b022). Memo: `docs/benchmark/partB-adjudication-2026-11-17.md`. 11 Nov: `test.bat` 262 passed. **Part A is not collected**, so there is no headline v1 number yet; the 14 and 16 Nov dates have passed.
+
+**Next (Aftab):**
+1. Read `docs/benchmark/partB-adjudication-2026-11-17.csv` (42 cells, a convention beside each). Approve the proposed gold or change a cell. Two real decisions: convention 17 and b022.
+2. If approved: `ren K:\airlume\airlume\eval\benchmark\partB-gold-2026-11-17-PROPOSED.csv partB-gold-2026-11-17.csv`, then `save`. The file is then frozen.
+3. Part A: tell me whether any classmate sheets have come back; I type them into `classmate-raw-2026-11-<dd>.jsonl`.
+4. Score Part B once (commands in the adjudication memo): stub first, then `openai/gpt-oss-120b`, not on an E4 day.
+5. Still open from 6 Nov: restore the 7,215 archive rows (`scripts\recover_archive_rows.py`, report first), EPA redistribution answer, E4 dates.
+
+**Latest — 10 Nov 2026.** Interface restyled in neumorphism (cream, ink black, burnt orange). Theme in `.streamlit/config.toml`, soft shadows in one static `airlume/app/assets/airlume.css` loaded by `st.html` (no new `unsafe_allow_html`), ink labels and warm-grey missing stations on the maps, ink-edged bars, 4 new tests (`tests/test_theme.py`). AQI band colours unchanged. Checked in a headless browser on fake data at desktop and phone width; the full suite and the CARTO light basemap were not run here.
+
+**Next (Aftab, UI):**
+1. `K:\airlume\test.bat`; expect 262 passed (258 plus 4 new). If a number differs, send me the failing line.
+2. `K:\airlume\run.bat`, then look at it on your own screen and, ideally, on the projector or room you will present in.
+3. If it looks right, `save`. If not, tell me which part (colours, shadow strength, a specific tab) and I will adjust the one stylesheet.
+4. Decide whether to keep `dark` basemap tiles or the new `light` ones once you have a CARTO key set (Status panel shows "Map tiles").
+5. Re-take the chapter 4 screenshots from real data.
+
+The 6 Nov list below still stands.
 
 **Latest — 6 Nov 2026.** Data and accuracy audit (memos in `docs/research/`, dated 6 Nov).
 - **(1) Archive data loss.** 7,215 committed rows had been deleted by the two collectors' git merges. The cause is fixed (union merge in `.gitattributes`), and `scripts/recover_archive_rows.py` restores the rows. The 110-hour station gap is really 76 hours.

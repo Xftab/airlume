@@ -1,9 +1,18 @@
 [theme]
-base = "dark"
-primaryColor = "#5BC8D6"
-backgroundColor = "#0B0F14"
-secondaryBackgroundColor = "#121922"
-textColor = "#E8EEF4"
+# Neumorphism: cream surface, ink-black text, burnt-orange accent (Nov 2026).
+# Colours and radii live here; the soft shadows live in airlume/app/assets/airlume.css.
+base = "light"
+primaryColor = "#C2531B"
+backgroundColor = "#F1E7D3"
+secondaryBackgroundColor = "#E9DDC4"
+textColor = "#1B1A17"
+borderColor = "#CDBE9F"
+linkColor = "#A8420F"
+baseRadius = "large"
+buttonRadius = "large"
+showWidgetBorder = false
+showSidebarBorder = false
+dataframeHeaderBackgroundColor = "#E9DDC4"
 
 [server]
 headless = true

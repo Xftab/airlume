@@ -1,0 +1,44 @@
+﻿id,field,he_wrote,now
+b017,time_label,7 days ,last_7_days
+b017,aggregation,Mean,mean
+b006,time_label,last week,last_7_days
+b006,aggregation,count_hour,count_hours_above
+b019,compare_to,other city,other_city
+b028,metric,PM2.5,pm25
+b028,time_label,this week ,this_week
+b030,metric,pm2.5,pm25
+b030,compare_to,last day,yesterday
+b029,metric,PM10,pm10
+b026,metric,PM10,pm10
+b012,time_label,this week,this_week
+b013,aggregation,count_hour,count_hours_above
+b008,aggregation,above,count_hours_above
+b021,metric,PM2.5,pm25
+b009,aggregation,count_hour,count_hours_above
+b009,compare_to,last day,yesterday
+b023,metric,PM10,pm10
+b023,compare_to,other city,other_city
+b027,time_label,last30 days,last_30_days
+b027,aggregation,count_hour,count_hours_above
+b027,compare_to,last 30 days,last_30_days
+b022,time_label,this month,this_month
+b022,aggregation,count_hour,count_hours_above
+b010,time_label,this month,this_month
+b010,aggregation,count_hour,count_hours_above
+b005,metric,PM2.5,pm25
+b005,time_label,last week,last_7_days
+b003,metric,PM2.5,pm25
+b003,time_label,last week,last_7_days
+b004,metric,PM10,pm10
+b024,metric,PM2.5,pm25
+b024,time_label,last 30 days,last_30_days
+b024,compare_to,last 30 days,last_30_days
+b001,metric,PM2.5,pm25
+b020,time_label,this month,this_month
+b020,aggregation,Mean,mean
+b007,time_label,this month,this_month
+b007,aggregation,count_hour,count_hours_above
+b025,time_label,last month,last_month
+b002,aggregation,count_hour,count_hours_above
+b015,time_label,this week,this_week
+b015,compare_to,last week ,last_week

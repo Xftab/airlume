@@ -15,7 +15,7 @@ def _map_kwargs() -> dict:
     """Keyless by default. CARTO basemap only when a key is configured."""
     key = load_settings().carto_api_key
     if key:
-        return {"map_provider": "carto", "map_style": "dark", "api_keys": {"carto": key}}
+        return {"map_provider": "carto", "map_style": "light", "api_keys": {"carto": key}}
     return {"map_provider": None, "map_style": None}
 
 

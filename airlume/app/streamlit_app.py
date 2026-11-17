@@ -47,6 +47,10 @@ from airlume.viz import coverage as cov_mod  # noqa: E402
 from airlume.viz.views import deck_city_overview, deck_stations_3d  # noqa: E402
 
 st.set_page_config(page_title="Airlume", page_icon="🌫️", layout="wide")
+# Neumorphism (cream / ink black / burnt orange). Colours are in .streamlit/config.toml;
+# the soft shadows are in one static stylesheet read from the repo. st.html sanitises it,
+# ignores JavaScript, and nothing from a user or the model is ever placed in it.
+st.html(Path(__file__).parent / "assets" / "airlume.css")
 
 SETTINGS = load_settings()
 PROBLEMS = check_secrets(SETTINGS)
@@ -128,6 +132,21 @@ def city_frame() -> pd.DataFrame:
     return base.merge(latest, on="city_id", how="left")
 
 
+# Light band colours (Satisfactory is 1.3:1 on cream) keep a thin ink edge so the bar is
+# still readable. The fill is the official band colour and is never changed.
+BAR_EDGE = {"stroke": "#1B1A17", "strokeWidth": 0.6, "cornerRadiusEnd": 4}
+
+
+def ink_chart(chart, **kwargs):
+    """st.altair_chart with ink-black axes and a quiet grid, so labels stay readable on cream."""
+    ink, soft = "#1B1A17", "#5A5448"
+    chart = (chart.configure_axis(labelColor=ink, titleColor=ink, gridColor="#DDD0B4",
+                                  domainColor=soft, tickColor=soft)
+                  .configure_legend(labelColor=ink, titleColor=ink)
+                  .configure_view(strokeWidth=0))
+    return st.altair_chart(chart, **kwargs)
+
+
 def ranked_bar(df: pd.DataFrame, name_col: str, value_col: str = "aqi", height: int = 320) -> alt.Chart:
     """2D companion to the 3D view: exact comparison, sorted, official colours (W10)."""
     d = df.dropna(subset=[value_col]).copy()
@@ -135,7 +154,7 @@ def ranked_bar(df: pd.DataFrame, name_col: str, value_col: str = "aqi", height: 
     d["colour"] = d[value_col].map(lambda v: band_for(int(v)).colour)
     return (
         alt.Chart(d)
-        .mark_bar()
+        .mark_bar(**BAR_EDGE)
         .encode(
             y=alt.Y(f"{name_col}:N", sort="-x", title=None),
             x=alt.X(f"{value_col}:Q", title="AQI", scale=alt.Scale(domain=[0, max(100, float(d[value_col].max()) * 1.05)])),
@@ -195,7 +214,7 @@ with st.sidebar:
 
 # ---------------------------------------------------------------- header
 st.markdown(
-    f"<h1 style='margin-bottom:0'>Airlume</h1><p style='color:#9FB0C0;margin-top:0'>"
+    f"<h1 style='margin-bottom:0'>Airlume</h1><p style='color:#5A5448;margin-top:0'>"
     f"Conversational 3D digital twin of air quality in Pakistan's monitored cities · v{__version__}</p>",
     unsafe_allow_html=True,
 )
@@ -295,8 +314,8 @@ if split:
     if not delta.empty:
         delta["change"] = delta["aqi_now"] - delta["aqi_then"]
         delta["colour"] = delta["change"].map(lambda v: "#E0736A" if v > 0 else "#7FB069")
-        st.altair_chart(
-            alt.Chart(delta).mark_bar().encode(
+        ink_chart(
+            alt.Chart(delta).mark_bar(**BAR_EDGE).encode(
                 y=alt.Y("name:N", sort="x", title=None), x=alt.X("change:Q", title=f"change in {resolved.metric.upper()} (positive = worse now)"),
                 color=alt.Color("colour:N", scale=None, legend=None),
                 tooltip=["name", alt.Tooltip("aqi_now:Q", title="now", format=".0f"), alt.Tooltip("aqi_then:Q", title="then", format=".0f"), alt.Tooltip("change:Q", format="+.0f")],
@@ -313,7 +332,7 @@ elif timeline:
         names = {s_.station_id: s_.name for s_ in reg.stations_in("PB-LHE")}
         ser["station"] = ser["station_id"].map(names)
         ser["ts"] = pd.to_datetime(ser["ts"], utc=True).dt.tz_convert(KARACHI)
-        st.altair_chart(alt.Chart(ser).mark_line(point=len(ids) == 1).encode(
+        ink_chart(alt.Chart(ser).mark_line(point=len(ids) == 1).encode(
             x=alt.X("ts:T", title=None), y=alt.Y("value:Q", title=resolved.metric.upper()), color=alt.Color("station:N", title=None),
             tooltip=["station", alt.Tooltip("ts:T", format="%d %b %H:%M"), alt.Tooltip("value:Q", format=".0f")]).properties(height=360), width="stretch")
         best = ser.groupby(ser["ts"].dt.hour)["value"].mean()
@@ -373,13 +392,13 @@ with right:
         if cf.empty:
             st.caption("No city-level data yet. Run a collection round.")
         else:
-            st.altair_chart(ranked_bar(cf.head(20), "name", height=520), width="stretch")
+            ink_chart(ranked_bar(cf.head(20), "name", height=520), width="stretch")
     else:
         sf = station_frame("PB-LHE")
         reporting = int(sf["aqi"].notna().sum())
         st.metric("Stations reporting", f"{reporting} of {len(sf)}")
         if reporting:
-            st.altair_chart(ranked_bar(sf, "name", height=330), width="stretch")
+            ink_chart(ranked_bar(sf, "name", height=330), width="stretch")
         stale = sf[sf["stale"]]["name"].tolist()
         if stale:
             st.caption("No recent data: " + ", ".join(stale))
@@ -395,7 +414,7 @@ st.caption(
 
 SEVERITY_COLOUR = {
     "Critical": "#8B3A62", "High": "#E0736A", "Elevated": "#E8A33D",
-    "Moderate": "#C7D66D", "Low": "#7FB069", "Unknown": "#4A5563",
+    "Moderate": "#C7D66D", "Low": "#7FB069", "Unknown": "#8A8272",
 }
 
 tab_pri, tab_resp, tab_scn = st.tabs(
@@ -422,12 +441,12 @@ with tab_pri:
             "trend_per_day": None if p.trend_aqi_per_day is None else round(p.trend_aqi_per_day, 1),
             "hours": p.total_hours_present,
             "confidence": p.data_confidence,
-            "colour": SEVERITY_COLOUR.get(p.severity_label, "#4A5563"),
+            "colour": SEVERITY_COLOUR.get(p.severity_label, "#8A8272"),
         } for p in scored])
         pc1, pc2 = st.columns([1.6, 1])
         with pc1:
-            st.altair_chart(
-                alt.Chart(rows).mark_bar().encode(
+            ink_chart(
+                alt.Chart(rows).mark_bar(**BAR_EDGE).encode(
                     y=alt.Y("station:N", sort="-x", title=None),
                     x=alt.X("score:Q", title="priority score", scale=alt.Scale(domain=[0, 100])),
                     color=alt.Color("colour:N", scale=None, legend=None),
@@ -569,11 +588,11 @@ with tab_fc:
         issued = pd.to_datetime(fc["issued_at"].iloc[0], utc=True).tz_convert(KARACHI)
         st.caption(f"Issued {issued:%d %b %H:%M} PKT. These are relayed forecasts, not ours; whose they are is always shown.")
         base = alt.Chart(fc).encode(x=alt.X("target_ts:T", title=None))
-        palette = alt.Scale(domain=["EPA Punjab forecast", "CAMS model (Open-Meteo)"], range=["#F2A44A", "#5BC8D6"])
+        palette = alt.Scale(domain=["EPA Punjab forecast", "CAMS model (Open-Meteo)"], range=["#C2531B", "#5A5448"])
         lines = base.mark_line(point=True).encode(y=alt.Y("forecast:Q", title="AQI"), color=alt.Color("source:N", title=None, scale=palette),
                                                   tooltip=["source", alt.Tooltip("target_ts:T", format="%d %b %H:%M"), alt.Tooltip("forecast:Q", title="forecast AQI")])
-        actual = base.mark_point(shape="diamond", size=80, color="#E8EEF4").encode(y="actual:Q", tooltip=[alt.Tooltip("actual:Q", title="actual AQI")]).transform_filter("isValid(datum.actual)")
-        st.altair_chart((lines + actual).properties(height=280), width="stretch")
+        actual = base.mark_point(shape="diamond", size=90, filled=True, color="#1B1A17").encode(y="actual:Q", tooltip=[alt.Tooltip("actual:Q", title="actual AQI")]).transform_filter("isValid(datum.actual)")
+        ink_chart((lines + actual).properties(height=280), width="stretch")
 
         # Plan 4.6: the lowest predicted two-hour window, with the source's own error
         # beside it. A prediction, never advice about going outside.
@@ -614,7 +633,7 @@ with tab_fc:
                     x=alt.X("horizon_h:Q", title="hours ahead"), y=alt.Y("mae:Q", title="mean abs error (AQI)"),
                     color=alt.Color("series:N", title=None), strokeDash=alt.StrokeDash("source:N", title=None),
                     tooltip=["source", "series", "horizon_h", alt.Tooltip("mae:Q", format=".1f")])
-                st.altair_chart(chart.properties(height=220), width="stretch")
+                ink_chart(chart.properties(height=220), width="stretch")
             st.caption("Baselines: 'same hour yesterday' repeats the city's AQI 24 h before the target hour; 'last value' repeats the AQI at the time the forecast was issued. A forecast that cannot beat these has no skill (plan 4.1).")
 
 with tab_daily:
@@ -634,11 +653,11 @@ with tab_daily:
             st.caption("Nothing printed for that series.")
         else:
             band_rules = alt.Chart(pd.DataFrame([{"y": b.hi, "label": b.label} for b in PUNJAB_BANDS[:-1]])).mark_rule(
-                strokeDash=[2, 4], color="#4A5563").encode(y="y:Q")
-            line = alt.Chart(series).mark_line(point=True, color="#5BC8D6").encode(
+                strokeDash=[2, 4], color="#5A5448").encode(y="y:Q")
+            line = alt.Chart(series).mark_line(point=True, color="#C2531B").encode(
                 x=alt.X("date:T", title=None), y=alt.Y("aqi:Q", title="24-h AQI (PM2.5)"),
                 tooltip=[alt.Tooltip("date:T"), alt.Tooltip("aqi:Q", title="AQI")])
-            st.altair_chart((band_rules + line).properties(height=280), width="stretch")
+            ink_chart((band_rules + line).properties(height=280), width="stretch")
             st.caption(f"{len(series):,} days · 2020-21 bulletins excluded (different index scale) · gap after 2 Dec 2025 until our own collection began")
 
 with tab_replay:
@@ -666,7 +685,7 @@ with tab_replay:
         with c2:
             st.metric("Stations in that day's bulletin", f"{int(frame['aqi'].notna().sum())} of {len(frame)}")
             if frame["aqi"].notna().any():
-                st.altair_chart(ranked_bar(frame, "name", height=300), width="stretch")
+                ink_chart(ranked_bar(frame, "name", height=300), width="stretch")
         st.caption("24-hour PM2.5 AQI from the EPD bulletin of that day. Only the stations that exist in today's network are shown; the bulletins also covered Town Hall, PKLI, LWMC, FMDRC, PU 2 and EPA HQ.")
 
 with tab_hourly:
@@ -728,7 +747,7 @@ with tab_hourly:
                            "It lengthens by one frame an hour as the collector runs.")
         names = {s.station_id: s.name for s in reg.stations_in("PB-LHE")}
         ser["station"] = ser["station_id"].map(names)
-        st.altair_chart(
+        ink_chart(
             alt.Chart(ser).mark_line().encode(
                 x=alt.X("ts:T", title=None), y=alt.Y("value:Q", title="AQI"), color=alt.Color("station:N", title=None),
                 tooltip=["station", alt.Tooltip("ts:T"), alt.Tooltip("value:Q", title="AQI")]).properties(height=280),
@@ -819,7 +838,7 @@ with tab_cov:
         deck = pdk.Deck(
             layers=[cov_mod.coverage_layer(cov), layer_mod.station_columns(base.assign(aqi=base["aqi"].fillna(0))), cov_mod.recommendation_layer(rec), layer_mod.labels(base)],
             initial_view_state=cam_mod.view_state("top"), tooltip={"text": "{label}"},
-            map_provider=None if not SETTINGS.carto_api_key else "carto", map_style=None if not SETTINGS.carto_api_key else "dark",
+            map_provider=None if not SETTINGS.carto_api_key else "carto", map_style=None if not SETTINGS.carto_api_key else "light",
         )
         st.pydeck_chart(deck, width="stretch", height=480, key=map_key("coverage"))
     with c2:
