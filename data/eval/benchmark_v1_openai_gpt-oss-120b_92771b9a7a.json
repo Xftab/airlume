@@ -1,0 +1,261 @@
+{
+ "date": "2026-11-17",
+ "model": "openai/gpt-oss-120b",
+ "gold_file": "partB-gold-2026-11-17.csv",
+ "gold_hash": "92771b9a7a",
+ "draft_labels_not_gold": false,
+ "n": 30,
+ "overall": {
+  "n": 30,
+  "pass": 25,
+  "rate": 0.8333,
+  "wilson95": [
+   0.6644,
+   0.9266
+  ]
+ },
+ "by_language": {
+  "en": {
+   "n": 19,
+   "pass": 17,
+   "rate": 0.8947,
+   "wilson95": [
+    0.6861,
+    0.9706
+   ]
+  },
+  "ur-Latn": {
+   "n": 11,
+   "pass": 8,
+   "rate": 0.7273,
+   "wilson95": [
+    0.4344,
+    0.9025
+   ]
+  }
+ },
+ "scope_decision": {
+  "n": 30,
+  "pass": 30,
+  "rate": 1.0,
+  "wilson95": [
+   0.8865,
+   1.0
+  ]
+ },
+ "per_field": {
+  "aggregation": {
+   "n": 22,
+   "correct": 19,
+   "acc": 0.8636,
+   "wilson95": [
+    0.6667,
+    0.9525
+   ]
+  },
+  "area": {
+   "n": 15,
+   "correct": 15,
+   "acc": 1.0,
+   "wilson95": [
+    0.7961,
+    1.0
+   ]
+  },
+  "camera": {
+   "n": 2,
+   "correct": 2,
+   "acc": 1.0,
+   "wilson95": [
+    0.3424,
+    1.0
+   ]
+  },
+  "city": {
+   "n": 13,
+   "correct": 13,
+   "acc": 1.0,
+   "wilson95": [
+    0.7719,
+    1.0
+   ]
+  },
+  "compare_to": {
+   "n": 14,
+   "correct": 14,
+   "acc": 1.0,
+   "wilson95": [
+    0.7847,
+    1.0
+   ]
+  },
+  "in_scope": {
+   "n": 30,
+   "correct": 30,
+   "acc": 1.0,
+   "wilson95": [
+    0.8865,
+    1.0
+   ]
+  },
+  "metric": {
+   "n": 12,
+   "correct": 12,
+   "acc": 1.0,
+   "wilson95": [
+    0.7575,
+    1.0
+   ]
+  },
+  "other_city": {
+   "n": 8,
+   "correct": 8,
+   "acc": 1.0,
+   "wilson95": [
+    0.6756,
+    1.0
+   ]
+  },
+  "threshold": {
+   "n": 7,
+   "correct": 7,
+   "acc": 1.0,
+   "wilson95": [
+    0.6457,
+    1.0
+   ]
+  },
+  "time": {
+   "n": 27,
+   "correct": 25,
+   "acc": 0.9259,
+   "wilson95": [
+    0.7663,
+    0.9794
+   ]
+  },
+  "view": {
+   "n": 17,
+   "correct": 16,
+   "acc": 0.9412,
+   "wilson95": [
+    0.7302,
+    0.9895
+   ]
+  }
+ },
+ "language_gap": {
+  "en_minus_ur_latn": 0.1675,
+  "newcombe95": [
+   -0.1051,
+   0.4701
+  ]
+ },
+ "failures": [
+  {
+   "id": "b022",
+   "lang": "en",
+   "question": "How many hours did Faisalabad spend above 250 this month compared with last month?",
+   "expected": {
+    "in_scope": true,
+    "city": "Faisalabad",
+    "time": "this_month",
+    "aggregation": "count_hours_above",
+    "view": "compare",
+    "threshold": 250
+   },
+   "got": {
+    "city": "Faisalabad",
+    "time": {
+     "label": "this_month"
+    },
+    "aggregation": "count_hours_above",
+    "threshold": 250,
+    "view": "city_overview",
+    "camera": "zoomed_out"
+   }
+  },
+  {
+   "id": "b020",
+   "lang": "ur-Latn",
+   "question": "is mahine Bahawalpur aur Multan mein se kahan smog zyada raha?",
+   "expected": {
+    "in_scope": true,
+    "city": "Bahawalpur",
+    "time": "this_month",
+    "aggregation": "mean",
+    "compare_to": "other_city",
+    "other_city": "Multan",
+    "view": "compare"
+   },
+   "got": {
+    "city": "Bahawalpur",
+    "time": {
+     "label": "this_month"
+    },
+    "aggregation": "max",
+    "compare_to": "other_city",
+    "other_city": "Multan",
+    "view": "compare",
+    "camera": "zoomed_out"
+   }
+  },
+  {
+   "id": "b016",
+   "lang": "en",
+   "question": "Which is cleaner right now, Faisalabad or Gujranwala?",
+   "expected": {
+    "in_scope": true,
+    "city": "Faisalabad",
+    "time": "now",
+    "aggregation": "min",
+    "compare_to": "other_city",
+    "other_city": "Gujranwala",
+    "view": "compare"
+   },
+   "got": {
+    "city": "Faisalabad",
+    "compare_to": "other_city",
+    "other_city": "Gujranwala",
+    "view": "compare",
+    "camera": "zoomed_out"
+   }
+  },
+  {
+   "id": "b014",
+   "lang": "ur-Latn",
+   "question": "kya aaj GT Road ki hawa kal se behtar hai?",
+   "expected": {
+    "in_scope": true,
+    "area": "GT Road",
+    "time": "today",
+    "compare_to": "yesterday",
+    "view": "compare"
+   },
+   "got": {
+    "area": "GT Road",
+    "compare_to": "yesterday",
+    "view": "compare",
+    "camera": "station"
+   }
+  },
+  {
+   "id": "b015",
+   "lang": "ur-Latn",
+   "question": "is hafte Lahore ki hawa pichle hafte se kharab hai?",
+   "expected": {
+    "in_scope": true,
+    "city": "Lahore",
+    "time": "last_7_days",
+    "aggregation": "mean",
+    "compare_to": "last_week",
+    "view": "compare"
+   },
+   "got": {
+    "city": "Lahore",
+    "compare_to": "last_week",
+    "view": "compare"
+   }
+  }
+ ]
+}

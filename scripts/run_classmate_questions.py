@@ -1,7 +1,8 @@
-r"""Run the 62 classmate questions through the real pipeline and record what happens.
+r"""Run classmate questions through the real pipeline and record what happens.
 
-    python scripts\run_classmate_questions.py                 # model router (needs the key in .env)
+    python scripts\run_classmate_questions.py                 # the 62 of 30 Oct, model router (needs the key in .env)
     python scripts\run_classmate_questions.py --router stub   # rule-based router, no key, no budget
+    python scripts\run_classmate_questions.py --file classmate-raw-2026-11-17.jsonl   # another file in airlume\eval\benchmark
 
 Same path as the app: route -> (follow-up merge not used; each question is single-turn)
 -> resolve -> answer. For every question it writes one row: the form the router filled,
@@ -57,13 +58,15 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--model", default=router.PRIMARY_MODEL)
     ap.add_argument("--pace", type=float, default=18.0, help="seconds between model calls")
     ap.add_argument("--out", default=r"K:\airlume_work")
+    ap.add_argument("--file", default=QFILE.name, help="question file inside airlume\\eval\\benchmark")
     a = ap.parse_args(argv)
 
     out_dir = Path(a.out)
     out_dir.mkdir(parents=True, exist_ok=True)
     reg = Registry.load()
     store = build_store()
-    qs = [json.loads(l) for l in QFILE.read_text(encoding="utf-8").splitlines() if l.strip()]
+    qfile = QFILE.parent / Path(a.file).name  # a bare file name only, never a path
+    qs = [json.loads(l) for l in qfile.read_text(encoding="utf-8").splitlines() if l.strip()]
     rows = []
     for i, q in enumerate(qs):
         text = q["question"]
@@ -105,7 +108,7 @@ def main(argv: list[str]) -> int:
         print(q["id"], row["outcome"], "|", row["answer"][:90])
 
     stamp = time.strftime("%Y-%m-%d")
-    base = out_dir / f"classmate_run_{a.router}_{stamp}"
+    base = out_dir / f"classmate_run_{qfile.stem.replace('classmate-raw-', '')}_{a.router}_{stamp}"
     with open(str(base) + ".csv", "w", newline="", encoding="utf-8-sig") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()

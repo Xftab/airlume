@@ -1,0 +1,2238 @@
+{
+ "date": "2026-11-17",
+ "n_rows_complete_week": 437,
+ "folds": [
+  "W2021-22",
+  "W2022-23",
+  "W2023-24",
+  "Summer2024"
+ ],
+ "results": {
+  "winter pooled": {
+   "n_days": 131,
+   "mean_pm25": 174.8,
+   "models": {
+    "GRU": {
+     "mae": 37.57,
+     "rmse": 49.61,
+     "skill_vs_persistence": [
+      0.128,
+      0.074,
+      0.185
+     ],
+     "skill_vs_mean7": [
+      0.236,
+      0.16,
+      0.336
+     ],
+     "skill_vs_lightgbm": [
+      0.062,
+      -0.004,
+      0.107
+     ]
+    },
+    "GRU (no weather)": {
+     "mae": 40.48,
+     "rmse": 55.58,
+     "skill_vs_persistence": [
+      0.061,
+      0.018,
+      0.098
+     ],
+     "skill_vs_mean7": [
+      0.177,
+      0.098,
+      0.277
+     ],
+     "skill_vs_lightgbm": [
+      -0.011,
+      -0.101,
+      0.06
+     ]
+    },
+    "LSTM": {
+     "mae": 37.76,
+     "rmse": 49.77,
+     "skill_vs_persistence": [
+      0.124,
+      0.051,
+      0.194
+     ],
+     "skill_vs_mean7": [
+      0.233,
+      0.157,
+      0.334
+     ],
+     "skill_vs_lightgbm": [
+      0.057,
+      -0.025,
+      0.12
+     ]
+    },
+    "LSTM (no weather)": {
+     "mae": 40.28,
+     "rmse": 55.46,
+     "skill_vs_persistence": [
+      0.065,
+      0.017,
+      0.103
+     ],
+     "skill_vs_mean7": [
+      0.181,
+      0.101,
+      0.283
+     ],
+     "skill_vs_lightgbm": [
+      -0.006,
+      -0.095,
+      0.06
+     ]
+    },
+    "LightGBM": {
+     "mae": 40.05,
+     "rmse": 52.45,
+     "skill_vs_persistence": [
+      0.071,
+      0.008,
+      0.141
+     ],
+     "skill_vs_mean7": [
+      0.186,
+      0.106,
+      0.304
+     ]
+    },
+    "LightGBM (no weather)": {
+     "mae": 42.87,
+     "rmse": 58.97,
+     "skill_vs_persistence": [
+      0.005,
+      -0.06,
+      0.067
+     ],
+     "skill_vs_mean7": [
+      0.129,
+      0.034,
+      0.247
+     ],
+     "skill_vs_lightgbm": [
+      -0.07,
+      -0.165,
+      -0.001
+     ]
+    },
+    "MLP": {
+     "mae": 40.17,
+     "rmse": 52.79,
+     "skill_vs_persistence": [
+      0.068,
+      -0.023,
+      0.15
+     ],
+     "skill_vs_mean7": [
+      0.184,
+      0.109,
+      0.3
+     ],
+     "skill_vs_lightgbm": [
+      -0.003,
+      -0.11,
+      0.081
+     ]
+    },
+    "MLP (no weather)": {
+     "mae": 40.86,
+     "rmse": 56.08,
+     "skill_vs_persistence": [
+      0.052,
+      0.01,
+      0.094
+     ],
+     "skill_vs_mean7": [
+      0.169,
+      0.087,
+      0.275
+     ],
+     "skill_vs_lightgbm": [
+      -0.02,
+      -0.104,
+      0.044
+     ]
+    },
+    "N-BEATS-lite": {
+     "mae": 40.29,
+     "rmse": 52.6,
+     "skill_vs_persistence": [
+      0.065,
+      -0.084,
+      0.17
+     ],
+     "skill_vs_mean7": [
+      0.181,
+      0.09,
+      0.294
+     ],
+     "skill_vs_lightgbm": [
+      -0.006,
+      -0.158,
+      0.084
+     ]
+    },
+    "N-BEATS-lite (no weather)": {
+     "mae": 42.57,
+     "rmse": 55.92,
+     "skill_vs_persistence": [
+      0.012,
+      -0.058,
+      0.082
+     ],
+     "skill_vs_mean7": [
+      0.135,
+      0.045,
+      0.239
+     ],
+     "skill_vs_lightgbm": [
+      -0.063,
+      -0.174,
+      0.01
+     ]
+    },
+    "Ridge": {
+     "mae": 44.03,
+     "rmse": 56.46,
+     "skill_vs_persistence": [
+      -0.022,
+      -0.224,
+      0.108
+     ],
+     "skill_vs_mean7": [
+      0.105,
+      -0.012,
+      0.225
+     ],
+     "skill_vs_lightgbm": [
+      -0.099,
+      -0.302,
+      0.011
+     ]
+    },
+    "Ridge (no weather)": {
+     "mae": 47.66,
+     "rmse": 60.88,
+     "skill_vs_persistence": [
+      -0.106,
+      -0.301,
+      0.009
+     ],
+     "skill_vs_mean7": [
+      0.031,
+      -0.091,
+      0.149
+     ],
+     "skill_vs_lightgbm": [
+      -0.19,
+      -0.404,
+      -0.077
+     ]
+    },
+    "Ridge+LightGBM avg": {
+     "mae": 39.53,
+     "rmse": 51.64,
+     "skill_vs_persistence": [
+      0.083,
+      -0.016,
+      0.166
+     ],
+     "skill_vs_mean7": [
+      0.197,
+      0.11,
+      0.309
+     ],
+     "skill_vs_lightgbm": [
+      0.013,
+      -0.07,
+      0.071
+     ]
+    },
+    "Ridge+LightGBM avg (no weather)": {
+     "mae": 43.51,
+     "rmse": 58.52,
+     "skill_vs_persistence": [
+      -0.009,
+      -0.128,
+      0.068
+     ],
+     "skill_vs_mean7": [
+      0.116,
+      0.013,
+      0.231
+     ],
+     "skill_vs_lightgbm": [
+      -0.086,
+      -0.225,
+      -0.004
+     ]
+    },
+    "TCN": {
+     "mae": 38.97,
+     "rmse": 50.22,
+     "skill_vs_persistence": [
+      0.096,
+      0.017,
+      0.171
+     ],
+     "skill_vs_mean7": [
+      0.208,
+      0.139,
+      0.299
+     ],
+     "skill_vs_lightgbm": [
+      0.027,
+      -0.061,
+      0.084
+     ]
+    },
+    "TCN (no weather)": {
+     "mae": 40.34,
+     "rmse": 56.08,
+     "skill_vs_persistence": [
+      0.064,
+      0.01,
+      0.117
+     ],
+     "skill_vs_mean7": [
+      0.18,
+      0.091,
+      0.288
+     ],
+     "skill_vs_lightgbm": [
+      -0.007,
+      -0.099,
+      0.057
+     ]
+    },
+    "base:mean3": {
+     "mae": 46.35,
+     "rmse": 64.05,
+     "skill_vs_persistence": [
+      -0.075,
+      -0.224,
+      0.016
+     ],
+     "skill_vs_mean7": [
+      0.058,
+      -0.027,
+      0.145
+     ],
+     "skill_vs_lightgbm": [
+      -0.157,
+      -0.363,
+      -0.046
+     ]
+    },
+    "base:mean7": {
+     "mae": 49.2,
+     "rmse": 63.89,
+     "skill_vs_persistence": [
+      -0.142,
+      -0.318,
+      -0.035
+     ],
+     "skill_vs_lightgbm": [
+      -0.229,
+      -0.436,
+      -0.118
+     ]
+    },
+    "base:month_mean": {
+     "mae": 78.78,
+     "rmse": 99.82,
+     "skill_vs_persistence": [
+      -0.828,
+      -1.406,
+      -0.399
+     ],
+     "skill_vs_mean7": [
+      -0.601,
+      -0.992,
+      -0.243
+     ],
+     "skill_vs_lightgbm": [
+      -0.967,
+      -1.525,
+      -0.569
+     ]
+    },
+    "base:persistence": {
+     "mae": 43.1,
+     "rmse": 60.58,
+     "skill_vs_mean7": [
+      0.124,
+      0.034,
+      0.241
+     ],
+     "skill_vs_lightgbm": [
+      -0.076,
+      -0.164,
+      -0.008
+     ]
+    }
+   }
+  },
+  "summer 2024": {
+   "n_days": 100,
+   "mean_pm25": 41.4,
+   "models": {
+    "GRU": {
+     "mae": 10.71,
+     "rmse": 14.28,
+     "skill_vs_persistence": [
+      0.167,
+      0.107,
+      0.233
+     ],
+     "skill_vs_mean7": [
+      0.174,
+      0.054,
+      0.291
+     ],
+     "skill_vs_lightgbm": [
+      0.014,
+      -0.053,
+      0.081
+     ]
+    },
+    "GRU (no weather)": {
+     "mae": 11.58,
+     "rmse": 15.15,
+     "skill_vs_persistence": [
+      0.1,
+      0.038,
+      0.148
+     ],
+     "skill_vs_mean7": [
+      0.107,
+      -0.005,
+      0.209
+     ],
+     "skill_vs_lightgbm": [
+      -0.066,
+      -0.16,
+      0.01
+     ]
+    },
+    "LSTM": {
+     "mae": 10.78,
+     "rmse": 14.44,
+     "skill_vs_persistence": [
+      0.162,
+      0.095,
+      0.232
+     ],
+     "skill_vs_mean7": [
+      0.169,
+      0.056,
+      0.283
+     ],
+     "skill_vs_lightgbm": [
+      0.007,
+      -0.059,
+      0.075
+     ]
+    },
+    "LSTM (no weather)": {
+     "mae": 11.62,
+     "rmse": 15.4,
+     "skill_vs_persistence": [
+      0.097,
+      0.049,
+      0.136
+     ],
+     "skill_vs_mean7": [
+      0.104,
+      -0.02,
+      0.214
+     ],
+     "skill_vs_lightgbm": [
+      -0.07,
+      -0.158,
+      0.007
+     ]
+    },
+    "LightGBM": {
+     "mae": 10.86,
+     "rmse": 14.57,
+     "skill_vs_persistence": [
+      0.156,
+      0.095,
+      0.213
+     ],
+     "skill_vs_mean7": [
+      0.163,
+      0.039,
+      0.271
+     ]
+    },
+    "LightGBM (no weather)": {
+     "mae": 12.03,
+     "rmse": 16.19,
+     "skill_vs_persistence": [
+      0.066,
+      -0.004,
+      0.125
+     ],
+     "skill_vs_mean7": [
+      0.073,
+      -0.059,
+      0.196
+     ],
+     "skill_vs_lightgbm": [
+      -0.107,
+      -0.211,
+      -0.016
+     ]
+    },
+    "MLP": {
+     "mae": 10.95,
+     "rmse": 14.6,
+     "skill_vs_persistence": [
+      0.149,
+      0.083,
+      0.208
+     ],
+     "skill_vs_mean7": [
+      0.156,
+      0.028,
+      0.273
+     ],
+     "skill_vs_lightgbm": [
+      -0.008,
+      -0.086,
+      0.071
+     ]
+    },
+    "MLP (no weather)": {
+     "mae": 11.83,
+     "rmse": 15.76,
+     "skill_vs_persistence": [
+      0.081,
+      0.041,
+      0.113
+     ],
+     "skill_vs_mean7": [
+      0.088,
+      -0.052,
+      0.21
+     ],
+     "skill_vs_lightgbm": [
+      -0.089,
+      -0.171,
+      -0.014
+     ]
+    },
+    "N-BEATS-lite": {
+     "mae": 10.92,
+     "rmse": 14.43,
+     "skill_vs_persistence": [
+      0.152,
+      0.079,
+      0.208
+     ],
+     "skill_vs_mean7": [
+      0.158,
+      0.042,
+      0.256
+     ],
+     "skill_vs_lightgbm": [
+      -0.005,
+      -0.087,
+      0.063
+     ]
+    },
+    "N-BEATS-lite (no weather)": {
+     "mae": 11.48,
+     "rmse": 15.05,
+     "skill_vs_persistence": [
+      0.108,
+      0.053,
+      0.153
+     ],
+     "skill_vs_mean7": [
+      0.115,
+      -0.008,
+      0.226
+     ],
+     "skill_vs_lightgbm": [
+      -0.057,
+      -0.15,
+      0.015
+     ]
+    },
+    "Ridge": {
+     "mae": 10.56,
+     "rmse": 14.23,
+     "skill_vs_persistence": [
+      0.18,
+      0.1,
+      0.252
+     ],
+     "skill_vs_mean7": [
+      0.186,
+      0.053,
+      0.304
+     ],
+     "skill_vs_lightgbm": [
+      0.028,
+      -0.038,
+      0.09
+     ]
+    },
+    "Ridge (no weather)": {
+     "mae": 11.65,
+     "rmse": 15.4,
+     "skill_vs_persistence": [
+      0.095,
+      0.049,
+      0.131
+     ],
+     "skill_vs_mean7": [
+      0.102,
+      -0.043,
+      0.224
+     ],
+     "skill_vs_lightgbm": [
+      -0.073,
+      -0.162,
+      0.003
+     ]
+    },
+    "Ridge+LightGBM avg": {
+     "mae": 10.55,
+     "rmse": 14.19,
+     "skill_vs_persistence": [
+      0.18,
+      0.114,
+      0.24
+     ],
+     "skill_vs_mean7": [
+      0.187,
+      0.062,
+      0.296
+     ],
+     "skill_vs_lightgbm": [
+      0.029,
+      -0.004,
+      0.06
+     ]
+    },
+    "Ridge+LightGBM avg (no weather)": {
+     "mae": 11.71,
+     "rmse": 15.65,
+     "skill_vs_persistence": [
+      0.09,
+      0.038,
+      0.135
+     ],
+     "skill_vs_mean7": [
+      0.097,
+      -0.04,
+      0.222
+     ],
+     "skill_vs_lightgbm": [
+      -0.078,
+      -0.166,
+      0.003
+     ]
+    },
+    "TCN": {
+     "mae": 11.07,
+     "rmse": 14.55,
+     "skill_vs_persistence": [
+      0.14,
+      0.066,
+      0.198
+     ],
+     "skill_vs_mean7": [
+      0.147,
+      0.02,
+      0.254
+     ],
+     "skill_vs_lightgbm": [
+      -0.019,
+      -0.103,
+      0.053
+     ]
+    },
+    "TCN (no weather)": {
+     "mae": 11.71,
+     "rmse": 15.55,
+     "skill_vs_persistence": [
+      0.09,
+      0.041,
+      0.123
+     ],
+     "skill_vs_mean7": [
+      0.097,
+      -0.04,
+      0.212
+     ],
+     "skill_vs_lightgbm": [
+      -0.078,
+      -0.169,
+      -0.009
+     ]
+    },
+    "base:mean3": {
+     "mae": 13.07,
+     "rmse": 16.72,
+     "skill_vs_persistence": [
+      -0.015,
+      -0.147,
+      0.081
+     ],
+     "skill_vs_mean7": [
+      -0.007,
+      -0.121,
+      0.082
+     ],
+     "skill_vs_lightgbm": [
+      -0.203,
+      -0.357,
+      -0.078
+     ]
+    },
+    "base:mean7": {
+     "mae": 12.97,
+     "rmse": 16.09,
+     "skill_vs_persistence": [
+      -0.008,
+      -0.166,
+      0.133
+     ],
+     "skill_vs_lightgbm": [
+      -0.194,
+      -0.372,
+      -0.04
+     ]
+    },
+    "base:month_mean": {
+     "mae": 33.88,
+     "rmse": 43.98,
+     "skill_vs_persistence": [
+      -1.632,
+      -2.611,
+      -0.65
+     ],
+     "skill_vs_mean7": [
+      -1.612,
+      -2.375,
+      -0.704
+     ],
+     "skill_vs_lightgbm": [
+      -2.119,
+      -3.236,
+      -0.973
+     ]
+    },
+    "base:persistence": {
+     "mae": 12.87,
+     "rmse": 17.55,
+     "skill_vs_mean7": [
+      0.008,
+      -0.154,
+      0.143
+     ],
+     "skill_vs_lightgbm": [
+      -0.185,
+      -0.27,
+      -0.105
+     ]
+    }
+   }
+  },
+  "W2021-22": {
+   "n_days": 47,
+   "mean_pm25": 133.9,
+   "models": {
+    "GRU": {
+     "mae": 26.65,
+     "rmse": 33.14,
+     "skill_vs_persistence": [
+      0.05,
+      -0.086,
+      0.182
+     ],
+     "skill_vs_mean7": [
+      0.312,
+      0.179,
+      0.406
+     ],
+     "skill_vs_lightgbm": [
+      0.074,
+      -0.128,
+      0.188
+     ]
+    },
+    "GRU (no weather)": {
+     "mae": 27.64,
+     "rmse": 33.96,
+     "skill_vs_persistence": [
+      0.014,
+      -0.069,
+      0.071
+     ],
+     "skill_vs_mean7": [
+      0.286,
+      0.152,
+      0.383
+     ],
+     "skill_vs_lightgbm": [
+      0.039,
+      -0.179,
+      0.166
+     ]
+    },
+    "LSTM": {
+     "mae": 27.21,
+     "rmse": 35.51,
+     "skill_vs_persistence": [
+      0.03,
+      -0.196,
+      0.217
+     ],
+     "skill_vs_mean7": [
+      0.297,
+      0.172,
+      0.426
+     ],
+     "skill_vs_lightgbm": [
+      0.054,
+      -0.238,
+      0.242
+     ]
+    },
+    "LSTM (no weather)": {
+     "mae": 27.36,
+     "rmse": 33.86,
+     "skill_vs_persistence": [
+      0.024,
+      -0.105,
+      0.102
+     ],
+     "skill_vs_mean7": [
+      0.293,
+      0.157,
+      0.384
+     ],
+     "skill_vs_lightgbm": [
+      0.049,
+      -0.199,
+      0.174
+     ]
+    },
+    "LightGBM": {
+     "mae": 28.77,
+     "rmse": 36.68,
+     "skill_vs_persistence": [
+      -0.026,
+      -0.178,
+      0.159
+     ],
+     "skill_vs_mean7": [
+      0.257,
+      0.085,
+      0.405
+     ]
+    },
+    "LightGBM (no weather)": {
+     "mae": 28.47,
+     "rmse": 36.36,
+     "skill_vs_persistence": [
+      -0.015,
+      -0.195,
+      0.114
+     ],
+     "skill_vs_mean7": [
+      0.264,
+      0.105,
+      0.371
+     ],
+     "skill_vs_lightgbm": [
+      0.01,
+      -0.24,
+      0.141
+     ]
+    },
+    "MLP": {
+     "mae": 29.87,
+     "rmse": 37.99,
+     "skill_vs_persistence": [
+      -0.065,
+      -0.364,
+      0.25
+     ],
+     "skill_vs_mean7": [
+      0.228,
+      0.061,
+      0.455
+     ],
+     "skill_vs_lightgbm": [
+      -0.038,
+      -0.391,
+      0.255
+     ]
+    },
+    "MLP (no weather)": {
+     "mae": 27.75,
+     "rmse": 34.42,
+     "skill_vs_persistence": [
+      0.01,
+      -0.086,
+      0.088
+     ],
+     "skill_vs_mean7": [
+      0.283,
+      0.155,
+      0.385
+     ],
+     "skill_vs_lightgbm": [
+      0.035,
+      -0.183,
+      0.169
+     ]
+    },
+    "N-BEATS-lite": {
+     "mae": 32.52,
+     "rmse": 42.06,
+     "skill_vs_persistence": [
+      -0.16,
+      -0.621,
+      0.184
+     ],
+     "skill_vs_mean7": [
+      0.16,
+      -0.09,
+      0.394
+     ],
+     "skill_vs_lightgbm": [
+      -0.13,
+      -0.646,
+      0.17
+     ]
+    },
+    "N-BEATS-lite (no weather)": {
+     "mae": 29.32,
+     "rmse": 36.96,
+     "skill_vs_persistence": [
+      -0.046,
+      -0.144,
+      0.051
+     ],
+     "skill_vs_mean7": [
+      0.242,
+      0.12,
+      0.357
+     ],
+     "skill_vs_lightgbm": [
+      -0.019,
+      -0.26,
+      0.15
+     ]
+    },
+    "Ridge": {
+     "mae": 42.85,
+     "rmse": 52.57,
+     "skill_vs_persistence": [
+      -0.528,
+      -0.998,
+      -0.278
+     ],
+     "skill_vs_mean7": [
+      -0.107,
+      -0.43,
+      0.112
+     ],
+     "skill_vs_lightgbm": [
+      -0.489,
+      -1.044,
+      -0.236
+     ]
+    },
+    "Ridge (no weather)": {
+     "mae": 43.37,
+     "rmse": 53.08,
+     "skill_vs_persistence": [
+      -0.547,
+      -1.095,
+      -0.235
+     ],
+     "skill_vs_mean7": [
+      -0.121,
+      -0.555,
+      0.154
+     ],
+     "skill_vs_lightgbm": [
+      -0.507,
+      -1.159,
+      -0.172
+     ]
+    },
+    "Ridge+LightGBM avg": {
+     "mae": 31.4,
+     "rmse": 39.6,
+     "skill_vs_persistence": [
+      -0.12,
+      -0.394,
+      0.083
+     ],
+     "skill_vs_mean7": [
+      0.189,
+      -0.048,
+      0.356
+     ],
+     "skill_vs_lightgbm": [
+      -0.091,
+      -0.363,
+      0.075
+     ]
+    },
+    "Ridge+LightGBM avg (no weather)": {
+     "mae": 32.81,
+     "rmse": 42.69,
+     "skill_vs_persistence": [
+      -0.17,
+      -0.583,
+      0.045
+     ],
+     "skill_vs_mean7": [
+      0.152,
+      -0.167,
+      0.335
+     ],
+     "skill_vs_lightgbm": [
+      -0.141,
+      -0.635,
+      0.081
+     ]
+    },
+    "TCN": {
+     "mae": 28.46,
+     "rmse": 34.99,
+     "skill_vs_persistence": [
+      -0.015,
+      -0.216,
+      0.184
+     ],
+     "skill_vs_mean7": [
+      0.265,
+      0.144,
+      0.389
+     ],
+     "skill_vs_lightgbm": [
+      0.011,
+      -0.241,
+      0.176
+     ]
+    },
+    "TCN (no weather)": {
+     "mae": 27.01,
+     "rmse": 33.78,
+     "skill_vs_persistence": [
+      0.037,
+      -0.077,
+      0.12
+     ],
+     "skill_vs_mean7": [
+      0.302,
+      0.186,
+      0.385
+     ],
+     "skill_vs_lightgbm": [
+      0.061,
+      -0.153,
+      0.177
+     ]
+    },
+    "base:mean3": {
+     "mae": 30.94,
+     "rmse": 40.33,
+     "skill_vs_persistence": [
+      -0.103,
+      -0.243,
+      0.004
+     ],
+     "skill_vs_mean7": [
+      0.201,
+      0.054,
+      0.295
+     ],
+     "skill_vs_lightgbm": [
+      -0.075,
+      -0.372,
+      0.107
+     ]
+    },
+    "base:mean7": {
+     "mae": 38.71,
+     "rmse": 48.37,
+     "skill_vs_persistence": [
+      -0.38,
+      -0.64,
+      -0.139
+     ],
+     "skill_vs_lightgbm": [
+      -0.345,
+      -0.682,
+      -0.093
+     ]
+    },
+    "base:month_mean": {
+     "mae": 72.47,
+     "rmse": 96.22,
+     "skill_vs_persistence": [
+      -1.585,
+      -3.104,
+      -0.59
+     ],
+     "skill_vs_mean7": [
+      -0.872,
+      -1.723,
+      -0.228
+     ],
+     "skill_vs_lightgbm": [
+      -1.519,
+      -2.897,
+      -0.701
+     ]
+    },
+    "base:persistence": {
+     "mae": 28.04,
+     "rmse": 35.14,
+     "skill_vs_mean7": [
+      0.276,
+      0.122,
+      0.39
+     ],
+     "skill_vs_lightgbm": [
+      0.025,
+      -0.189,
+      0.151
+     ]
+    }
+   }
+  },
+  "W2022-23": {
+   "n_days": 23,
+   "mean_pm25": 201.6,
+   "models": {
+    "GRU": {
+     "mae": 69.61,
+     "rmse": 81.1,
+     "skill_vs_persistence": [
+      0.16,
+      0.099,
+      0.269
+     ],
+     "skill_vs_mean7": [
+      0.112,
+      0.029,
+      0.228
+     ],
+     "skill_vs_lightgbm": [
+      0.05,
+      0.012,
+      0.09
+     ]
+    },
+    "GRU (no weather)": {
+     "mae": 78.23,
+     "rmse": 92.05,
+     "skill_vs_persistence": [
+      0.056,
+      0.001,
+      0.142
+     ],
+     "skill_vs_mean7": [
+      0.002,
+      -0.1,
+      0.136
+     ],
+     "skill_vs_lightgbm": [
+      -0.068,
+      -0.135,
+      -0.013
+     ]
+    },
+    "LSTM": {
+     "mae": 67.96,
+     "rmse": 79.4,
+     "skill_vs_persistence": [
+      0.18,
+      0.106,
+      0.302
+     ],
+     "skill_vs_mean7": [
+      0.133,
+      0.033,
+      0.263
+     ],
+     "skill_vs_lightgbm": [
+      0.073,
+      0.009,
+      0.138
+     ]
+    },
+    "LSTM (no weather)": {
+     "mae": 77.15,
+     "rmse": 91.89,
+     "skill_vs_persistence": [
+      0.069,
+      0.006,
+      0.14
+     ],
+     "skill_vs_mean7": [
+      0.016,
+      -0.102,
+      0.143
+     ],
+     "skill_vs_lightgbm": [
+      -0.053,
+      -0.142,
+      -0.006
+     ]
+    },
+    "LightGBM": {
+     "mae": 73.27,
+     "rmse": 83.04,
+     "skill_vs_persistence": [
+      0.116,
+      0.067,
+      0.205
+     ],
+     "skill_vs_mean7": [
+      0.065,
+      -0.018,
+      0.19
+     ]
+    },
+    "LightGBM (no weather)": {
+     "mae": 81.42,
+     "rmse": 94.85,
+     "skill_vs_persistence": [
+      0.018,
+      -0.072,
+      0.139
+     ],
+     "skill_vs_mean7": [
+      -0.039,
+      -0.17,
+      0.12
+     ],
+     "skill_vs_lightgbm": [
+      -0.111,
+      -0.203,
+      -0.027
+     ]
+    },
+    "MLP": {
+     "mae": 74.48,
+     "rmse": 85.51,
+     "skill_vs_persistence": [
+      0.102,
+      0.037,
+      0.213
+     ],
+     "skill_vs_mean7": [
+      0.05,
+      -0.035,
+      0.191
+     ],
+     "skill_vs_lightgbm": [
+      -0.016,
+      -0.055,
+      0.033
+     ]
+    },
+    "MLP (no weather)": {
+     "mae": 77.14,
+     "rmse": 92.27,
+     "skill_vs_persistence": [
+      0.07,
+      0.003,
+      0.169
+     ],
+     "skill_vs_mean7": [
+      0.016,
+      -0.109,
+      0.162
+     ],
+     "skill_vs_lightgbm": [
+      -0.053,
+      -0.141,
+      0.022
+     ]
+    },
+    "N-BEATS-lite": {
+     "mae": 70.79,
+     "rmse": 81.82,
+     "skill_vs_persistence": [
+      0.146,
+      0.043,
+      0.298
+     ],
+     "skill_vs_mean7": [
+      0.097,
+      0.033,
+      0.254
+     ],
+     "skill_vs_lightgbm": [
+      0.034,
+      -0.047,
+      0.128
+     ]
+    },
+    "N-BEATS-lite (no weather)": {
+     "mae": 77.23,
+     "rmse": 88.67,
+     "skill_vs_persistence": [
+      0.068,
+      -0.027,
+      0.238
+     ],
+     "skill_vs_mean7": [
+      0.015,
+      -0.108,
+      0.19
+     ],
+     "skill_vs_lightgbm": [
+      -0.054,
+      -0.139,
+      0.072
+     ]
+    },
+    "Ridge": {
+     "mae": 72.52,
+     "rmse": 84.83,
+     "skill_vs_persistence": [
+      0.125,
+      0.019,
+      0.315
+     ],
+     "skill_vs_mean7": [
+      0.075,
+      -0.027,
+      0.253
+     ],
+     "skill_vs_lightgbm": [
+      0.01,
+      -0.064,
+      0.144
+     ]
+    },
+    "Ridge (no weather)": {
+     "mae": 79.42,
+     "rmse": 90.28,
+     "skill_vs_persistence": [
+      0.042,
+      -0.056,
+      0.179
+     ],
+     "skill_vs_mean7": [
+      -0.013,
+      -0.125,
+      0.123
+     ],
+     "skill_vs_lightgbm": [
+      -0.084,
+      -0.165,
+      -0.006
+     ]
+    },
+    "Ridge+LightGBM avg": {
+     "mae": 72.66,
+     "rmse": 82.11,
+     "skill_vs_persistence": [
+      0.124,
+      0.044,
+      0.264
+     ],
+     "skill_vs_mean7": [
+      0.073,
+      -0.014,
+      0.214
+     ],
+     "skill_vs_lightgbm": [
+      0.008,
+      -0.033,
+      0.079
+     ]
+    },
+    "Ridge+LightGBM avg (no weather)": {
+     "mae": 79.9,
+     "rmse": 91.75,
+     "skill_vs_persistence": [
+      0.036,
+      -0.058,
+      0.16
+     ],
+     "skill_vs_mean7": [
+      -0.019,
+      -0.142,
+      0.124
+     ],
+     "skill_vs_lightgbm": [
+      -0.091,
+      -0.176,
+      -0.016
+     ]
+    },
+    "TCN": {
+     "mae": 68.39,
+     "rmse": 79.29,
+     "skill_vs_persistence": [
+      0.175,
+      0.113,
+      0.312
+     ],
+     "skill_vs_mean7": [
+      0.128,
+      0.063,
+      0.277
+     ],
+     "skill_vs_lightgbm": [
+      0.067,
+      0.033,
+      0.144
+     ]
+    },
+    "TCN (no weather)": {
+     "mae": 77.11,
+     "rmse": 93.56,
+     "skill_vs_persistence": [
+      0.07,
+      -0.002,
+      0.212
+     ],
+     "skill_vs_mean7": [
+      0.016,
+      -0.109,
+      0.189
+     ],
+     "skill_vs_lightgbm": [
+      -0.052,
+      -0.125,
+      0.049
+     ]
+    },
+    "base:mean3": {
+     "mae": 87.76,
+     "rmse": 102.29,
+     "skill_vs_persistence": [
+      -0.059,
+      -0.236,
+      0.116
+     ],
+     "skill_vs_mean7": [
+      -0.12,
+      -0.198,
+      -0.023
+     ],
+     "skill_vs_lightgbm": [
+      -0.198,
+      -0.389,
+      -0.084
+     ]
+    },
+    "base:mean7": {
+     "mae": 78.39,
+     "rmse": 92.43,
+     "skill_vs_persistence": [
+      0.054,
+      -0.103,
+      0.181
+     ],
+     "skill_vs_lightgbm": [
+      -0.07,
+      -0.235,
+      0.017
+     ]
+    },
+    "base:month_mean": {
+     "mae": 93.97,
+     "rmse": 116.96,
+     "skill_vs_persistence": [
+      -0.134,
+      -0.335,
+      0.343
+     ],
+     "skill_vs_mean7": [
+      -0.199,
+      -0.357,
+      0.268
+     ],
+     "skill_vs_lightgbm": [
+      -0.283,
+      -0.463,
+      0.185
+     ]
+    },
+    "base:persistence": {
+     "mae": 82.9,
+     "rmse": 102.49,
+     "skill_vs_mean7": [
+      -0.058,
+      -0.22,
+      0.093
+     ],
+     "skill_vs_lightgbm": [
+      -0.131,
+      -0.257,
+      -0.072
+     ]
+    }
+   }
+  },
+  "W2023-24": {
+   "n_days": 61,
+   "mean_pm25": 196.1,
+   "models": {
+    "GRU": {
+     "mae": 33.9,
+     "rmse": 44.27,
+     "skill_vs_persistence": [
+      0.146,
+      0.075,
+      0.213
+     ],
+     "skill_vs_mean7": [
+      0.267,
+      0.116,
+      0.413
+     ],
+     "skill_vs_lightgbm": [
+      0.064,
+      0.009,
+      0.155
+     ]
+    },
+    "GRU (no weather)": {
+     "mae": 36.15,
+     "rmse": 50.5,
+     "skill_vs_persistence": [
+      0.089,
+      0.028,
+      0.147
+     ],
+     "skill_vs_mean7": [
+      0.219,
+      0.102,
+      0.33
+     ],
+     "skill_vs_lightgbm": [
+      0.002,
+      -0.104,
+      0.127
+     ]
+    },
+    "LSTM": {
+     "mae": 34.5,
+     "rmse": 44.38,
+     "skill_vs_persistence": [
+      0.131,
+      0.056,
+      0.203
+     ],
+     "skill_vs_mean7": [
+      0.255,
+      0.101,
+      0.403
+     ],
+     "skill_vs_lightgbm": [
+      0.047,
+      -0.013,
+      0.147
+     ]
+    },
+    "LSTM (no weather)": {
+     "mae": 36.33,
+     "rmse": 50.38,
+     "skill_vs_persistence": [
+      0.085,
+      0.026,
+      0.142
+     ],
+     "skill_vs_mean7": [
+      0.215,
+      0.096,
+      0.33
+     ],
+     "skill_vs_lightgbm": [
+      -0.003,
+      -0.111,
+      0.125
+     ]
+    },
+    "LightGBM": {
+     "mae": 36.21,
+     "rmse": 47.65,
+     "skill_vs_persistence": [
+      0.088,
+      -0.026,
+      0.161
+     ],
+     "skill_vs_mean7": [
+      0.218,
+      0.038,
+      0.365
+     ]
+    },
+    "LightGBM (no weather)": {
+     "mae": 39.43,
+     "rmse": 55.29,
+     "skill_vs_persistence": [
+      0.007,
+      -0.078,
+      0.095
+     ],
+     "skill_vs_mean7": [
+      0.148,
+      -0.013,
+      0.296
+     ],
+     "skill_vs_lightgbm": [
+      -0.089,
+      -0.207,
+      0.059
+     ]
+    },
+    "MLP": {
+     "mae": 35.16,
+     "rmse": 46.01,
+     "skill_vs_persistence": [
+      0.114,
+      0.062,
+      0.166
+     ],
+     "skill_vs_mean7": [
+      0.24,
+      0.099,
+      0.38
+     ],
+     "skill_vs_lightgbm": [
+      0.029,
+      -0.037,
+      0.125
+     ]
+    },
+    "MLP (no weather)": {
+     "mae": 37.28,
+     "rmse": 51.28,
+     "skill_vs_persistence": [
+      0.061,
+      0.009,
+      0.113
+     ],
+     "skill_vs_mean7": [
+      0.194,
+      0.058,
+      0.329
+     ],
+     "skill_vs_lightgbm": [
+      -0.03,
+      -0.125,
+      0.091
+     ]
+    },
+    "N-BEATS-lite": {
+     "mae": 34.78,
+     "rmse": 45.33,
+     "skill_vs_persistence": [
+      0.124,
+      0.017,
+      0.203
+     ],
+     "skill_vs_mean7": [
+      0.248,
+      0.077,
+      0.397
+     ],
+     "skill_vs_lightgbm": [
+      0.039,
+      -0.057,
+      0.141
+     ]
+    },
+    "N-BEATS-lite (no weather)": {
+     "mae": 39.71,
+     "rmse": 51.96,
+     "skill_vs_persistence": [
+      -0.0,
+      -0.08,
+      0.083
+     ],
+     "skill_vs_mean7": [
+      0.142,
+      -0.001,
+      0.292
+     ],
+     "skill_vs_lightgbm": [
+      -0.097,
+      -0.204,
+      0.045
+     ]
+    },
+    "Ridge": {
+     "mae": 34.19,
+     "rmse": 44.74,
+     "skill_vs_persistence": [
+      0.139,
+      0.061,
+      0.192
+     ],
+     "skill_vs_mean7": [
+      0.261,
+      0.125,
+      0.378
+     ],
+     "skill_vs_lightgbm": [
+      0.056,
+      -0.034,
+      0.165
+     ]
+    },
+    "Ridge (no weather)": {
+     "mae": 38.98,
+     "rmse": 52.12,
+     "skill_vs_persistence": [
+      0.018,
+      -0.082,
+      0.09
+     ],
+     "skill_vs_mean7": [
+      0.158,
+      0.04,
+      0.263
+     ],
+     "skill_vs_lightgbm": [
+      -0.077,
+      -0.231,
+      0.071
+     ]
+    },
+    "Ridge+LightGBM avg": {
+     "mae": 33.29,
+     "rmse": 44.45,
+     "skill_vs_persistence": [
+      0.161,
+      0.085,
+      0.229
+     ],
+     "skill_vs_mean7": [
+      0.281,
+      0.129,
+      0.419
+     ],
+     "skill_vs_lightgbm": [
+      0.08,
+      0.031,
+      0.156
+     ]
+    },
+    "Ridge+LightGBM avg (no weather)": {
+     "mae": 38.02,
+     "rmse": 52.7,
+     "skill_vs_persistence": [
+      0.042,
+      -0.031,
+      0.12
+     ],
+     "skill_vs_mean7": [
+      0.178,
+      0.038,
+      0.321
+     ],
+     "skill_vs_lightgbm": [
+      -0.05,
+      -0.173,
+      0.099
+     ]
+    },
+    "TCN": {
+     "mae": 35.98,
+     "rmse": 45.86,
+     "skill_vs_persistence": [
+      0.094,
+      0.004,
+      0.161
+     ],
+     "skill_vs_mean7": [
+      0.222,
+      0.065,
+      0.357
+     ],
+     "skill_vs_lightgbm": [
+      0.006,
+      -0.086,
+      0.108
+     ]
+    },
+    "TCN (no weather)": {
+     "mae": 36.74,
+     "rmse": 50.73,
+     "skill_vs_persistence": [
+      0.075,
+      0.009,
+      0.141
+     ],
+     "skill_vs_mean7": [
+      0.206,
+      0.064,
+      0.351
+     ],
+     "skill_vs_lightgbm": [
+      -0.015,
+      -0.107,
+      0.112
+     ]
+    },
+    "base:mean3": {
+     "mae": 42.61,
+     "rmse": 60.09,
+     "skill_vs_persistence": [
+      -0.073,
+      -0.32,
+      0.108
+     ],
+     "skill_vs_mean7": [
+      0.079,
+      -0.03,
+      0.188
+     ],
+     "skill_vs_lightgbm": [
+      -0.177,
+      -0.514,
+      0.086
+     ]
+    },
+    "base:mean7": {
+     "mae": 46.28,
+     "rmse": 61.18,
+     "skill_vs_persistence": [
+      -0.166,
+      -0.38,
+      -0.001
+     ],
+     "skill_vs_lightgbm": [
+      -0.278,
+      -0.576,
+      -0.04
+     ]
+    },
+    "base:month_mean": {
+     "mae": 77.91,
+     "rmse": 95.43,
+     "skill_vs_persistence": [
+      -0.963,
+      -1.394,
+      -0.515
+     ],
+     "skill_vs_mean7": [
+      -0.684,
+      -1.228,
+      -0.151
+     ],
+     "skill_vs_lightgbm": [
+      -1.152,
+      -1.601,
+      -0.627
+     ]
+    },
+    "base:persistence": {
+     "mae": 39.7,
+     "rmse": 54.5,
+     "skill_vs_mean7": [
+      0.142,
+      0.001,
+      0.275
+     ],
+     "skill_vs_lightgbm": [
+      -0.096,
+      -0.192,
+      0.025
+     ]
+    }
+   }
+  },
+  "Summer2024": {
+   "n_days": 100,
+   "mean_pm25": 41.4,
+   "models": {
+    "GRU": {
+     "mae": 10.71,
+     "rmse": 14.28,
+     "skill_vs_persistence": [
+      0.167,
+      0.107,
+      0.233
+     ],
+     "skill_vs_mean7": [
+      0.174,
+      0.054,
+      0.291
+     ],
+     "skill_vs_lightgbm": [
+      0.014,
+      -0.053,
+      0.081
+     ]
+    },
+    "GRU (no weather)": {
+     "mae": 11.58,
+     "rmse": 15.15,
+     "skill_vs_persistence": [
+      0.1,
+      0.038,
+      0.148
+     ],
+     "skill_vs_mean7": [
+      0.107,
+      -0.005,
+      0.209
+     ],
+     "skill_vs_lightgbm": [
+      -0.066,
+      -0.16,
+      0.01
+     ]
+    },
+    "LSTM": {
+     "mae": 10.78,
+     "rmse": 14.44,
+     "skill_vs_persistence": [
+      0.162,
+      0.095,
+      0.232
+     ],
+     "skill_vs_mean7": [
+      0.169,
+      0.056,
+      0.283
+     ],
+     "skill_vs_lightgbm": [
+      0.007,
+      -0.059,
+      0.075
+     ]
+    },
+    "LSTM (no weather)": {
+     "mae": 11.62,
+     "rmse": 15.4,
+     "skill_vs_persistence": [
+      0.097,
+      0.049,
+      0.136
+     ],
+     "skill_vs_mean7": [
+      0.104,
+      -0.02,
+      0.214
+     ],
+     "skill_vs_lightgbm": [
+      -0.07,
+      -0.158,
+      0.007
+     ]
+    },
+    "LightGBM": {
+     "mae": 10.86,
+     "rmse": 14.57,
+     "skill_vs_persistence": [
+      0.156,
+      0.095,
+      0.213
+     ],
+     "skill_vs_mean7": [
+      0.163,
+      0.039,
+      0.271
+     ]
+    },
+    "LightGBM (no weather)": {
+     "mae": 12.03,
+     "rmse": 16.19,
+     "skill_vs_persistence": [
+      0.066,
+      -0.004,
+      0.125
+     ],
+     "skill_vs_mean7": [
+      0.073,
+      -0.059,
+      0.196
+     ],
+     "skill_vs_lightgbm": [
+      -0.107,
+      -0.211,
+      -0.016
+     ]
+    },
+    "MLP": {
+     "mae": 10.95,
+     "rmse": 14.6,
+     "skill_vs_persistence": [
+      0.149,
+      0.083,
+      0.208
+     ],
+     "skill_vs_mean7": [
+      0.156,
+      0.028,
+      0.273
+     ],
+     "skill_vs_lightgbm": [
+      -0.008,
+      -0.086,
+      0.071
+     ]
+    },
+    "MLP (no weather)": {
+     "mae": 11.83,
+     "rmse": 15.76,
+     "skill_vs_persistence": [
+      0.081,
+      0.041,
+      0.113
+     ],
+     "skill_vs_mean7": [
+      0.088,
+      -0.052,
+      0.21
+     ],
+     "skill_vs_lightgbm": [
+      -0.089,
+      -0.171,
+      -0.014
+     ]
+    },
+    "N-BEATS-lite": {
+     "mae": 10.92,
+     "rmse": 14.43,
+     "skill_vs_persistence": [
+      0.152,
+      0.079,
+      0.208
+     ],
+     "skill_vs_mean7": [
+      0.158,
+      0.042,
+      0.256
+     ],
+     "skill_vs_lightgbm": [
+      -0.005,
+      -0.087,
+      0.063
+     ]
+    },
+    "N-BEATS-lite (no weather)": {
+     "mae": 11.48,
+     "rmse": 15.05,
+     "skill_vs_persistence": [
+      0.108,
+      0.053,
+      0.153
+     ],
+     "skill_vs_mean7": [
+      0.115,
+      -0.008,
+      0.226
+     ],
+     "skill_vs_lightgbm": [
+      -0.057,
+      -0.15,
+      0.015
+     ]
+    },
+    "Ridge": {
+     "mae": 10.56,
+     "rmse": 14.23,
+     "skill_vs_persistence": [
+      0.18,
+      0.1,
+      0.252
+     ],
+     "skill_vs_mean7": [
+      0.186,
+      0.053,
+      0.304
+     ],
+     "skill_vs_lightgbm": [
+      0.028,
+      -0.038,
+      0.09
+     ]
+    },
+    "Ridge (no weather)": {
+     "mae": 11.65,
+     "rmse": 15.4,
+     "skill_vs_persistence": [
+      0.095,
+      0.049,
+      0.131
+     ],
+     "skill_vs_mean7": [
+      0.102,
+      -0.043,
+      0.224
+     ],
+     "skill_vs_lightgbm": [
+      -0.073,
+      -0.162,
+      0.003
+     ]
+    },
+    "Ridge+LightGBM avg": {
+     "mae": 10.55,
+     "rmse": 14.19,
+     "skill_vs_persistence": [
+      0.18,
+      0.114,
+      0.24
+     ],
+     "skill_vs_mean7": [
+      0.187,
+      0.062,
+      0.296
+     ],
+     "skill_vs_lightgbm": [
+      0.029,
+      -0.004,
+      0.06
+     ]
+    },
+    "Ridge+LightGBM avg (no weather)": {
+     "mae": 11.71,
+     "rmse": 15.65,
+     "skill_vs_persistence": [
+      0.09,
+      0.038,
+      0.135
+     ],
+     "skill_vs_mean7": [
+      0.097,
+      -0.04,
+      0.222
+     ],
+     "skill_vs_lightgbm": [
+      -0.078,
+      -0.166,
+      0.003
+     ]
+    },
+    "TCN": {
+     "mae": 11.07,
+     "rmse": 14.55,
+     "skill_vs_persistence": [
+      0.14,
+      0.066,
+      0.198
+     ],
+     "skill_vs_mean7": [
+      0.147,
+      0.02,
+      0.254
+     ],
+     "skill_vs_lightgbm": [
+      -0.019,
+      -0.103,
+      0.053
+     ]
+    },
+    "TCN (no weather)": {
+     "mae": 11.71,
+     "rmse": 15.55,
+     "skill_vs_persistence": [
+      0.09,
+      0.041,
+      0.123
+     ],
+     "skill_vs_mean7": [
+      0.097,
+      -0.04,
+      0.212
+     ],
+     "skill_vs_lightgbm": [
+      -0.078,
+      -0.169,
+      -0.009
+     ]
+    },
+    "base:mean3": {
+     "mae": 13.07,
+     "rmse": 16.72,
+     "skill_vs_persistence": [
+      -0.015,
+      -0.147,
+      0.081
+     ],
+     "skill_vs_mean7": [
+      -0.007,
+      -0.121,
+      0.082
+     ],
+     "skill_vs_lightgbm": [
+      -0.203,
+      -0.357,
+      -0.078
+     ]
+    },
+    "base:mean7": {
+     "mae": 12.97,
+     "rmse": 16.09,
+     "skill_vs_persistence": [
+      -0.008,
+      -0.166,
+      0.133
+     ],
+     "skill_vs_lightgbm": [
+      -0.194,
+      -0.372,
+      -0.04
+     ]
+    },
+    "base:month_mean": {
+     "mae": 33.88,
+     "rmse": 43.98,
+     "skill_vs_persistence": [
+      -1.632,
+      -2.611,
+      -0.65
+     ],
+     "skill_vs_mean7": [
+      -1.612,
+      -2.375,
+      -0.704
+     ],
+     "skill_vs_lightgbm": [
+      -2.119,
+      -3.236,
+      -0.973
+     ]
+    },
+    "base:persistence": {
+     "mae": 12.87,
+     "rmse": 17.55,
+     "skill_vs_mean7": [
+      0.008,
+      -0.154,
+      0.143
+     ],
+     "skill_vs_lightgbm": [
+      -0.185,
+      -0.27,
+      -0.105
+     ]
+    }
+   }
+  }
+ }
+}

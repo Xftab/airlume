@@ -1,4 +1,4 @@
-/* Airlume neumorphism: cream surface, ink-black text, burnt-orange accent.
+/* Airlume interface, 17 Nov 2026: cool white surfaces, navy ink, one blue accent.
  *
  * One static stylesheet, read from disk by the app and passed to st.html(Path).
  * No user text, model text or data value is ever interpolated into it, and
@@ -6,271 +6,290 @@
  * unsafe_allow_html (tests/test_security.py still allows exactly one use, the header).
  *
  * Colour rules
- *  - Raised  = a control or card you can act on or read as a unit.
- *  - Inset   = a place where you type, or a window onto the data (the maps).
- *  - Burnt orange #C2531B (3.8:1 on cream) is for fills, rings, large numbers and
- *    icons. Text in orange uses the deeper #A8420F (5.0:1). Body text is ink.
- *  - AQI band colours are data and are never recoloured here.
+ *  - Colour means one of two things. An AQI band colour means "this is how the air
+ *    is". The blue accent means "this is something you can use". They never mix, and
+ *    the accent is outside the AQI hue family on purpose.
+ *  - Band colours are the official Punjab EPA table (airlume/aqi.py) and are never
+ *    changed here. tests/test_ui.py checks every hex below against that table.
+ *  - No text is ever set in a band colour: five of the seven fail 3:1 on white. A
+ *    band is shown as a fill (bar, chip, edge) with its name written out beside it,
+ *    so the meaning never rests on colour alone.
  */
 
 :root {
-  --cream: #F1E7D3;
-  --cream-deep: #E9DDC4;
-  --hi: #FBF5E9;          /* light edge, top-left */
-  --lo: #CDBE9F;          /* dark edge, bottom-right */
-  --ink: #1B1A17;
-  --ink-soft: #5A5448;    /* 6.1:1 on cream: captions, help text */
-  --burnt: #C2531B;
-  --burnt-deep: #A8420F;
-  --radius: 20px;
-  --radius-sm: 14px;
-
-  --raised: 7px 7px 16px var(--lo), -7px -7px 16px var(--hi);
-  --raised-sm: 4px 4px 9px var(--lo), -4px -4px 9px var(--hi);
-  --inset: inset 5px 5px 10px var(--lo), inset -5px -5px 10px var(--hi);
-  --inset-sm: inset 3px 3px 6px var(--lo), inset -3px -3px 6px var(--hi);
-  --ring: 0 0 0 3px var(--cream), 0 0 0 5px var(--burnt);
+  --bg: #F4F6FA;
+  --surface: #FFFFFF;
+  --ink: #0F1B2D;
+  --ink-soft: #475467;      /* 7.5:1 on white, 6.9:1 on the page background */
+  --line: #DCE3ED;
+  --line-strong: #C3CEDD;
+  --accent: #2457C5;        /* 6.4:1 on white: controls, focus, links */
+  --accent-deep: #1B3F94;
+  --accent-tint: #E8EEFB;
+  --panel: #F1F4F9;         /* quiet inner panel: the "what to do" box */
+  --radius: 16px;
+  --radius-sm: 12px;
+  --shadow: 0 1px 2px rgba(15, 27, 45, 0.06), 0 8px 22px rgba(15, 27, 45, 0.06);
+  --shadow-sm: 0 1px 2px rgba(15, 27, 45, 0.08);
+  --ring: 0 0 0 3px rgba(36, 87, 197, 0.28);
+  --band: var(--line-strong);   /* overridden by the band hooks below */
+  --band-ink: #0F1B2D;          /* text on a band-coloured chip */
 }
 
 /* ------------------------------------------------------------------ page */
 [data-testid="stApp"],
 [data-testid="stAppViewContainer"],
-[data-testid="stMain"] {
-  background: var(--cream);
-  color: var(--ink);
-}
+[data-testid="stMain"] { background: var(--bg); color: var(--ink); }
 [data-testid="stHeader"] { background: transparent; }
-[data-testid="stMainBlockContainer"] { padding-top: 3.2rem; }
+[data-testid="stAppDeployButton"] { display: none; }   /* local-only "Deploy" button */
+[data-testid="stMainBlockContainer"] { padding-top: 2.4rem; max-width: 1280px; }
 
-h1, h2, h3 { color: var(--ink); letter-spacing: -0.01em; }
-h1 { font-weight: 800; }
-h2, h3 { font-weight: 700; }
+h1, h2, h3, h4 { color: var(--ink); letter-spacing: -0.015em; }
+h2 { font-weight: 700; margin-top: 0.4rem; }
+h3 { font-weight: 650; }
 
 [data-testid="stCaptionContainer"],
-[data-testid="stCaptionContainer"] p {
-  color: var(--ink-soft);
-  opacity: 1;               /* Streamlit fades captions; on cream that drops below 4.5:1 */
-}
+[data-testid="stCaptionContainer"] p { color: var(--ink-soft); opacity: 1; }
+a { color: var(--accent-deep); }
+hr { border: 0; border-top: 1px solid var(--line); margin: 1.6rem 0; }
 
-hr, [data-testid="stDivider"] { border-color: transparent; }
-hr {
-  height: 6px;
-  border: 0;
-  border-radius: 6px;
-  background: var(--cream);
-  box-shadow: var(--inset-sm);
+/* ---------------------------------------------------------------- header */
+.al-head { display: flex; align-items: center; gap: 0.7rem; margin: 0; }
+.al-mark {
+  width: 34px; height: 34px; border-radius: 11px; flex: none;
+  background: linear-gradient(135deg, #2457C5 0%, #5B8DEF 100%);
+  box-shadow: var(--shadow-sm);
 }
-
-a { color: var(--burnt-deep); }
+.al-head h1 { margin: 0; padding: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
+.al-tag { margin: 0.25rem 0 0 0; color: var(--ink-soft); font-size: 0.98rem; }
 
 /* --------------------------------------------------------------- sidebar */
-[data-testid="stSidebar"] {
-  background: var(--cream);
-  border: 0;
-  box-shadow: 10px 0 22px -6px var(--lo);
-}
+[data-testid="stSidebar"] { background: var(--surface); border-right: 1px solid var(--line); }
 [data-testid="stSidebar"] [data-testid="stSidebarContent"] { background: transparent; }
+[data-testid="stSidebar"] h3 {
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--ink-soft); font-weight: 700;
+}
 
 /* ------------------------------------------------------------ text fields */
 [data-testid="stTextInputRootElement"],
 [data-testid="stNumberInputContainer"] {
-  background: var(--cream);
-  border: 1px solid rgba(27, 26, 23, 0.28);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--inset);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
 }
 [data-testid="stTextInputRootElement"] input,
-[data-testid="stNumberInputContainer"] input {
-  background: transparent;
-  color: var(--ink);
-}
+[data-testid="stNumberInputContainer"] input { background: transparent; color: var(--ink); }
 [data-testid="stTextInputRootElement"] input::placeholder { color: var(--ink-soft); opacity: 1; }
 [data-testid="stTextInputRootElement"]:focus-within,
 [data-testid="stNumberInputContainer"]:focus-within {
-  border-color: var(--burnt);
-  box-shadow: var(--inset), 0 0 0 3px rgba(194, 83, 27, 0.35);
+  border-color: var(--accent);
+  box-shadow: var(--ring);
 }
+/* The ask bar is the first thing on the page, so it is larger than any other field. */
+.st-key-ask [data-testid="stTextInputRootElement"] { min-height: 3.3rem; border-radius: 16px; box-shadow: var(--shadow); }
+.st-key-ask input { font-size: 1.12rem; padding-left: 1.1rem; }
 
-/* Selectbox: the visible control is the group that holds the combobox input. */
 [data-testid="stSelectbox"] [role="group"] {
-  background: var(--cream);
-  border: 1px solid rgba(27, 26, 23, 0.28);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--inset);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
 }
 [data-testid="stSelectbox"] input { color: var(--ink); background: transparent; }
-[data-testid="stSelectbox"] [role="group"]:focus-within {
-  border-color: var(--burnt);
-  box-shadow: var(--inset), 0 0 0 3px rgba(194, 83, 27, 0.35);
-}
+[data-testid="stSelectbox"] [role="group"]:focus-within { border-color: var(--accent); box-shadow: var(--ring); }
 
-/* ---------------------------------------------------------------- buttons */
+/* ---------------------------------------------------------------- buttons
+ * Secondary buttons are also the example-question chips under the ask bar. */
 [data-testid^="stBaseButton-secondary"] {
-  background: var(--cream);
+  background: var(--surface);
   color: var(--ink);
-  border: 1px solid rgba(27, 26, 23, 0.28);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--raised-sm);
-  font-weight: 600;
-  transition: box-shadow 0.12s ease, color 0.12s ease;
+  border: 1px solid var(--line-strong);
+  font-weight: 560;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
 }
 [data-testid^="stBaseButton-secondary"]:hover {
-  color: var(--burnt-deep);
-  border-color: var(--burnt);
-}
-[data-testid^="stBaseButton-secondary"]:active {
-  box-shadow: var(--inset-sm);
-  color: var(--burnt-deep);
+  color: var(--accent-deep); border-color: var(--accent); background: var(--accent-tint);
 }
 [data-testid^="stBaseButton-secondary"]:focus-visible,
-[data-testid^="stBaseButton-secondary"]:focus {
-  outline: none;
-  box-shadow: var(--raised-sm), var(--ring);
+[data-testid^="stBaseButton-secondary"]:focus { outline: none; box-shadow: var(--ring); }
+.st-key-chips [data-testid^="stBaseButton-secondary"] {
+  font-size: 0.9rem; font-weight: 500; color: var(--ink-soft);
+  min-height: 2.2rem; padding: 0.15rem 0.9rem; box-shadow: none;
 }
+.st-key-chips [data-testid^="stBaseButton-secondary"]:hover { color: var(--accent-deep); }
 
 /* ---------------------------------------------------- toggles and radios */
-[data-testid="stCheckbox"] label:has(input[role="switch"]) > div:first-of-type {
-  background: var(--cream);
-  border: 1px solid rgba(27, 26, 23, 0.45);
-  box-shadow: var(--inset-sm);
-}
-[data-testid="stCheckbox"] label:has(input[role="switch"]:checked) > div:first-of-type {
-  background: var(--burnt);
-  box-shadow: inset 3px 3px 6px rgba(27, 26, 23, 0.35);
-}
-[data-testid="stRadioGroup"] { gap: 0.6rem; }
+[data-testid="stCheckbox"] label:has(input[role="switch"]:checked) > div:first-of-type { background: var(--accent); }
+[data-testid="stRadioGroup"] { gap: 0.5rem; }
 [data-testid="stRadioOption"] {
-  background: var(--cream);
-  border-radius: var(--radius-sm);
-  padding: 0.3rem 0.9rem;
-  box-shadow: var(--raised-sm);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.25rem 0.95rem;
 }
 [data-testid="stRadioOption"]:has(input:checked) {
-  box-shadow: var(--inset-sm);
-  color: var(--burnt-deep);
-  font-weight: 700;
+  background: var(--accent-tint); border-color: var(--accent); color: var(--accent-deep); font-weight: 650;
 }
-[data-testid="stRadioOption"]:has(input:focus-visible) { box-shadow: var(--raised-sm), var(--ring); }
+[data-testid="stRadioOption"]:has(input:focus-visible) { box-shadow: var(--ring); }
 
 /* ----------------------------------------------------------------- tabs */
-[data-testid="stTabs"] [role="tablist"] {
-  gap: 0.6rem;
-  border: 0;
-  padding: 0.35rem 0.1rem 0.9rem;
-}
-[data-testid="stTab"] {
-  background: var(--cream);
-  color: var(--ink);
-  border-radius: var(--radius-sm);
-  padding: 0.45rem 1rem;
-  box-shadow: var(--raised-sm);
-  border: 0;
-}
-[data-testid="stTab"][aria-selected="true"] {
-  box-shadow: var(--inset-sm);
-  color: var(--burnt-deep);
-  font-weight: 700;
-}
-[data-testid="stTab"]:focus-visible { outline: none; box-shadow: var(--raised-sm), var(--ring); }
-/* Streamlit draws its own underline and track under the tab strip; the inset
-   state replaces both. */
-[data-testid="stTabs"] [role="tablist"] > div:not([data-testid="stTab"]) { display: none; }
+[data-testid="stTabs"] [role="tablist"] { gap: 0.4rem; border-bottom: 1px solid var(--line); }
+[data-testid="stTab"] { color: var(--ink-soft); font-weight: 560; padding: 0.55rem 0.9rem; }
+[data-testid="stTab"]:hover { color: var(--ink); }
+[data-testid="stTab"][aria-selected="true"] { color: var(--accent-deep); font-weight: 700; }
+[data-testid="stTab"]:focus-visible { outline: none; box-shadow: var(--ring); border-radius: 8px; }
 
-/* --------------------------------------------------------------- metrics */
+/* --------------------------------------------------------------- metrics
+ * A plain metric (Priority, Scenario, Coverage tabs) is a white card. Inside a
+ * keyed tile (below) the tile is the card and the metric sits flat in it. */
 [data-testid="stMetric"] {
-  background: var(--cream);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 1rem 1.2rem;
-  box-shadow: var(--raised);
+  padding: 0.9rem 1.1rem;
+  box-shadow: var(--shadow-sm);
 }
 [data-testid="stMetricLabel"] { color: var(--ink-soft); }
-[data-testid="stMetricValue"] { color: var(--burnt); font-weight: 800; }   /* large text: 3.8:1 is enough */
-/* The delta chip is Streamlit's green/red; here it carries a band name or a share, not good or bad. */
+[data-testid="stMetricValue"] { color: var(--ink); font-weight: 750; letter-spacing: -0.02em; }
 [data-testid="stMetricDelta"],
-[data-testid="stMetricDelta"] * { background: transparent; color: var(--ink) !important; }
-[data-testid="stMetricDelta"] { box-shadow: var(--inset-sm); border-radius: 999px; padding: 2px 10px; }
+[data-testid="stMetricDelta"] * { background: transparent; color: var(--ink-soft) !important; }
+[data-testid="stMetricDeltaIcon-Up"],
+[data-testid="stMetricDeltaIcon-Down"] { display: none; }
+
+/* ------------------------------------------------- band hooks and tiles
+ * st.container(key="band-SLUG-ROLE") is given a class "st-key-band-SLUG-ROLE".
+ * The slug comes from a fixed list in airlume/app/ui.py, never from text. */
+[class*="st-key-band-good-"]           { --band: #7FB069; --band-ink: #0F1B2D; }
+[class*="st-key-band-satisfactory-"]   { --band: #C7D66D; --band-ink: #0F1B2D; }
+[class*="st-key-band-moderate-"]       { --band: #E8A33D; --band-ink: #0F1B2D; }
+[class*="st-key-band-usg-"]            { --band: #EE9D52; --band-ink: #0F1B2D; }
+[class*="st-key-band-unhealthy-"]      { --band: #E0736A; --band-ink: #0F1B2D; }
+[class*="st-key-band-very-unhealthy-"] { --band: #C98FDB; --band-ink: #0F1B2D; }
+[class*="st-key-band-hazardous-"]      { --band: #8B3A62; --band-ink: #FFFFFF; }
+
+[class*="st-key-band-"][class*="-worst"],
+[class*="st-key-band-"][class*="-best"],
+.st-key-plain-worst, .st-key-plain-best, .st-key-plain-reporting {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 5px solid var(--band);
+  border-radius: var(--radius);
+  padding: 0.85rem 1.1rem 0.9rem;
+  box-shadow: var(--shadow-sm);
+}
+[class*="st-key-band-"] [data-testid="stMetric"],
+[class*="st-key-plain-"] [data-testid="stMetric"] {
+  background: none; border: 0; box-shadow: none; padding: 0;
+}
+[class*="st-key-band-"] [data-testid="stMetricValue"],
+[class*="st-key-plain-"] [data-testid="stMetricValue"] { font-size: 2.5rem; line-height: 1.1; }
+/* The band name is a chip filled with the band colour, with its name written out. */
+[class*="st-key-band-"] [data-testid="stMetricDelta"] {
+  display: inline-flex;
+  background: var(--band);
+  border-radius: 999px;
+  padding: 2px 11px;
+  font-weight: 650;
+}
+[class*="st-key-band-"] [data-testid="stMetricDelta"],
+[class*="st-key-band-"] [data-testid="stMetricDelta"] * { color: var(--band-ink) !important; }
+
+/* ------------------------------------------------------------ answer card */
+[class*="st-key-band-"][class*="-answer"],
+.st-key-plain-answer {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 7px solid var(--band, var(--accent));
+  border-radius: var(--radius);
+  padding: 1.15rem 1.4rem 1.2rem;
+  box-shadow: var(--shadow);
+  margin: 0.4rem 0 0.2rem;
+}
+.st-key-plain-answer { --band: #2457C5; }
+[class*="st-key-band-"][class*="-answer"] [data-testid="stHeading"] h3,
+.st-key-plain-answer [data-testid="stHeading"] h3 {
+  font-size: 1.55rem; line-height: 1.28; font-weight: 720; margin: 0.15rem 0 0.35rem; padding: 0;
+}
+[class*="st-key-band-"][class*="-answer"] [data-testid="stCaptionContainer"],
+.st-key-plain-answer [data-testid="stCaptionContainer"] {
+  text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.74rem; font-weight: 700;
+}
+.st-key-advice-box {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1rem 0.8rem;
+  margin-top: 0.5rem;
+}
+.st-key-advice-box [data-testid="stCaptionContainer"] {
+  text-transform: uppercase; letter-spacing: 0.07em; font-size: 0.72rem; font-weight: 700;
+}
+.st-key-advice-box p { margin: 0; }
 
 /* ---------------------------------------------------------------- alerts
- * Not green / amber / blue any more, so the kind is carried by the edge bar and
- * the surface: answer = raised with an orange bar; warning = pressed in with an
- * orange bar; info = raised with an ink bar. */
+ * One calm card for every kind; the edge bar tells the kinds apart. */
 [data-testid="stAlert"] {
-  background: var(--cream);
+  background: var(--surface);
   color: var(--ink);
-  border: 0;
-  border-radius: var(--radius);
-  box-shadow: var(--raised);
-  border-left: 7px solid var(--ink);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
 }
 [data-testid="stAlert"] [data-testid="stAlertContainer"],
 [data-testid="stAlert"] [data-testid^="stAlertContent"] { background: transparent; color: var(--ink); }
 [data-testid="stAlert"] p, [data-testid="stAlert"] li { color: var(--ink); }
-[data-testid="stAlert"]:has([data-testid="stAlertContentSuccess"]) { border-left-color: var(--burnt); }
-[data-testid="stAlert"]:has([data-testid="stAlertContentWarning"]) {
-  border-left-color: var(--burnt);
-  background: #F3DFC3;
-  box-shadow: var(--inset);
-}
-[data-testid="stAlert"]:has([data-testid="stAlertContentError"]) {
-  border-left-color: var(--ink);
-  background: #EBD3C4;
-  box-shadow: var(--inset);
-}
-[data-testid="stAlert"]:has([data-testid="stAlertContentInfo"]) { border-left-color: var(--ink-soft); }
+[data-testid="stAlert"]:has([data-testid="stAlertContentWarning"]) { border-left-color: var(--ink-soft); background: var(--panel); }
+[data-testid="stAlert"]:has([data-testid="stAlertContentError"])   { border-left-color: var(--ink); }
+[data-testid="stAlert"]:has([data-testid="stAlertContentSuccess"]) { border-left-color: var(--accent-deep); }
 
 /* --------------------------------------------------------------- expander */
 [data-testid="stExpander"] details {
-  background: var(--cream);
-  border: 0;
-  border-radius: var(--radius);
-  box-shadow: var(--raised-sm);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
 }
-[data-testid="stExpander"] details[open] { box-shadow: var(--inset-sm); }
 [data-testid="stExpander"] summary { color: var(--ink); font-weight: 600; }
 
 /* -------------------------------------------------------- tables, charts */
-[data-testid="stDataFrame"] {
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  box-shadow: var(--inset-sm);
-  padding: 4px;
-}
+[data-testid="stDataFrame"] { border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
 [data-testid="stVegaLiteChart"] {
-  background: var(--cream);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: var(--raised-sm);
+  box-shadow: var(--shadow-sm);
   padding: 0.7rem 0.6rem 0.2rem;
-  margin: 4px 14px 16px 4px;   /* room for the shadow, which the parent would clip */
 }
 
 /* ------------------------------------------------------------------ maps
- * The map is a window onto the city, so it is pressed in. The canvas is
- * transparent when no basemap key is set, so this colour is the ground. */
+ * The canvas is transparent when no basemap key is set, so this is the ground:
+ * a pale blue-grey that the band colours stand out against. */
 [data-testid="stDeckGlJsonChart"] {
-  background: var(--cream-deep);
+  background: linear-gradient(180deg, #EDF2F9 0%, #DCE5F1 100%);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: var(--inset);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
   padding: 0;
 }
 [data-testid="stDeckGlJsonChartZoomButton"] {
-  background: var(--cream);
-  color: var(--ink);
-  border-radius: 12px;
-  box-shadow: var(--raised-sm);
+  background: var(--surface); color: var(--ink); border-radius: 10px; box-shadow: var(--shadow-sm);
 }
 
 /* ---------------------------------------------------------------- sliders */
-[data-testid="stSlider"] [data-testid="stSliderThumbValue"] { color: var(--burnt-deep); }
+[data-testid="stSlider"] [data-testid="stSliderThumbValue"] { color: var(--accent-deep); }
 
 /* --------------------------------------------------------- reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
-}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
 /* ------------------------------------------------------------ phone width */
 @media (max-width: 640px) {
-  :root { --raised: 5px 5px 11px var(--lo), -5px -5px 11px var(--hi); }
-  [data-testid="stMainBlockContainer"] { padding-left: 1rem; padding-right: 1rem; }
-  [data-testid="stMetric"] { padding: 0.8rem 0.9rem; }
+  [data-testid="stMainBlockContainer"] { padding-left: 1rem; padding-right: 1rem; padding-top: 1.4rem; }
+  .al-head h1 { font-size: 1.6rem; }
+  [class*="st-key-band-"] [data-testid="stMetricValue"],
+  [class*="st-key-plain-"] [data-testid="stMetricValue"] { font-size: 2rem; }
+  [class*="st-key-band-"][class*="-answer"] [data-testid="stHeading"] h3,
+  .st-key-plain-answer [data-testid="stHeading"] h3 { font-size: 1.3rem; }
 }

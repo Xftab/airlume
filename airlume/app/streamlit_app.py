@@ -24,6 +24,7 @@ import pandas as pd  # noqa: E402
 import streamlit as st  # noqa: E402
 
 from airlume import __version__  # noqa: E402
+from airlume.app.ui import TIME_WORDS, advice_parts, band_slug, split_answer  # noqa: E402
 from airlume.aqi import PUNJAB_BANDS, band_for  # noqa: E402
 from airlume.config import check_secrets, load_settings  # noqa: E402
 from airlume.nl import router, stub_router  # noqa: E402
@@ -46,10 +47,11 @@ from airlume.pipeline.store import Store  # noqa: E402
 from airlume.viz import coverage as cov_mod  # noqa: E402
 from airlume.viz.views import deck_city_overview, deck_stations_3d  # noqa: E402
 
-st.set_page_config(page_title="Airlume", page_icon="🌫️", layout="wide")
-# Neumorphism (cream / ink black / burnt orange). Colours are in .streamlit/config.toml;
-# the soft shadows are in one static stylesheet read from the repo. st.html sanitises it,
-# ignores JavaScript, and nothing from a user or the model is ever placed in it.
+st.set_page_config(page_title="Airlume", page_icon="🌫️", layout="wide", initial_sidebar_state="collapsed")
+# Clean light theme (white / navy / one blue accent). Colours are in .streamlit/config.toml;
+# cards, the answer layout and the band colours are in one static stylesheet read from the
+# repo. st.html sanitises it, ignores JavaScript, and nothing from a user or the model is
+# ever placed in it.
 st.html(Path(__file__).parent / "assets" / "airlume.css")
 
 SETTINGS = load_settings()
@@ -132,15 +134,15 @@ def city_frame() -> pd.DataFrame:
     return base.merge(latest, on="city_id", how="left")
 
 
-# Light band colours (Satisfactory is 1.3:1 on cream) keep a thin ink edge so the bar is
+# Light band colours (Satisfactory is 1.6:1 on white) keep a thin ink edge so the bar is
 # still readable. The fill is the official band colour and is never changed.
-BAR_EDGE = {"stroke": "#1B1A17", "strokeWidth": 0.6, "cornerRadiusEnd": 4}
+BAR_EDGE = {"stroke": "#0F1B2D", "strokeWidth": 0.6, "cornerRadiusEnd": 4}
 
 
 def ink_chart(chart, **kwargs):
-    """st.altair_chart with ink-black axes and a quiet grid, so labels stay readable on cream."""
-    ink, soft = "#1B1A17", "#5A5448"
-    chart = (chart.configure_axis(labelColor=ink, titleColor=ink, gridColor="#DDD0B4",
+    """st.altair_chart with navy axes and a quiet grid, so labels stay readable on white."""
+    ink, soft = "#0F1B2D", "#475467"
+    chart = (chart.configure_axis(labelColor=ink, titleColor=ink, gridColor="#E5EAF1",
                                   domainColor=soft, tickColor=soft)
                   .configure_legend(labelColor=ink, titleColor=ink)
                   .configure_view(strokeWidth=0))
@@ -185,8 +187,7 @@ def map_key(name: str) -> str:
 
 # ---------------------------------------------------------------- sidebar
 with st.sidebar:
-    st.subheader("Ask")
-    question = st.text_input("Question", placeholder="e.g. Where is the air worst in Lahore right now?")
+    st.subheader("Settings")
     models = router.models_available()
     model = st.selectbox("Language model", models, index=0,
                          help="Falls back to the rule-based stand-in if the model call fails.")
@@ -204,7 +205,6 @@ with st.sidebar:
                                       "throws away the view you set up by hand."):
         st.session_state["map_nonce"] = st.session_state.get("map_nonce", 0) + 1
         st.rerun()
-    thread_box = st.empty()  # filled at the end of the script, once the answer exists
     st.divider()
     st.subheader("Status")
     rc = store.real_counts()
@@ -214,10 +214,31 @@ with st.sidebar:
 
 # ---------------------------------------------------------------- header
 st.markdown(
-    f"<h1 style='margin-bottom:0'>Airlume</h1><p style='color:#5A5448;margin-top:0'>"
-    f"Conversational 3D digital twin of air quality in Pakistan's monitored cities · v{__version__}</p>",
+    f"<div class='al-head'><span class='al-mark'></span><h1>Airlume</h1></div>"
+    f"<p class='al-tag'>Air quality in Pakistan's monitored cities, as a 3D map you can talk to · v{__version__}</p>",
     unsafe_allow_html=True,
 )
+_MODE_BADGE = {"live": ":green-badge[Live data]", "archive": ":blue-badge[History only]", "fake": ":orange-badge[Demo data, not real readings]"}
+st.markdown(_MODE_BADGE[DATA_MODE])
+
+# ---------------------------------------------------------------- ask bar
+EXAMPLES = (
+    "Which Lahore station is worst right now?",
+    "How is the air in Lahore today?",
+    "Compare Lahore and Multan this week",
+    "kal Lahore ki hawa kaisi hogi?",
+)
+
+
+def _use_example(text: str) -> None:
+    st.session_state["ask"] = text
+
+
+question = st.text_input("Ask about the air", key="ask", label_visibility="collapsed",
+                         placeholder="Ask about the air in Lahore or any monitored city, in English or Roman Urdu")
+with st.container(key="chips"):
+    for _col, _ex, _i in zip(st.columns(len(EXAMPLES)), EXAMPLES, range(len(EXAMPLES))):
+        _col.button(_ex, key=f"ex{_i}", on_click=_use_example, args=(_ex,), width="stretch")
 
 # ---------------------------------------------------------------- question
 intent = None
@@ -275,20 +296,63 @@ if intent is not None:
         except ResolveError as e:
             st.warning(md_escape(str(e)))
 
+
+
+def headline_slug(rq) -> str | None:
+    """Band colour for the answer's edge, only when the number the answer leads with is
+    unambiguous: a current AQI for one named station, or the worst or cleanest station.
+    Everything else (a forecast, a window, a comparison) gets the neutral accent, so the
+    edge never claims a band the sentence did not state."""
+    if rq.metric != "aqi" or rq.time_label != "now" or rq.view != "stations_3d":
+        return None
+    if rq.city_id != "PB-LHE" or rq.compare_city_id:
+        return None
+    vals = station_frame(rq.city_id).dropna(subset=["aqi"])
+    if vals.empty:
+        return None
+    if rq.station_id:
+        row = vals[vals["station_id"] == rq.station_id]
+        return band_slug(row["aqi"].iloc[0]) if len(row) else None
+    if rq.aggregation == "max":
+        return band_slug(vals["aqi"].max())
+    if rq.aggregation == "min":
+        return band_slug(vals["aqi"].min())
+    return None
+
+
+def answer_card(text: str, slug: str | None, kicker: str) -> None:
+    """The answer as a headline, any detail, and a separate "what to do" box. The words are
+    the code-written sentence, only grouped; user and model text is markdown-escaped."""
+    head, detail, advice = split_answer(text)
+    with st.container(key=f"band-{slug}-answer" if slug else "plain-answer"):
+        st.caption(kicker)
+        st.subheader(md_escape(head), anchor=False)
+        if detail:
+            st.markdown(md_escape(" ".join(detail)))
+        label, body = advice_parts(advice)
+        if body:
+            with st.container(key="advice-box"):
+                st.caption(label)
+                st.markdown(md_escape(body))
+
+
 if resolved is not None:
     text = answer(resolved, store, reg)
-    st.success(text)
+    when = TIME_WORDS.get(resolved.time_label)
+    answer_card(text, headline_slug(resolved), f"Answer · {when}" if when else "Answer")
     for n in resolved.notes:
         st.info(n)
     thread = st.session_state.setdefault("thread", [])
     if not thread or thread[-1][0] != question:
         thread.append((question, text))
 
-if st.session_state.get("thread"):
-    with thread_box.container():
-        st.caption("This conversation")
-        for q, a in st.session_state["thread"][-4:]:
-            st.markdown(f"**You:** {md_escape(q)}  \n{md_escape(a)}")
+_thread = st.session_state.get("thread", [])
+_prior = _thread[:-1] if (resolved is not None and _thread) else _thread
+if _prior:
+    with st.expander(f"Earlier in this conversation ({len(_prior)})"):
+        for q, a in reversed(_prior[-4:]):
+            st.markdown(f"**You:** {md_escape(q)}")
+            st.caption(md_escape(split_answer(a)[0]))
 
 view = resolved.view if resolved else "stations_3d"
 city_id = resolved.city_id if resolved else "PB-LHE"
@@ -337,6 +401,23 @@ elif timeline:
             tooltip=["station", alt.Tooltip("ts:T", format="%d %b %H:%M"), alt.Tooltip("value:Q", format=".0f")]).properties(height=360), width="stretch")
         best = ser.groupby(ser["ts"].dt.hour)["value"].mean()
         st.caption(f"Cleanest hour of day in this window: {int(best.idxmin()):02d}:00 (mean {best.min():.0f}); worst: {int(best.idxmax()):02d}:00 (mean {best.max():.0f}).")
+
+if not (split or timeline or national):
+    sf_main = station_frame(city_id)
+    _shown = sf_main.dropna(subset=["aqi"])
+    _t1, _t2, _t3 = st.columns(3)
+    if not _shown.empty:
+        for _col, _role, _title, _row in (
+            (_t1, "worst", "Worst right now", _shown.loc[_shown["aqi"].idxmax()]),
+            (_t2, "best", "Cleanest right now", _shown.loc[_shown["aqi"].idxmin()]),
+        ):
+            with _col, st.container(key=f"band-{band_slug(_row['aqi'])}-{_role}"):
+                st.metric(f"{_title} · {_row['name']}", f"{int(_row['aqi'])}",
+                          band_for(int(_row["aqi"])).label, delta_color="off")
+    with _t3, st.container(key="plain-reporting"):
+        _stamp = (f"Updated {pd.to_datetime(sf_main['ts'].max()).tz_convert(KARACHI):%H:%M} PKT"
+                  if sf_main["ts"].notna().any() else "No readings yet")
+        st.metric("Stations reporting", f"{len(_shown)} of {len(sf_main)}", _stamp, delta_color="off")
 
 left, right = st.columns([3, 1.4])
 
@@ -396,7 +477,7 @@ with right:
     else:
         sf = station_frame("PB-LHE")
         reporting = int(sf["aqi"].notna().sum())
-        st.metric("Stations reporting", f"{reporting} of {len(sf)}")
+        st.markdown("**Stations, worst to best**")
         if reporting:
             ink_chart(ranked_bar(sf, "name", height=330), width="stretch")
         stale = sf[sf["stale"]]["name"].tolist()

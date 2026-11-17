@@ -138,3 +138,25 @@ def test_current_value_path_unchanged_for_latest(tmp_path, registry):
     s = _store(tmp_path, registry)
     q = resolve(route("Which city has worse air today, Lahore or Faisalabad?"), registry, NOW)
     assert "is worse right now" in answer(q, s, registry)
+
+
+def test_city_compare_names_the_city_that_has_no_data(tmp_path, registry):
+    s = Store(tmp_path / "lhr.duckdb")
+    r = fake_readings(registry, hours=24 * 10, end=END)
+    c = fake_city_hourly(registry, r, hours=24 * 10, end=END)
+    s.upsert_readings(r)
+    s.upsert_city_hourly(c[c.city_id == "PB-LHE"])          # Lahore only: Karachi has no rows
+    a = answer(resolve(route("Compare the current air quality of Lahore and Karachi."), registry, NOW), s, registry)
+    assert a == "I have no recent AQI reading for Karachi, so I cannot compare them right now."
+
+
+def test_named_city_over_a_window_is_answered_for_that_city(tmp_path, registry):
+    # 17 Nov Part A: "AQI in Lahore yesterday" and "Islamabad last week" were answered with the
+    # worst city in the country because the form said view=city_overview. A named city wins.
+    s = _store(tmp_path, registry)
+    v = ViewIntent(city="Faisalabad", time=_rng(), aggregation="mean", view="city_overview")
+    a = answer(resolve(v, registry, NOW), s, registry)
+    assert a.startswith("Faisalabad: mean AQI ") and "had the worst air" not in a
+    gone = ViewIntent(city="Faisalabad", time=_rng("2026-10-15", "2026-10-16"), aggregation="mean", view="city_overview")
+    b = answer(resolve(gone, registry, NOW), s, registry)
+    assert b.startswith("No data:") or "No Faisalabad city data" in b

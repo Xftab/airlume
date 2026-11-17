@@ -1,0 +1,719 @@
+{
+ "date": "2026-11-17",
+ "split": "2026-10-27T00:00:00Z",
+ "train_origins": 389,
+ "test_origins": 519,
+ "blend_weights": {
+  "1": 0.9500000000000001,
+  "2": 0.8500000000000001,
+  "3": 0.7000000000000001,
+  "4": 0.5,
+  "5": 0.30000000000000004,
+  "6": 0.25,
+  "7": 0.2,
+  "8": 0.15000000000000002,
+  "9": 0.15000000000000002,
+  "10": 0.15000000000000002,
+  "11": 0.15000000000000002,
+  "12": 0.15000000000000002,
+  "13": 0.15000000000000002,
+  "14": 0.15000000000000002,
+  "15": 0.15000000000000002,
+  "16": 0.15000000000000002,
+  "17": 0.15000000000000002,
+  "18": 0.15000000000000002,
+  "19": 0.2,
+  "20": 0.25,
+  "21": 0.30000000000000004,
+  "22": 0.4,
+  "23": 0.65,
+  "24": 0.0
+ },
+ "bands": {
+  "1-3 h": {
+   "n_rows": 1554,
+   "persistence_mae": 42.7,
+   "yesterday_mae": 65.1,
+   "models": {
+    "ridge_band": {
+     "mae": 35.5,
+     "skill_vs_persistence": [
+      0.17,
+      0.112,
+      0.214
+     ],
+     "skill_vs_yesterday": [
+      0.455,
+      0.335,
+      0.558
+     ]
+    },
+    "lightgbm_band": {
+     "mae": 34.1,
+     "skill_vs_persistence": [
+      0.201,
+      0.148,
+      0.241
+     ],
+     "skill_vs_yesterday": [
+      0.476,
+      0.359,
+      0.573
+     ]
+    },
+    "lightgbm_reg_rel": {
+     "mae": 35.1,
+     "skill_vs_persistence": [
+      0.179,
+      0.138,
+      0.21
+     ],
+     "skill_vs_yesterday": [
+      0.461,
+      0.329,
+      0.572
+     ]
+    },
+    "blend": {
+     "mae": 38.8,
+     "skill_vs_persistence": [
+      0.091,
+      0.036,
+      0.132
+     ],
+     "skill_vs_yesterday": [
+      0.404,
+      0.273,
+      0.514
+     ]
+    },
+    "MLP": {
+     "mae": 32.0,
+     "skill_vs_persistence": [
+      0.251,
+      0.191,
+      0.302
+     ],
+     "skill_vs_yesterday": [
+      0.509,
+      0.392,
+      0.609
+     ]
+    },
+    "GRU": {
+     "mae": 33.2,
+     "skill_vs_persistence": [
+      0.222,
+      0.149,
+      0.281
+     ],
+     "skill_vs_yesterday": [
+      0.49,
+      0.368,
+      0.593
+     ]
+    },
+    "LSTM": {
+     "mae": 33.7,
+     "skill_vs_persistence": [
+      0.212,
+      0.15,
+      0.265
+     ],
+     "skill_vs_yesterday": [
+      0.483,
+      0.362,
+      0.587
+     ]
+    },
+    "TCN": {
+     "mae": 33.7,
+     "skill_vs_persistence": [
+      0.21,
+      0.15,
+      0.26
+     ],
+     "skill_vs_yesterday": [
+      0.482,
+      0.361,
+      0.586
+     ]
+    },
+    "N-BEATS-lite": {
+     "mae": 32.3,
+     "skill_vs_persistence": [
+      0.245,
+      0.173,
+      0.3
+     ],
+     "skill_vs_yesterday": [
+      0.505,
+      0.391,
+      0.6
+     ]
+    },
+    "cams": {
+     "mae": 126.8,
+     "skill_vs_persistence": [
+      -1.97,
+      -2.346,
+      -1.682
+     ],
+     "skill_vs_yesterday": [
+      -0.948,
+      -1.52,
+      -0.491
+     ]
+    }
+   }
+  },
+  "4-8 h": {
+   "n_rows": 2570,
+   "persistence_mae": 95.6,
+   "yesterday_mae": 65.2,
+   "models": {
+    "ridge_band": {
+     "mae": 68.5,
+     "skill_vs_persistence": [
+      0.284,
+      0.179,
+      0.355
+     ],
+     "skill_vs_yesterday": [
+      -0.051,
+      -0.274,
+      0.123
+     ]
+    },
+    "lightgbm_band": {
+     "mae": 66.0,
+     "skill_vs_persistence": [
+      0.31,
+      0.235,
+      0.357
+     ],
+     "skill_vs_yesterday": [
+      -0.013,
+      -0.216,
+      0.156
+     ]
+    },
+    "lightgbm_reg_rel": {
+     "mae": 63.1,
+     "skill_vs_persistence": [
+      0.341,
+      0.263,
+      0.392
+     ],
+     "skill_vs_yesterday": [
+      0.032,
+      -0.151,
+      0.179
+     ]
+    },
+    "blend": {
+     "mae": 60.5,
+     "skill_vs_persistence": [
+      0.368,
+      0.242,
+      0.463
+     ],
+     "skill_vs_yesterday": [
+      0.072,
+      -0.005,
+      0.145
+     ]
+    },
+    "MLP": {
+     "mae": 53.2,
+     "skill_vs_persistence": [
+      0.444,
+      0.358,
+      0.506
+     ],
+     "skill_vs_yesterday": [
+      0.183,
+      0.042,
+      0.31
+     ]
+    },
+    "GRU": {
+     "mae": 54.8,
+     "skill_vs_persistence": [
+      0.427,
+      0.336,
+      0.496
+     ],
+     "skill_vs_yesterday": [
+      0.159,
+      0.017,
+      0.283
+     ]
+    },
+    "LSTM": {
+     "mae": 54.0,
+     "skill_vs_persistence": [
+      0.435,
+      0.361,
+      0.491
+     ],
+     "skill_vs_yesterday": [
+      0.171,
+      0.026,
+      0.296
+     ]
+    },
+    "TCN": {
+     "mae": 55.8,
+     "skill_vs_persistence": [
+      0.416,
+      0.33,
+      0.477
+     ],
+     "skill_vs_yesterday": [
+      0.143,
+      -0.009,
+      0.275
+     ]
+    },
+    "N-BEATS-lite": {
+     "mae": 51.4,
+     "skill_vs_persistence": [
+      0.462,
+      0.372,
+      0.53
+     ],
+     "skill_vs_yesterday": [
+      0.211,
+      0.074,
+      0.332
+     ]
+    },
+    "cams": {
+     "mae": 128.0,
+     "skill_vs_persistence": [
+      -0.338,
+      -0.516,
+      -0.203
+     ],
+     "skill_vs_yesterday": [
+      -0.963,
+      -1.548,
+      -0.493
+     ]
+    }
+   }
+  },
+  "9-16 h": {
+   "n_rows": 4060,
+   "persistence_mae": 121.9,
+   "yesterday_mae": 65.7,
+   "models": {
+    "ridge_band": {
+     "mae": 77.7,
+     "skill_vs_persistence": [
+      0.363,
+      0.253,
+      0.451
+     ],
+     "skill_vs_yesterday": [
+      -0.183,
+      -0.471,
+      0.045
+     ]
+    },
+    "lightgbm_band": {
+     "mae": 86.4,
+     "skill_vs_persistence": [
+      0.292,
+      0.216,
+      0.348
+     ],
+     "skill_vs_yesterday": [
+      -0.315,
+      -0.641,
+      -0.067
+     ]
+    },
+    "lightgbm_reg_rel": {
+     "mae": 69.4,
+     "skill_vs_persistence": [
+      0.431,
+      0.348,
+      0.497
+     ],
+     "skill_vs_yesterday": [
+      -0.057,
+      -0.23,
+      0.069
+     ]
+    },
+    "blend": {
+     "mae": 63.2,
+     "skill_vs_persistence": [
+      0.482,
+      0.361,
+      0.586
+     ],
+     "skill_vs_yesterday": [
+      0.038,
+      -0.005,
+      0.081
+     ]
+    },
+    "MLP": {
+     "mae": 63.4,
+     "skill_vs_persistence": [
+      0.48,
+      0.373,
+      0.566
+     ],
+     "skill_vs_yesterday": [
+      0.035,
+      -0.087,
+      0.157
+     ]
+    },
+    "GRU": {
+     "mae": 66.3,
+     "skill_vs_persistence": [
+      0.456,
+      0.316,
+      0.567
+     ],
+     "skill_vs_yesterday": [
+      -0.01,
+      -0.153,
+      0.122
+     ]
+    },
+    "LSTM": {
+     "mae": 62.9,
+     "skill_vs_persistence": [
+      0.484,
+      0.368,
+      0.576
+     ],
+     "skill_vs_yesterday": [
+      0.042,
+      -0.067,
+      0.142
+     ]
+    },
+    "TCN": {
+     "mae": 64.0,
+     "skill_vs_persistence": [
+      0.475,
+      0.368,
+      0.559
+     ],
+     "skill_vs_yesterday": [
+      0.025,
+      -0.104,
+      0.152
+     ]
+    },
+    "N-BEATS-lite": {
+     "mae": 62.9,
+     "skill_vs_persistence": [
+      0.484,
+      0.36,
+      0.581
+     ],
+     "skill_vs_yesterday": [
+      0.042,
+      -0.09,
+      0.176
+     ]
+    },
+    "cams": {
+     "mae": 131.2,
+     "skill_vs_persistence": [
+      -0.076,
+      -0.227,
+      0.071
+     ],
+     "skill_vs_yesterday": [
+      -0.998,
+      -1.584,
+      -0.477
+     ]
+    }
+   }
+  },
+  "17-24 h": {
+   "n_rows": 3996,
+   "persistence_mae": 88.9,
+   "yesterday_mae": 66.3,
+   "models": {
+    "ridge_band": {
+     "mae": 83.0,
+     "skill_vs_persistence": [
+      0.066,
+      -0.117,
+      0.22
+     ],
+     "skill_vs_yesterday": [
+      -0.253,
+      -0.577,
+      0.017
+     ]
+    },
+    "lightgbm_band": {
+     "mae": 102.5,
+     "skill_vs_persistence": [
+      -0.152,
+      -0.385,
+      0.047
+     ],
+     "skill_vs_yesterday": [
+      -0.546,
+      -1.006,
+      -0.179
+     ]
+    },
+    "lightgbm_reg_rel": {
+     "mae": 68.7,
+     "skill_vs_persistence": [
+      0.227,
+      0.142,
+      0.296
+     ],
+     "skill_vs_yesterday": [
+      -0.037,
+      -0.132,
+      0.036
+     ]
+    },
+    "blend": {
+     "mae": 65.3,
+     "skill_vs_persistence": [
+      0.266,
+      0.164,
+      0.356
+     ],
+     "skill_vs_yesterday": [
+      0.015,
+      -0.02,
+      0.05
+     ]
+    },
+    "MLP": {
+     "mae": 69.7,
+     "skill_vs_persistence": [
+      0.216,
+      0.107,
+      0.304
+     ],
+     "skill_vs_yesterday": [
+      -0.052,
+      -0.181,
+      0.066
+     ]
+    },
+    "GRU": {
+     "mae": 74.6,
+     "skill_vs_persistence": [
+      0.161,
+      -0.003,
+      0.298
+     ],
+     "skill_vs_yesterday": [
+      -0.126,
+      -0.266,
+      -0.002
+     ]
+    },
+    "LSTM": {
+     "mae": 70.8,
+     "skill_vs_persistence": [
+      0.204,
+      0.076,
+      0.313
+     ],
+     "skill_vs_yesterday": [
+      -0.068,
+      -0.158,
+      0.012
+     ]
+    },
+    "TCN": {
+     "mae": 69.7,
+     "skill_vs_persistence": [
+      0.216,
+      0.11,
+      0.302
+     ],
+     "skill_vs_yesterday": [
+      -0.051,
+      -0.161,
+      0.049
+     ]
+    },
+    "N-BEATS-lite": {
+     "mae": 72.9,
+     "skill_vs_persistence": [
+      0.18,
+      0.033,
+      0.297
+     ],
+     "skill_vs_yesterday": [
+      -0.1,
+      -0.278,
+      0.064
+     ]
+    },
+    "cams": {
+     "mae": 135.0,
+     "skill_vs_persistence": [
+      -0.517,
+      -0.801,
+      -0.234
+     ],
+     "skill_vs_yesterday": [
+      -1.036,
+      -1.636,
+      -0.504
+     ]
+    }
+   }
+  },
+  "all 1-24 h": {
+   "n_rows": 12180,
+   "persistence_mae": 95.4,
+   "yesterday_mae": 65.7,
+   "models": {
+    "ridge_band": {
+     "mae": 72.1,
+     "skill_vs_persistence": [
+      0.244,
+      0.134,
+      0.333
+     ],
+     "skill_vs_yesterday": [
+      -0.098,
+      -0.326,
+      0.101
+     ]
+    },
+    "lightgbm_band": {
+     "mae": 80.7,
+     "skill_vs_persistence": [
+      0.155,
+      0.059,
+      0.232
+     ],
+     "skill_vs_yesterday": [
+      -0.228,
+      -0.496,
+      -0.008
+     ]
+    },
+    "lightgbm_reg_rel": {
+     "mae": 63.5,
+     "skill_vs_persistence": [
+      0.335,
+      0.263,
+      0.392
+     ],
+     "skill_vs_yesterday": [
+      0.034,
+      -0.09,
+      0.136
+     ]
+    },
+    "blend": {
+     "mae": 60.2,
+     "skill_vs_persistence": [
+      0.369,
+      0.266,
+      0.461
+     ],
+     "skill_vs_yesterday": [
+      0.084,
+      0.037,
+      0.133
+     ]
+    },
+    "MLP": {
+     "mae": 59.3,
+     "skill_vs_persistence": [
+      0.379,
+      0.288,
+      0.451
+     ],
+     "skill_vs_yesterday": [
+      0.097,
+      -0.019,
+      0.204
+     ]
+    },
+    "GRU": {
+     "mae": 62.4,
+     "skill_vs_persistence": [
+      0.346,
+      0.22,
+      0.448
+     ],
+     "skill_vs_yesterday": [
+      0.05,
+      -0.067,
+      0.162
+     ]
+    },
+    "LSTM": {
+     "mae": 59.9,
+     "skill_vs_persistence": [
+      0.373,
+      0.273,
+      0.455
+     ],
+     "skill_vs_yesterday": [
+      0.089,
+      -0.009,
+      0.175
+     ]
+    },
+    "TCN": {
+     "mae": 60.3,
+     "skill_vs_persistence": [
+      0.368,
+      0.278,
+      0.44
+     ],
+     "skill_vs_yesterday": [
+      0.082,
+      -0.033,
+      0.184
+     ]
+    },
+    "N-BEATS-lite": {
+     "mae": 59.8,
+     "skill_vs_persistence": [
+      0.373,
+      0.265,
+      0.457
+     ],
+     "skill_vs_yesterday": [
+      0.089,
+      -0.037,
+      0.211
+     ]
+    },
+    "cams": {
+     "mae": 131.2,
+     "skill_vs_persistence": [
+      -0.374,
+      -0.56,
+      -0.194
+     ],
+     "skill_vs_yesterday": [
+      -0.997,
+      -1.518,
+      -0.54
+     ]
+    }
+   }
+  }
+ }
+}

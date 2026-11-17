@@ -1,0 +1,402 @@
+{
+ "date": "2026-11-02",
+ "city": "PB-LHE",
+ "split_origin_utc": "2026-10-27T00:00:00Z",
+ "regime": {
+  "train_aqi_mean": 175.3,
+  "test_aqi_mean": 273.2,
+  "train_aqi_range": [
+   67.0,
+   419.0
+  ],
+  "test_aqi_range": [
+   100.0,
+   486.0
+  ]
+ },
+ "train_rows": 9612,
+ "test_rows": 3228,
+ "train_origins": 412,
+ "test_origins": 146,
+ "features": [
+  "last",
+  "mean3",
+  "d3",
+  "lag24",
+  "hs",
+  "hc",
+  "h",
+  "cams",
+  "epa"
+ ],
+ "bands": {
+  "1-3 h": {
+   "n_rows": 435,
+   "n_origins": 146,
+   "mae_persistence": 42.7,
+   "models": {
+    "yesterday": {
+     "n_rows": 435,
+     "mae": 70.15,
+     "mae_persistence_same_rows": 42.7,
+     "skill": -0.643,
+     "skill_ci95": [
+      -1.899,
+      0.059
+     ]
+    },
+    "cams": {
+     "n_rows": 228,
+     "mae": 126.24,
+     "mae_persistence_same_rows": 41.49,
+     "skill": -2.043,
+     "skill_ci95": [
+      -2.577,
+      -0.755
+     ]
+    },
+    "epa": {
+     "n_rows": 153,
+     "mae": 53.82,
+     "mae_persistence_same_rows": 41.39,
+     "skill": -0.3,
+     "skill_ci95": [
+      -0.418,
+      -0.098
+     ]
+    },
+    "ridge": {
+     "n_rows": 435,
+     "mae": 62.5,
+     "mae_persistence_same_rows": 42.7,
+     "skill": -0.464,
+     "skill_ci95": [
+      -1.008,
+      -0.093
+     ]
+    },
+    "lightgbm": {
+     "n_rows": 435,
+     "mae": 66.41,
+     "mae_persistence_same_rows": 42.7,
+     "skill": -0.555,
+     "skill_ci95": [
+      -1.125,
+      -0.063
+     ]
+    },
+    "ridge_band": {
+     "n_rows": 435,
+     "mae": 35.76,
+     "mae_persistence_same_rows": 42.7,
+     "skill": 0.163,
+     "skill_ci95": [
+      0.142,
+      0.206
+     ]
+    },
+    "lightgbm_band": {
+     "n_rows": 435,
+     "mae": 32.77,
+     "mae_persistence_same_rows": 42.7,
+     "skill": 0.233,
+     "skill_ci95": [
+      0.094,
+      0.317
+     ]
+    }
+   }
+  },
+  "4-8 h": {
+   "n_rows": 705,
+   "n_origins": 143,
+   "mae_persistence": 99.57,
+   "models": {
+    "yesterday": {
+     "n_rows": 705,
+     "mae": 70.52,
+     "mae_persistence_same_rows": 99.57,
+     "skill": 0.292,
+     "skill_ci95": [
+      -0.294,
+      0.571
+     ]
+    },
+    "cams": {
+     "n_rows": 379,
+     "mae": 129.14,
+     "mae_persistence_same_rows": 94.36,
+     "skill": -0.369,
+     "skill_ci95": [
+      -0.664,
+      0.245
+     ]
+    },
+    "epa": {
+     "n_rows": 213,
+     "mae": 86.23,
+     "mae_persistence_same_rows": 90.31,
+     "skill": 0.045,
+     "skill_ci95": [
+      -0.018,
+      0.225
+     ]
+    },
+    "ridge": {
+     "n_rows": 705,
+     "mae": 76.79,
+     "mae_persistence_same_rows": 99.57,
+     "skill": 0.229,
+     "skill_ci95": [
+      0.057,
+      0.354
+     ]
+    },
+    "lightgbm": {
+     "n_rows": 705,
+     "mae": 87.49,
+     "mae_persistence_same_rows": 99.57,
+     "skill": 0.121,
+     "skill_ci95": [
+      -0.015,
+      0.268
+     ]
+    },
+    "ridge_band": {
+     "n_rows": 705,
+     "mae": 73.01,
+     "mae_persistence_same_rows": 99.57,
+     "skill": 0.267,
+     "skill_ci95": [
+      0.108,
+      0.374
+     ]
+    },
+    "lightgbm_band": {
+     "n_rows": 705,
+     "mae": 68.29,
+     "mae_persistence_same_rows": 99.57,
+     "skill": 0.314,
+     "skill_ci95": [
+      0.209,
+      0.39
+     ]
+    }
+   }
+  },
+  "9-16 h": {
+   "n_rows": 1076,
+   "n_origins": 138,
+   "mae_persistence": 128.03,
+   "models": {
+    "yesterday": {
+     "n_rows": 1076,
+     "mae": 72.65,
+     "mae_persistence_same_rows": 128.03,
+     "skill": 0.433,
+     "skill_ci95": [
+      -0.063,
+      0.673
+     ]
+    },
+    "cams": {
+     "n_rows": 573,
+     "mae": 127.67,
+     "mae_persistence_same_rows": 131.95,
+     "skill": 0.032,
+     "skill_ci95": [
+      -0.29,
+      0.35
+     ]
+    },
+    "epa": null,
+    "ridge": {
+     "n_rows": 1076,
+     "mae": 85.57,
+     "mae_persistence_same_rows": 128.03,
+     "skill": 0.332,
+     "skill_ci95": [
+      0.169,
+      0.444
+     ]
+    },
+    "lightgbm": {
+     "n_rows": 1076,
+     "mae": 97.13,
+     "mae_persistence_same_rows": 128.03,
+     "skill": 0.241,
+     "skill_ci95": [
+      0.14,
+      0.373
+     ]
+    },
+    "ridge_band": {
+     "n_rows": 1076,
+     "mae": 83.46,
+     "mae_persistence_same_rows": 128.03,
+     "skill": 0.348,
+     "skill_ci95": [
+      0.197,
+      0.45
+     ]
+    },
+    "lightgbm_band": {
+     "n_rows": 1076,
+     "mae": 94.43,
+     "mae_persistence_same_rows": 128.03,
+     "skill": 0.262,
+     "skill_ci95": [
+      0.149,
+      0.385
+     ]
+    }
+   }
+  },
+  "17-24 h": {
+   "n_rows": 1012,
+   "n_origins": 130,
+   "mae_persistence": 96.53,
+   "models": {
+    "yesterday": {
+     "n_rows": 1012,
+     "mae": 75.51,
+     "mae_persistence_same_rows": 96.53,
+     "skill": 0.218,
+     "skill_ci95": [
+      -0.054,
+      0.461
+     ]
+    },
+    "cams": {
+     "n_rows": 493,
+     "mae": 119.7,
+     "mae_persistence_same_rows": 110.73,
+     "skill": -0.081,
+     "skill_ci95": [
+      -0.786,
+      0.513
+     ]
+    },
+    "epa": null,
+    "ridge": {
+     "n_rows": 1012,
+     "mae": 81.1,
+     "mae_persistence_same_rows": 96.53,
+     "skill": 0.16,
+     "skill_ci95": [
+      0.017,
+      0.358
+     ]
+    },
+    "lightgbm": {
+     "n_rows": 1012,
+     "mae": 87.12,
+     "mae_persistence_same_rows": 96.53,
+     "skill": 0.098,
+     "skill_ci95": [
+      -0.075,
+      0.381
+     ]
+    },
+    "ridge_band": {
+     "n_rows": 1012,
+     "mae": 82.03,
+     "mae_persistence_same_rows": 96.53,
+     "skill": 0.15,
+     "skill_ci95": [
+      -0.009,
+      0.374
+     ]
+    },
+    "lightgbm_band": {
+     "n_rows": 1012,
+     "mae": 86.9,
+     "mae_persistence_same_rows": 96.53,
+     "skill": 0.1,
+     "skill_ci95": [
+      -0.108,
+      0.416
+     ]
+    }
+   }
+  },
+  "all 1-24 h": {
+   "n_rows": 3228,
+   "n_origins": 146,
+   "mae_persistence": 100.44,
+   "models": {
+    "yesterday": {
+     "n_rows": 3228,
+     "mae": 72.75,
+     "mae_persistence_same_rows": 100.44,
+     "skill": 0.276,
+     "skill_ci95": [
+      -0.145,
+      0.574
+     ]
+    },
+    "cams": {
+     "n_rows": 1673,
+     "mae": 125.46,
+     "mae_persistence_same_rows": 104.85,
+     "skill": -0.197,
+     "skill_ci95": [
+      -0.584,
+      0.281
+     ]
+    },
+    "epa": {
+     "n_rows": 366,
+     "mae": 72.69,
+     "mae_persistence_same_rows": 69.86,
+     "skill": -0.04,
+     "skill_ci95": [
+      -0.103,
+      0.143
+     ]
+    },
+    "ridge": {
+     "n_rows": 3228,
+     "mae": 79.14,
+     "mae_persistence_same_rows": 100.44,
+     "skill": 0.212,
+     "skill_ci95": [
+      0.059,
+      0.34
+     ]
+    },
+    "lightgbm": {
+     "n_rows": 3228,
+     "mae": 87.74,
+     "mae_persistence_same_rows": 100.44,
+     "skill": 0.126,
+     "skill_ci95": [
+      -0.041,
+      0.29
+     ]
+    },
+    "ridge_band": {
+     "n_rows": 3228,
+     "mae": 74.3,
+     "mae_persistence_same_rows": 100.44,
+     "skill": 0.26,
+     "skill_ci95": [
+      0.121,
+      0.374
+     ]
+    },
+    "lightgbm_band": {
+     "n_rows": 3228,
+     "mae": 78.05,
+     "mae_persistence_same_rows": 100.44,
+     "skill": 0.223,
+     "skill_ci95": [
+      0.069,
+      0.359
+     ]
+    }
+   }
+  }
+ },
+ "note": "25-28 Oct city AQI comes from the portal 7-day trend endpoint; hyperparameters fixed in advance; forecast origins within a block are not independent, hence the block bootstrap"
+}

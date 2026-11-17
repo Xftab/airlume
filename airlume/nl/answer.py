@@ -197,7 +197,7 @@ def _city_window_answer(q: ResolvedQuery, store: Store, reg: Registry) -> str:
         return (f"{names[q.city_id]}: {what} {show(va)} over {na} h · "
                 f"{names[q.compare_city_id]}: {show(vb)} over {nb} h ({window}). {tail}")
 
-    if q.view == "city_overview" and not q.compare_start:
+    if q.view == "city_overview" and not q.compare_start and not q.city_named:
         res = {c.city_id: val(c.city_id) for c in reg.cities}
         res = {k: v for k, v in res.items() if v is not None}
         if not res:
@@ -360,7 +360,12 @@ def _answer_body(q: ResolvedQuery, store: Store, reg: Registry,
             a = cf[cf.city_id == q.city_id]
             b = cf[cf.city_id == q.compare_city_id]
             if a.empty or b.empty:
-                return "One of the two cities has no recent data."
+                # Name the city (17 Nov 2026). The old reply, "One of the two cities has no recent
+                # data.", left the person guessing which one; a run of the classmate questions
+                # showed it for Lahore-versus-Karachi and Peshawar-versus-Quetta.
+                missing = [n for n, d in ((city.name, a), (names[q.compare_city_id], b)) if d.empty]
+                return (f"I have no recent {_METRIC_NAME[q.metric]} reading for {' or '.join(missing)}, "
+                        "so I cannot compare them right now.")
             va, vb = float(a[q.metric].iloc[0]), float(b[q.metric].iloc[0])
             worse = city.name if va >= vb else names[q.compare_city_id]
             return (f"{city.name}: {_METRIC_NAME[q.metric]} {_fmt(va, q.metric)} · "

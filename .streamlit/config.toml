@@ -1,18 +1,21 @@
 [theme]
-# Neumorphism: cream surface, ink-black text, burnt-orange accent (Nov 2026).
-# Colours and radii live here; the soft shadows live in airlume/app/assets/airlume.css.
+# Clean light theme (17 Nov 2026): cool white surfaces, navy ink, one blue accent.
+# The accent is deliberately outside the AQI hue family (green to maroon), so a colour
+# on screen means an air-quality band or it means "this is a control", never both.
+# Colours live here; cards, the answer layout and the band colours live in
+# airlume/app/assets/airlume.css.
 base = "light"
-primaryColor = "#C2531B"
-backgroundColor = "#F1E7D3"
-secondaryBackgroundColor = "#E9DDC4"
-textColor = "#1B1A17"
-borderColor = "#CDBE9F"
-linkColor = "#A8420F"
+primaryColor = "#2457C5"
+backgroundColor = "#F4F6FA"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#0F1B2D"
+borderColor = "#DCE3ED"
+linkColor = "#1B3F94"
 baseRadius = "large"
-buttonRadius = "large"
-showWidgetBorder = false
-showSidebarBorder = false
-dataframeHeaderBackgroundColor = "#E9DDC4"
+buttonRadius = "full"
+showWidgetBorder = true
+showSidebarBorder = true
+dataframeHeaderBackgroundColor = "#E8EEFB"
 
 [server]
 headless = true

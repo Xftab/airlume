@@ -1,4 +1,4 @@
-"""Interface theme guards (plan, "Interface design", 10 Nov 2026).
+"""Interface theme guards (plan, "Interface design", redesigned 17 Nov 2026).
 
 The look is a static stylesheet in the repo. These tests pin the three things that
 could quietly go wrong: the stylesheet becoming a second way to inject HTML, the
@@ -11,8 +11,8 @@ CSS = (ROOT / "airlume" / "app" / "assets" / "airlume.css").read_text(encoding="
 APP = (ROOT / "airlume" / "app" / "streamlit_app.py").read_text(encoding="utf-8")
 CFG = (ROOT / ".streamlit" / "config.toml").read_text(encoding="utf-8")
 
-CREAM, INK, INK_SOFT = "#F1E7D3", "#1B1A17", "#5A5448"
-BURNT, BURNT_DEEP = "#C2531B", "#A8420F"
+CREAM, INK, INK_SOFT = "#F4F6FA", "#0F1B2D", "#475467"   # CREAM now names the cool page ground
+BURNT, BURNT_DEEP = "#2457C5", "#1B3F94"                  # BURNT now names the blue accent
 
 
 def _lum(h: str) -> float:

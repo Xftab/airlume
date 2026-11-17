@@ -39,3 +39,10 @@ data/eval/*
 !data/eval/e5_*.json
 !data/eval/e6_*.json
 !data/eval/benchmark_v1_*.json
+# 17 Nov 2026: the forecast comparison results are cited by path in docs/research/, so they are tracked too.
+!data/eval/forecast_fit_*.json
+!data/eval/forecast_baseline_check_*.json
+!data/eval/forecast_diagnose_*.json
+!data/eval/forecast_models_v2_*.json
+!data/eval/model_a_v2_*.json
+!data/eval/model_a_v2_predictions_*.csv
