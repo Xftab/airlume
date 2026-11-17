@@ -4,7 +4,7 @@
 
 **Revised 6 November 2026** with the results of the 6 Nov audit (`docs/research/*-2026-11-06.md`): restored archive and coverage (3.1, 5.1), the portal's table change and the new W1 figure (3.3, 5.2), CAMS on 313 hours (5.3), the forecast against the same-hour-yesterday baseline (5.4, RQ1), the prompt v5 schema freeze (3.4, 3.5), and verified Chapter 2 citations (`docs/report/citation-check-2026-11-06.md`).
 
-**Revised 17 November 2026** with the forecast work of 17 Nov (`docs/research/forecast-models-v2-2026-11-17.md`): the hourly re-run on 519 test origins, the diagnosis of the 6 Nov overfit, five deep models against classical ones, and the corrected daily Model A with winter in the test (3.6, 5.4, 6, 7 W7, 9 RQ1, ledger). Chapters 1, 5.5 to 5.8 and the language-layer parts of 9 have not yet been revised for the 17 Nov Part A and Part B results.
+**Revised 17 November 2026** with the forecast work of 17 Nov (`docs/research/forecast-models-v2-2026-11-17.md`): the hourly re-run on 519 test origins, the diagnosis of the 6 Nov overfit, five deep models against classical ones, and the corrected daily Model A with winter in the test (3.6, 5.4, 6, 7 W7, 9 RQ1, ledger). Sections 5.5 and 5.6 were written on 17 November (they had been referred to but never drafted): the language layer with the Part B score and the Part A first look, and performance. 5.7 and 5.8 are placeholders. Chapter 1 has not been revised for the 17 Nov language results.
 
 Three chapters are substantially complete (3 Materials and Methods, 5 Results, 7 Weaknesses). Chapters 1, 2, 4, 6, 8 and 9 are drafted to the point the evidence allows. The abstract is written last, by rule.
 
@@ -195,7 +195,7 @@ Prompt v4 (30 October) made guidance questions in scope and the forecast horizon
 
 **v0 covers the schema but not real usage; the classmate set covers real usage but not the schema.** Both are development sets: prompt v4 was checked against v0, and the 62 classmate questions were run through the pipeline on 2 November with every failure read and acted on. Neither can serve as a held-out test set, and the report describes them as development data throughout.
 
-**Test set.** A fresh collection, in two clearly labelled strata: **Stratum A, naturalistic** (unsteered classmate questions, carrying the headline claim) and **Stratum B, schema coverage** (constructed after the schema freeze to exercise the four unused fields, reported separately). `[Collection pending the schema freeze; see Chapter 7, W2.]`
+**Test set.** A fresh collection, in two clearly labelled strata: **Stratum A, naturalistic** (unsteered classmate questions, carrying the headline claim) and **Stratum B, schema coverage** (constructed after the schema freeze to exercise the four unused fields, reported separately). *Status, 17 November:* the schema was frozen on 6 November. Stratum B is **Part B** (30 constructed questions, independently annotated, scored once; 5.5). Stratum A is **Part A** (40 of a target 60 to 100 collected; unlabelled; first look only; 5.5). `[Part A annotation and scoring PENDING.]`
 
 **Annotation.** Two annotators who have not seen any model draft fill the form independently from annotator guide v3 (6 Nov, matching prompt v5). Disagreements are adjudicated against the written guide, with the governing rule recorded for each. Where the guide is silent, that is a guide gap: the guide is amended and both annotators re-decide.
 
@@ -333,6 +333,79 @@ Qualifications that belong beside the result:
 - **Not tested:** transformers, time-series foundation models, multi-station models, quantile forecasts.
 - **Nothing beyond 24 hours exists in the archive** (CAMS 24 h, EPA 8 h), so days two to four cannot be scored, and the product scope stays at 48 hours.
 
+### 5.5 The language layer (RQ3, C1)
+
+*Written 17 November 2026. Sections 5.5 to 5.8 were referred to by earlier chapters but did not exist in the draft until now. Sources: `data/eval/benchmark_v1_openai_gpt-oss-120b_92771b9a7a.json`, `benchmark_v1_stub_92771b9a7a.json`, `docs/benchmark/partB-adjudication-2026-11-17.md`, `partA-model-run-2026-11-17.md`, `docs/research/benchmark-v0-prompt-v4-2026-10-30.md`, `classmate-questions-2026-10-30.md`.*
+
+**Four question sets, and what each can support.**
+
+| Set | n | Written by | Gold labels | Status |
+|---|---:|---|---|---|
+| v0 | 90 | the build team | a model draft accepted unchanged | development data; prompt v3 and v4 were tuned on it |
+| Classmate set, 30 Oct | 62 | three classmates, blind to the app | none | development data; run through the pipeline on 2 Nov and acted on (prompt v5) |
+| **Part B** | 30 | constructed by Claude after the schema freeze, to exercise every form field | two human annotators, adjudicated by the written guide; frozen 17 Nov (hash `92771b9a7a`) | **scored once** |
+| **Part A** | 40 so far | classmates (Kiran's 20; a second sheet of 20 from several classmates) | **none yet** | first look only; not scored |
+
+**Development results (not held-out).** On v0 the rule-based stub scores 45.6%; both language models score 88.9% at prompt v3 and 90.0% [83.3, 95.6] at prompt v4 on 90 items, with 100% run-to-run consistency (temperature 0). `gpt-oss-120b` and `gpt-oss-20b` scored identically. These figures were produced by tuning against the same items, so they show that the pipeline works and that nothing regressed, not how it will do on new questions.
+
+**What real users ask (62 classmate questions, 30 October).** 21 of 62 (34%) were out of scope against 7 of 90 (10%) in v0; 37 of 62 (60%) were in Roman Urdu against 10 of 70 (14%); and none used the four fields `metric`, `threshold`, `compare_to` or `other_city`. The benchmark we built covered the schema; real users asked for something else. The 2 November reading of these questions produced prompt v5 and the schema freeze (3.4).
+
+**Part B, scored once.** 30 questions (19 English, 11 Roman Urdu) written to cover every field. Two annotators (Tehreem Fatima and Kiran Saif) labelled them independently; 42 of the 330 cells differed (28 of 30 questions) and were adjudicated by the guide's conventions, mostly spelling (8), `compare_to` filled for a plain time window (11) and `view` (4). Raw agreement before adjudication was weakest on `compare_to` (57%, κ 0.47), then `area`, `time` and `aggregation` (80 to 83%), and 87 to 100% on the other fields (n = 30 per field, so κ moves with one label). Kiran's first sheet had 301 format problems in all 30 rows and was not used; his redo, made from a one-page instruction sheet, is the sheet of record.
+
+| | Questions passed | Rate (Wilson 95%) |
+|---|---:|---|
+| **`gpt-oss-120b`, prompt v5** | **25 / 30** | **83.3% [66.4, 92.7]** |
+| Rule-based stub | 9 / 30 | 30.0% [16.7, 47.9] |
+| Difference (Newcombe, unpaired) | | **+53.3 points [+28.7, +69.6]** |
+| English, model | 17 / 19 | 89.5% [68.6, 97.1] |
+| Roman Urdu, model | 8 / 11 | 72.7% [43.4, 90.3] |
+| English minus Roman Urdu | | +16.8 points [−10.5, +47.0] |
+
+A question passes only if every field matches the gold. Per field, model (correct / n): `area` 15/15, `city` 13/13, `compare_to` 14/14, `metric` 12/12, `other_city` 8/8, `threshold` 7/7, `camera` 2/2, `in_scope` 30/30, `time` 25/27, `view` 16/17, `aggregation` 19/22. Fields with n under 10 are counts, not percentages. The model clearly beats the stub on this set. The English and Roman Urdu results are **not distinguishable** at these sizes.
+
+The five failures: b014 and b015 (Roman Urdu: "is today's air better than yesterday's?", "is this week worse than last week?") left the time at its default; b016 ("which is cleaner right now, Faisalabad or Gujranwala?") and b020 (Roman Urdu: "which of Bahawalpur and Multan had more smog this month?") filled the wrong `aggregation` (`latest` and `max`, against `min` and `mean`); b022 ("hours above 250 this month compared with last month") cannot be expressed in the frozen form, since `compare_to` has no `last_month` value, so it tests a known schema limit and stays in the score. Four of the five are comparisons and three are Roman Urdu. With five failures, that is a pattern to examine, not a result.
+
+**What Part B does not show.** It was written by Claude, on the builder's side, to cover the schema, and the gold is adjudicated by rule from two human sheets, not written by Claude. It contains no out-of-scope questions (all 30 are in scope in the adjudicated gold), so the refusal path is untested here; it is a schema-coverage set, not a sample of what users ask, and is never pooled with Part A. One chat message used b006 as an example, so b006 may not be fully independent. The stub-against-model difference is unpaired, which is conservative.
+
+**Part A, first look (not a score).** Forty fresh classmate questions were collected on 17 November, 20 in Kiran's sheet (15 English, 5 Roman Urdu) and 20 in a second sheet written by several classmates `[number of authors unknown]` (17 English, 3 Roman Urdu). They were run through the real router on 17 November (`gpt-oss-120b`, prompt v5, frozen). Outcomes: 30 answered, 3 asked for clarification, 3 refused as out of scope, 2 hit an unknown area, and 2 forms were rejected by the validator because the model wrote `17:00` and `2026-07` in date fields. The model refused only 3 of 40, against 34% of the 30 October questions being out of scope. No gold exists, so there is no accuracy figure. One unblinded reading by the builder puts 18 of 40 as clearly right (45%, Wilson [31, 60]) and 22 of 40 (55% [40, 69]) if four reasonable or partial answers are counted; this is indicative only and will be replaced by the labelled score. The failure classes matter more than the figure:
+
+- **Two-place comparison (6 of 40):** "which is worse, X or Y?" within one city. The form has no field for two areas, so both names are dropped and the answer ranks the whole network. This needs a schema change.
+- **Windows the form or the archive cannot hold (5):** "last 2 months", "last 3 months", "December". The hourly archive holds about 40 days, so the honest answer is to say so; the model narrowed them silently.
+- **Time-of-day and month values (2):** rejected by the validator; the live app then falls back to the rule-based router, which gives a generic answer.
+- **A wrong sentence from a right form (3, plus one):** a named city with the city-overview view was answered with the worst city in the country. This was an answer-layer fault, found by reading the answers and fixed on 17 November (a named city is now answered for itself; test added).
+- **Handled well:** station names inside a city (a station called "Multan Road" is in Lahore), "nearest station" notes with distances, out-of-archive dates answered with an honest "no data" that states what the archive covers, and forecasts for cities with none published.
+
+**Protocol for what follows.** Prompt v5, the schema and the router stay frozen: Part A is the held-out set, and tuning against it would turn it into development data. The failure classes above are hypotheses for a prompt and schema v2, to be tested on questions nobody has seen, with both versions reported side by side. Because they were found on Part A, Part A cannot evaluate that change. Only one downstream change was made (the answer-layer fault) and it does not alter the form the router returns, which is what is scored. The Part A headline needs more questions (40 of a target 60 to 100), two independent annotators (not Kiran for his own 20), a check script, adjudication and a freeze. `[PENDING]`
+
+**What this says about RQ3.** On a constructed set that covers the schema, the model fills the form correctly for 25 of 30 questions [66.4, 92.7] and clearly beats the rule-based router. On unsteered classmate questions the first look suggests it is clearly harder, mainly because users ask for things the form cannot express (two-place comparisons, long windows). Reliability on natural questions is not yet measured and the report does not claim it.
+
+### 5.6 Response time and parallel extraction (E6, E5)
+
+*Source: `data/eval/e6_latency_model_2026-11-01_pace18.json`, `e5_parallel_2026-11-01.json`; Materials Section 10.*
+
+**Response time (E6), measured 1 November.** 30 questions through the language-model router (Groq) against the archive, paced 18 s apart so the free-tier limit is not hit. The model round trip has median 1.13 s [1.03, 1.26], 95th percentile 1.55 s, maximum 2.05 s; the rest of the pipeline (resolve, query, answer text) takes about 20 ms; 0 of 30 calls waited on a rate limit. An unpaced first run had a median of 16.2 s: the free tier allows 8,000 tokens a minute, about three questions a minute, and the router sleeps and retries on HTTP 429. **Limitation:** sustained use above about three questions a minute waits about 15 s per question, and the app caps one session at 30 model calls an hour. Not measured: map frames per second and drawing time in the browser `[measure by hand]`. One laptop, one network.
+
+**Parallel extraction (E5).** The real bulletin parser (`epd_parse.parse_report`, CPU-bound, so processes) on a random 300 of 1,990 downloaded EPD bulletin PDFs (73 MB), 12 logical CPUs, three interleaved repeats.
+
+| Design | Workers | Median time | Speed-up | Efficiency | Karp-Flatt serial fraction |
+|---|---:|---:|---:|---:|---:|
+| Sequential | 1 | 54.6 s | 1.00 | 1.00 | n/a |
+| Multiprocessing | 2 | 32.1 s | 1.70 | 0.85 | 0.176 |
+| Multiprocessing | 4 | 21.5 s | 2.54 | 0.63 | 0.192 |
+| Multiprocessing | 8 | 16.2 s | 3.37 | 0.42 | 0.196 |
+| Multiprocessing | 12 | 13.8 s | 3.95 | 0.33 | 0.186 |
+| Async downloads + processes | 8 | 16.3 s | 3.35 | 0.42 | 0.198 |
+
+Every design returned results identical to the sequential run (row count and a hash of the parsed rows, all 300 files). The serial fraction stays near 0.18 to 0.20, which points to a fixed serial share rather than growing contention and caps the speed-up near 5 by Amdahl's law. In practice the back-fill is download-bound: with a 2 s wait between requests to the government site, 1,990 files take at least 3,980 s (computed, not measured) whatever the design, against about 360 s of sequential parsing. **Limitation:** the spread between repeats is wide (sequential 39.4, 54.6, 54.9 s), most likely heat throttling, so the speed-ups are medians with wide uncertainty; one machine; the asyncio download is a model of latency, not a measurement of the real server.
+
+### 5.7 User study (E4)
+
+`[PENDING. Planned in docs/study/user-study-plan-2026-11-01.md: 8 to 10 participants, 3 tasks each, System Usability Scale. No sessions have been run, so no result is reported. When run: SUS with a bootstrap interval and task success as counts with Wilson intervals; a small convenience sample with an observer present, which inflates success.]`
+
+### 5.8 Station placement (C7)
+
+`[PENDING in this draft. To be written from the placement analysis; it is a coverage heuristic, not a siting study (W8).]`
+
 ## 6. Discussion
 
 Six points, each tied to a result above.
@@ -343,7 +416,7 @@ Six points, each tied to a result above.
 
 **3. A global reanalysis is a trend instrument, not a measurement.** CAMS correlates with ground truth and even leads it by two to three hours, but sits about 48 µg/m³ low on PM2.5 and 179 low on PM10, and is blind to the within-city gradient (5.3). This is the empirical justification for the whole design choice of showing only measured station values on the map.
 
-**4. Refusing well is most of the job.** Thirty-five per cent of what real users ask is out of scope, against 10% in the development benchmark (5.5). A system that answers in-scope questions at 90% but handles the refusal path poorly will be experienced as bad, because refusal is the first thing a third of users meet. The cheap, correct improvement is a refusal that names what the system *can* do.
+**4. Refusing well is most of the job.** Thirty-four per cent of the first 62 classmate questions were out of scope (21 of 62), against 10% in the development benchmark (5.5); in the fresh Part A sample the model refused only 3 of 40, so that proportion is not stable. A system that answers in-scope questions at 90% but handles the refusal path poorly will be experienced as bad, because refusal is the first thing a third of users meet. The cheap, correct improvement is a refusal that names what the system *can* do.
 
 **5. The schema is richer than the demand.** Four of the twelve form fields were never used by any of the 62 real questions (3.5). The schema was designed for a query space — thresholds, two-city comparisons, explicit metrics — that these users did not enter. That is a finding about conversational analytics design, not a flaw to hide: it suggests building the form outward from observed demand rather than from what the data model can express.
 
@@ -358,7 +431,7 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 | | Weakness | Mitigation | Evidence | Verdict |
 |---|---|---|---|---|
 | W1 | Station AQI vs CAMS concentration: different units and formulas | Recover the portal's own scale | 5.2: 99.1% exact, MAE 0.16 [0.05, 0.31] on 3,293 station-hours, with the portal's 3 Nov table change dated | **Met.** Residual is CO-dominant hours (0.6%); PM2.5 top band still extrapolated under the new table |
-| W2 | Benchmark written by the system's builder | Classmates write blind; second annotator; kappa | 62 blind questions collected; **but the gold labels were a model draft accepted unchanged** | **NOT MET as of 4 Nov.** See `validity-review-2026-11-04.md`. Corrective plan in 3.5; verdict cannot be Met until independent annotation is complete |
+| W2 | Benchmark written by the system's builder | Classmates write blind; second annotator; kappa | Part B (30, constructed by Claude) annotated independently by two people, adjudicated by the written guide, frozen and scored once (5.5); Part A is classmate-written but not yet labelled | **Partly met.** The v0 gold was a model draft (4 Nov review) and is development data. Part B's questions are builder-written, so it supports a schema-coverage claim only. The naturalistic claim waits on Part A labels |
 | W3 | Contribution mistaken for "just structured output" | Frame as scoring the *visual* answer | 1.4 framing; C1 wording | **Met in framing**; relies on the report and viva being consistent |
 | W4 | Small samples | Intervals on every figure; no claims inside the noise | Wilson and bootstrap intervals throughout Chapter 5 | **Met** |
 | W5 | No single correct camera | Score camera by level and direction category | v0 camera n = 5; classmate set n = 1 | **Partially met.** The rubric exists; the evidence base is too thin to report a camera accuracy |
@@ -368,7 +441,7 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 | W9 | Station readings may be inaccurate | Frame C4 as agreement; report uptime | 5.3 framed as agreement; coverage in 5.1 | **Handled.** US Consulate cross-check `[pending]` |
 | W10 | 3D columns distort height comparison | 2D ranked bar beside every 3D view | Chapter 4 | **Met** |
 | W11 | A website may not reach the public | Name real target users | E4 not started | **Not met.** Public demand is not measured and the report should not claim it is |
-| W12 | English-only questions | Roman Urdu test set | v0 10 items (14%); classmate set 37 (60%) | **Partially met.** v0's 10 items distinguish nothing; the fresh set must carry Roman Urdu near half. Urdu script remains unsupported |
+| W12 | English-only questions | Roman Urdu test set | v0 10 items (14%); classmate set 37 (60%); Part B 11 of 30; Part A 8 of 40 | **Partially met.** On Part B, Roman Urdu 8/11 [43.4, 90.3] against English 17/19: a 16.8-point gap that is not distinguishable from zero [−10.5, +47.0]. Urdu script remains unsupported |
 | W13 | Free tiers and libraries change | Pin versions; offline demo | `requirements.txt` pinned; offline rehearsal `[pending]` | **Met for pinning** |
 | W14 | One person, ten weeks | Fixed cut order; optional features last | HISTORY shows the compression to four weeks with nothing cut | **Managed, not eliminated** |
 | W15 | No licence for EPA data | Permission request; derived statistics only | **Permission to use the data granted 4 Nov via the supervisor, no additional data** | **Met for use.** Whether raw redistribution is covered is unconfirmed; the repository is public and holds the archive — resolve before deployment |
@@ -405,7 +478,7 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 
 **RQ2 — how well does CAMS match ground stations?** Well in trend (r 0.68), poorly in level (PM2.5 bias −57.7 [−73.2, −44.0], PM10 −191.7, both growing with the season), and not at all in within-city structure (per-station PM2.5 MAD 27.8 to 102.5), on 313 hours. This is the first such quantification published for Lahore.
 
-**RQ3 — can a conversational interface answer air-quality questions reliably?** `[PENDING a valid test set.]` The development benchmark reaches 90.0% [83.3, 95.6] on 90 items with 100% run-to-run consistency, and the collected evidence on what real users ask is reported in 5.5. The honest position on 4 November is that **reliability has not yet been measured on held-out data**, and the report says so.
+**RQ3 — can a conversational interface answer air-quality questions reliably?** Partly, and the answer depends on the kind of question. On a constructed set covering every field (Part B, 30 questions, independently annotated, scored once) the model fills the form correctly for 25 of 30, 83.3% [66.4, 92.7], against 9 of 30 (30.0% [16.7, 47.9]) for the rule-based router: a difference of +53.3 points [+28.7, +69.6]. English and Roman Urdu are not distinguishable at n = 11 and 19. On fresh classmate questions (Part A, 40 so far, unlabelled) a first look by the builder suggests it is clearly harder, because users ask for two-place comparisons and long windows that the form cannot express; the labelled score is `[PENDING]`. The development benchmark (90.0% [83.3, 95.6] on 90 items) was tuned against and is not evidence of reliability on new questions. **Reliability on natural questions has not been measured, and the report says so.**
 
 **RQ4 — can the data support a defensible intervention-priority score?** Yes for a transparent, data-confidence-flagged severity ranking, and no for anything that predicts the effect of an intervention. The scenario calculator deliberately computes coverage only.
 
@@ -444,7 +517,7 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 
 ### What must happen before this draft becomes a report
 
-1. **Schema freeze: done 6 Nov (prompt v5).** Then the fresh question collection and independent annotation (3.5; `docs/benchmark/v1-packet-2026-11-06.md`). Until then W2 is not met and 5.5 has no headline.
+1. **Schema freeze: done 6 Nov (prompt v5). Part B: scored 17 Nov.** Remaining: more Part A questions (40 of 60 to 100), independent labels (not Kiran for his own 20), the check script, adjudication, freeze, one scoring run per model (3.5, 5.5). Until then W2 is only partly met and 5.5 has no naturalistic headline.
 2. **E4 sessions**, scheduled and run (5.7).
 3. **Frames per second**, measured by hand (5.6).
 4. **The EPA reply pasted in**, and the raw-redistribution question settled (3.1, 8).

@@ -2,6 +2,12 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 17 November 2026 (night, last of all): report language chapters written
+- **Found:** the report referred to sections 5.5 to 5.8 but only 5.1 to 5.4 existed. 5.5 and 5.6 are now written; 5.7 and 5.8 are marked pending, not filled with estimates.
+- **5.5** carries the Part B result from the scorecards (25/30 = 83.3% [66.4, 92.7]; stub 9/30; Newcombe +53.3 [+28.7, +69.6], unpaired; English 17/19, Roman Urdu 8/11, gap not distinguishable), the five failures (four comparisons, three Roman Urdu, one the frozen form cannot express), the Part A first look with its failure classes, and the protocol (v5 and schema frozen; Part A cannot evaluate a v6). The Part A figure of 18/40 (45%) is labelled as one unblinded reading and indicative only.
+- **Also changed:** W2 verdict (Partly met: Part B's questions are builder-written, so it supports a schema-coverage claim only); W12 with Part B's Roman Urdu numbers; the RQ3 conclusion; Discussion 4 now says 34% (21 of 62) instead of 35%; 3.5 status line.
+- **Open:** number of authors of Part A sheet E is unknown (marked in the text). Chapter 1 and the abstract not yet revised. 5.7 (user study) and 5.8 (placement) pending.
+
 ## 17 November 2026 (night, last): report and Materials updated with the forecast results
 - **Report** (`docs/report/report-draft-2026-11-04.md`, revised in place): 5.4 rewritten from the v2 memo; 3.6 models table; Related work item 4; Discussion points 1 and 2; W7 verdict (Partly met, now with the training-data finding); the limitations line; the RQ1 paragraph of Chapter 9; the evidence ledger. The 6 Nov hourly tables are superseded (252 to 519 test origins).
 - **Materials:** `docs/report/materials-forecast-update-2026-11-17.md` replaces Section 6.1 (daily Model A v2) and 6.3 (hourly), and Section 5 items 4 and 5. Also saved in the Project as `07c-materials-v7-forecast-update.md`.
