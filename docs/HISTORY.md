@@ -2,6 +2,13 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 17 November 2026 (night, last): report and Materials updated with the forecast results
+- **Report** (`docs/report/report-draft-2026-11-04.md`, revised in place): 5.4 rewritten from the v2 memo; 3.6 models table; Related work item 4; Discussion points 1 and 2; W7 verdict (Partly met, now with the training-data finding); the limitations line; the RQ1 paragraph of Chapter 9; the evidence ledger. The 6 Nov hourly tables are superseded (252 to 519 test origins).
+- **Materials:** `docs/report/materials-forecast-update-2026-11-17.md` replaces Section 6.1 (daily Model A v2) and 6.3 (hourly), and Section 5 items 4 and 5. Also saved in the Project as `07c-materials-v7-forecast-update.md`.
+- **Source of the numbers:** the laptop run of 17 Nov, not the container run the memo tables came from. The two differ in the first decimal for some hourly MAEs (MLP 59.3 against 59.4, TCN at 17 to 24 h 69.7 against 69.1); conclusions did not change. Noted in the memo and in 5.4 as run-to-run noise.
+- **Two statements made more careful while writing:** "learned models beat persistence in every setting" became "in every hourly setting; ridge does not on daily winter data"; the relayed EPA forecast, which beats persistence on its rows (+0.27 [+0.11, +0.42]), is no longer described as failing to. A direct paired test against EPA was not run.
+- **Still stale in the report:** Chapter 1, 5.5 to 5.8 and RQ3 in Chapter 9 do not yet carry the 17 Nov Part A and Part B results. The daily join stops at 2024-08-20 although the bulletins run to December 2025; reason not yet checked.
+
 ## 17 November 2026 (night, very last): Part A run with the real model, one fix, protocol kept
 - **Run:** `run_classmate_questions.py --file classmate-raw-2026-11-17.jsonl` on the laptop, gpt-oss-120b, prompt v5. 30 answered, 3 clarify, 3 out of scope, 2 resolve error, 2 route error (the form had `17:00`, `24:00`, `2026-07` in date fields). Raw rows: `docs/benchmark/partA-model-run-2026-11-17-output.md`.
 - **Reading (single unblinded rater, not a score):** 18 of 40 clearly right (45%, Wilson 31 to 60); 22 of 40 (55%, 40 to 69) if four reasonable or partial rows count. Part B was 83.3%, so naturalistic questions look harder; the labelled score will say by how much. Failure classes: two-place comparison with no schema field (6), windows the form or the 40-day hourly archive cannot hold (5), rejected time values (2), wrong city in the sentence (3), others (see the write-up).

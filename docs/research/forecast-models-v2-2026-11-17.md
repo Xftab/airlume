@@ -234,6 +234,7 @@ Deep models: one network per architecture, 24 outputs, input = last 48 hourly va
 - Hourly deep models see only the AQI history and the hour; they do not use the CAMS or EPA forecasts (removing those features did not change LightGBM, so this is unlikely to matter, but it was not tested for the networks).
 - Daily: 437 usable days, weather of the target day is observed ERA5 (perfect prognosis), one city, folds of 23 to 100 days. W2021-22 trained on only 56 days.
 - Results depend on random seeds; the networks are 5-seed ensembles, not fixed single runs. Single-seed spread was not measured.
+- **Run note (17 Nov, later).** The scripts were re-run on the project laptop after this memo was written. All conclusions held; some hourly MAEs differ in the first decimal (for example MLP 59.3 against 59.4 overall, TCN 69.7 against 69.1 at 17 to 24 h, GRU against yesterday at 17 to 24 h -0.13 against -0.12). The report (5.4) uses the laptop figures, which are the ones in the committed `data/eval` files; the tables above came from the container run. Differences of that size are run-to-run noise.
 - Not tested: transformers, foundation models (Chronos, TimesFM), multi-station models, quantile forecasts. [Optional future work.]
 - Seasonality beyond one winter cannot be estimated from this archive. Re-run weekly as origins grow (about 24 a day).
 

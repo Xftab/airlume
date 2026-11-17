@@ -4,6 +4,8 @@
 
 **Revised 6 November 2026** with the results of the 6 Nov audit (`docs/research/*-2026-11-06.md`): restored archive and coverage (3.1, 5.1), the portal's table change and the new W1 figure (3.3, 5.2), CAMS on 313 hours (5.3), the forecast against the same-hour-yesterday baseline (5.4, RQ1), the prompt v5 schema freeze (3.4, 3.5), and verified Chapter 2 citations (`docs/report/citation-check-2026-11-06.md`).
 
+**Revised 17 November 2026** with the forecast work of 17 Nov (`docs/research/forecast-models-v2-2026-11-17.md`): the hourly re-run on 519 test origins, the diagnosis of the 6 Nov overfit, five deep models against classical ones, and the corrected daily Model A with winter in the test (3.6, 5.4, 6, 7 W7, 9 RQ1, ledger). Chapters 1, 5.5 to 5.8 and the language-layer parts of 9 have not yet been revised for the 17 Nov Part A and Part B results.
+
 Three chapters are substantially complete (3 Materials and Methods, 5 Results, 7 Weaknesses). Chapters 1, 2, 4, 6, 8 and 9 are drafted to the point the evidence allows. The abstract is written last, by rule.
 
 ---
@@ -84,7 +86,7 @@ Structure:
 1. **Conversational interfaces to environmental data.** VayuBuddy (2024) and VayuChat (2025) establish the line of work; Punjab's own EcoBot (2025) is the local deployment. VayuBuddy explicitly names the evaluation of *visual* answers as future work, which is the gap C1 addresses.
 2. **Air-quality visualisation and the interpolation question.** `[Fill from the proposal's survey; the specific claim needed is that commercial maps interpolate without disclosing distance-to-sensor.]`
 3. **Reanalysis and model-versus-ground validation.** CAMS and its known coarse resolution over South Asia; the absence of a published local error estimate for Lahore, which C4 supplies.
-4. **Forecasting with limited ground data.** Shwartz-Ziv and Armon (2022), *Information Fusion* 81, on tree ensembles versus deep models on tabular data, which is directly relevant to the finding in 5.4.
+4. **Forecasting with limited ground data.** Shwartz-Ziv and Armon (2022), *Information Fusion* 81, and Grinsztajn, Oyallon and Varoquaux (NeurIPS 2022, arXiv 2207.08815) on tree ensembles versus deep models on tabular data; Zeng et al. (AAAI 2023) on simple linear models beating elaborate deep forecasters; and Hyndman and Koehler (2006, *International Journal of Forecasting*) on the seasonal-naive forecast as the yardstick a learned forecast must beat, which is why "the same hour yesterday" is the bar in 5.4. The architectures are N-BEATS (Oreshkin et al., ICLR 2020) and the temporal convolutional network (Bai, Kolter and Koltun, 2018); `[verify these two references before submission]`. All are directly relevant to the finding in 5.4.
 5. **Monitoring-network siting.** Rahman, Usama, Tahir and Uppal (2022), "Data driven framework for analysis of air quality landscape for the city of Lahore", ISPRS Archives XLVIII-4/W5-2022, 167–173. It analyses 4 reference-grade stations and 9 low-cost sensors and proposes a location-recommendation method for new stations. It is the comparison point for C7.
 6. **Intervention evidence.** "Gupta et al. (2022)" could not be found and is dropped. Replacement, as background only: Patra, Sahbaz and Ganesan (CEEW, 18 November 2025), who find the evidence for anti-smog guns limited and their road coverage about 2% in Delhi. The scenario calculator makes no effect claim.
 
@@ -207,12 +209,12 @@ Prompt v4 (30 October) made guidance questions in scope and the forecast horizon
 
 | | Model | Data | Baselines |
 |---|---|---|---|
-| A | Daily forecaster: LightGBM, ridge, LSTM, GRU | EPD daily 2020–2025 + ERA5 | persistence |
+| A | Daily forecaster (v2, calendar-correct lags): ridge, LightGBM, MLP, GRU, LSTM, TCN, N-BEATS-lite | EPD daily 2020–2024 + ERA5, 437 days with a complete previous week | persistence, 3-day and 7-day means |
 | B | Hourly CAMS-error correction | lagged readings, hour, weather | raw CAMS, persistence |
 | C | Zero-shot time-series foundation model | — | persistence |
-| 4.2 | Hourly 1–24 h Lahore AQI, per-band and single-model | archive + CAMS + EPA forecast | persistence, yesterday, relayed CAMS, relayed EPA |
+| 4.2 | Hourly 1–24 h Lahore AQI: per-band ridge and LightGBM, regularised LightGBM, MLP, GRU, LSTM, TCN, N-BEATS-lite (5-seed ensembles) | archive (957 hourly values) + CAMS + EPA forecast for the boosted models; AQI history and hour for the networks | persistence, same hour yesterday, a training-fitted blend, relayed CAMS, relayed EPA |
 
-All are scored against persistence with skill scores and intervals. Splits are by time.
+All are scored against persistence, and the hourly models also against the same hour yesterday, with skill scores and intervals. Splits are by time. The hourly split (27 Oct 2026 00:00 UTC) was fixed on 1 November before the deep models were written; later splits are sensitivity checks only.
 
 ### 3.7 Insight modules
 
@@ -276,51 +278,68 @@ The bias has grown as the season has deepened (−20 on 30 hours, −48 on 211, 
 
 ### 5.4 Forecasting (RQ1, C5)
 
-**Daily (Model A), 131 test days April–August 2024.** LightGBM MAE 13.9 [12.6, 15.7]; persistence 14.5 [12.2, 17.7]; GRU 14.1; LSTM 18.1. **All intervals overlap.** The honest statement is that no model is distinguishable from persistence on this split, and that the deep models did not win. Summer only, so it does not transfer to smog season.
+*Rewritten 17 November 2026 from `docs/research/forecast-models-v2-2026-11-17.md`. The 6 November tables are superseded: the test set doubled (252 to 519 origins), the daily lags were corrected, and deep models were added. Every figure is a 95% interval. Skill = 1 − MAE(model) / MAE(baseline) on the same rows; 0 means no better than the baseline. Intervals are moving-block bootstraps (24 h blocks over forecast origins for hourly, 7-day blocks over days for daily; 2000 resamples).*
+
+**Daily next-day PM2.5 (Model A, version 2).** Two corrections to the earlier Model A. (1) Its lag features were shifted by table row, not by calendar day. The bulletin series has 52 gaps (the longest 198 days), so 55 of 657 rows had a "yesterday" from an earlier date and the neural models' 7-day windows were 7 rows, not 7 days. A lag now exists only if that calendar day was observed, and every model is scored on the same 437 days that have a complete previous week. (2) The earlier test period (April to August 2024, mean PM2.5 about 56) was the easiest season for persistence. The folds are now forward-chained: winter 2021–22, 2022–23 and 2023–24 (131 test days pooled, mean PM2.5 174.8 µg/m³) and summer 2024 (100 days, mean 41.4). The target is the log change from yesterday, so every model starts at persistence. Winter, skill against persistence (yesterday's value; MAE 43.1):
+
+| Model | MAE | Skill vs persistence | Skill vs LightGBM |
+|---|---:|---|---|
+| GRU | 37.57 | +0.13 [+0.07, +0.18] | +0.06 [−0.00, +0.11] |
+| LSTM | 37.76 | +0.12 [+0.05, +0.19] | +0.06 [−0.03, +0.12] |
+| TCN | 38.97 | +0.10 [+0.02, +0.17] | +0.03 [−0.06, +0.08] |
+| Ridge + LightGBM average | 39.53 | +0.08 [−0.02, +0.17] | +0.01 [−0.07, +0.07] |
+| LightGBM | 40.05 | +0.07 [+0.01, +0.14] | — |
+| MLP | 40.17 | +0.07 [−0.02, +0.15] | −0.00 [−0.11, +0.08] |
+| N-BEATS-lite | 40.29 | +0.07 [−0.08, +0.17] | −0.01 [−0.16, +0.08] |
+| Persistence | 43.10 | — | −0.08 [−0.16, −0.01] |
+| Ridge | 44.03 | −0.02 [−0.22, +0.11] | −0.10 [−0.30, +0.01] |
+| 7-day mean | 49.20 | −0.14 [−0.32, −0.04] | −0.23 [−0.44, −0.12] |
+
+In summer 2024 every model that sees weather beats persistence by 0.14 to 0.18, with the ridge and ridge-plus-LightGBM average at the top (+0.18 [+0.11, +0.24]); the deep models are not better than ridge there. **Three qualifications.** The target day's ERA5 weather is an input, so in real use it would be a weather forecast: these are upper bounds. Without weather the winter gains shrink to +0.05 to +0.07 for the better networks and ridge is no better than persistence. And 16 learned model-and-feature variants were scored on the same folds, so the best-looking one (GRU) carries selection optimism; the safe statement is that recurrent and boosted models improve on persistence by roughly 5 to 13% in winter with no clear winner. This is a different experiment from the earlier one (LightGBM MAE 13.9 against 14.5, intervals overlapping, summer only) and the two are not pooled.
 
 **Hourly CAMS correction (Models B, C), 42 test hours.** Model B MAE 37.3 against raw CAMS 80.4 — a **54% reduction** in CAMS error — but hourly persistence scores 21.1 and beats both. A learned correction fixes CAMS without being useful as a forecast.
 
-**Hourly 1–24 h Lahore AQI (Phase 4.2), re-run 6 November** on the restored archive (`data/eval/forecast_fit_2026-11-06.json`, `forecast_baseline_check_2026-11-06.json`). 690 hourly values; 412 training and **252 test origins**; split at 2026-10-27T00:00Z, fixed on 1 November. Block bootstrap over origins.
+**Hourly 1–24 h Lahore AQI (Phase 4.2), re-run 17 November.** Data: 957 hourly values; split at 2026-10-27 00:00 UTC, fixed on 1 November before any of the models below were written; 412 training origins (9,612 rows; 389 for the deep models, which need 48 h of history) and **519 test origins** (12,180 rows). Test mean AQI is 297.0 against 175.3 in training. Baselines: persistence, the same hour yesterday, a one-weight-per-horizon blend of the two (weights fitted on training rows only; exploratory because it was added after seeing a result), and the relayed CAMS and EPA forecasts.
 
-Skill against **persistence**:
+*Why the 6 November model overfit.* Three things. (a) **The smog level left the range it had seen:** 5.9% of training rows had a last reading above 300, against 54% of test rows at 17 to 24 h. On those rows the per-band LightGBM's error was 123 to 124 against 82 to 83 for persistence; trees cannot predict beyond the range they saw. (b) **Real overfitting on a very small sample:** at 17 to 24 h its in-sample MAE was 20.4, cross-validated inside the training period 43.3, and on the test 102.5; 389 origins is about 16 days. (c) **Regularisation recovers most of it:** fewer, shallower trees and a larger minimum leaf cut the test MAE to 69.8, and adding a relative-change target to 65.1, against 66.3 for yesterday. Removing the CAMS and EPA features changed almost nothing (100.1), so they are not the cause. Cross-validation inside the training period could not have warned us (CV 43.3 against 44.5 for the regularised model, while the test errors were 102 and 70): with a short archive, in-sample validation does not predict a regime shift. The regularised variants were written down before their test result but promoted after I had seen it, so their figures are exploratory.
 
-| Band | Persistence MAE | Ridge (per band) | LightGBM (per band) | Same hour yesterday | Relayed CAMS |
-|---|---:|---|---|---|---|
-| 1–3 h | 43.6 | +0.14 [+0.06, +0.20] | +0.24 [+0.17, +0.29] | −0.51 | −1.96 [−2.60, −1.50] |
-| 4–8 h | 101.3 | +0.29 [+0.12, +0.38] | +0.35 [+0.25, +0.41] | +0.35 | −0.29 [−0.59, −0.12] |
-| 9–16 h | 130.0 | +0.34 [+0.16, +0.46] | +0.28 [+0.15, +0.36] | +0.49 | −0.04 [−0.30, +0.12] |
-| 17–24 h | 92.7 | +0.02 [−0.27, +0.23] | −0.18 [−0.55, +0.11] | +0.26 | −0.50 [−0.97, −0.10] |
-| **All 1–24 h** | **100.6** | **+0.22 [+0.05, +0.34]** | **+0.15 [+0.01, +0.26]** | **+0.34** | −0.34 [−0.63, −0.11] |
+*Classical against deep.* Five architectures (MLP, GRU, LSTM, TCN, N-BEATS-lite) were trained as 5-seed ensembles, one network for all 24 horizons, from the last 48 hourly values relative to the latest one, predicting the log ratio to the latest value, with early stopping on the last 20% of training origins and no tuning on any test period. Primary split, all 1–24 h (persistence MAE 95.4; same hour yesterday 65.7):
 
-The relayed EPA forecast (1–8 h only) is +0.07 overall.
+| Model | MAE | Skill vs persistence | Skill vs same hour yesterday |
+|---|---:|---|---|
+| MLP | 59.3 | +0.38 [+0.29, +0.45] | +0.10 [−0.02, +0.20] |
+| N-BEATS-lite | 59.8 | +0.37 [+0.27, +0.46] | +0.09 [−0.04, +0.21] |
+| LSTM | 59.9 | +0.37 [+0.27, +0.46] | +0.09 [−0.01, +0.17] |
+| Blend of last value and yesterday (exploratory) | 60.2 | +0.37 [+0.27, +0.46] | +0.08 [+0.04, +0.13] |
+| TCN | 60.3 | +0.37 [+0.28, +0.44] | +0.08 [−0.03, +0.18] |
+| GRU | 62.4 | +0.35 [+0.22, +0.45] | +0.05 [−0.07, +0.16] |
+| LightGBM, regularised, relative target | 63.5 | +0.34 [+0.26, +0.39] | +0.03 [−0.09, +0.14] |
+| Ridge, one per band | 72.1 | +0.24 [+0.13, +0.33] | −0.10 [−0.33, +0.10] |
+| LightGBM, one per band (the 6 Nov model) | 80.7 | +0.15 [+0.06, +0.23] | −0.23 [−0.50, −0.01] |
+| CAMS relayed forecast | 131.2 | −0.37 [−0.56, −0.19] | −1.00 [−1.52, −0.54] |
 
-Skill against **the same hour yesterday** (seasonal naive), on the same rows:
+By horizon band on the same split: at **1–3 h** every model beats yesterday by 0.40 to 0.51 (MLP +0.51 [+0.39, +0.61]) and the learned models beat persistence by 0.17 to 0.25 (the blend by 0.09). At **4–8 h** the MLP, GRU, LSTM and N-BEATS-lite beat yesterday (+0.16 to +0.21, intervals above zero); the TCN, the blend and the boosted models do not. At **9–16 h** nothing beats yesterday with confidence (best, the blend, +0.04 [−0.01, +0.08]). At **17–24 h** the GRU is significantly worse than yesterday (−0.13 [−0.27, −0.00]) and the rest are level or worse. The relayed EPA forecast (1–8 h only) beats persistence on the rows it covers (+0.27 [+0.11, +0.42] on 2,047 rows). The relayed CAMS forecast is worse than every baseline in every setting.
 
-| Band | Yesterday MAE | LightGBM (per band) | Ridge (per band) | Blend (training-fitted) |
-|---|---:|---|---|---|
-| 1–3 h | 65.6 | **+0.49 [+0.25, +0.64]** | +0.43 [+0.16, +0.59] | +0.40 [+0.13, +0.56] |
-| 4–8 h | 65.8 | −0.01 [−0.41, +0.25] | −0.10 [−0.52, +0.15] | +0.05 [−0.10, +0.17] |
-| 9–16 h | 66.8 | −0.41 [−1.03, +0.03] | −0.28 [−0.81, +0.08] | +0.01 [−0.06, +0.08] |
-| 17–24 h | 68.2 | −0.61 [−1.54, −0.08] | −0.34 [−0.99, +0.04] | −0.00 [−0.06, +0.05] |
-| All 1–24 h | 66.9 | −0.27 [−0.80, +0.07] | −0.17 [−0.58, +0.12] | **+0.06 [−0.02, +0.13]** |
+*Robustness to the split date.* The same models were refitted with the split moved to 30 October (484 training and 447 test origins) and 5 November (628 and 303). The test sets overlap and the dates were chosen after seeing the first result, so this is a sensitivity check, not new evidence. Every learned model has a positive point estimate against yesterday on both later splits (+0.04 to +0.23 overall). On 5 November all intervals exclude zero; on 30 October the GRU, TCN, LSTM and the blend do. The best model changes with the split (GRU on 30 October, per-band LightGBM on 5 November, MLP on 27 October) and the intervals overlap.
 
-**The answer to RQ1, stated carefully.** The learned models beat persistence over 1–24 hours with intervals that exclude zero, and the relayed forecasts do not: CAMS is worse than persistence at every band. **But persistence is the weak baseline in a smog season with a strong daily cycle.** The same hour yesterday beats persistence by a third. Beyond three hours, no learned model beats it. The models win only at 1–3 hours, where they are about half as wrong as yesterday. The 2 November result already showed yesterday (+0.28) level with the best model (+0.26), and it should have been reported beside it. A one-weight-per-horizon blend of the last value and yesterday is the best overall (MAE 62.6). Its weights were fitted on training rows only, but it was added after seeing the result, so it is exploratory.
+**The answer to RQ1, stated carefully.** Learned hourly forecasters beat persistence over 1–24 hours in every setting tested, with intervals that exclude zero for the regularised and deep models, and the relayed CAMS forecast does not. Against the stronger baseline, the same hour yesterday, the result depends on how much of the current smog regime the training data contains: on the split fixed in advance the best models are level with it overall (+0.03 to +0.10, intervals including zero) and ahead of it at 1–8 h; with 70 to 220 more training origins they are ahead of it overall. **Deep and classical models are not distinguishable.** What changed the outcome was the training-data volume and the formulation (a relative target, all 24 horizons trained jointly), not the model family; a regularised LightGBM with the same relative target gets most of the deep models' gain. The earlier conclusion that no learned model beats yesterday beyond 3 h described 16 days of training data in a smog level that then rose, not the model families.
 
-Five qualifications, all of which belong beside the result:
+Qualifications that belong beside the result:
 
-- **Two baselines, not one.** Skill is reported against both from now on; the stronger, yesterday, is the bar from 4 h on.
-- **The per-band models and the blend are post hoc.** The single-model variants lose at 1–3 hours, so the per-band fit was added after seeing the data; the blend likewise.
-- **The test period is far heavier smog than training** (mean AQI 301 against 175; range up to 500 against 419), which is the likely reason the 17–24 h band goes negative.
-- **The archive is about four weeks long**, so every hourly result is a short-window result.
+- **The archive is 40 days, one city, one season** (October–November smog). Training is about 16 days of origins. Nothing here speaks to the rest of the year.
+- **Selection.** The regularised variants, the blend, the per-band fit and the later splits were all chosen after seeing a result. They are reported next to the fixed-split numbers, not instead of them.
+- **Run-to-run noise.** The networks are 5-seed ensembles. Figures are from the run on the project laptop on 17 November (`data/eval/forecast_models_v2_2026-11-17.json`). An earlier run of the same script in a different environment differed in the first decimal of some MAEs (for example TCN at 17–24 h, 69.1 against 69.7), and none of the conclusions changed; differences of that size are noise. Single-seed spread was not measured.
+- **The hourly networks use only the AQI history and the hour.** They do not see the CAMS or EPA forecasts. Removing those features did not change the boosted model, but this was not tested for the networks.
+- **Not tested:** transformers, time-series foundation models, multi-station models, quantile forecasts.
 - **Nothing beyond 24 hours exists in the archive** (CAMS 24 h, EPA 8 h), so days two to four cannot be scored, and the product scope stays at 48 hours.
 
 ## 6. Discussion
 
 Six points, each tied to a result above.
 
-**1. The larger model did not win, twice.** LightGBM matched or beat the LSTM and GRU on daily forecasting (5.4); `gpt-oss-120b` and `gpt-oss-20b` scored identically on the language benchmark (5.5). At this data size and task difficulty, capacity is not the binding constraint. This is consistent with Shwartz-Ziv and Armon (2022) on small tabular data, and it is worth stating once as a theme rather than twice as a surprise.
+**1. The larger model did not win, and neither did the deeper one.** Five neural architectures and two classical ones were compared on hourly and daily forecasting (5.4). On daily winter data the recurrent networks have the best point estimates (GRU +0.13 against persistence) but not distinguishably better than LightGBM (+0.06 [−0.00, +0.11]); on the hourly data the best model changes with the split and the intervals overlap. `gpt-oss-120b` and `gpt-oss-20b` also scored identically on the language benchmark (5.5). At this data size, capacity is not the binding constraint; the amount of regime-matched training data and the target formulation (a relative change, all horizons trained jointly) are. This is consistent with Grinsztajn et al. (2022) and Shwartz-Ziv and Armon (2022) on small tabular data, and with Zeng et al. (2023) on simple models against deep forecasters. It is worth stating once as a theme rather than twice as a surprise.
 
-**2. The baseline decides the verdict.** Against persistence the learned models show positive skill over 1–24 hours, and the relayed CAMS and EPA forecasts do not (5.4). Against "the same hour yesterday" the models win only at 1–3 hours. In a season with a strong daily cycle, the honest yardstick is the stronger simple baseline, not the conventional one. The caveats are load-bearing: post hoc band choice, a heavy-smog test period, and no skill at all demonstrated beyond 16 hours.
+**2. The baseline decides the verdict, and so does the training data.** Against persistence the learned models show positive skill over 1–24 hours and the relayed CAMS forecast does not (5.4). Against "the same hour yesterday" the verdict moves with the data: on the split fixed in advance the best models are level with it overall and ahead of it at 1–8 h; with 70 to 220 more training origins they are ahead overall. The 6 November model lost to yesterday beyond 3 h because 16 days of training had not seen the smog level the test period reached (5.9% of training rows against 54% of test rows above AQI 300 at 17 to 24 h), and because trees cannot predict beyond the range they saw. In a season with a strong daily cycle the honest yardstick is the stronger simple baseline, not the conventional one, and **in-sample or cross-validated error inside a short archive did not warn us of the regime shift** (cross-validated MAE 43 against test MAE 102). The caveats are load-bearing: variants chosen after seeing results, a 40-day single-season archive, and no skill demonstrated beyond 24 hours.
 
 **3. A global reanalysis is a trend instrument, not a measurement.** CAMS correlates with ground truth and even leads it by two to three hours, but sits about 48 µg/m³ low on PM2.5 and 179 low on PM10, and is blind to the within-city gradient (5.3). This is the empirical justification for the whole design choice of showing only measured station values on the map.
 
@@ -344,7 +363,7 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 | W4 | Small samples | Intervals on every figure; no claims inside the noise | Wilson and bootstrap intervals throughout Chapter 5 | **Met** |
 | W5 | No single correct camera | Score camera by level and direction category | v0 camera n = 5; classmate set n = 1 | **Partially met.** The rubric exists; the evidence base is too thin to report a camera accuracy |
 | W6 | LLM answers vary between runs | Temperature 0; repeated runs; report consistency | 100% consistency on both models, v0 | **Met for v0**; to be repeated on the test set |
-| W7 | Forecast may not beat the baseline | CAMS forecast as an input feature | 5.4: against persistence +0.15 to +0.22 over 1–24 h; against the same hour yesterday, wins only at 1–3 h | **Partly met.** Beats persistence; matches but does not beat the seasonal baseline beyond 3 h; post hoc; heavy-smog test period |
+| W7 | Forecast may not beat the baseline | CAMS forecast as an input feature; stronger baselines; deep and classical models compared | 5.4 (17 Nov): against persistence +0.34 to +0.38 for the regularised and deep models, and +0.15 to +0.24 for the per-band boosted and ridge models; against the same hour yesterday, level overall on the fixed split (+0.03 to +0.10) and ahead at 1–8 h, ahead overall on later splits | **Partly met.** Beats persistence over 1–24 h in every hourly setting (daily winter: not ridge); against yesterday the result depends on the training data and the interval often includes zero; chosen after seeing results; one city, 40 days |
 | W8 | Placement ignores pollution sources | Add roads and industrial land | 5.8 | **Reduced.** Still a heuristic, not a siting study |
 | W9 | Station readings may be inaccurate | Frame C4 as agreement; report uptime | 5.3 framed as agreement; coverage in 5.1 | **Handled.** US Consulate cross-check `[pending]` |
 | W10 | 3D columns distort height comparison | 2D ranked bar beside every 3D view | Chapter 4 | **Met** |
@@ -356,7 +375,7 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 
 ### Cross-cutting limitations
 
-- **The hourly archive is about four weeks old and roughly half populated.** Every hourly model is undertrained, and every hourly result is a short-window result.
+- **The hourly archive is about 40 days old and part populated.** Every hourly model is undertrained, every hourly result is a short-window result, and cross-validation inside a window this short could not warn of the regime shift that broke the 6 November model (5.4).
 - **One city in depth.** Lahore only; other cities are city-level comparison points.
 - **Laptop-dependent collection** means data is lost whenever one machine is off (3.2).
 - **Single-machine timings.** All performance figures come from one laptop; they do not generalise to other hardware.
@@ -382,7 +401,7 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 
 ## 9. Conclusion and future work
 
-**RQ1 — can a learned forecaster beat persistence, CAMS and the EPA forecast?** It beats persistence and both relayed forecasts. It does not beat "the same hour yesterday" beyond three hours, and that is the stronger baseline in smog season. The relayed CAMS forecast is worse than persistence at every horizon. The qualifications in 5.4 — post hoc band selection, a heavy-smog test period, a four-week archive — are part of the answer, not footnotes to it.
+**RQ1 — can a learned forecaster beat persistence, CAMS and the EPA forecast?** It beats persistence over 1–24 h in every hourly setting tested (skill +0.34 to +0.38 for the regularised and deep models) and on daily winter data for the recurrent, convolutional and boosted models (+0.07 to +0.13; ridge does not), and it beats the relayed CAMS forecast, which is worse than persistence and than yesterday everywhere. Against the relayed EPA forecast (1–8 h, which on the rows it covers beats persistence by +0.27 [+0.11, +0.42]) the learned models are ahead at 1–3 h and similar at 4–8 h; a direct paired test was not run. Against "the same hour yesterday", the stronger baseline in smog season, the models are level overall on the split fixed in advance (+0.03 to +0.10, intervals including zero) and ahead at 1–8 h, and ahead overall with more training data. **Deep and classical models are not distinguishable;** what mattered was training-data volume and the target formulation. The qualifications in 5.4 — selection after seeing results, a 40-day single-season archive, no seed-spread measurement — are part of the answer, not footnotes to it.
 
 **RQ2 — how well does CAMS match ground stations?** Well in trend (r 0.68), poorly in level (PM2.5 bias −57.7 [−73.2, −44.0], PM10 −191.7, both growing with the season), and not at all in within-city structure (per-station PM2.5 MAD 27.8 to 102.5), on 313 hours. This is the first such quantification published for Lahore.
 
@@ -408,7 +427,11 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 | AQI harmonisation | `scripts/w1_check.py`; `docs/research/w1-harmonisation.md` |
 | CAMS validation | `scripts/cams_validation.py`; `docs/research/cams-validation.md` |
 | Daily and hourly models | `scripts/model_a_*.py`, `scripts/model_bc.py` |
-| Hourly 1–24 h forecaster | `data/eval/forecast_fit_2026-11-06.json`, `forecast_baseline_check_2026-11-06.json` (2 Nov run superseded) |
+| Hourly 1–24 h forecaster | `data/eval/forecast_fit_2026-11-17.json`, `forecast_baseline_check_2026-11-17.json` (6 Nov and 2 Nov runs superseded) |
+| Why the hourly model overfit | `data/eval/forecast_diagnose_2026-11-17.json`; `scripts/forecast_diagnose.py` |
+| Classical against deep, hourly | `data/eval/forecast_models_v2_2026-11-17.json` and `_split-2026-10-30`, `_split-2026-11-05`; `scripts/forecast_models_v2.py` |
+| Daily Model A v2 | `data/eval/model_a_v2_2026-11-17.json`; `scripts/model_a_v2.py` |
+| Forecast memo | `docs/research/forecast-models-v2-2026-11-17.md` (figure in `docs/research/figures/`) |
 | AQI table change, W1 re-score | `data/eval/w1_rescore_2026-11-06.json`; `docs/research/w1-portal-table-change-2026-11-06.md` |
 | Archive merge loss and restore | `scripts/recover_archive_rows.py`; `docs/research/archive-merge-loss-2026-11-06.md` |
 | Language layer v0 | `data/eval/e1_*_2026-10-30.json`; `docs/research/benchmark-v0-prompt-v4-2026-10-30.md` |
