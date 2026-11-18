@@ -2,6 +2,11 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 18 November 2026 (noon): Part A grows to 54 questions
+- **Contributor F (Tehreem Fatima)** returned a sheet of 20 slots with 14 filled and 6 blank. Added verbatim (whitespace collapsed only) as d041 to d054 in `airlume/eval/benchmark/classmate-raw-2026-11-17.jsonl`. Three are Roman Urdu (d042, d046, d048), eleven English.
+- **Four are cut off mid-sentence** (d041 "What is air quality right now around", d045 "What should i do if AQI is", d047 "Do i", d051 "How we can safe"). Kept as received: users do send incomplete messages; the labellers decide the gold (expected: clarify). No question was repeated from the earlier sets.
+- **Consequence for labelling:** Tehreem is now an author of d041 to d054, so she cannot label those; she did not write d001 to d040 and can still label Kiran's d001 to d020. Part A is now 54 of the 60 to 100 target; still unlabelled and unscored. Prompt v5, the schema and the router stay frozen.
+
 ## 18 November 2026 (late morning): abstract drafted
 - **Abstract (about 200 words)** written into the report front matter from numbers already in 5.1 to 5.5, each with its interval. It states plainly that the fresh-question test (Part A), the user study and the placement analysis are not complete, with an `[update before submission]` flag.
 - **Open:** rewrite the last sentence when Part A, E4 and 5.8 land.

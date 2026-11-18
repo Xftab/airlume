@@ -4,6 +4,8 @@ _Last updated: 18 November 2026_
 
 ## Where we are
 
+**18 Nov, noon - Part A at 54 questions.** Tehreem's sheet added as d041 to d054 (14 filled of 20, four cut off mid-sentence; three Roman Urdu). Still unlabelled and unscored. She cannot label her own; she can still label Kiran's d001 to d020.
+
 **18 Nov, late morning - abstract drafted** (front matter of the report; update the last sentence when Part A, the user study and 5.8 land).
 
 **18 Nov, midday - literature search on the CAMS "first" claim.** Result: not first. Bilal et al. validated CAMS against ground monitors across nine Pakistani cities including Lahore (pooled statistics only). Report 1.4 C4 and Chapter 9 RQ2 reworded, with a note stating the search limits. To do: verify the Bilal et al. citation.
