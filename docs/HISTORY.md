@@ -2,6 +2,12 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 18 November 2026 (morning): plan.md and the plan PDF brought up to date
+- **plan.md** (the project rule: every change is recorded here): added the Part A first look and protocol to 3.2 (numbers as in the Part A memos, flagged as unscored), the two answer-layer fixes of 17 Nov to 3.6, the report state to 7.1, a schedule-status paragraph after the sprint table, and 17 Nov notes on the W2, W7 and W12 rows. The 17 Nov UI, Part B and forecast entries were already there. Nothing cut.
+- **Schedule honesty:** the sprint's "Benchmark v1 frozen, one scored run" for week 3 is half done (Part B yes, Part A no); it moves into week 4 and depends on people labelling questions. Fallback if Part A cannot be completed is written into the plan.
+- **PDF** rebuilt from plan.md with the project's own pandoc settings (44 pages, page layout checked by eye). The glyphs for subscript 2 and 3 are missing from the body font and print blank; the same text was in the earlier PDF.
+- **Project file** `03-status-and-next.md` rewritten to the 18 Nov state, with the typo fixed.
+
 ## 17 November 2026 (night, last of all): report language chapters written
 - **Found:** the report referred to sections 5.5 to 5.8 but only 5.1 to 5.4 existed. 5.5 and 5.6 are now written; 5.7 and 5.8 are marked pending, not filled with estimates.
 - **5.5** carries the Part B result from the scorecards (25/30 = 83.3% [66.4, 92.7]; stub 9/30; Newcombe +53.3 [+28.7, +69.6], unpaired; English 17/19, Roman Urdu 8/11, gap not distinguishable), the five failures (four comparisons, three Roman Urdu, one the frozen form cannot express), the Part A first look with its failure classes, and the protocol (v5 and schema frozen; Part A cannot evaluate a v6). The Part A figure of 18/40 (45%) is labelled as one unblinded reading and indicative only.

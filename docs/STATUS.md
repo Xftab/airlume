@@ -1,8 +1,10 @@
 # Status
 
-_Last updated: 17 November 2026_
+_Last updated: 18 November 2026_
 
 ## Where we are
+
+**18 Nov, morning - plan.md brought up to date and the plan PDF rebuilt.** New entries: Part A first look and protocol (3.2), the two answer-layer fixes (3.6), report state (7.1), schedule status for 18 Nov (timeline; nothing cut; Part A labelling is the one item that slipped), and the W2, W7 and W12 rows. PDF `docs/pdf/Airlume_Complete_Project_Plan.pdf` rebuilt (44 pages). Project file `03-status-and-next.md` refreshed. Known cosmetic issue: the subscript characters in the text (₂, ₃) are missing from the PDF font and print blank; this was already the case. Run `save` to push.
 
 **17 Nov, night - report language chapters written.** Report sections 5.5 (language layer: four question sets, development results, what users ask, Part B 25/30 = 83.3% [66.4, 92.7] against stub 9/30, Part A first look with failure classes and the protocol) and 5.6 (response time and parallel extraction) added; they had been cross-referenced but never drafted. 5.7 (user study) and 5.8 (placement) are placeholders. Also updated: 3.5 status, W2 (Partly met), W12, the RQ3 conclusion, Discussion 4 (34% out of scope, 21 of 62). Still to do: Chapter 1 and the abstract; Part A labels and score; 5.7 and 5.8. Run `save` to push.
 
