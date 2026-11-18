@@ -2,6 +2,12 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 18 November 2026 (midday): literature search on the "first CAMS validation for Lahore" claim
+- **Searched** four queries (CAMS or reanalysis PM2.5 against ground monitors in Lahore, Pakistan, the Indo-Gangetic Plain, and Open-Meteo accuracy) and read five pages.
+- **Found:** Bilal et al. (80 Pakistani cities, 2003 to 2020) validate CAMS and MERRA-2 PM2.5 against US Consulate BAM and PAQI low-cost monitors in nine cities, including 24 Lahore low-cost stations, but report pooled Pakistan-wide statistics only (CAMS 0.75 degree about 30% high against BAM, 55 to 57% high against low-cost monitors, monthly r 0.72 to 0.76). Shahbaz et al. (EGU 2026), Agarwal et al. (ACP 2024) and Kushwaha and Gopalan (arXiv 2511.11185) do not validate CAMS against Lahore monitors. One ResearchGate figure could not be opened.
+- **Decision:** the word "first" is dropped. Report 1.4 C4 and Chapter 9 RQ2 now say prior pooled work exists and that our contribution is Lahore-specific, per-station, hourly and tied to forecast skill. A new note under the 1.4 table states the limit of the search (not exhaustive). The sign difference (Bilal: CAMS high; ours: CAMS low in the 313 h smog window) is stated and not reconciled.
+- **Open:** verify the full Bilal et al. citation (journal, year, pages) before submission; the preprint was read, not the published version.
+
 ## 18 November 2026 (morning): Chapter 1 revised against the results
 - **Error found and corrected:** 1.1 said Gulberg III and Multan Road "differ by roughly 95 µg/m³ of PM2.5 on average (Chapter 5.3)". The 95 was a CAMS error (mean absolute deviation, 29 Oct run), not a difference between stations. Replaced with what 5.3 supports: against one CAMS value, bias +7.1 at Gulberg III and -101.2 at Multan Road on 313 hours.
 - **1.4:** the sentence "trains no model from scratch" was no longer true (five networks were trained for 5.4); it now says they are standard architectures used for comparison, not a contribution. The contributions table gained an evidence-status column that says plainly what is met, partly met, weak (C2: camera has n = 2) or not yet written (C7). "First CAMS validation for Lahore" is not claimed until a literature search confirms it.

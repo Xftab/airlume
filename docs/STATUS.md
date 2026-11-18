@@ -4,6 +4,8 @@ _Last updated: 18 November 2026_
 
 ## Where we are
 
+**18 Nov, midday - literature search on the CAMS "first" claim.** Result: not first. Bilal et al. validated CAMS against ground monitors across nine Pakistani cities including Lahore (pooled statistics only). Report 1.4 C4 and Chapter 9 RQ2 reworded, with a note stating the search limits. To do: verify the Bilal et al. citation.
+
 **18 Nov, morning - report Chapter 1 revised.** 1.1 corrected (a CAMS error figure had been described as a difference between two stations) and given the forecast-scoring evidence; 1.2 forecast scope; 1.4 contributions now carry an evidence-status column (C1 partly, C2 weak, C3 partly, C4 met, C5 built, C6 partly, C7 not yet written); new 1.5 findings in brief and 1.6 chapter map; two Chapter 9 statements made more careful ("first quantification" now needs a literature search; future work no longer calls multi-turn a measured weak point). Still to do: the abstract (last), 5.7, 5.8, Part A score, real-data screenshots. Run `save` to push.
 
 **18 Nov, morning - plan.md brought up to date and the plan PDF rebuilt.** New entries: Part A first look and protocol (3.2), the two answer-layer fixes (3.6), report state (7.1), schedule status for 18 Nov (timeline; nothing cut; Part A labelling is the one item that slipped), and the W2, W7 and W12 rows. PDF `docs/pdf/Airlume_Complete_Project_Plan.pdf` rebuilt (44 pages). Project file `03-status-and-next.md` refreshed. Known cosmetic issue: the subscript characters in the text (₂, ₃) are missing from the PDF font and print blank; this was already the case. Run `save` to push.
