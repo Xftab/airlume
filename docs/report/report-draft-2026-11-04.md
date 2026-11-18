@@ -6,6 +6,8 @@
 
 **Revised 17 November 2026** with the forecast work of 17 Nov (`docs/research/forecast-models-v2-2026-11-17.md`): the hourly re-run on 519 test origins, the diagnosis of the 6 Nov overfit, five deep models against classical ones, and the corrected daily Model A with winter in the test (3.6, 5.4, 6, 7 W7, 9 RQ1, ledger). Sections 5.5 and 5.6 were written on 17 November (they had been referred to but never drafted): the language layer with the Part B score and the Part A first look, and performance. 5.7 and 5.8 are placeholders.
 
+**Section 5.8 (station placement) written 18 November 2026** from a re-run of the placement analysis; the abstract has a first draft.
+
 **Revised 18 November 2026:** Chapter 1 brought in line with the results (1.1 problem 2 and 3, 1.2 forecast scope, 1.4 contributions with an evidence-status column, a new 1.5 findings in brief, 1.6 chapter map) and two statements in Chapter 9 made more careful. One factual slip in 1.1 was corrected: it had described a CAMS error figure as a difference between two stations.
 
 Three chapters are substantially complete (3 Materials and Methods, 5 Results, 7 Weaknesses). Chapters 1, 2, 4, 6, 8 and 9 are drafted to the point the evidence allows. The abstract has a first draft (18 Nov) and is updated last.
@@ -20,7 +22,7 @@ Three chapters are substantially complete (3 Materials and Methods, 5 Results, 7
 
 **Statement of contributions.** `[Fill factually with the team before submission.]` The dated record in `docs/HISTORY.md` shows the implementation, data pipeline, modelling and evaluation work concentrated in one member. The benchmark annotation is owned by Kiran Saif and Tehreem Fatima (Chapter 3.5), which is both a methodological requirement and a documented contribution. State this plainly rather than distributing credit evenly by default; an examiner can read the commit history.
 
-**Abstract.** Air-quality data for Pakistani cities is scattered, hard to compare and hard to question in plain language. Airlume is a conversational 3D digital twin of air quality for Lahore's monitoring stations and Pakistan's monitored cities. A person asks in English or Roman Urdu; a language model fills a typed form, never SQL or code; code validates the form, queries the data and writes the answer from the numbers. Over an hourly archive of about 40 days (one season), 53.4% of Lahore's station-hours are present, and the portal's AQI table is reproduced exactly for 99.1% of 3,293 station-hours (MAE 0.16 [0.05, 0.31]). On 313 hours, the CAMS model follows the trend (r 0.68) but under-reads the level (PM2.5 bias −57.7 [−73.2, −44.0] µg/m³) and cannot see structure within the city. Learned 1 to 24 hour forecasters beat persistence in every hourly setting (+0.34 to +0.38 skill) but are level with the same hour yesterday on the split fixed in advance, and deep and classical models are indistinguishable. On 30 constructed questions the language layer is correct on 25 (83.3% [66.4, 92.7]), against 9 for a rule-based router; a fresh-question test, a user study and a station-placement analysis are not yet complete `[update before submission]`.
+**Abstract.** Air-quality data for Pakistani cities is scattered, hard to compare and hard to question in plain language. Airlume is a conversational 3D digital twin of air quality for Lahore's monitoring stations and Pakistan's monitored cities. A person asks in English or Roman Urdu; a language model fills a typed form, never SQL or code; code validates the form, queries the data and writes the answer from the numbers. Over an hourly archive of about 40 days (one season), 53.4% of Lahore's station-hours are present, and the portal's AQI table is reproduced exactly for 99.1% of 3,293 station-hours (MAE 0.16 [0.05, 0.31]). On 313 hours, the CAMS model follows the trend (r 0.68) but under-reads the level (PM2.5 bias −57.7 [−73.2, −44.0] µg/m³) and cannot see structure within the city. Learned 1 to 24 hour forecasters beat persistence in every hourly setting (+0.34 to +0.38 skill) but are level with the same hour yesterday on the split fixed in advance, and deep and classical models are indistinguishable. On 30 constructed questions the language layer is correct on 25 (83.3% [66.4, 92.7]), against 9 for a rule-based router; a fresh-question test and a user study are not yet complete `[update before submission]`.
 
 ---
 
@@ -69,7 +71,7 @@ From `plan.md` Part A. The project claims no new machine-learning architecture. 
 | C4 | A quantified CAMS-versus-ground validation for Lahore | Released statistics (5.3) | **Met** on 313 hours: PM2.5 bias −57.7 [−73.2, −44.0], r 0.68. "First" is **not** claimed: a literature search (18 Nov 2026) found a Pakistan-wide CAMS validation that includes Lahore stations (Bilal et al., pooled statistics only). What is new here is Lahore-specific, per-station, hourly and season-resolved, and tied to forecast skill `[search was limited, see 1.4 note]` |
 | C5 | An automatic forecast scorecard | Generated from logs (5.4) | **Built.** The app's Next 24 hours tab scores the published forecasts against baselines; the intervals in 5.4 come from the evaluation scripts. Not public until deployment |
 | C6 | A released benchmark of questions with human-adjudicated labels | Public repository (3.5) | **Partly.** Part B (30 questions, gold frozen, hash `92771b9a7a`) exists; Part A (40 so far) has no labels yet; the questions are single-turn. Release depends on the repository being public `[confirm]` |
-| C7 | A station-placement recommendation for Lahore's network | Coverage gained per proposed site (5.8) | **Not yet written** in this draft |
+| C7 | A station-placement recommendation for Lahore's network | Coverage gained per proposed site (5.8) | **Met as a heuristic** (5.8): five population-ranked sites would bring 3.15 million people within 5 km (33.0% to 10.7% beyond); not a siting plan `[confirm 1 km cell positions on the map before quoting coordinates]` |
 
 **Note on C4 (literature search, 18 Nov 2026).** Four searches (CAMS or reanalysis PM2.5 with ground monitors, Lahore, Pakistan, Indo-Gangetic Plain, Open-Meteo) and five pages read. The closest prior work is Bilal et al. (80 Pakistani cities, 2003 to 2020), which validates CAMS and MERRA-2 PM2.5 against US Consulate BAM and PAQI low-cost monitors in nine cities including 24 Lahore low-cost stations, but reports pooled Pakistan-wide statistics only. The other hits (Shahbaz et al., EGU 2026, BAM versus low-cost sensors in Lahore; Agarwal et al., ACP 2024, WRF-Chem over northern India; Kushwaha and Gopalan, arXiv 2511.11185, CAMS-trained nowcasting) do not validate CAMS against Lahore monitors. A search of four queries is not exhaustive, so the claim is "no Lahore-specific per-station hourly CAMS validation found", not "none exists" `[verify full citation of Bilal et al. before submission]`.
 
@@ -87,7 +89,8 @@ Each line states the result with its interval and its main limit; the chapter th
 - **RQ3 (5.5).** On a constructed set covering every form field, the language layer is correct on 25 of 30 questions (83.3% [66.4, 92.7]) against 9 of 30 for a rule-based router. On fresh classmate questions the first look suggests it is clearly harder, because users ask for comparisons and windows the form cannot express; that score is pending and no claim is made.
 - **RQ4 (3.7, 9).** A transparent, confidence-flagged priority score; no effect prediction.
 - **Performance (5.6).** The model call takes a median 1.13 s [1.03, 1.26]; the rest of the pipeline about 20 ms. Parallel extraction speeds parsing up about 4 times at 12 workers, though the real back-fill is download-bound.
-- **Not yet measured:** the naturalistic language score (Part A), the user study (E4), map frame rate, and the station-placement result.
+- **Placement (5.8).** 4.67 million people (33.0%) live more than 5 km from a monitor. Five population-ranked sites would bring 3.15 million of them inside 5 km (to 10.7% beyond); adding proximity to roads and industry brings 2.35 million. A coverage heuristic, with no uncertainty from the population raster stated.
+- **Not yet measured:** the naturalistic language score (Part A), the user study (E4) and map frame rate.
 
 Several of the report's results are negative or conditional: a forecast that does not beat yesterday on the data it started with, a global model that cannot see the city's structure, and a benchmark that looked good until its labels were examined (7, W2).
 
@@ -424,7 +427,26 @@ Every design returned results identical to the sequential run (row count and a h
 
 ### 5.8 Station placement (C7)
 
-`[PENDING in this draft. To be written from the placement analysis; it is a coverage heuristic, not a siting study (W8).]`
+`Re-run 18 Nov 2026 from the committed registry and WorldPop and OpenStreetMap layers; it reproduces the 15 Oct figures exactly. Memo: docs/research/placement-2026-11-18.md.`
+
+**What was computed.** Lahore has 11 EPA stations. For every populated 1 km WorldPop 2025 cell (2,817 cells, 14.16 million people) the distance to the nearest station was computed (great circle). Today 4.67 million people (33.0%) live more than 5 km from a monitor, 68.3% are more than 3 km away, and the population-weighted mean distance is 4.31 km. Measured by area over the built-up disc the figures are worse (44.2% beyond 5 km, mean 4.93 km), because the stations sit in the dense centre; the two are reported separately and the report never says "coverage" without saying which. These are geometric facts about the registry; they have no sampling interval.
+
+**Greedy ranked sites.** Candidates are populated cells outside OpenStreetMap exclusions (seven airport, two military, one water cell). Each round adds the site that brings the most people inside 5 km, then recomputes.
+
+| Variant | Beyond 5 km after five sites | People brought within 5 km | Beyond 3 km after | Mean distance |
+|---|---|---|---|---|
+| Today (11 stations) | 33.0% (4.67 M) | none | 68.3% | 4.31 km |
+| Area-ranked sites (the app's first version) | 20.8% (2.95 M) | 1.72 M | 62.6% | 3.78 km |
+| **Population-ranked** | **10.7% (1.52 M)** | **3.15 M** | 56.0% | 3.41 km |
+| Population and source proximity (weight 0.3) | 16.4% (2.33 M) | 2.35 M | 55.9% | 3.48 km |
+
+The population-ranked gains by rank are 1.10 M, 0.68 M, 0.57 M, 0.52 M and 0.28 M people, so the curve falls steeply: the first two sites bring 57% of the five-site gain. Ranking by area covers 1.43 M fewer people than ranking by population; the choice of what to count matters more than the count of stations. At the 3 km threshold the same method leaves 43.2% of people beyond 3 km after five sites.
+
+**Population against sources.** Blending in proximity to major roads and industrial land at weight 0.3 costs about 0.8 million people of coverage (3.15 M to 2.35 M) and puts all five proposed monitors within 200 m of a major road. No combined site lies within 2 km of a population-ranked site (the nearest are 2.0 to 13.6 km away), so the two rankings are different recommendations, not variants of one. Which is right depends on whether the network is meant to measure exposure or emissions; both are reported and neither is chosen (W8).
+
+**Comparison with Rahman et al. (2022).** Their nine recommended sites are source-led (commercial hubs, industry, traffic, drainage) and are published as markers on a map, without coordinates; a numeric overlap would be accurate to no better than 1 to 2 km and is not claimed. Their criteria are closer to our combined variant than to the population-ranked one `[ask the authors for coordinates if time allows]`.
+
+**What this does not show.** Distance to a station is a proxy for how well a place is measured, not a measure of it: pollution gradients within Lahore (for example the per-station PM2.5 spread of 27.8 to 102.5 in 5.3) mean a station 3 km away may or may not represent a neighbourhood. WorldPop is a modelled raster and its error is not quantified here. The exclusion layer under-catches the Ravi river, so a proposed site near it needs checking by eye. The ranking ignores official siting rules (Punjab follows US EPA criteria), land access and cost, and its candidates are 1 km cells, so coordinates are good to about 1 km. The output is "recommended for consideration", never a siting plan.
 
 ## 6. Discussion
 
@@ -457,7 +479,7 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 | W5 | No single correct camera | Score camera by level and direction category | v0 camera n = 5; classmate set n = 1 | **Partially met.** The rubric exists; the evidence base is too thin to report a camera accuracy |
 | W6 | LLM answers vary between runs | Temperature 0; repeated runs; report consistency | 100% consistency on both models, v0 | **Met for v0**; to be repeated on the test set |
 | W7 | Forecast may not beat the baseline | CAMS forecast as an input feature; stronger baselines; deep and classical models compared | 5.4 (17 Nov): against persistence +0.34 to +0.38 for the regularised and deep models, and +0.15 to +0.24 for the per-band boosted and ridge models; against the same hour yesterday, level overall on the fixed split (+0.03 to +0.10) and ahead at 1–8 h, ahead overall on later splits | **Partly met.** Beats persistence over 1–24 h in every hourly setting (daily winter: not ridge); against yesterday the result depends on the training data and the interval often includes zero; chosen after seeing results; one city, 40 days |
-| W8 | Placement ignores pollution sources | Add roads and industrial land | 5.8 | **Reduced.** Still a heuristic, not a siting study |
+| W8 | Placement ignores pollution sources | Add roads and industrial land | 5.8 | **Reduced.** Both variants reported (3.15 M against 2.35 M people); still a heuristic, not a siting study |
 | W9 | Station readings may be inaccurate | Frame C4 as agreement; report uptime | 5.3 framed as agreement; coverage in 5.1 | **Handled.** US Consulate cross-check `[pending]` |
 | W10 | 3D columns distort height comparison | 2D ranked bar beside every 3D view | Chapter 4 | **Met** |
 | W11 | A website may not reach the public | Name real target users | E4 not started | **Not met.** Public demand is not measured and the report should not claim it is |

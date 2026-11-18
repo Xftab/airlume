@@ -2,6 +2,12 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 18 November 2026 (afternoon): report 5.8 station placement written
+- **Re-ran** the placement analysis from the committed registry, WorldPop and OpenStreetMap files; it reproduces the 15 Oct figures (4.67 million people, 33.0%, beyond 5 km; five population-ranked sites bring 3.15 million inside 5 km, leaving 10.7%; with source proximity 2.35 million, leaving 16.4%). Memo `docs/research/placement-2026-11-18.md`.
+- **New in the memo:** area-ranked sites cover 1.72 million (1.43 million fewer than population-ranked); the first two sites give 57% of the five-site gain; the combined and population-ranked sites are 2.0 to 13.6 km apart; a 3 km threshold gives different sites (43.2% left beyond 3 km).
+- **Report:** 5.8 written with its limits (distance proxy, modelled population, no interval, river under-caught); C7 marked "met as a heuristic"; 1.5 and the abstract updated; W8 row updated. No code changed; 276 tests unaffected.
+- **Open:** ask Rahman et al. for site coordinates (numeric overlap); check proposed cells on the map before quoting coordinates.
+
 ## 18 November 2026 (noon): Part A grows to 54 questions
 - **Contributor F (Tehreem Fatima)** returned a sheet of 20 slots with 14 filled and 6 blank. Added verbatim (whitespace collapsed only) as d041 to d054 in `airlume/eval/benchmark/classmate-raw-2026-11-17.jsonl`. Three are Roman Urdu (d042, d046, d048), eleven English.
 - **Four are cut off mid-sentence** (d041 "What is air quality right now around", d045 "What should i do if AQI is", d047 "Do i", d051 "How we can safe"). Kept as received: users do send incomplete messages; the labellers decide the gold (expected: clarify). No question was repeated from the earlier sets.

@@ -4,6 +4,8 @@ _Last updated: 18 November 2026_
 
 ## Where we are
 
+**18 Nov, afternoon - report 5.8 (station placement) written** from a re-run that reproduces the 15 Oct figures; memo `docs/research/placement-2026-11-18.md`. Remaining pending report sections: 5.7 (user study, not run).
+
 **18 Nov, noon - Part A at 54 questions.** Tehreem's sheet added as d041 to d054 (14 filled of 20, four cut off mid-sentence; three Roman Urdu). Still unlabelled and unscored. She cannot label her own; she can still label Kiran's d001 to d020.
 
 **18 Nov, late morning - abstract drafted** (front matter of the report; update the last sentence when Part A, the user study and 5.8 land).
