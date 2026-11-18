@@ -8,7 +8,7 @@
 
 **Revised 18 November 2026:** Chapter 1 brought in line with the results (1.1 problem 2 and 3, 1.2 forecast scope, 1.4 contributions with an evidence-status column, a new 1.5 findings in brief, 1.6 chapter map) and two statements in Chapter 9 made more careful. One factual slip in 1.1 was corrected: it had described a CAMS error figure as a difference between two stations.
 
-Three chapters are substantially complete (3 Materials and Methods, 5 Results, 7 Weaknesses). Chapters 1, 2, 4, 6, 8 and 9 are drafted to the point the evidence allows. The abstract is written last, by rule.
+Three chapters are substantially complete (3 Materials and Methods, 5 Results, 7 Weaknesses). Chapters 1, 2, 4, 6, 8 and 9 are drafted to the point the evidence allows. The abstract has a first draft (18 Nov) and is updated last.
 
 ---
 
@@ -20,7 +20,7 @@ Three chapters are substantially complete (3 Materials and Methods, 5 Results, 7
 
 **Statement of contributions.** `[Fill factually with the team before submission.]` The dated record in `docs/HISTORY.md` shows the implementation, data pipeline, modelling and evaluation work concentrated in one member. The benchmark annotation is owned by Kiran Saif and Tehreem Fatima (Chapter 3.5), which is both a methodological requirement and a documented contribution. State this plainly rather than distributing credit evenly by default; an examiner can read the commit history.
 
-**Abstract.** `[Write last. 200 words, one sentence per headline result: coverage, AQI harmonisation, CAMS validation, forecast skill, language-layer accuracy, user study.]`
+**Abstract.** Air-quality data for Pakistani cities is scattered, hard to compare and hard to question in plain language. Airlume is a conversational 3D digital twin of air quality for Lahore's monitoring stations and Pakistan's monitored cities. A person asks in English or Roman Urdu; a language model fills a typed form, never SQL or code; code validates the form, queries the data and writes the answer from the numbers. Over an hourly archive of about 40 days (one season), 53.4% of Lahore's station-hours are present, and the portal's AQI table is reproduced exactly for 99.1% of 3,293 station-hours (MAE 0.16 [0.05, 0.31]). On 313 hours, the CAMS model follows the trend (r 0.68) but under-reads the level (PM2.5 bias −57.7 [−73.2, −44.0] µg/m³) and cannot see structure within the city. Learned 1 to 24 hour forecasters beat persistence in every hourly setting (+0.34 to +0.38 skill) but are level with the same hour yesterday on the split fixed in advance, and deep and classical models are indistinguishable. On 30 constructed questions the language layer is correct on 25 (83.3% [66.4, 92.7]), against 9 for a rule-based router; a fresh-question test, a user study and a station-placement analysis are not yet complete `[update before submission]`.
 
 ---
 

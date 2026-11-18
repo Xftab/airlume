@@ -2,6 +2,10 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 18 November 2026 (late morning): abstract drafted
+- **Abstract (about 200 words)** written into the report front matter from numbers already in 5.1 to 5.5, each with its interval. It states plainly that the fresh-question test (Part A), the user study and the placement analysis are not complete, with an `[update before submission]` flag.
+- **Open:** rewrite the last sentence when Part A, E4 and 5.8 land.
+
 ## 18 November 2026 (midday): literature search on the "first CAMS validation for Lahore" claim
 - **Searched** four queries (CAMS or reanalysis PM2.5 against ground monitors in Lahore, Pakistan, the Indo-Gangetic Plain, and Open-Meteo accuracy) and read five pages.
 - **Found:** Bilal et al. (80 Pakistani cities, 2003 to 2020) validate CAMS and MERRA-2 PM2.5 against US Consulate BAM and PAQI low-cost monitors in nine cities, including 24 Lahore low-cost stations, but report pooled Pakistan-wide statistics only (CAMS 0.75 degree about 30% high against BAM, 55 to 57% high against low-cost monitors, monthly r 0.72 to 0.76). Shahbaz et al. (EGU 2026), Agarwal et al. (ACP 2024) and Kushwaha and Gopalan (arXiv 2511.11185) do not validate CAMS against Lahore monitors. One ResearchGate figure could not be opened.

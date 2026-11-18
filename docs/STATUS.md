@@ -4,6 +4,8 @@ _Last updated: 18 November 2026_
 
 ## Where we are
 
+**18 Nov, late morning - abstract drafted** (front matter of the report; update the last sentence when Part A, the user study and 5.8 land).
+
 **18 Nov, midday - literature search on the CAMS "first" claim.** Result: not first. Bilal et al. validated CAMS against ground monitors across nine Pakistani cities including Lahore (pooled statistics only). Report 1.4 C4 and Chapter 9 RQ2 reworded, with a note stating the search limits. To do: verify the Bilal et al. citation.
 
 **18 Nov, morning - report Chapter 1 revised.** 1.1 corrected (a CAMS error figure had been described as a difference between two stations) and given the forecast-scoring evidence; 1.2 forecast scope; 1.4 contributions now carry an evidence-status column (C1 partly, C2 weak, C3 partly, C4 met, C5 built, C6 partly, C7 not yet written); new 1.5 findings in brief and 1.6 chapter map; two Chapter 9 statements made more careful ("first quantification" now needs a literature search; future work no longer calls multi-turn a measured weak point). Still to do: the abstract (last), 5.7, 5.8, Part A score, real-data screenshots. Run `save` to push.
