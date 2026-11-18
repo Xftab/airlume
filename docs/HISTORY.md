@@ -2,6 +2,13 @@
 
 Newest first. Each entry records what was decided and why.
 
+## 18 November 2026 (morning): Chapter 1 revised against the results
+- **Error found and corrected:** 1.1 said Gulberg III and Multan Road "differ by roughly 95 µg/m³ of PM2.5 on average (Chapter 5.3)". The 95 was a CAMS error (mean absolute deviation, 29 Oct run), not a difference between stations. Replaced with what 5.3 supports: against one CAMS value, bias +7.1 at Gulberg III and -101.2 at Multan Road on 313 hours.
+- **1.4:** the sentence "trains no model from scratch" was no longer true (five networks were trained for 5.4); it now says they are standard architectures used for comparison, not a contribution. The contributions table gained an evidence-status column that says plainly what is met, partly met, weak (C2: camera has n = 2) or not yet written (C7). "First CAMS validation for Lahore" is not claimed until a literature search confirms it.
+- **New 1.5 (findings in brief) and 1.6 (chapter map)**, every number copied from 5.1 to 5.6 with its interval and main limit.
+- **Chapter 9:** "first such quantification" qualified; future work no longer calls multi-turn handling "the measured weak point" (neither Part A nor Part B tests multi-turn); it now names the gaps the Part A first look found.
+- **Open:** the abstract is still last; 5.7 and 5.8 placeholders; the Part A score.
+
 ## 18 November 2026 (morning): plan.md and the plan PDF brought up to date
 - **plan.md** (the project rule: every change is recorded here): added the Part A first look and protocol to 3.2 (numbers as in the Part A memos, flagged as unscored), the two answer-layer fixes of 17 Nov to 3.6, the report state to 7.1, a schedule-status paragraph after the sprint table, and 17 Nov notes on the W2, W7 and W12 rows. The 17 Nov UI, Part B and forecast entries were already there. Nothing cut.
 - **Schedule honesty:** the sprint's "Benchmark v1 frozen, one scored run" for week 3 is half done (Part B yes, Part A no); it moves into week 4 and depends on people labelling questions. Fallback if Part A cannot be completed is written into the plan.

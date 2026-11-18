@@ -4,7 +4,9 @@
 
 **Revised 6 November 2026** with the results of the 6 Nov audit (`docs/research/*-2026-11-06.md`): restored archive and coverage (3.1, 5.1), the portal's table change and the new W1 figure (3.3, 5.2), CAMS on 313 hours (5.3), the forecast against the same-hour-yesterday baseline (5.4, RQ1), the prompt v5 schema freeze (3.4, 3.5), and verified Chapter 2 citations (`docs/report/citation-check-2026-11-06.md`).
 
-**Revised 17 November 2026** with the forecast work of 17 Nov (`docs/research/forecast-models-v2-2026-11-17.md`): the hourly re-run on 519 test origins, the diagnosis of the 6 Nov overfit, five deep models against classical ones, and the corrected daily Model A with winter in the test (3.6, 5.4, 6, 7 W7, 9 RQ1, ledger). Sections 5.5 and 5.6 were written on 17 November (they had been referred to but never drafted): the language layer with the Part B score and the Part A first look, and performance. 5.7 and 5.8 are placeholders. Chapter 1 has not been revised for the 17 Nov language results.
+**Revised 17 November 2026** with the forecast work of 17 Nov (`docs/research/forecast-models-v2-2026-11-17.md`): the hourly re-run on 519 test origins, the diagnosis of the 6 Nov overfit, five deep models against classical ones, and the corrected daily Model A with winter in the test (3.6, 5.4, 6, 7 W7, 9 RQ1, ledger). Sections 5.5 and 5.6 were written on 17 November (they had been referred to but never drafted): the language layer with the Part B score and the Part A first look, and performance. 5.7 and 5.8 are placeholders.
+
+**Revised 18 November 2026:** Chapter 1 brought in line with the results (1.1 problem 2 and 3, 1.2 forecast scope, 1.4 contributions with an evidence-status column, a new 1.5 findings in brief, 1.6 chapter map) and two statements in Chapter 9 made more careful. One factual slip in 1.1 was corrected: it had described a CAMS error figure as a difference between two stations.
 
 Three chapters are substantially complete (3 Materials and Methods, 5 Results, 7 Weaknesses). Chapters 1, 2, 4, 6, 8 and 9 are drafted to the point the evidence allows. The abstract is written last, by rule.
 
@@ -28,9 +30,9 @@ Three chapters are substantially complete (3 Materials and Methods, 5 Results, 7
 
 **Data you cannot ask questions of.** Punjab's Environmental Protection Agency publishes hourly readings from eleven monitoring stations in Lahore and a district ranking for the province. The data is public and it is updated. It is also a web page: a table of numbers that answers exactly the questions its layout anticipated. A resident who wants to know whether the air near their own neighbourhood is worse tonight than last night, or whether this week has been worse than last, cannot ask. They can only read.
 
-**Maps that pretend to know more than they do.** Commercial air-quality maps render smooth colour fields over entire cities. Those fields are interpolations from sparse instruments. Lahore has eleven official monitors for a city of well over ten million people, and the gradients between them are extreme: over the validation period, Gulberg III and Multan Road differ by roughly 95 µg/m³ of PM2.5 on average (Chapter 5.3). A continuous colour wash across that gap is a confident statement about places where nothing is measured.
+**Maps that pretend to know more than they do.** Commercial air-quality maps render smooth colour fields over entire cities. Those fields are interpolations from sparse instruments. Lahore has eleven official monitors for a city of well over ten million people, and the gradients between them are extreme. Over 313 validation hours, a single regional model value read 7.1 µg/m³ too high at Gulberg III, a residential station, and 101.2 µg/m³ too low at Multan Road, a roadside and industrial one (Chapter 5.3). A continuous colour wash across that gap is a confident statement about places where nothing is measured.
 
-**Forecasts nobody holds accountable.** Air-quality forecasts are published daily and almost never scored afterwards. Without a public record of error, a forecast is a claim with no cost attached to being wrong.
+**Forecasts nobody holds accountable.** Air-quality forecasts are published daily and almost never scored afterwards. Without a public record of error, a forecast is a claim with no cost attached to being wrong. We scored two of them against what happened (Chapter 5.4). The relayed CAMS forecast for Lahore was worse than repeating the last reading, and worse than repeating the same hour yesterday, over 1 to 24 hours (skill −0.37 [−0.56, −0.19] against the first, −1.00 [−1.52, −0.54] against the second). The EPA's own 8-hour forecast did better than the last reading on the hours it covers (+0.27 [+0.11, +0.42]). Both were visible only because the errors were computed; neither was published as a score.
 
 ### 1.2 What Airlume is
 
@@ -43,7 +45,7 @@ Four design rules hold throughout, and they are the spine of the system:
 3. Values are never invented for unmonitored places. Where there is no station, the system says so and names the nearest one with its distance.
 4. WAQI data is display-only and is never stored or analysed, per its terms.
 
-**In scope:** current and historical readings for monitored stations and cities; comparisons across time and place; forecasts to at most 48 hours; graded health guidance drawn from published advisories; intervention-priority guidance.
+**In scope:** current and historical readings for monitored stations and cities; comparisons across time and place; forecasts to at most 48 hours (scored here only to 24 hours, because nothing longer exists in the archive); graded health guidance drawn from published advisories; intervention-priority guidance.
 **Out of scope:** weather prediction; medical diagnosis; causes of pollution except intervention guidance; any estimate for an unmonitored location; anything beyond the forecast horizon.
 
 ### 1.3 Research questions
@@ -57,23 +59,38 @@ From the R&D extension (`05-rd-extension-plan.md`), confirmed by the supervisor 
 
 ### 1.4 Contributions
 
-From `plan.md` Part A. The project claims no new machine-learning architecture and trains no model from scratch; the contributions are in systems design, evaluation methodology and local measurement.
+From `plan.md` Part A. The project claims no new machine-learning architecture. The recurrent and convolutional networks trained for the forecast comparison (5.4) are standard architectures, trained from scratch on a small archive and used to test whether deep models help, not offered as a contribution. The contributions are in systems design, evaluation methodology and local measurement.
 
-| | Contribution | Verified by |
-|---|---|---|
-| C1 | A scoring rubric for conversational *visual* analytics, via a typed view-intent schema | Per-field accuracy on a frozen benchmark (5.5) |
-| C2 | Camera pose treated as part of the generated answer | Camera fields scored separately (5.5) |
-| C3 | A sparsity-honest visualisation protocol and a quantified coverage map | Protocol audit; user comprehension (5.7) |
-| C4 | The first quantified CAMS-versus-ground validation for Lahore | Released statistics (5.3) |
-| C5 | A public, automatic forecast scorecard | Generated from logs (5.4) |
-| C6 | A released benchmark of single and multi-turn questions | Public repository (3.5) |
-| C7 | A station-placement recommendation for Lahore's network | Coverage gained per proposed site (5.8) |
+| | Contribution | Verified by | Evidence status, 18 Nov 2026 |
+|---|---|---|---|
+| C1 | A scoring rubric for conversational *visual* analytics, via a typed view-intent schema | Per-field accuracy on a frozen benchmark (5.5) | **Partly.** Part B scored once: 25 of 30 = 83.3% [66.4, 92.7] (n = 30, schema coverage). The naturalistic Part A score is pending |
+| C2 | Camera pose treated as part of the generated answer | Camera fields scored separately (5.5) | **Weak.** Camera is scored, but only 2 Part B questions carry it (2 of 2), so no rate is reported |
+| C3 | A sparsity-honest visualisation protocol and a quantified coverage map | Protocol audit; user comprehension (5.7) | **Partly.** Coverage reported (5.1); the comprehension test (E4) has not been run |
+| C4 | A quantified CAMS-versus-ground validation for Lahore | Released statistics (5.3) | **Met** on 313 hours: PM2.5 bias −57.7 [−73.2, −44.0], r 0.68. "First" is not claimed until a literature search confirms it `[search pending]` |
+| C5 | An automatic forecast scorecard | Generated from logs (5.4) | **Built.** The app's Next 24 hours tab scores the published forecasts against baselines; the intervals in 5.4 come from the evaluation scripts. Not public until deployment |
+| C6 | A released benchmark of questions with human-adjudicated labels | Public repository (3.5) | **Partly.** Part B (30 questions, gold frozen, hash `92771b9a7a`) exists; Part A (40 so far) has no labels yet; the questions are single-turn. Release depends on the repository being public `[confirm]` |
+| C7 | A station-placement recommendation for Lahore's network | Coverage gained per proposed site (5.8) | **Not yet written** in this draft |
 
 C1 is the central one, and its framing matters: the contribution is **scoring the visual answer** — view, area, time window and camera — which VayuBuddy's authors named as future work. It is not "using structured output".
 
-### 1.5 Chapter map
+### 1.5 Findings in brief
 
-`[One paragraph, written last.]`
+Each line states the result with its interval and its main limit; the chapter that supports it is named.
+
+- **Data (5.1).** 53.4% of Lahore's station-hours are present over the hourly archive to 6 November (8.0% missing in the stable window); the city-level series is complete. A collector fault had lost 7,215 committed rows to git merges; the cause was found and fixed and the rows restored. The archive is about 40 days of one season.
+- **AQI (5.2).** With the portal's table in force at each hour, 99.1% of 3,293 station-hours reproduce exactly (MAE 0.16 [0.05, 0.31]). The portal changed its table on 3 November, which the project found from its own archive.
+- **RQ2 (5.3).** CAMS follows the trend (r 0.68) but misses the level (PM2.5 bias −57.7 [−73.2, −44.0] µg/m³) and the structure within the city (per-station error 27.8 to 102.5), on 313 hours.
+- **RQ1 (5.4).** Learned forecasters beat the last reading over 1 to 24 hours in every hourly setting tested. Against the stronger baseline, the same hour yesterday, they are level overall on the split fixed in advance and ahead at 1 to 8 hours, and ahead overall with more training data. Deep and classical models are not distinguishable. The first version lost to yesterday beyond 3 hours because 16 days of training had never seen the smog level of the test period. This rests on 40 days and one season, and several variants were chosen after seeing results.
+- **RQ3 (5.5).** On a constructed set covering every form field, the language layer is correct on 25 of 30 questions (83.3% [66.4, 92.7]) against 9 of 30 for a rule-based router. On fresh classmate questions the first look suggests it is clearly harder, because users ask for comparisons and windows the form cannot express; that score is pending and no claim is made.
+- **RQ4 (3.7, 9).** A transparent, confidence-flagged priority score; no effect prediction.
+- **Performance (5.6).** The model call takes a median 1.13 s [1.03, 1.26]; the rest of the pipeline about 20 ms. Parallel extraction speeds parsing up about 4 times at 12 workers, though the real back-fill is download-bound.
+- **Not yet measured:** the naturalistic language score (Part A), the user study (E4), map frame rate, and the station-placement result.
+
+Several of the report's results are negative or conditional: a forecast that does not beat yesterday on the data it started with, a global model that cannot see the city's structure, and a benchmark that looked good until its labels were examined (7, W2).
+
+### 1.6 Chapter map
+
+Chapter 2 places the work among conversational interfaces to environmental data, air-quality visualisation, model-versus-ground validation, forecasting with little ground data, station siting and intervention evidence. Chapter 3 gives the data, the collection design, the AQI computation, the language layer, the evaluation protocol, the models and the insight modules. Chapter 4 describes the system as built. Chapter 5 reports the results: data quality, harmonisation, CAMS, forecasting, the language layer, performance, the user study and placement. Chapter 6 discusses what the results mean together. Chapter 7 lists the weaknesses found in review and what each verdict is. Chapter 8 covers ethics, security and licensing, and Chapter 9 answers the research questions and sets out future work.
 
 ---
 
@@ -476,13 +493,13 @@ Verdicts against the fifteen weaknesses identified in self-review (`plan.md` Par
 
 **RQ1 — can a learned forecaster beat persistence, CAMS and the EPA forecast?** It beats persistence over 1–24 h in every hourly setting tested (skill +0.34 to +0.38 for the regularised and deep models) and on daily winter data for the recurrent, convolutional and boosted models (+0.07 to +0.13; ridge does not), and it beats the relayed CAMS forecast, which is worse than persistence and than yesterday everywhere. Against the relayed EPA forecast (1–8 h, which on the rows it covers beats persistence by +0.27 [+0.11, +0.42]) the learned models are ahead at 1–3 h and similar at 4–8 h; a direct paired test was not run. Against "the same hour yesterday", the stronger baseline in smog season, the models are level overall on the split fixed in advance (+0.03 to +0.10, intervals including zero) and ahead at 1–8 h, and ahead overall with more training data. **Deep and classical models are not distinguishable;** what mattered was training-data volume and the target formulation. The qualifications in 5.4 — selection after seeing results, a 40-day single-season archive, no seed-spread measurement — are part of the answer, not footnotes to it.
 
-**RQ2 — how well does CAMS match ground stations?** Well in trend (r 0.68), poorly in level (PM2.5 bias −57.7 [−73.2, −44.0], PM10 −191.7, both growing with the season), and not at all in within-city structure (per-station PM2.5 MAD 27.8 to 102.5), on 313 hours. This is the first such quantification published for Lahore.
+**RQ2 — how well does CAMS match ground stations?** Well in trend (r 0.68), poorly in level (PM2.5 bias −57.7 [−73.2, −44.0], PM10 −191.7, both growing with the season), and not at all in within-city structure (per-station PM2.5 MAD 27.8 to 102.5), on 313 hours. To our knowledge this is the first such quantification for Lahore `[confirm by literature search before submission]`.
 
 **RQ3 — can a conversational interface answer air-quality questions reliably?** Partly, and the answer depends on the kind of question. On a constructed set covering every field (Part B, 30 questions, independently annotated, scored once) the model fills the form correctly for 25 of 30, 83.3% [66.4, 92.7], against 9 of 30 (30.0% [16.7, 47.9]) for the rule-based router: a difference of +53.3 points [+28.7, +69.6]. English and Roman Urdu are not distinguishable at n = 11 and 19. On fresh classmate questions (Part A, 40 so far, unlabelled) a first look by the builder suggests it is clearly harder, because users ask for two-place comparisons and long windows that the form cannot express; the labelled score is `[PENDING]`. The development benchmark (90.0% [83.3, 95.6] on 90 items) was tuned against and is not evidence of reliability on new questions. **Reliability on natural questions has not been measured, and the report says so.**
 
 **RQ4 — can the data support a defensible intervention-priority score?** Yes for a transparent, data-confidence-flagged severity ranking, and no for anything that predicts the effect of an intervention. The scenario calculator deliberately computes coverage only.
 
-**Future work.** A longer archive with rolling-origin evaluation; a winter test period; the top-band AQI refit as readings above 350 accumulate; more cities in depth; multi-turn handling, which is the measured weak point of the language layer; a refusal that names what the system can answer; and a public deployment with feedback. Methodologically: a benchmark whose fields are carried by enough items to be worth reporting, built outward from observed demand.
+**Future work.** A longer archive with rolling-origin evaluation; a winter test period; the top-band AQI refit as readings above 350 accumulate; more cities in depth; the gaps the Part A first look found in the form (two-place comparison, windows longer than the archive, time of day), and multi-turn handling, which neither Part A nor Part B tests; a refusal that names what the system can answer; and a public deployment with feedback. Methodologically: a benchmark whose fields are carried by enough items to be worth reporting, built outward from observed demand.
 
 ---
 
