@@ -46,3 +46,11 @@ data/eval/*
 !data/eval/forecast_models_v2_*.json
 !data/eval/model_a_v2_*.json
 !data/eval/model_a_v2_predictions_*.csv
+# 20 Nov 2026, Experiment A (docs/research/expA-protocol-2026-11-20.md): gold answers, model
+# replies, executions and scorecards are tracked, like the E1 scorecards (each run costs days of
+# the Groq free tier). Snapshots copy the raw archive (about 15 MB each) and stay local, except
+# their manifests, which pin the exact data by SHA-256.
+!data/eval/expA/
+data/eval/expA/snapshots/**
+!data/eval/expA/snapshots/**/
+!data/eval/expA/snapshots/**/manifest.json

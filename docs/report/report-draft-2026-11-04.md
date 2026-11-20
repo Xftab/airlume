@@ -423,7 +423,7 @@ Every design returned results identical to the sequential run (row count and a h
 
 ### 5.7 User study (E4)
 
-`[PENDING. Planned in docs/study/user-study-plan-2026-11-01.md: 8 to 10 participants, 3 tasks each, System Usability Scale. No sessions have been run, so no result is reported. When run: SUS with a bootstrap interval and task success as counts with Wilson intervals; a small convenience sample with an observer present, which inflates success.]`
+`[PENDING. Planned in docs/study/user-study-plan-2026-11-01.md: 8 to 10 participants, 3 tasks each, System Usability Scale. No sessions have been run, so no result is reported. When run: SUS with a bootstrap interval and task success as counts with Wilson intervals; a small convenience sample with an observer present, which inflates success. The printed questionnaire uses simplified plain-English wording of the ten SUS statements ("system" became "website", some phrases shortened) with the standard 1 to 5 scoring; state this as a deviation from Brooke (1996).]`
 
 ### 5.8 Station placement (C7)
 

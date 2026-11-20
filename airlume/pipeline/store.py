@@ -357,15 +357,35 @@ class Store:
             [*station_ids, start, end],
         ).df()
 
-    def latest_city_values(self) -> pd.DataFrame:
-        return self.con.execute(
+    def latest_city_values(self, include_modelled: bool = False) -> pd.DataFrame:
+        """The latest row per city.
+
+        Modelled rows (source open_meteo_cams) are left out unless asked for (20 Nov 2026).
+        Before, the latest hour was taken across every source, so when CAMS and the Punjab
+        EPA shared the newest hour Lahore came back twice, and the answer layer could read
+        the modelled figure as the city's measurement: with the 20 Nov archive, "Is the air
+        clean in Lahore?" answered AQI 182 (CAMS) while the EPA measured 221, a different
+        band and weaker advice. The map already dropped CAMS rows after the fact, which
+        could also drop a city whose newest hour was CAMS-only. Choosing the latest hour
+        among measured rows fixes both.
+        """
+        if include_modelled:
+            sql = """
+                SELECT c.city_id, c.ts, c.pm25, c.pm10, c.aqi, c.n_stations, c.source
+                FROM city_hourly c
+                JOIN (SELECT city_id, max(ts) AS ts FROM city_hourly GROUP BY city_id) m
+                  ON c.city_id = m.city_id AND c.ts = m.ts
             """
-            SELECT c.city_id, c.ts, c.pm25, c.pm10, c.aqi, c.n_stations, c.source
-            FROM city_hourly c
-            JOIN (SELECT city_id, max(ts) AS ts FROM city_hourly GROUP BY city_id) m
-              ON c.city_id = m.city_id AND c.ts = m.ts
+        else:
+            sql = """
+                SELECT c.city_id, c.ts, c.pm25, c.pm10, c.aqi, c.n_stations, c.source
+                FROM city_hourly c
+                JOIN (SELECT city_id, max(ts) AS ts FROM city_hourly
+                      WHERE source <> 'open_meteo_cams' GROUP BY city_id) m
+                  ON c.city_id = m.city_id AND c.ts = m.ts
+                WHERE c.source <> 'open_meteo_cams'
             """
-        ).df()
+        return self.con.execute(sql).df()
 
     def delete_source(self, source: str) -> None:
         for t in ("readings", "city_hourly", "epd_daily", "forecasts"):

@@ -371,6 +371,11 @@ def _answer_body(q: ResolvedQuery, store: Store, reg: Registry,
             return (f"{city.name}: {_METRIC_NAME[q.metric]} {_fmt(va, q.metric)} · "
                     f"{names[q.compare_city_id]}: {_fmt(vb, q.metric)}. {worse} is worse right now.")
         row = cf[cf.city_id == q.city_id]
+        if q.city_named and q.aggregation == "latest" and row.empty:
+            # 20 Nov 2026: a named city with no reading fell through to the ranking below, so
+            # "What is the AQI in Karachi right now?" was answered "Muzaffargarh has the worst
+            # air right now", and "PM2.5 in Multan?" with Lahore's PM2.5. Say so instead.
+            return f"I have no recent {_METRIC_NAME[q.metric]} reading for {city.name}."
         if q.city_named and q.aggregation == "latest" and not row.empty:
             # "Is the air clean in Lahore?" names one city: answer for it first (6 Nov 2026,
             # group 3 of the 2 Nov run, which got "Gujranwala has the worst air" instead).

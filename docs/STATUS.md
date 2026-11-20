@@ -1,8 +1,15 @@
 # Status
 
-_Last updated: 18 November 2026_
+_Last updated: 20 November 2026_
 
 ## Where we are
+
+**20 Nov, evening - Experiment A started (typed form against Python code against SQL, English and Roman Urdu).** Protocol fixed before any run (`docs/research/expA-protocol-2026-11-20.md`). Harness `airlume/eval/expA/` and `scripts\expA_run.py`, with a sandbox for the code and SQL arms (offline only; the app never runs model code). 51-item trick set, development only. 411 tests pass, 1 skipped. Two answer-layer fixes: CAMS model values no longer reach answers as measurements (Lahore said 182 where the EPA measured 221), and a named city with no reading now says so instead of naming the worst city. Development run with the rule-based router: 19 of 51 (a floor, not a result).
+Next, Week 2 (27 Nov to 3 Dec): make the Google Form from `docs/benchmark/expA-question-form.md` and share it [ethics requirement and contact email: confirm]; decide the three open app defects (stale "right now" readings, zero-hour counts, Lahore against yesterday); pilot the code and SQL prompts on the trick set, then freeze all prompts; choose the free plan (about 11 days per model) or the Developer plan (about USD 1 for both models) [Aftab and Dr Rimsha]; confirm the official submission date. Run `test`, then `save ExpAWeek1`.
+
+**20 Nov, afternoon - novelty review.** Pre-submission additions: Part A score, E4 pilot with an interpolated-map comparison, zero-shot foundation-model baseline, Related Work update with four corrections, reworded contributions, EPA forecast archiving. Paper plan: Experiment A (form against code against SQL; started the same day, above), B (user study), C (season-long forecast audit).
+
+**18 Nov, late afternoon - printable E4 forms made** (`docs/study/e4-study-forms.pdf`). Print page 1 once; pages 2 and 3 once per participant. Page 3 uses simplified SUS wording (report must say so). No sessions run yet; 5.7 pending.
 
 **18 Nov, afternoon - report 5.8 (station placement) written** from a re-run that reproduces the 15 Oct figures; memo `docs/research/placement-2026-11-18.md`. Remaining pending report sections: 5.7 (user study, not run).
 
